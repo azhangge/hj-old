@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+  <persistence-unit name="examPU2" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>com.huajie.exam.model.CaseQuestion</class>
+    <class>com.huajie.exam.model.ChoiceQuestion</class>
+    <class>com.huajie.exam.model.DictionaryModel</class>
+    <class>com.huajie.exam.model.EssayQuestion</class>
+    <class>com.huajie.exam.model.ExamCase</class>
+    <class>com.huajie.exam.model.ExamCaseItemCase</class>
+    <class>com.huajie.exam.model.ExamCaseItemChoice</class>
+    <class>com.huajie.exam.model.ExamCaseItemEssay</class>
+    <class>com.huajie.exam.model.ExamCaseItemFile</class>
+    <class>com.huajie.exam.model.ExamCaseItemFill</class>
+    <class>com.huajie.exam.model.ExamCaseItemJudge</class>
+    <class>com.huajie.exam.model.ExamCaseItemMultiChoice</class>
+    <class>com.huajie.exam.model.ExamCaseLog</class>
+    <class>com.huajie.exam.model.ExamCheat</class>
+    <class>com.huajie.exam.model.ExamChoice</class>
+    <class>com.huajie.exam.model.ExamChoiceStatistic</class>
+    <class>com.huajie.exam.model.ExamDepartment</class>
+    <class>com.huajie.exam.model.ExamKnowledge</class>
+    <class>com.huajie.exam.model.ExamLabel</class>
+    <class>com.huajie.exam.model.ExamLabelType</class>
+    <class>com.huajie.exam.model.ExamModuleModel</class>
+    <class>com.huajie.exam.model.ExamMultiChoice</class>
+    <class>com.huajie.exam.model.ExamPaperManual</class>
+    <class>com.huajie.exam.model.ExamPaperManualPart</class>
+    <class>com.huajie.exam.model.ExamPaperRandom</class>
+    <class>com.huajie.exam.model.ExamRoom</class>
+    <class>com.huajie.exam.model.Examination</class>
+    <class>com.huajie.exam.model.FileQuestion</class>
+    <class>com.huajie.exam.model.FillQuestion</class>
+    <class>com.huajie.exam.model.GeneralExamCaseItem</class>
+    <class>com.huajie.exam.model.JudgeQuestion</class>
+    <class>com.huajie.exam.model.ManualPartItem</class>
+    <class>com.huajie.exam.model.ModuleRandomPaper</class>
+    <class>com.huajie.exam.model.MultiChoiceQuestion</class>
+    <class>com.huajie.exam.model.QuestionCollection</class>
+    <class>com.huajie.exam.model.QuestionComment</class>
+    <class>com.huajie.exam.model.WrongKnowledge</class>
+    <class>com.huajie.exam.model.WrongQuestion</class>
+    <class>com.huajie.exam.model.buffet.BuffetExamCase</class>
+    <class>com.huajie.exam.model.buffet.BuffetExamCaseItemCase</class>
+    <class>com.huajie.exam.model.buffet.BuffetExamCaseItemChoice</class>
+    <class>com.huajie.exam.model.buffet.BuffetExamCaseItemEssay</class>
+    <class>com.huajie.exam.model.buffet.BuffetExamCaseItemFile</class>
+    <class>com.huajie.exam.model.buffet.BuffetExamCaseItemFill</class>
+    <class>com.huajie.exam.model.buffet.BuffetExamCaseItemJudge</class>
+    <class>com.huajie.exam.model.buffet.BuffetExamCaseItemMultiChoice</class>
+    <class>com.huajie.exam.model.buffet.BuffetExamination</class>
+    <class>com.huajie.exam.model.buffet.BuffetExaminationPart</class>
+    <class>com.huajie.exam.model.buffet.BuffetGeneralExamCaseItem</class>
+    <class>com.huajie.exam.model.buffet.BuffetPartItem</class>
+    <class>com.huajie.exam.model.buffet.ModuleBuffetPart</class>
+    <class>com.huajie.exam.model.contest.ContestCase</class>
+    <class>com.huajie.exam.model.contest.ContestCaseItemCase</class>
+    <class>com.huajie.exam.model.contest.ContestCaseItemChoice</class>
+    <class>com.huajie.exam.model.contest.ContestCaseItemEssay</class>
+    <class>com.huajie.exam.model.contest.ContestCaseItemFile</class>
+    <class>com.huajie.exam.model.contest.ContestCaseItemFill</class>
+    <class>com.huajie.exam.model.contest.ContestCaseItemJudge</class>
+    <class>com.huajie.exam.model.contest.ContestCaseItemMultiChoice</class>
+    <class>com.huajie.exam.model.contest.ExamContestSession</class>
+    <class>com.huajie.exam.model.contest.GeneralContestCaseItem</class>
+    <class>com.huajie.exam.model.module.ModuleExamCase</class>
+    <class>com.huajie.exam.model.module.ModuleExamCaseItemCase</class>
+    <class>com.huajie.exam.model.module.ModuleExamCaseItemChoice</class>
+    <class>com.huajie.exam.model.module.ModuleExamCaseItemEssay</class>
+    <class>com.huajie.exam.model.module.ModuleExamCaseItemFile</class>
+    <class>com.huajie.exam.model.module.ModuleExamCaseItemFill</class>
+    <class>com.huajie.exam.model.module.ModuleExamCaseItemJudge</class>
+    <class>com.huajie.exam.model.module.ModuleExamCaseItemMultiChoice</class>
+    <class>com.huajie.exam.model.module.ModuleExamInfo</class>
+    <class>com.huajie.exam.model.module.ModuleGeneralExamCaseItem</class>
+    <class>com.huajie.exam.model.module2.Module2PartItem</class>
+    <class>com.huajie.exam.model.module2.ModuleExam2Part</class>
+    <class>com.huajie.exam.model.module2.ModuleExamination2</class>
+    <class>com.huajie.exam.model.module2.ModuleModule2Part</class>
+    <class>com.huajie.exam.model.random2.ExamPaperRandom2</class>
+    <class>com.huajie.exam.model.random2.ModuleRandom2Part</class>
+    <class>com.huajie.exam.model.random2.Random2PaperPart</class>
+    <class>com.huajie.exam.web.mb.external.ExternalUser</class>
+    <class>com.huajie.learning.model.Lesson</class>
+    <class>com.huajie.learning.model.LessonLog</class>
+    <class>com.huajie.learning.model.LessonType</class>
+    <class>com.huajie.model.AdminInfo</class>
+    <class>com.huajie.model.AdvModel</class>
+    <class>com.huajie.model.CasusModel</class>
+    <class>com.huajie.model.CustomerService</class>
+    <class>com.huajie.model.FinanceLog</class>
+    <class>com.huajie.model.FireWall</class>
+    <class>com.huajie.model.IpRule</class>
+    <class>com.huajie.model.ManualModel</class>
+    <class>com.huajie.model.NetStat</class>
+    <class>com.huajie.model.OnlinePayConfig</class>
+    <class>com.huajie.model.OperationLog</class>
+    <class>com.huajie.model.PartnerModel</class>
+    <class>com.huajie.model.PartnerType</class>
+    <class>com.huajie.model.PictureModel</class>
+    <class>com.huajie.model.SystemConfig</class>
+    <class>com.huajie.model.SystemEmailBoxModel</class>
+    <class>com.huajie.model.SystemInfo</class>
+    <class>com.huajie.rerebbs.model.BbsFileModel</class>
+    <class>com.huajie.rerebbs.model.BbsMessage</class>
+    <class>com.huajie.rerebbs.model.BbsScoreLog</class>
+    <class>com.huajie.rerebbs.model.BbsScoreRegular</class>
+    <class>com.huajie.rerebbs.model.BbsTalk</class>
+    <class>com.huajie.rerebbs.model.BbsThread</class>
+    <class>com.huajie.rerebbs.model.BbsThreadBookMark</class>
+    <class>com.huajie.rerebbs.model.BbsThreadTrade</class>
+    <class>com.huajie.rerebbs.model.BbsUser</class>
+    <class>com.huajie.rerebbs.model.BbsUserGrade</class>
+    <class>com.huajie.rerebbs.model.BbsZone</class>
+    <class>com.huajie.rerebbs.model.DictCity</class>
+    <class>com.huajie.rerebbs.model.DictProvince</class>
+    <class>com.huajie.rerebbs.model.Friendship</class>
+    <class>com.huajie.seller.model.GoodsModuleModel</class>
+    <class>com.huajie.seller.model.OrderSerial</class>
+    <class>com.huajie.seller.model.SaleGoods</class>
+    <class>com.huajie.seller.model.SaleOrder</class>
+    <class>com.huajie.seller.model.SaleOrderItem</class>
+    <class>com.huajie.learning.model.RereAsk</class>
+    <class>com.huajie.learning.model.RereAskTalk</class>
+    <class>com.huajie.learning.model.RereAskZone</class>
+    <class>com.huajie.exam.model.contest.ContestSessionCase</class>
+    <class>com.huajie.model.UserSessionState</class>
+    <class>com.huajie.exam.model.ExamComment</class>
+    <class>com.huajie.exam.model.GeneralQuestion</class>
+    <class>com.huajie.rerebbs.model.BbsPosition</class>
+    <class>com.huajie.exam.model.KnowledgeLabel</class>
+    <class>com.huajie.exam.model.KnowledgeLabelType</class>
+    <class>com.huajie.rerebbs.model.ShareModel</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <!--Cache configuration, cache should be disabled in cluster enviroment.-->
+      <property name="eclipselink.cache.shared.default" value="false"/>
+      <property name="eclipselink.cache.size.default" value="0"/>
+      <property name="eclipselink.cache.type.default" value="NONE"/>
+      <property name="eclipselink.query-results-cache" value="false"/>
+      <property name="eclipselink.jdbc.cache-statements" value="false"/>
+      <property name="eclipselink.jdbc.batch-writing" value="JDBC"/>
+      <!--Ddl-generation stratety of 'create-or-extend-tables',from which the database upgrade benifits most, will create the tables and columns which is missing,-->
+ 		<property name="eclipselink.ddl-generation" value="create-or-extend-tables"/>
+		<property name="eclipselink.ddl-generation.output-mode" value="database"/>
+		<property name="eclipselink.show_sql" value="false"/>
+		<property name="eclipselink.logging.parameters" value="true"/>
+		<property name="eclipselink.logging.level" value="DEBUG"/>
+		<property name="eclipselink.logging.level.sql" value="FINE"/>
+		<property name="eclipselink.weaving" value="static"/>
+		<property name="eclipselink.logging.logger" value="ServerLogger"/>
+		<property name="eclipselink.orm.throw.exceptions" value="true"/>  
+		<!--
+		-->
+		<!-- 
+			<property name="eclipselink.logging.file" value="log4j/output.log"/>
+            <property name="eclipselink.logging.level" value="ALL"/>
+            <property name="eclipselink.logging.level.sql" value="Warning"/>
+            <property name="eclipselink.logging.parameters" value="false"/>
+            <property name="eclipselink.cache.coordination.protocol" value="jms" />
+            <property name="eclipselink.cache.coordination.jms.factory" value="java:comp/env/jms/ConnectionFactory" />
+            <property name="eclipselink.cache.coordination.jms.topic" value="java:comp/env/jms/Topic" />
+            <property name="eclipselink.cache.coordination.jms.host" value="localhost:61616" />
+            <property name="eclipselink.cache.coordination.jndi.user" value="admin" />
+            <property name="eclipselink.cache.coordination.jndi.password" value="admin" />
+     	 -->
+    </properties>
+  </persistence-unit>
+</persistence>

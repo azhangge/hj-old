@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans  xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+        xmlns:tx="http://www.springframework.org/schema/tx"
+        xmlns:jee="http://www.springframework.org/schema/jee"
+        xsi:schemaLocation="  
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd  
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd  
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+       http://www.springframework.org/schema/jee
+		http://www.springframework.org/schema/jee/spring-jee-3.0.xsd">
+    <bean id="LessonDAO" class="com.hjedu.course.dao.impl.LessonDAO" lazy-init="true">
+    </bean>
+    <bean id="LessonLogDAO" class="com.hjedu.course.dao.impl.LessonLogDAO" lazy-init="true">
+    </bean>
+    <bean id="LessonPurchaseLogDAO" class="com.hjedu.course.dao.impl.LessonPurchaseLogDAO" lazy-init="true">
+    </bean>
+    <bean id="LessonTypeDAO" class="com.hjedu.course.dao.impl.LessonTypeDAO" lazy-init="true">
+    </bean>
+    <bean id="LessonTypeLogDAO" class="com.hjedu.course.dao.impl.LessonTypeLogDAO" lazy-init="true">
+    </bean>
+    
+    <bean id="StudyPlanLogDAO" class="com.hjedu.course.dao.impl.StudyPlanLogDAO" lazy-init="true">
+    </bean>
+    <bean id="StudyPlanChangeLogDAO" class="com.hjedu.course.dao.impl.StudyPlanChangeLogDAO" lazy-init="true">
+    </bean>
+    
+    <bean id="RereAskDAO" class="com.hjedu.course.dao.impl.RereAskDAOImpl" lazy-init="true">
+    </bean>
+    <bean id="RereAskZoneDAO" class="com.hjedu.course.dao.impl.RereAskZoneDAOImpl" lazy-init="true">
+    </bean>
+    <bean id="RereAskTalkDAO" class="com.hjedu.course.dao.impl.RereAskTalkDAOImpl" lazy-init="true">
+        <property name="askDAO" ref="BbsThreadDAO" />
+    </bean>
+    <bean id="CourseApproveHistoryDAO" class="com.hjedu.course.dao.impl.CourseApproveHistoryDAO" lazy-init="true">
+    </bean>
+    <bean id="CourseOfPlanDAO" class="com.hjedu.course.dao.impl.CourseOfPlanDAO" lazy-init="true">
+    </bean>
+    <bean id="CourseTypeDAO" class="com.hjedu.course.dao.impl.CourseTypeDAO" lazy-init="true">
+    </bean>
+    <bean id="StudyPlanDAO" class="com.hjedu.course.dao.impl.StudyPlanDAO" lazy-init="true">
+    </bean>
+    <bean id="HJCourseDAO" class="com.hjedu.course.dao.impl.HJCourseDAOImpl" lazy-init="true">
+    </bean>
+    <bean id="CourseTypeDAO2" class="com.hjedu.course.dao.impl.CourseTypeDAOImpl" lazy-init="true">
+    </bean>
+    <bean id="ChapterDAO" class="com.hjedu.course.dao.impl.ChapterDAOImpl" lazy-init="true">
+    </bean>
+</beans>

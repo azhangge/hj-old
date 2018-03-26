@@ -1,0 +1,6 @@
+&logistics_name=No_Need_for_Logistics
+&_input_charset=utf-8
+&trade_no=${tradeNo}
+&partner=${partner}
+&service=send_goods_confirm_by_platform
+&transport_type=DIRECT

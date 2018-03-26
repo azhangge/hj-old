@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans  xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+        xmlns:tx="http://www.springframework.org/schema/tx"
+        xmlns:jee="http://www.springframework.org/schema/jee"
+        xsi:schemaLocation="  
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd  
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd  
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+       http://www.springframework.org/schema/jee
+		http://www.springframework.org/schema/jee/spring-jee-3.0.xsd">
+
+    <bean id="CasusDAO" class="com.hjedu.platform.dao.impl.CasusDAO" lazy-init="true">
+    </bean>
+    <bean id="NoticeDAO" class="com.hjedu.platform.dao.impl.NoticeDAO" lazy-init="true">
+    </bean>
+    <bean id="NoticeInformationDAO" class="com.hjedu.platform.dao.impl.NoticeInformationDAO" lazy-init="true">
+    </bean>
+    <bean id="NoticeUserDAO" class="com.hjedu.platform.dao.impl.NoticeUserDAO" lazy-init="true">
+    </bean>
+    <bean id="ManualDAO" class="com.hjedu.platform.dao.impl.ManualDAO" lazy-init="true">
+    </bean>
+    <bean id="AdvDAO" class="com.hjedu.platform.dao.impl.AdvDAO" lazy-init="true">
+    </bean>
+    <bean id="PictureDAO" class="com.hjedu.platform.dao.impl.PictureDAO" lazy-init="true">
+    </bean>
+    <bean id="ImgDAO" class="com.hjedu.platform.dao.impl.ImgDAO" lazy-init="true">
+        <property name="systemConfigDAO" ref="SystemConfigDAO" />
+    </bean>
+    <bean id="FlashDAO" class="com.hjedu.platform.dao.impl.FlashDAO" lazy-init="true">
+        <property name="systemConfigDAO" ref="SystemConfigDAO" />
+    </bean>
+    <bean id="Mp3DAO" class="com.hjedu.platform.dao.impl.Mp3DAO" lazy-init="true">
+        <property name="systemConfigDAO" ref="SystemConfigDAO" />
+    </bean>
+    <bean id="PartnerDAO" class="com.hjedu.platform.dao.impl.PartnerDAO" lazy-init="true">
+    </bean>
+    <bean id="IpRuleDAO" class="com.hjedu.platform.dao.impl.IpRuleDAO" lazy-init="true">
+    </bean>
+    <bean id="FireWallDAO" class="com.hjedu.platform.dao.impl.FireWallDAO" lazy-init="true">
+    </bean>
+    <bean id="PartnerTypeDAO" class="com.hjedu.platform.dao.impl.PartnerTypeDAO" lazy-init="true">
+    </bean>
+    <bean id="NetStatDAO" class="com.hjedu.platform.dao.impl.NetStatDAO" lazy-init="true">
+    </bean>
+    <bean id="SystemConfigDAO" class="com.hjedu.platform.dao.impl.SystemConfigDAO" lazy-init="true">
+    </bean>
+    <bean id="CustomerServiceDAO" class="com.hjedu.platform.dao.impl.CustomerServiceDAO" lazy-init="true">
+    </bean>
+    <bean id="OperationLogDAO" class="com.hjedu.platform.dao.impl.OperationLogDAO" lazy-init="true">
+    </bean>
+    <bean id="SystemEmailBoxDAO" class="com.hjedu.platform.dao.impl.SystemEmailBoxDAO" lazy-init="true">
+    </bean>
+    <bean id="DictCityDAO" class="com.hjedu.platform.dao.impl.DictCityDAO" lazy-init="true">
+    </bean>
+    <bean id="DictProvinceDAO" class="com.hjedu.platform.dao.impl.DictProvinceDAO" lazy-init="true">
+    </bean>
+    
+    <bean id="SystemInfoDAO" class="com.hjedu.platform.dao.impl.SystemInfoDAO" lazy-init="true">
+    </bean>
+    
+    <bean id="SaleGoodsDAO" class="com.huajie.seller.dao.impl.SaleGoodsDAO" lazy-init="true">
+    </bean>
+    
+    <bean id="SaleOrderDAO" class="com.huajie.seller.dao.impl.SaleOrderDAO" lazy-init="true">
+    </bean>
+    
+    <bean id="GoodsModule2DAO" class="com.huajie.seller.dao.impl.GoodsModule2DAO" lazy-init="true">
+    </bean>
+    
+    <bean id="OrderSerialDAO" class="com.huajie.seller.dao.impl.OrderSerialDAO" lazy-init="true">
+    </bean>
+    
+    <bean id="OnlinePayConfigDAO" class="com.hjedu.platform.dao.impl.OnlinePayConfigDAO" lazy-init="true">
+    </bean>
+    
+    <bean id="UserSessionStateDAO" class="com.hjedu.platform.dao.impl.UserSessionStateDAO" lazy-init="true">
+    </bean>
+    <bean id="SendCodeFrequencyDAO" class="com.hjedu.platform.dao.impl.SendCodeFrequencyDAO" lazy-init="true">
+    </bean>
+</beans>

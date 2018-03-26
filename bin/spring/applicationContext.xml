@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="  
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd  
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd  
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+       http://www.springframework.org/schema/jee
+		http://www.springframework.org/schema/jee/spring-jee-3.0.xsd
+		http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+    <bean id="propertyPlaceholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">  
+        <property name="locations">  
+            <list>
+                <!-- <value>classpath:jdbc.properties</value> -->
+                <value>classpath:jdbc.properties</value>
+                <value>classpath:rere_pub.key</value>
+                <value>classpath:ldap.properties</value>
+                <value>classpath:jms.properties</value>
+                <value>classpath:rere_cache.properties</value> 
+                <value>classpath:remote.properties</value> 
+            </list>
+        </property>
+    </bean>
+    <import resource="db_config2.xml"></import>
+    <import resource="config.xml"></import>
+    <import resource="services.xml"></import>
+    <import resource="services_specific1.xml"></import>
+    <import resource="course_daos.xml"></import>
+	<import resource="customer_daos.xml"></import>
+	<import resource="platform_daos.xml"></import>
+    <import resource="examination_daos.xml"></import>
+    <import resource="themes.xml"></import>
+    <import resource="external.xml"></import>
+    <import resource="pub_key.xml"></import>
+    <import resource="authorities.xml"></import>
+    <import resource="ldap.xml"></import>
+    <import resource="rere_cache.xml"></import>
+    <!--
+    <import resource="jms.xml"></import>
+    -->
+    <import resource="remote.xml"></import>
+    
+    <!-- <context:component-scan base-package="com.hjedu.*.dao.impl" use-default-filters="false">
+    	<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/> 
+		<context:exclude-filter type="regex" expression=".entity.*"/>
+		<context:exclude-filter type="regex" expression=".vo.*"/>
+		<context:exclude-filter type="regex" expression=".controller.*"/>
+		<context:exclude-filter type="regex" expression=".util.*"/>  
+    </context:component-scan>
+    <context:component-scan base-package="com.hjedu.*.service.impl" use-default-filters="false">
+    	<context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/> 
+    </context:component-scan> -->
+</beans>

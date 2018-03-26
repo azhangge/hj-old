@@ -1,0 +1,17 @@
+&body=${body}
+&logistics_fee=0
+&logistics_payment=SELLER_PAY
+&logistics_type=EXPRESS
+&_input_charset=utf-8
+&notify_url=${notifyUrl}
+&out_trade_no=${orderNo}
+&partner=${partner}
+&payment_type=1
+&seller_id=${sellerId}
+&total_fee_type=${totalFee}
+&price=${price}
+&quantity=${quantity}
+&return_url=${returnUrl}
+&seller_email=${sellerEmail}
+&service=${payType}
+&subject=${goodsName}

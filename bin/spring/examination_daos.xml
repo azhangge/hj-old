@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans  xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+        xmlns:tx="http://www.springframework.org/schema/tx"
+        xmlns:jee="http://www.springframework.org/schema/jee"
+        xsi:schemaLocation="  
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd  
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd  
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+       http://www.springframework.org/schema/jee
+		http://www.springframework.org/schema/jee/spring-jee-3.0.xsd">
+
+    <!--The begainning of seven types of questions and their annexes.-->
+    <bean id="ChoiceQuestionDAO" class="com.hjedu.examination.dao.impl.ChoiceQuestionDAO" lazy-init="true">
+        <property name="wqDAO" ref="WrongQuestionDAO" />
+        <property name="hashCodeService" ref="HashCodeService" />
+    </bean>
+    <bean id="FillQuestionDAO" class="com.hjedu.examination.dao.impl.FillQuestionDAO" lazy-init="true">
+        <property name="wqDAO" ref="WrongQuestionDAO" />
+        <property name="hashCodeService" ref="HashCodeService" />
+    </bean>
+    <bean id="JudgeQuestionDAO" class="com.hjedu.examination.dao.impl.JudgeQuestionDAO" lazy-init="true">
+        <property name="wqDAO" ref="WrongQuestionDAO" />
+        <property name="hashCodeService" ref="HashCodeService" />
+    </bean>
+    <bean id="EssayQuestionDAO" class="com.hjedu.examination.dao.impl.EssayQuestionDAO" lazy-init="true">
+        <property name="wqDAO" ref="WrongQuestionDAO" />
+        <property name="hashCodeService" ref="HashCodeService" />
+    </bean>
+    <bean id="FileQuestionDAO" class="com.hjedu.examination.dao.impl.FileQuestionDAO" lazy-init="true">
+        <property name="systemConfigDAO" ref="SystemConfigDAO" />
+        <property name="wqDAO" ref="WrongQuestionDAO" />
+        <property name="hashCodeService" ref="HashCodeService" />
+    </bean>
+    <bean id="CaseQuestionDAO" class="com.hjedu.examination.dao.impl.CaseQuestionDAO" lazy-init="true">
+        <property name="wqDAO" ref="WrongQuestionDAO" />
+    </bean>
+    <bean id="MultiChoiceQuestionDAO" class="com.hjedu.examination.dao.impl.MultiChoiceQuestionDAO" lazy-init="true">
+        <property name="wqDAO" ref="WrongQuestionDAO" />
+        <property name="hashCodeService" ref="HashCodeService" />
+    </bean>
+    <!--The choices for choice question-->
+    <bean id="ExamChoiceDAO" class="com.hjedu.examination.dao.impl.ExamChoiceDAO" lazy-init="true">
+        <property name="statisticDAO" ref="ExamChoiceStatisticDAO" />
+    </bean>
+    <bean id="ExamMultiChoiceDAO" class="com.hjedu.examination.dao.impl.ExamMultiChoiceDAO" lazy-init="true">
+    </bean>
+    <!--The end of seven types of questions-->
+    
+    <bean id="ExamPaperManualDAO" class="com.hjedu.examination.dao.impl.ExamPaperManualDAO" lazy-init="true">
+        <property name="partDAO" ref="ExamPaperManualPartDAO" />
+    </bean>
+    <bean id="ExamPaperManualPartDAO" class="com.hjedu.examination.dao.impl.ExamPaperManualPartDAO" lazy-init="true">
+    </bean>
+    <bean id="ExamPaperRandomDAO" class="com.hjedu.examination.dao.impl.ExamPaperRandomDAO" lazy-init="true">
+    </bean>
+    <bean id="ExaminationDAO" class="com.hjedu.examination.dao.impl.ExaminationDAO" lazy-init="true">
+        <property name="statisticDAO" ref="ExamChoiceStatisticDAO" />
+        <property name="caseDAO" ref="ExamCaseDAO" />
+        <property name="logDAO" ref="ExamCaseLogDAO" />
+    </bean>
+    <bean id="QuestionCommentDAO" class="com.hjedu.examination.dao.impl.QuestionCommentDAO" lazy-init="true">
+    </bean>
+    <bean id="ExamCommentDAO" class="com.hjedu.examination.dao.impl.ExamCommentDAO" lazy-init="true">
+    </bean>
+    
+    <bean id="ExamKnowledgeDAO" class="com.hjedu.examination.dao.impl.ExamKnowledgeDAO" lazy-init="true">
+        <property name="wkDAO" ref="WrongKnowledgeDAO" />
+    </bean>
+    <bean id="KnowledgeLabelDAO" class="com.hjedu.examination.dao.impl.KnowledgeLabelDAO" lazy-init="true">
+    </bean>
+    <bean id="KnowledgeLabelTypeDAO" class="com.hjedu.examination.dao.impl.KnowledgeLabelTypeDAO" lazy-init="true">
+    </bean>
+    
+    <bean id="ExamCaseDAO" class="com.hjedu.examination.dao.impl.ExamCaseDAO" lazy-init="true">
+        <property name="fqDAO" ref="FileQuestionDAO" />
+        <property name="statisticDAO" ref="ExamChoiceStatisticDAO" />
+    </bean>
+    <bean id="ModuleExamCaseDAO" class="com.hjedu.examination.dao.impl.ModuleExamCaseDAO" lazy-init="true">
+        <property name="fqDAO" ref="FileQuestionDAO" />
+    </bean>
+    <bean id="ModuleExamInfoDAO" class="com.hjedu.examination.dao.impl.ModuleExamInfoDAO" lazy-init="true">
+    </bean>
+    
+    <bean id="ModuleExaminationDAO" class="com.hjedu.examination.dao.impl.ModuleExaminationDAO" lazy-init="true">
+        <property name="mmPartDAO" ref="ModuleModule2PartDAO" />
+    </bean>
+    <bean id="ModuleExamPartDAO" class="com.hjedu.examination.dao.impl.ModuleExamPartDAO" lazy-init="true">
+    </bean>
+    <bean id="ModuleModule2PartDAO" class="com.hjedu.examination.dao.impl.ModuleModule2PartDAO" lazy-init="true">
+    </bean>
+    
+    
+    <bean id="ExamCaseLogDAO" class="com.hjedu.examination.dao.impl.ExamCaseLogDAO" lazy-init="true">
+    </bean>
+    <bean id="ExamRoomDAO" class="com.hjedu.examination.dao.impl.ExamRoomDAO" lazy-init="true">
+    </bean>
+    <bean id="ExamDepartmentDAO" class="com.hjedu.examination.dao.impl.ExamDepartmentDAO" lazy-init="true">
+    </bean>
+    
+    <bean id="DictionaryDAO" class="com.hjedu.examination.dao.impl.DictionaryDAO" lazy-init="true">
+    </bean>
+    
+    <bean id="ExamModule2DAO" class="com.hjedu.examination.dao.impl.ExamModule2DAO" lazy-init="true">
+        <property name="mbuffetPartDAO" ref="ModuleBuffetPartDAO" />
+        <property name="mrandom2PartDAO" ref="ModuleRandom2PartDAO" />
+        <property name="choiceDAO" ref="ChoiceQuestionDAO" />
+        <property name="mchoiceDAO" ref="MultiChoiceQuestionDAO" />
+        <property name="fillDAO" ref="FillQuestionDAO" />
+        <property name="judgeDAO" ref="JudgeQuestionDAO" />
+        <property name="essayDAO" ref="EssayQuestionDAO" />
+        <property name="fileDAO" ref="FileQuestionDAO" />
+        <property name="caseDAO" ref="CaseQuestionDAO" />
+    </bean>
+    
+    <bean id="WrongKnowledgeDAO" class="com.hjedu.examination.dao.impl.WrongKnowledgeDAO" lazy-init="true">
+    </bean>
+    
+    <bean id="WrongQuestionDAO" class="com.hjedu.examination.dao.impl.WrongQuestionDAO" lazy-init="true">
+        <property name="choiceDAO" ref="ChoiceQuestionDAO" />
+        <property name="multiChoiceDAO" ref="MultiChoiceQuestionDAO" />
+        <property name="fillDAO" ref="FillQuestionDAO" />
+        <property name="judgeDAO" ref="JudgeQuestionDAO" />
+        <property name="essayDAO" ref="EssayQuestionDAO" />
+        <property name="fileDAO" ref="FileQuestionDAO" />
+    </bean>
+    <bean id="ExamCheatDAO" class="com.hjedu.examination.dao.impl.ExamCheatDAO" lazy-init="true">
+    </bean>
+    
+    
+    
+    <bean id="BuffetExaminationDAO" class="com.hjedu.examination.dao.impl.BuffetExaminationDAO" lazy-init="true">
+        <property name="mbuffetPartDAO" ref="ModuleBuffetPartDAO" />
+    </bean>
+    <bean id="BuffetExaminationPartDAO" class="com.hjedu.examination.dao.impl.BuffetExaminationPartDAO" lazy-init="true">
+    </bean>
+    <bean id="ModuleBuffetPartDAO" class="com.hjedu.examination.dao.impl.ModuleBuffetPartDAO" lazy-init="true">
+    </bean>
+    <bean id="ContestCaseDAO" class="com.hjedu.examination.dao.impl.ContestCaseDAO" lazy-init="true">
+        <property name="fqDAO" ref="FileQuestionDAO" />
+    </bean>
+    <bean id="ContestSessionCaseDAO" class="com.hjedu.examination.dao.impl.ContestSessionCaseDAO" lazy-init="true">
+    </bean>
+    <bean id="ExamContestDAO" class="com.hjedu.examination.dao.impl.ExamContestDAO" lazy-init="true">
+    </bean>
+    <bean id="BuffetExamCaseDAO" class="com.hjedu.examination.dao.impl.BuffetExamCaseDAO" lazy-init="true">
+        <property name="fqDAO" ref="FileQuestionDAO" />
+    </bean>
+    <bean id="ExamPaperRandom2DAO" class="com.hjedu.examination.dao.impl.ExamPaperRandom2DAO" lazy-init="true">
+        <property name="partDAO" ref="Random2PaperPartDAO" />
+        <property name="mrandom2PartDAO" ref="ModuleRandom2PartDAO" />
+    </bean>
+    <bean id="Random2PaperPartDAO" class="com.hjedu.examination.dao.impl.Random2PaperPartDAO" lazy-init="true">
+    </bean>
+    <bean id="ModuleRandom2PartDAO" class="com.hjedu.examination.dao.impl.ModuleRandom2PartDAO" lazy-init="true">
+    </bean>
+    
+    <bean id="ExamLabelDAO" class="com.hjedu.examination.dao.impl.ExamLabelDAO" lazy-init="true">
+    </bean>
+    <bean id="ExamLabelTypeDAO" class="com.hjedu.examination.dao.impl.ExamLabelTypeDAO" lazy-init="true">
+    </bean>
+    <bean id="ExamChoiceStatisticDAO" class="com.hjedu.examination.dao.impl.ExamChoiceStatisticDAO" lazy-init="true">
+    </bean>
+    
+    <bean id="QuestionCollectionDAO" class="com.hjedu.examination.dao.impl.QuestionCollectionDAO" lazy-init="true">
+    </bean>
+    
+    <bean id="IntensiveExamAndUserDAO" class="com.hjedu.examination.dao.impl.IntensiveExamAndUserDAO" lazy-init="true">
+    </bean>
+    
+    <bean id="GeneralQuestionDAO" class="com.hjedu.examination.dao.impl.GeneralQuestionDAOImpl" lazy-init="true">
+    </bean>
+</beans>

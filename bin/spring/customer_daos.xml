@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans  xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+        xmlns:tx="http://www.springframework.org/schema/tx"
+        xmlns:jee="http://www.springframework.org/schema/jee"
+        xsi:schemaLocation="  
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd  
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd  
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+		http://www.springframework.org/schema/jee
+		http://www.springframework.org/schema/jee/spring-jee-3.0.xsd">
+		
+		<bean id="AdminDAO" class="com.hjedu.customer.dao.impl.AdminDAO" lazy-init="true"> </bean>
+		<bean id="BusinessUserDAO" class="com.hjedu.businessuser.dao.impl.BusinessUserDaoImpl" lazy-init="true"> </bean>
+ 		<bean id="UserInfoDAO" class="com.hjedu.customer.dao.impl.UserInfoDAO" lazy-init="true"></bean>
+ 		<bean id="BbsFileDAO" class="com.hjedu.customer.dao.impl.BbsFileDAOImpl" lazy-init="true">
+	        <property name="timesNumDAO" ref="SystemConfigDAO" />
+	        <property name="cu" ref="BbsUserDAO" />
+	        <property name="imgDAO" ref="ImgDAO" />
+	        <property name="flashDAO" ref="FlashDAO" />
+	        <property name="mp3DAO" ref="Mp3DAO" />
+    	</bean>
+    	
+    	    
+    <bean id="ExternalUserDAO" class="com.hjedu.customer.dao.impl.ExternalUserDAO" lazy-init="true">
+    </bean>
+    
+    <bean id="FinanceLogDAO" class="com.hjedu.customer.dao.impl.FinanceLogDAO" lazy-init="true">
+    </bean>
+    <bean id="BbsThreadDAO" class="com.hjedu.customer.dao.impl.BbsThreadDAOImpl" lazy-init="true">
+    </bean>
+    <bean id="ThreadTradeDAO" class="com.hjedu.customer.dao.impl.ThreadTradeDAO" lazy-init="true">
+    </bean>
+    <bean id="ThreadBookMarkDAO" class="com.hjedu.customer.dao.impl.ThreadBookMarkDAO" lazy-init="true">
+    </bean>
+    <bean id="ShareDAO" class="com.hjedu.customer.dao.impl.ShareDAO" lazy-init="true">
+        <property name="cf" ref="BbsFileDAO"/>
+        <property name="cu" ref="BbsUserDAO"/>
+    </bean>
+    <bean id="BbsUserDAO" class="com.hjedu.customer.dao.impl.BbsUserDAO" lazy-init="true">
+        <property name="externalDAO" ref="ExternalUserDAO"/>
+    </bean>
+    
+    <bean id="UserTokenDAO" class="com.hjedu.customer.dao.impl.UserTokenDAO" lazy-init="true">
+    </bean>
+
+    <bean id="BbsZoneDAO" class="com.hjedu.customer.dao.impl.BbsZoneDAOImpl" lazy-init="true">
+    </bean>
+    <bean id="BbsMessageDAO" class="com.hjedu.customer.dao.impl.BbsMessageDAOImpl" lazy-init="true">
+    </bean>
+    <bean id="BbsTalkDAO" class="com.hjedu.customer.dao.impl.BbsTalkDAOImpl" lazy-init="true">
+        <property name="threadDAO" ref="BbsThreadDAO" />
+    </bean>
+    <bean id="BbsScoreRegularDAO" class="com.hjedu.customer.dao.impl.BbsScoreRegularDAO" lazy-init="true">
+    </bean>
+    
+    <bean id="PositionDAO" class="com.hjedu.customer.dao.impl.PositionDAO" lazy-init="true">
+    </bean>
+    
+    <bean id="BbsUserGradeDAO" class="com.hjedu.customer.dao.impl.BbsUserGradeDAO" lazy-init="true">
+    </bean>
+    <bean id="BbsScoreLogDAO" class="com.hjedu.customer.dao.impl.BbsScoreLogDAO" lazy-init="true">
+    </bean>
+    <bean id="TeacherDAO" class="com.hjedu.customer.dao.impl.TeacherDAO" lazy-init="true">
+    </bean>
+    
+    <bean id="JobTitleDAO" class="com.hjedu.customer.dao.impl.JobTitleDAOImpl" lazy-init="true">
+    </bean>
+    <bean id="ProjectExperienceDAO" class="com.hjedu.customer.dao.impl.ProjectExperienceDAOImpl" lazy-init="true">
+    </bean>
+    <bean id="WorkExperienceDAO" class="com.hjedu.customer.dao.impl.WorkExperienceDAOImpl" lazy-init="true">
+    </bean>
+    <bean id="CertificateDAO" class="com.hjedu.customer.dao.impl.CertificateDAOImpl" lazy-init="true">
+    </bean>
+    <bean id="BaseDAO" class="com.hjedu.common.dao.impl.BaseDAOImpl" lazy-init="true">
+    </bean>
+    <bean id="SuggestionDAO" class="com.hjedu.common.dao.impl.SuggestionDAOImpl" lazy-init="true">
+    </bean>
+    <bean id="LogoDAO" class="com.hjedu.common.dao.impl.LogoDAOImpl" lazy-init="true">
+    </bean>
+	<bean id="UserCommentDAO" class="com.hjedu.common.dao.impl.UserCommentDAOImpl" lazy-init="true">
+    </bean>
+    <bean id="DataTransferDAO" class="com.hjedu.common.dao.impl.DataTransferDAOIml" lazy-init="true">
+    </bean>
+</beans>

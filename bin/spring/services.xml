@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+        xmlns:tx="http://www.springframework.org/schema/tx"
+        xmlns:jee="http://www.springframework.org/schema/jee"
+        xsi:schemaLocation="  
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd  
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd  
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+       http://www.springframework.org/schema/jee
+		http://www.springframework.org/schema/jee/spring-jee-3.0.xsd">
+    
+    <!--Aop Begain-->
+    <aop:config>
+        <aop:aspect id="WrongQuestionAop" ref="WrongQuestionAngel">
+            <aop:pointcut id="examCaseTarget" expression="execution(* com.hjedu.examination.service.impl.ExamCaseService.computeExamCase(..))"/>
+            <aop:after-returning method="checkAndSaveWrongQuestion" pointcut-ref="examCaseTarget" returning="ec"/>
+        </aop:aspect>
+        <aop:aspect id="WrongQuestionAopManual" ref="WrongQuestionAngel">
+            <aop:pointcut id="examCaseTarget2" expression="execution(* com.hjedu.examination.service.impl.ManualExamCaseService.computeExamCase(..))"/>
+            <aop:after-returning method="checkAndSaveWrongQuestion" pointcut-ref="examCaseTarget2" returning="ec"/>
+        </aop:aspect>
+        <aop:aspect id="ModuleWrongQuestionAop" ref="ModuleWrongQuestionAngel">
+            <aop:pointcut id="examCaseTarget3" expression="execution(* com.hjedu.examination.service.impl.ModuleExamCaseService.computeExamCase(..))"/>
+            <aop:after-returning method="checkAndSaveWrongQuestion" pointcut-ref="examCaseTarget3" returning="ec"/>
+        </aop:aspect>
+        <aop:aspect id="Random2WrongQuestionAop" ref="WrongQuestionAngel">
+            <aop:pointcut id="examCaseTarget4" expression="execution(* com.hjedu.examination.service.impl.ExamCaseRandom2Service.computeExamCase(..))"/>
+            <aop:after-returning method="checkAndSaveWrongQuestion" pointcut-ref="examCaseTarget4" returning="ec"/>
+        </aop:aspect>
+        <aop:aspect id="BuffetWrongQuestionAop" ref="BuffetWrongQuestionAngel">
+            <aop:pointcut id="examCaseTarget5" expression="execution(* com.hjedu.examination.service.impl.BuffetExamCaseService.computeExamCase(..))"/>
+            <aop:after-returning method="checkAndSaveWrongQuestion" pointcut-ref="examCaseTarget5" returning="ec"/>
+        </aop:aspect>
+        <aop:aspect id="ContestWrongQuestionAop" ref="ContestWrongQuestionAngel">
+            <aop:pointcut id="examCaseTarget6" expression="execution(* com.hjedu.examination.service.impl.ContestCaseRandom2Service.computeExamCase(..))"/>
+            <aop:after-returning method="checkAndSaveWrongQuestion" pointcut-ref="examCaseTarget6" returning="ec"/>
+        </aop:aspect>
+        <aop:aspect id="Module2WrongQuestionAop" ref="Module2WrongQuestionAngel">
+            <aop:pointcut id="examCaseTarget7" expression="execution(* com.hjedu.examination.service.impl.Module2ExamCaseService.computeExamCase(..))"/>
+            <aop:after-returning method="checkAndSaveWrongQuestion" pointcut-ref="examCaseTarget7" returning="ec"/>
+        </aop:aspect>
+        <aop:aspect id="WrongTestAop" ref="WrongTestAngel">
+            <aop:pointcut id="wrongTestTarget" expression="execution(* com.hjedu.examination.service.impl.WrongExamCaseService.computeWrongTestCase(..))"/>
+            <aop:after-returning method="checkAndSaveWrongQuestion" pointcut-ref="wrongTestTarget" returning="ec"/>
+        </aop:aspect>
+    </aop:config>
+    <!--Aop End-->
+	
+	<bean id="VelocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">  
+        <property name="velocityProperties">     
+            <props>     
+                <prop key="resource.loader">class</prop>     
+                <prop key="class.resource.loader.class">     
+                    org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader     
+                </prop>     
+                <prop key="velocimacro.library"></prop>     
+            </props>     
+        </property>     
+    </bean> 
+	<bean id="taskExecutor"
+		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<!-- 线程池维护线程的最少数量 -->
+		<property name="corePoolSize" value="100" />
+		<!-- 线程池维护线程所允许的空闲时间 -->
+		<property name="keepAliveSeconds" value="200" />
+		<!-- 线程池维护线程的最大数量 -->
+		<property name="maxPoolSize" value="2000" />
+		<!-- 线程池所使用的缓冲队列 -->
+		<property name="queueCapacity" value="25000" />
+	</bean>
+ 	
+ 	<!-- other begin -->
+    <bean id="ipSeekerService" class="${remote.ipSeeker.agent}" lazy-init="true">
+    </bean>
+    <bean id="UserAppService" class="com.huajie.app.service.UserAppService" lazy-init="true">
+    </bean>
+    <!-- other end -->
+
+ 	<!-- platform.service begin-->
+    <bean id="AlipayService" class="com.hjedu.platform.service.impl.AlipayService" lazy-init="true">
+        <property name="velocityEngine" ref="VelocityEngine" />
+        <property name="configDAO" ref="OnlinePayConfigDAO" />
+    </bean>
+    <bean id="ComplexFileLogic" class="com.hjedu.platform.service.impl.ComplexFileLogicImpl">
+        <property name="clientFileDAO" ref="BbsFileDAO"></property>
+    </bean>
+    <bean id="ComplexGoodsModuleLogic" class="com.hjedu.platform.service.impl.ComplexGoodsModuleLogicImpl">
+        <property name="moduleDAO" ref="GoodsModule2DAO"></property>
+    </bean>
+    <bean id="EmailService" class="com.hjedu.platform.service.impl.EmailService" lazy-init="true">
+        <property name="esmss" ref="SystemEmailBoxDAO" />
+        <property name="velocityEngine" ref="VelocityEngine" />
+    </bean>
+    <bean id="FireWallService" class="com.hjedu.platform.service.impl.FireWallService">
+        <property name="ipRuleDAO" ref="IpRuleDAO"></property>
+        <property name="wallDAO" ref="FireWallDAO"></property>
+    </bean>
+    <bean id="FlashService" class="com.hjedu.platform.service.impl.FlashService" lazy-init="true">
+    </bean>  
+    <bean id="HashCodeService" class="com.hjedu.platform.service.impl.HashCodeService">
+    </bean>
+    <bean id="ImageService" class="com.hjedu.platform.service.impl.ImageService" lazy-init="true">
+    </bean>  
+    <bean id="LogService" class="com.hjedu.platform.service.impl.JsfLogService" lazy-init="true">
+        <property name="olDAO" ref="OperationLogDAO"></property>
+    </bean>
+    <bean id="Mp3Service" class="com.hjedu.platform.service.impl.Mp3Service" lazy-init="true">
+    </bean>
+    <bean id="MessageService" class="com.hjedu.platform.service.impl.MessageService" lazy-init="true">
+        <property name="msgDAO" ref="BbsMessageDAO" />
+        <property name="userDAO" ref="BbsUserDAO" />
+    </bean> 
+    <bean id="WordImgService" class="com.hjedu.platform.service.impl.WordImgService" lazy-init="true">
+    </bean>  
+    <!-- platform.service end-->
+    
+    <!-- customer.service begin -->
+    <bean id="ComplexBbsUserService" class="com.hjedu.customer.service.impl.ComplexBbsUserService" lazy-init="true">
+    </bean>
+    <bean id="BbsUserExportService" class="com.hjedu.customer.service.impl.BbsUserExportService" lazy-init="true">
+    </bean>
+    <bean id="BbsUserImportService" class="com.hjedu.customer.service.impl.BbsUserImportService" lazy-init="true">
+    </bean>
+    <bean id="AdminImportService" class="com.hjedu.customer.service.impl.AdminImportService" lazy-init="true">
+    </bean>
+    <bean id="AdminExportService" class="com.hjedu.customer.service.impl.AdminExportService" lazy-init="true">
+    </bean>
+    <bean id="BbsScoreLogService" class="com.hjedu.customer.service.impl.BbsScoreLogService" lazy-init="true">
+        <property name="olDAO" ref="BbsScoreLogDAO"></property>
+    </bean>
+    <bean id="FinanceService" class="com.hjedu.customer.service.impl.FinanceService">
+        <property name="bbsUserDAO" ref="BbsUserDAO"></property>
+        <property name="financeLogDAO" ref="FinanceLogDAO"></property>
+        <property name="orderDAO" ref="SaleOrderDAO"></property>
+    </bean>
+    <bean id="UserService" class="com.hjedu.customer.service.impl.UserService">
+        <property name="userDAO" ref="BbsUserDAO"></property>
+    </bean>
+    <!-- customer.service end -->
+    
+    <!-- examination.service case begin -->
+    <bean id="ExamCaseService" class="com.hjedu.examination.service.impl.ExamCaseService" lazy-init="true">
+        <property name="examCaseDAO" ref="ExamCaseDAO" />
+        <property name="choiceQuestionDAO" ref="ChoiceQuestionDAO" />
+        <property name="multiChoiceQuestionDAO" ref="MultiChoiceQuestionDAO" />
+        <property name="fillQuestionDAO" ref="FillQuestionDAO" />
+        <property name="judgeQuestionDAO" ref="JudgeQuestionDAO" />
+        <property name="essayQuestionDAO" ref="EssayQuestionDAO" />
+        <property name="fileQuestionDAO" ref="FileQuestionDAO" />
+        <property name="caseQuestionDAO" ref="CaseQuestionDAO" />
+        <property name="exec" ref="taskExecutor" />
+    </bean>
+    <bean id="ManualExamCaseService" class="com.hjedu.examination.service.impl.ManualExamCaseService" lazy-init="true">
+        <property name="exec" ref="taskExecutor" />
+    </bean>
+    <bean id="ExamCaseRandom2Service" class="com.hjedu.examination.service.impl.ExamCaseRandom2Service" lazy-init="true">
+        <property name="examCaseDAO" ref="ExamCaseDAO" />
+        <property name="choiceQuestionDAO" ref="ChoiceQuestionDAO" />
+        <property name="multiChoiceQuestionDAO" ref="MultiChoiceQuestionDAO" />
+        <property name="fillQuestionDAO" ref="FillQuestionDAO" />
+        <property name="judgeQuestionDAO" ref="JudgeQuestionDAO" />
+        <property name="essayQuestionDAO" ref="EssayQuestionDAO" />
+        <property name="fileQuestionDAO" ref="FileQuestionDAO" />
+        <property name="caseQuestionDAO" ref="CaseQuestionDAO" />
+        <property name="exec" ref="taskExecutor" />
+    </bean>
+    <bean id="ModuleExamCaseService" class="com.hjedu.examination.service.impl.ModuleExamCaseService" lazy-init="true">
+        <property name="answerB" ref="fillBegain" />
+        <property name="answerE" ref="fillEnd" />
+        <property name="examCaseDAO" ref="ModuleExamCaseDAO" />
+        <property name="choiceQuestionDAO" ref="ChoiceQuestionDAO" />
+        <property name="multiChoiceQuestionDAO" ref="MultiChoiceQuestionDAO" />
+        <property name="fillQuestionDAO" ref="FillQuestionDAO" />
+        <property name="judgeQuestionDAO" ref="JudgeQuestionDAO" />
+        <property name="essayQuestionDAO" ref="EssayQuestionDAO" />
+        <property name="fileQuestionDAO" ref="FileQuestionDAO" />
+        <property name="caseQuestionDAO" ref="CaseQuestionDAO" />
+        <property name="moduleExamInfoDAO" ref="ModuleExamInfoDAO" />
+    </bean>
+    <bean id="Module2ExamCaseService" class="com.hjedu.examination.service.impl.Module2ExamCaseService" lazy-init="true">
+        <property name="answerB" ref="fillBegain" />
+        <property name="answerE" ref="fillEnd" />
+        <property name="examCaseDAO" ref="ModuleExamCaseDAO" />
+        <property name="choiceQuestionDAO" ref="ChoiceQuestionDAO" />
+        <property name="multiChoiceQuestionDAO" ref="MultiChoiceQuestionDAO" />
+        <property name="fillQuestionDAO" ref="FillQuestionDAO" />
+        <property name="judgeQuestionDAO" ref="JudgeQuestionDAO" />
+        <property name="essayQuestionDAO" ref="EssayQuestionDAO" />
+        <property name="fileQuestionDAO" ref="FileQuestionDAO" />
+        <property name="caseQuestionDAO" ref="CaseQuestionDAO" />
+        <property name="exec" ref="taskExecutor" />
+    </bean>
+    <bean id="BuffetExamCaseService" class="com.hjedu.examination.service.impl.BuffetExamCaseService" lazy-init="true">
+        <property name="answerB" ref="fillBegain" />
+        <property name="answerE" ref="fillEnd" />
+        <property name="examCaseDAO" ref="ExamCaseDAO" />
+        <property name="choiceQuestionDAO" ref="ChoiceQuestionDAO" />
+        <property name="multiChoiceQuestionDAO" ref="MultiChoiceQuestionDAO" />
+        <property name="fillQuestionDAO" ref="FillQuestionDAO" />
+        <property name="judgeQuestionDAO" ref="JudgeQuestionDAO" />
+        <property name="essayQuestionDAO" ref="EssayQuestionDAO" />
+        <property name="fileQuestionDAO" ref="FileQuestionDAO" />
+        <property name="caseQuestionDAO" ref="CaseQuestionDAO" />
+    </bean>
+    <bean id="ContestCaseService" class="com.hjedu.examination.service.impl.ContestCaseService" lazy-init="true">
+        <property name="answerB" ref="fillBegain" />
+        <property name="answerE" ref="fillEnd" />
+        <property name="examCaseDAO" ref="ContestCaseDAO" />
+        <property name="choiceQuestionDAO" ref="ChoiceQuestionDAO" />
+        <property name="multiChoiceQuestionDAO" ref="MultiChoiceQuestionDAO" />
+        <property name="fillQuestionDAO" ref="FillQuestionDAO" />
+        <property name="judgeQuestionDAO" ref="JudgeQuestionDAO" />
+        <property name="essayQuestionDAO" ref="EssayQuestionDAO" />
+        <property name="fileQuestionDAO" ref="FileQuestionDAO" />
+        <property name="caseQuestionDAO" ref="CaseQuestionDAO" />
+    </bean>
+    <bean id="ContestCaseRandom2Service" class="com.hjedu.examination.service.impl.ContestCaseRandom2Service" lazy-init="true">
+        <property name="answerB" ref="fillBegain" />
+        <property name="answerE" ref="fillEnd" />
+        <property name="examCaseDAO" ref="ContestCaseDAO" />
+        <property name="choiceQuestionDAO" ref="ChoiceQuestionDAO" />
+        <property name="multiChoiceQuestionDAO" ref="MultiChoiceQuestionDAO" />
+        <property name="fillQuestionDAO" ref="FillQuestionDAO" />
+        <property name="judgeQuestionDAO" ref="JudgeQuestionDAO" />
+        <property name="essayQuestionDAO" ref="EssayQuestionDAO" />
+        <property name="fileQuestionDAO" ref="FileQuestionDAO" />
+        <property name="caseQuestionDAO" ref="CaseQuestionDAO" />
+    </bean>
+    <!-- examination.service case end -->
+    
+    <!-- examination.service begin -->
+    <bean id="ExamExportService" class="com.hjedu.examination.service.impl.ExamExportService" lazy-init="true">
+    </bean>
+    <bean id="ExamExportCaseQuestionService" class="com.hjedu.examination.service.impl.ExamExportCaseQuestionService" lazy-init="true">
+    </bean>
+    <bean id="ExamImportService" class="com.hjedu.examination.service.impl.ExamImportService" lazy-init="true">
+    </bean>
+    <bean id="ExamCaseExportService" class="com.hjedu.examination.service.impl.ExamCaseExportService" lazy-init="true">
+    </bean>
+    <bean id="ComplexExamModuleLogic" class="com.hjedu.examination.service.impl.ComplexExamModuleLogicImpl">
+        <property name="moduleDAO" ref="ExamModule2Service"></property>
+    </bean>
+    <bean id="ComplexDepartmentLogic" class="com.hjedu.examination.service.impl.ComplexDepartmentLogicImpl">
+        <property name="moduleDAO" ref="ExamDepartmentService"></property>
+    </bean>
+    <bean id="ExamChoiceStatisticService" class="com.hjedu.examination.service.impl.ExamChoiceStatisticService">
+    </bean>
+    <bean id="ContestSessionService" class="com.hjedu.examination.service.impl.ContestSessionService">
+        <property name="caseDAO" ref="ContestCaseDAO"></property>
+        <property name="sessionDAO" ref="ContestSessionCaseDAO"></property>
+        <property name="contestDAO" ref="ExamContestDAO"></property>
+    </bean>
+    <bean id="ExaminationService" class="com.hjedu.examination.service.impl.ExaminationService">
+        <property name="examDAO" ref="ExaminationDAO"></property>
+    </bean>
+    
+    <bean id="ChoiceQuestionService" class="com.hjedu.examination.service.impl.ChoiceQuestionService">
+        <property name="qDAO" ref="ChoiceQuestionDAO"></property>
+    </bean>
+    
+    <bean id="MultiChoiceQuestionService" class="com.hjedu.examination.service.impl.MultiChoiceQuestionService">
+        <property name="qDAO" ref="MultiChoiceQuestionDAO"></property>
+    </bean>
+    
+    <bean id="ExamModule2Service" class="com.hjedu.examination.service.impl.ExamModule2Service">
+        <property name="examModule2DAO" ref="ExamModule2DAO"></property>
+    </bean>
+    
+    <bean id="ExamDepartmentService" class="com.hjedu.examination.service.impl.ExamDepartmentService">
+        <property name="dicDAO" ref="DictionaryDAO"></property>
+    </bean>
+    <!-- examination.service end -->
+    
+    <bean id="BusinessUserService" class="com.hjedu.business.service.impl.BusinessUserService">
+        <property name="businessUserDao" ref="BusinessUserDAO"></property>
+    </bean>
+    
+    <!-- examination Advice Begain-->
+    <bean id="WrongQuestionAngel" class="com.hjedu.examination.service.impl.WrongQuestionAngel">
+    </bean>
+    <bean id="BuffetWrongQuestionAngel" class="com.hjedu.examination.service.impl.BuffetWrongQuestionAngel">  
+        <property name="wrongDAO" ref="WrongQuestionDAO" />
+        <property name="wrong2DAO" ref="WrongKnowledgeDAO" />
+    </bean> 
+    <bean id="ContestWrongQuestionAngel" class="com.hjedu.examination.service.impl.ContestWrongQuestionAngel">  
+        <property name="wrongDAO" ref="WrongQuestionDAO" />
+        <property name="wrong2DAO" ref="WrongKnowledgeDAO" />
+    </bean> 
+    <bean id="ModuleWrongQuestionAngel" class="com.hjedu.examination.service.impl.ModuleWrongQuestionAngel">  
+        <property name="wrongDAO" ref="WrongQuestionDAO" />
+        <property name="wrong2DAO" ref="WrongKnowledgeDAO" />
+    </bean> 
+    <bean id="Module2WrongQuestionAngel" class="com.hjedu.examination.service.impl.Module2WrongQuestionAngel">  
+        <property name="wrongDAO" ref="WrongQuestionDAO" />
+        <property name="wrong2DAO" ref="WrongKnowledgeDAO" />
+    </bean> 
+    <bean id="WrongTestAngel" class="com.hjedu.examination.service.impl.WrongTestAngel">  
+        <property name="wrongDAO" ref="WrongQuestionDAO" />
+        <property name="wrong2DAO" ref="WrongKnowledgeDAO" />
+    </bean> 
+    <!-- examination Advice End-->
+
+	<!-- course.service begin -->    
+    <bean id="BuyCourseService" class="com.hjedu.course.service.impl.BuyCourseService" lazy-init="true">
+    	<property name="userDAO" ref="BbsUserDAO"></property>
+    	<property name="lessonTypeDAO" ref="LessonTypeDAO"></property>
+    	<property name="lessonTypeLogDAO" ref="LessonTypeLogDAO"></property>
+    	<property name="lessonDAO" ref="LessonDAO"></property>
+    	<property name="lessonLogDAO" ref="LessonLogDAO"></property>
+    	<property name="bbsScoreLogDAO" ref="BbsScoreLogDAO"></property>
+    	<property name="systemConfigDAO" ref="SystemConfigDAO"></property>
+    </bean>
+    <bean id="StudyPlanLogService" class="com.hjedu.course.service.impl.StudyPlanLogService" lazy-init="true">
+    	<property name="lessonTypeLogDAO" ref="LessonTypeLogDAO"></property>
+    	<property name="examCaseDAO" ref="ExamCaseDAO"></property>
+    	<property name="lessonLogDAO" ref="LessonLogDAO"></property>
+    	<property name="studyPlanChangeLogDAO" ref="StudyPlanChangeLogDAO"></property>
+    	<property name="studyPlanLogDAO" ref="StudyPlanLogDAO"></property>
+    	<property name="studyPlanDAO" ref="StudyPlanDAO"></property>
+    </bean>
+    <bean id="IntensiveExamService" class="com.hjedu.examination.service.impl.IntensiveExamService" lazy-init="true">
+    	<property name="examDAO" ref="ExaminationDAO"></property>
+    </bean>
+    <!-- course.service end -->
+</beans>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans   
+    xmlns="http://www.springframework.org/schema/beans"   
+    xmlns:amq="http://activemq.apache.org/schema/core"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd  
+  http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd">  
+    <!-- 连接连接工厂 -->  
+    <bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="${jms.brokerURL}" />
+    </bean>
+    <!-- 定义消息主题（Topic） -->
+    <bean id="topicDestination" class="org.apache.activemq.command.ActiveMQTopic">
+        <constructor-arg>
+            <value>RereTopic</value>
+        </constructor-arg>
+    </bean>
+    <!-- 配置JMS模板（Topic），pubSubDomain="true"-->
+    <bean id="topicJmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <property name="connectionFactory" ref="connectionFactory" />
+        <property name="defaultDestination" ref="topicDestination" />
+        <property name="pubSubDomain" value="true" />
+        <property name="receiveTimeout" value="10000" />
+    </bean>
+    <!--topic消息发布者 -->
+    <bean id="topicProvider" class="com.huajie.cache.topic.TopicProvider">
+        <property name="topicJmsTemplate" ref="topicJmsTemplate"></property>
+    </bean>
+    <!-- 消息主题监听者 和 主题监听容器 可以配置多个，即多个订阅者 -->
+    <!-- 消息主题监听者(Topic) -->
+    <bean id="topicMessageListener" class="com.huajie.cache.jms.TopicMessageListener">
+        <property name="jmsTemplate" ref="topicJmsTemplate"></property>
+    </bean>
+    <!-- 主题监听容器 （Topic） -->
+    <bean id="topicJmsContainer"
+          class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="connectionFactory" />
+        <property name="destination" ref="topicDestination" />
+        <property name="messageListener" ref="topicMessageListener" />
+    </bean>
+  
+</beans>
