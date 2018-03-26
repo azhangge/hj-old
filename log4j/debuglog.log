@@ -1,0 +1,93 @@
+2018-03-10 10:39:37,281 [main] DEBUG [org.apache.http.client.protocol.RequestAddCookies] - CookieSpec selected: default
+ 2018-03-10 10:39:37,294 [main] DEBUG [org.apache.http.client.protocol.RequestAuthCache] - Auth cache not set in the context
+ 2018-03-10 10:39:37,296 [main] DEBUG [org.apache.http.impl.conn.PoolingHttpClientConnectionManager] - Connection request: [route: {}->http://hb.ums86.com:8899][total kept alive: 0; route allocated: 0 of 2; total allocated: 0 of 20]
+ 2018-03-10 10:39:37,317 [main] DEBUG [org.apache.http.impl.conn.PoolingHttpClientConnectionManager] - Connection leased: [id: 0][route: {}->http://hb.ums86.com:8899][total kept alive: 0; route allocated: 1 of 2; total allocated: 1 of 20]
+ 2018-03-10 10:39:37,318 [main] DEBUG [org.apache.http.impl.execchain.MainClientExec] - Opening connection {}->http://hb.ums86.com:8899
+ 2018-03-10 10:39:37,336 [main] DEBUG [org.apache.http.impl.conn.DefaultHttpClientConnectionOperator] - Connecting to hb.ums86.com/58.215.45.238:8899
+ 2018-03-10 10:39:37,363 [main] DEBUG [org.apache.http.impl.conn.DefaultHttpClientConnectionOperator] - Connection established 192.168.96.142:50678<->58.215.45.238:8899
+ 2018-03-10 10:39:37,363 [main] DEBUG [org.apache.http.impl.execchain.MainClientExec] - Executing request POST /sms/Api/Send.do HTTP/1.1
+ 2018-03-10 10:39:37,363 [main] DEBUG [org.apache.http.impl.execchain.MainClientExec] - Target auth state: UNCHALLENGED
+ 2018-03-10 10:39:37,363 [main] DEBUG [org.apache.http.impl.execchain.MainClientExec] - Proxy auth state: UNCHALLENGED
+ 2018-03-10 10:39:37,477 [main] DEBUG [org.apache.http.headers] - http-outgoing-0 >> POST /sms/Api/Send.do HTTP/1.1
+ 2018-03-10 10:39:37,477 [main] DEBUG [org.apache.http.headers] - http-outgoing-0 >> Content-Length: 260
+ 2018-03-10 10:39:37,477 [main] DEBUG [org.apache.http.headers] - http-outgoing-0 >> Content-Type: application/x-www-form-urlencoded; charset=GBK
+ 2018-03-10 10:39:37,477 [main] DEBUG [org.apache.http.headers] - http-outgoing-0 >> Host: hb.ums86.com:8899
+ 2018-03-10 10:39:37,477 [main] DEBUG [org.apache.http.headers] - http-outgoing-0 >> Connection: Keep-Alive
+ 2018-03-10 10:39:37,477 [main] DEBUG [org.apache.http.headers] - http-outgoing-0 >> User-Agent: Apache-HttpClient/4.5.2 (Java/1.8.0_121)
+ 2018-03-10 10:39:37,478 [main] DEBUG [org.apache.http.headers] - http-outgoing-0 >> Accept-Encoding: gzip,deflate
+ 2018-03-10 10:39:37,478 [main] DEBUG [org.apache.http.wire] - http-outgoing-0 >> "POST /sms/Api/Send.do HTTP/1.1[\r][\n]"
+ 2018-03-10 10:39:37,478 [main] DEBUG [org.apache.http.wire] - http-outgoing-0 >> "Content-Length: 260[\r][\n]"
+ 2018-03-10 10:39:37,479 [main] DEBUG [org.apache.http.wire] - http-outgoing-0 >> "Content-Type: application/x-www-form-urlencoded; charset=GBK[\r][\n]"
+ 2018-03-10 10:39:37,479 [main] DEBUG [org.apache.http.wire] - http-outgoing-0 >> "Host: hb.ums86.com:8899[\r][\n]"
+ 2018-03-10 10:39:37,479 [main] DEBUG [org.apache.http.wire] - http-outgoing-0 >> "Connection: Keep-Alive[\r][\n]"
+ 2018-03-10 10:39:37,479 [main] DEBUG [org.apache.http.wire] - http-outgoing-0 >> "User-Agent: Apache-HttpClient/4.5.2 (Java/1.8.0_121)[\r][\n]"
+ 2018-03-10 10:39:37,479 [main] DEBUG [org.apache.http.wire] - http-outgoing-0 >> "Accept-Encoding: gzip,deflate[\r][\n]"
+ 2018-03-10 10:39:37,479 [main] DEBUG [org.apache.http.wire] - http-outgoing-0 >> "[\r][\n]"
+ 2018-03-10 10:39:37,479 [main] DEBUG [org.apache.http.wire] - http-outgoing-0 >> "LoginName=wh_znhj&MessageContent=%C4%FA%B5%B1%C7%B0%B5%C4%D1%E9%D6%A4%C2%EB%CE%AA%3A123456%A3%AC%C7%EB%C4%FA%D4%DA5%B7%D6%D6%D3%D6%AE%C4%DA%D1%E9%D6%A4%A1%A3&SerialNumber=15206495762416442&ScheduleTime&SpCode=217925&f=1&Password=hjgc2015&UserNumber=13627217665"
+ 2018-03-10 10:39:37,503 [main] DEBUG [org.apache.http.wire] - http-outgoing-0 << "HTTP/1.1 200 OK[\r][\n]"
+ 2018-03-10 10:39:37,503 [main] DEBUG [org.apache.http.wire] - http-outgoing-0 << "Server: Flaginfo_Web[\r][\n]"
+ 2018-03-10 10:39:37,503 [main] DEBUG [org.apache.http.wire] - http-outgoing-0 << "Date: Sat, 10 Mar 2018 02:39:22 GMT[\r][\n]"
+ 2018-03-10 10:39:37,503 [main] DEBUG [org.apache.http.wire] - http-outgoing-0 << "Content-Length: 34[\r][\n]"
+ 2018-03-10 10:39:37,504 [main] DEBUG [org.apache.http.wire] - http-outgoing-0 << "Connection: keep-alive[\r][\n]"
+ 2018-03-10 10:39:37,504 [main] DEBUG [org.apache.http.wire] - http-outgoing-0 << "[\r][\n]"
+ 2018-03-10 10:39:37,504 [main] DEBUG [org.apache.http.wire] - http-outgoing-0 << "result=25&description=[0xd5][0xcb][0xbb][0xa7][0xc8][0xa8][0xcf][0xde][0xb2][0xbb][0xd7][0xe3]"
+ 2018-03-10 10:39:37,511 [main] DEBUG [org.apache.http.headers] - http-outgoing-0 << HTTP/1.1 200 OK
+ 2018-03-10 10:39:37,511 [main] DEBUG [org.apache.http.headers] - http-outgoing-0 << Server: Flaginfo_Web
+ 2018-03-10 10:39:37,511 [main] DEBUG [org.apache.http.headers] - http-outgoing-0 << Date: Sat, 10 Mar 2018 02:39:22 GMT
+ 2018-03-10 10:39:37,511 [main] DEBUG [org.apache.http.headers] - http-outgoing-0 << Content-Length: 34
+ 2018-03-10 10:39:37,511 [main] DEBUG [org.apache.http.headers] - http-outgoing-0 << Connection: keep-alive
+ 2018-03-10 10:39:37,520 [main] DEBUG [org.apache.http.impl.execchain.MainClientExec] - Connection can be kept alive indefinitely
+ 2018-03-10 10:39:37,526 [main] DEBUG [org.apache.http.impl.conn.PoolingHttpClientConnectionManager] - Connection [id: 0][route: {}->http://hb.ums86.com:8899] can be kept alive indefinitely
+ 2018-03-10 10:39:37,526 [main] DEBUG [org.apache.http.impl.conn.PoolingHttpClientConnectionManager] - Connection released: [id: 0][route: {}->http://hb.ums86.com:8899][total kept alive: 1; route allocated: 1 of 2; total allocated: 1 of 20]
+ 2018-03-10 10:39:37,526 [main] DEBUG [org.apache.http.impl.conn.PoolingHttpClientConnectionManager] - Connection manager is shutting down
+ 2018-03-10 10:39:37,526 [main] DEBUG [org.apache.http.impl.conn.DefaultManagedHttpClientConnection] - http-outgoing-0: Close connection
+ 2018-03-10 10:39:37,527 [main] DEBUG [org.apache.http.impl.conn.PoolingHttpClientConnectionManager] - Connection manager shut down
+ 2018-03-10 10:39:37,527 [main] INFO  [com.huajie.app.util.SmsHelper] - ++++++++++result=25&description=账户权限不足
+ 2018-03-10 10:39:37,570 [main] INFO  [com.cloopen.rest.sdk.CCPRestSmsSDK] - Sat Mar 10 10:39:37 CST 2018 sendTemplateSMS url = https://app.cloopen.com:8883/2013-12-26/Accounts/8aaf07085a6ec238015a7ea5da4408e7/SMS/TemplateSMS?sig=6B5C2837103ECBB1C27BAAC34A3C5490
+ 2018-03-10 10:39:37,595 [main] INFO  [com.cloopen.rest.sdk.CCPRestSmsSDK] - Sat Mar 10 10:39:37 CST 2018 sendTemplateSMS Request body =  {"appId":"8a216da85a7d6742015a7ead8cab015c","to":"13627217665","templateId":"234971","datas":["123456","5"]}
+ 2018-03-10 10:39:37,615 [main] DEBUG [ytx.org.apache.http.impl.conn.BasicClientConnectionManager] - Get connection for route {s}->https://app.cloopen.com:8883
+ 2018-03-10 10:39:37,722 [main] DEBUG [ytx.org.apache.http.impl.conn.DefaultClientConnectionOperator] - Connecting to app.cloopen.com:8883
+ 2018-03-10 10:39:37,940 [main] DEBUG [ytx.org.apache.http.client.protocol.RequestAddCookies] - CookieSpec selected: best-match
+ 2018-03-10 10:39:37,945 [main] DEBUG [ytx.org.apache.http.client.protocol.RequestAuthCache] - Auth cache not set in the context
+ 2018-03-10 10:39:37,945 [main] DEBUG [ytx.org.apache.http.client.protocol.RequestProxyAuthentication] - Proxy auth state: UNCHALLENGED
+ 2018-03-10 10:39:37,946 [main] DEBUG [ytx.org.apache.http.impl.client.DefaultHttpClient] - Attempt 1 to execute request
+ 2018-03-10 10:39:37,946 [main] DEBUG [ytx.org.apache.http.impl.conn.DefaultClientConnection] - Sending request: POST /2013-12-26/Accounts/8aaf07085a6ec238015a7ea5da4408e7/SMS/TemplateSMS?sig=6B5C2837103ECBB1C27BAAC34A3C5490 HTTP/1.1
+ 2018-03-10 10:39:37,956 [main] DEBUG [org.apache.http.wire] - >> "POST /2013-12-26/Accounts/8aaf07085a6ec238015a7ea5da4408e7/SMS/TemplateSMS?sig=6B5C2837103ECBB1C27BAAC34A3C5490 HTTP/1.1[\r][\n]"
+ 2018-03-10 10:39:37,956 [main] DEBUG [org.apache.http.wire] - >> "Accept: application/json[\r][\n]"
+ 2018-03-10 10:39:37,956 [main] DEBUG [org.apache.http.wire] - >> "Content-Type: application/json;charset=utf-8[\r][\n]"
+ 2018-03-10 10:39:37,956 [main] DEBUG [org.apache.http.wire] - >> "Authorization: OGFhZjA3MDg1YTZlYzIzODAxNWE3ZWE1ZGE0NDA4ZTc6MjAxODAzMTAxMDM5Mzc=[\r][\n]"
+ 2018-03-10 10:39:37,956 [main] DEBUG [org.apache.http.wire] - >> "Content-Length: 108[\r][\n]"
+ 2018-03-10 10:39:37,956 [main] DEBUG [org.apache.http.wire] - >> "Host: app.cloopen.com:8883[\r][\n]"
+ 2018-03-10 10:39:37,957 [main] DEBUG [org.apache.http.wire] - >> "Connection: Keep-Alive[\r][\n]"
+ 2018-03-10 10:39:37,957 [main] DEBUG [org.apache.http.wire] - >> "User-Agent: Apache-HttpClient/4.5.2 (java 1.5)[\r][\n]"
+ 2018-03-10 10:39:37,957 [main] DEBUG [org.apache.http.wire] - >> "[\r][\n]"
+ 2018-03-10 10:39:37,957 [main] DEBUG [org.apache.http.headers] - >> POST /2013-12-26/Accounts/8aaf07085a6ec238015a7ea5da4408e7/SMS/TemplateSMS?sig=6B5C2837103ECBB1C27BAAC34A3C5490 HTTP/1.1
+ 2018-03-10 10:39:37,957 [main] DEBUG [org.apache.http.headers] - >> Accept: application/json
+ 2018-03-10 10:39:37,957 [main] DEBUG [org.apache.http.headers] - >> Content-Type: application/json;charset=utf-8
+ 2018-03-10 10:39:37,957 [main] DEBUG [org.apache.http.headers] - >> Authorization: OGFhZjA3MDg1YTZlYzIzODAxNWE3ZWE1ZGE0NDA4ZTc6MjAxODAzMTAxMDM5Mzc=
+ 2018-03-10 10:39:37,957 [main] DEBUG [org.apache.http.headers] - >> Content-Length: 108
+ 2018-03-10 10:39:37,957 [main] DEBUG [org.apache.http.headers] - >> Host: app.cloopen.com:8883
+ 2018-03-10 10:39:37,957 [main] DEBUG [org.apache.http.headers] - >> Connection: Keep-Alive
+ 2018-03-10 10:39:37,957 [main] DEBUG [org.apache.http.headers] - >> User-Agent: Apache-HttpClient/4.5.2 (java 1.5)
+ 2018-03-10 10:39:37,958 [main] DEBUG [org.apache.http.wire] - >> "{"appId":"8a216da85a7d6742015a7ead8cab015c","to":"13627217665","templateId":"234971","datas":["123456","5"]}"
+ 2018-03-10 10:39:38,039 [main] DEBUG [org.apache.http.wire] - << "HTTP/1.1 200 OK[\r][\n]"
+ 2018-03-10 10:39:38,043 [main] DEBUG [org.apache.http.wire] - << "Server: nginx/1.4.6[\r][\n]"
+ 2018-03-10 10:39:38,043 [main] DEBUG [org.apache.http.wire] - << "Date: Sat, 10 Mar 2018 02:39:22 GMT[\r][\n]"
+ 2018-03-10 10:39:38,044 [main] DEBUG [org.apache.http.wire] - << "Content-Type: application/json;charset=UTF-8[\r][\n]"
+ 2018-03-10 10:39:38,044 [main] DEBUG [org.apache.http.wire] - << "Content-Length: 121[\r][\n]"
+ 2018-03-10 10:39:38,044 [main] DEBUG [org.apache.http.wire] - << "Connection: keep-alive[\r][\n]"
+ 2018-03-10 10:39:38,044 [main] DEBUG [org.apache.http.wire] - << "[\r][\n]"
+ 2018-03-10 10:39:38,046 [main] DEBUG [ytx.org.apache.http.impl.conn.DefaultClientConnection] - Receiving response: HTTP/1.1 200 OK
+ 2018-03-10 10:39:38,046 [main] DEBUG [org.apache.http.headers] - << HTTP/1.1 200 OK
+ 2018-03-10 10:39:38,046 [main] DEBUG [org.apache.http.headers] - << Server: nginx/1.4.6
+ 2018-03-10 10:39:38,047 [main] DEBUG [org.apache.http.headers] - << Date: Sat, 10 Mar 2018 02:39:22 GMT
+ 2018-03-10 10:39:38,047 [main] DEBUG [org.apache.http.headers] - << Content-Type: application/json;charset=UTF-8
+ 2018-03-10 10:39:38,047 [main] DEBUG [org.apache.http.headers] - << Content-Length: 121
+ 2018-03-10 10:39:38,048 [main] DEBUG [org.apache.http.headers] - << Connection: keep-alive
+ 2018-03-10 10:39:38,054 [main] DEBUG [ytx.org.apache.http.impl.client.DefaultHttpClient] - Connection can be kept alive indefinitely
+ 2018-03-10 10:39:38,063 [main] DEBUG [org.apache.http.wire] - << "{"statusCode":"000000","templateSMS":{"smsMessageSid":"b0e1298469894ae3a240deec6fd44369","dateCreated":"20180310103922"}}"
+ 2018-03-10 10:39:38,063 [main] DEBUG [ytx.org.apache.http.impl.conn.BasicClientConnectionManager] - Releasing connection ytx.org.apache.http.impl.conn.ManagedClientConnectionImpl@58a9760d
+ 2018-03-10 10:39:38,064 [main] DEBUG [ytx.org.apache.http.impl.conn.BasicClientConnectionManager] - Connection can be kept alive indefinitely
+ 2018-03-10 10:39:38,066 [main] DEBUG [ytx.org.apache.http.impl.conn.DefaultClientConnection] - Connection 0.0.0.0:50681<->42.121.254.126:8883 closed
+ 2018-03-10 10:39:38,066 [main] INFO  [com.cloopen.rest.sdk.CCPRestSmsSDK] - Sat Mar 10 10:39:38 CST 2018 sendTemplateSMS response body = {"statusCode":"000000","templateSMS":{"smsMessageSid":"b0e1298469894ae3a240deec6fd44369","dateCreated":"20180310103922"}}
+ 
