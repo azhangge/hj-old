@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"  lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <ui:composition template="BackGeneral.xhtml">
+        <ui:define name="content">
+            <h:form>
+                <ui:include src="/ManualPanel.xhtml"></ui:include>
+                <ui:include src="/AjaxStatus2.xhtml"/>
+                <p:outputPanel autoUpdate="true">
+                    <p:growl/>
+                </p:outputPanel>
+                <h:outputText id="outputText1" styleClass="tit"
+                              value="－功能设置－" />
+                <p:separator style="margin:5px 0px 10px 0px" />
+
+
+
+
+                <p:panel style="margin-top:20px;width:100%;;">
+                    <f:facet name="header">
+                        <h:outputText value="用户注册相关" />
+                    </f:facet>
+                    <h:panelGrid columns="8">
+
+                       <!--  <h:outputText value="EMAIL验证：" style="margin-left:20px"/>
+                        <h:panelGroup>
+                            <h:selectBooleanCheckbox
+                                value="#{systemConfigMB.sc.emailValidation}"></h:selectBooleanCheckbox>
+                            <ui:include src="/GeneralHelper.xhtml">
+                                <ui:param name="id" value="22183423093717"></ui:param>
+                            </ui:include>
+                        </h:panelGroup>
+
+                        <h:outputText value="验证身份证：" style="margin-left:20px"/>
+                        <h:selectBooleanCheckbox value="#{systemConfigMB.sc.usePid}"></h:selectBooleanCheckbox>
+
+                        <h:outputText value="自动审核用户：" style="margin-left:20px"/>
+                        <h:selectBooleanCheckbox value="#{systemConfigMB.sc.autoCheck}"></h:selectBooleanCheckbox> -->
+
+                        <h:outputText value="用户注册：" style="margin-left:20px"/>
+                        <!-- <h:selectBooleanCheckbox value="#{systemConfigMB.sc.systemClosed}"></h:selectBooleanCheckbox> -->
+                        <h:selectOneMenu value="#{systemConfigMB.sc.systemClosed}">
+                            <f:selectItem itemValue="0" itemLabel="不允许"/>
+                            <f:selectItem itemValue="1" itemLabel="允许"/>
+                            <f:selectItem itemValue="2" itemLabel="需要管理员审核"/>
+                        </h:selectOneMenu>
+                        
+                        <h:outputText value="轮播图切换间隔时间（秒）：" style="margin-left:20px"/>
+                        <h:inputText value="#{systemConfigMB.sc.picChangeTime}"></h:inputText>
+                        <h:outputText value="开放试题收藏：" style="margin-left:20px"/>
+                        <h:selectBooleanCheckbox value="#{systemConfigMB.sc.openCollection}"></h:selectBooleanCheckbox>
+
+
+                    </h:panelGrid>
+                </p:panel>
+
+
+                <!-- <p:panel style="margin-top:20px;width:100%;;">
+                    <f:facet name="header">
+                        <h:outputText value="功能模块" />
+                    </f:facet>
+                    <h:panelGrid columns="8">
+
+
+                        <h:outputText value="开放个人中心：" style="margin-left:20px"/>
+                        <h:selectBooleanCheckbox value="#{systemConfigMB.sc.openUserCenter}"></h:selectBooleanCheckbox>
+                        <h:outputText value="开放成绩查询：" style="margin-left:20px"/>
+                        <h:selectBooleanCheckbox value="#{systemConfigMB.sc.openScore}"></h:selectBooleanCheckbox>
+                        <h:outputText value="开放章节练习：" style="margin-left:20px"/>
+                        <h:selectBooleanCheckbox value="#{systemConfigMB.sc.openModuleExam}"></h:selectBooleanCheckbox>
+                        <h:outputText value="开放课程学习：" style="margin-left:20px"  rendered="#{copyrightController.sysType!='1' and copyrightController.sysType!='2'}"/>
+                        <h:selectBooleanCheckbox value="#{systemConfigMB.sc.openLesson}" rendered="#{copyrightController.sysType!='1' and copyrightController.sysType!='2'}"></h:selectBooleanCheckbox>
+
+                        <h:outputText value="开放竞赛：" style="margin-left:20px"  rendered="#{copyrightController.sysType!='1'}"/>
+                        <h:selectBooleanCheckbox value="#{systemConfigMB.sc.openContest}" rendered="#{copyrightController.sysType!='1'}"></h:selectBooleanCheckbox>
+                        <h:outputText value="开放自助练习：" style="margin-left:20px"  rendered="#{copyrightController.sysType!='1'}"/>
+                        <h:selectBooleanCheckbox value="#{systemConfigMB.sc.openBuffet}" rendered="#{copyrightController.sysType!='1'}"></h:selectBooleanCheckbox>
+                        <h:outputText value="前台试题检索：" style="margin-left:20px"  rendered="#{copyrightController.sysType!='1'}"/>
+                        <h:selectBooleanCheckbox value="#{systemConfigMB.sc.openSearch}" rendered="#{copyrightController.sysType!='1'}"></h:selectBooleanCheckbox>
+
+
+                        <h:outputText value="开放错题中心：" style="margin-left:20px"/>
+                        <h:selectBooleanCheckbox value="#{systemConfigMB.sc.openWrong}"></h:selectBooleanCheckbox>
+                        <h:outputText value="开放用户难点：" style="margin-left:20px" rendered="#{copyrightController.sysType!='1' and copyrightController.sysType!='2'}"/>
+                        <h:selectBooleanCheckbox value="#{systemConfigMB.sc.openWrong2}" rendered="#{copyrightController.sysType!='1' and copyrightController.sysType!='2'}"></h:selectBooleanCheckbox>
+                        <h:outputText value="开放用户论坛：" style="margin-left:20px"/>
+                        <h:selectBooleanCheckbox value="#{systemConfigMB.sc.openForum}"></h:selectBooleanCheckbox>
+
+                        <h:outputText value="开放用户消息：" style="margin-left:20px"/>
+                        <h:selectBooleanCheckbox value="#{systemConfigMB.sc.openMessage}"></h:selectBooleanCheckbox>
+
+                        <h:outputText value="开放用户文件：" style="margin-left:20px"/>
+                        <h:selectBooleanCheckbox value="#{systemConfigMB.sc.openFile}"></h:selectBooleanCheckbox>
+
+                        <h:outputText value="开放图片轮播：" style="margin-left:20px"/>
+                        <h:selectBooleanCheckbox value="#{systemConfigMB.sc.openPicture}"></h:selectBooleanCheckbox>
+
+                        <h:outputText value="开放客服中心：" rendered="#{copyrightController.sysType!='1'}" style="margin-left:20px"/>
+                        <h:panelGroup  rendered="#{copyrightController.sysType!='1'}">
+                            <h:selectBooleanCheckbox value="#{systemConfigMB.sc.openCustomerService}"></h:selectBooleanCheckbox>
+                            <ui:include src="/GeneralHelper.xhtml">
+                                <ui:param name="id" value="100518741071002"></ui:param>
+                            </ui:include>
+                        </h:panelGroup>
+
+
+                    </h:panelGrid>
+                </p:panel>
+
+
+                <p:panel style="margin-top:20px;width:100%;;">
+                    <f:facet name="header">
+                        <h:outputText value="其它设置" />
+                    </f:facet>
+                    <h:panelGrid columns="8">
+
+                        <h:outputText value="开放在线支付：" style="margin-left:20px" rendered="#{copyrightController.sysType!='1' and copyrightController.sysType!='2'}"/>
+                        <h:selectBooleanCheckbox value="#{systemConfigMB.sc.openTrade}" rendered="#{copyrightController.sysType!='1' and copyrightController.sysType!='2'}"></h:selectBooleanCheckbox>
+
+                        <h:outputText value="开放积分体系：" style="margin-left:20px" rendered="#{copyrightController.sysType!='1'}"/>
+                        <h:selectBooleanCheckbox value="#{systemConfigMB.sc.showScore}" rendered="#{copyrightController.sysType!='1'}"></h:selectBooleanCheckbox>
+
+                        <h:outputText value="允许用户更换部门：" style="margin-left:20px"/>
+                        <h:selectBooleanCheckbox value="#{systemConfigMB.sc.allowChgDept}"></h:selectBooleanCheckbox>
+
+                        <h:outputText value="仅显示本部门考试：" style="margin-left:20px"/>
+                        <h:selectBooleanCheckbox value="#{systemConfigMB.sc.onlyDept}"></h:selectBooleanCheckbox>
+
+                        <h:outputText value="仅显示本部门课程：" style="margin-left:20px"/>
+                        <h:selectBooleanCheckbox value="#{systemConfigMB.sc.onlyDeptLesson}"></h:selectBooleanCheckbox>
+
+                        
+                        <h:outputText value="开放职务：" style="margin-left:20px"/>
+                        <h:selectBooleanCheckbox value="#{systemConfigMB.sc.openPosition}"></h:selectBooleanCheckbox>
+
+                        <h:outputText value="不允许重复登录：" style="margin-left:20px"/>
+                        <h:selectBooleanCheckbox value="#{systemConfigMB.sc.singleLogin}"></h:selectBooleanCheckbox>
+
+
+                        <h:outputText value="启用交卷队列：" style="margin-left:20px" rendered="#{copyrightController.sysType!='1'}"/>
+                        <h:panelGroup rendered="#{copyrightController.sysType!='1'}">
+                            <h:selectBooleanCheckbox value="#{systemConfigMB.sc.asyncSubmit}"></h:selectBooleanCheckbox>
+                            <ui:include src="/GeneralHelper.xhtml">
+                                <ui:param name="id" value="21999711672293"></ui:param>
+                            </ui:include>
+                        </h:panelGroup>
+                        <h:outputText value="开启自动上传插件：" style="margin-left:20px"/>
+                        <h:panelGroup>
+                            <h:selectBooleanCheckbox value="#{systemConfigMB.sc.autoUpload}"></h:selectBooleanCheckbox>
+                            <ui:include src="/GeneralHelper.xhtml">
+                                <ui:param name="id" value="22060730607381"></ui:param>
+                            </ui:include>
+                        </h:panelGroup>
+
+                        <h:outputText value="开放第三方平台连接：" style="margin-left:20px" rendered="#{copyrightController.sysType!='1'}"/>
+                        <h:panelGroup rendered="#{copyrightController.sysType!='1'}">
+                            <h:selectBooleanCheckbox value="#{systemConfigMB.sc.ifConnect}"></h:selectBooleanCheckbox>
+                            <ui:include src="/GeneralHelper.xhtml">
+                                <ui:param name="id" value="100531059662610"></ui:param>
+                            </ui:include>
+                        </h:panelGroup>
+
+                    </h:panelGrid>
+                </p:panel> -->
+
+                <p:separator/>
+
+                <p:commandButton value="确定修改" style="margin-left:24px" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'sys')}"
+                                 action="#{systemConfigMB.updateTimesNum}" />
+
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

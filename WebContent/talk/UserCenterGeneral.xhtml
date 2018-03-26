@@ -1,0 +1,160 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:head>
+	<title>Facelet Title</title>
+	<f:loadBundle basename="com.huajie.exam.i18n.langs" var="lang" />
+</h:head>
+
+<h:body>
+	<ui:composition template="../HJ/HJGeneral.xhtml">
+		<ui:define name="title">
+			<h:outputText value="用户资料" />
+		</ui:define>
+		<ui:define name="content">
+		<p:outputPanel autoUpdate="true">
+						<p:growl />
+					</p:outputPanel>
+			<link type="text/css" rel="stylesheet" href="../HJ/css/navigation.css" />
+			<link type="text/css" rel="stylesheet" href="../HJ/css/user_center.css" />
+			<!-- <link type="text/css" rel="stylesheet" href="../HJ/css/hjhead.css" /> -->
+			<div class="navigation yahei bold" style=" margin-bottom: 0px;margin-top: 0px;height: 80px;padding-top: 20px;padding-left: 60px;">
+				<div class="navigation_div">
+					<a href="#{facesContext.externalContext.requestContextPath}/" class="navigation_link">首页</a>
+				</div>
+				<div class="navigation_separate">/</div>
+				<div class="navigation_div">个人中心</div>
+			</div>
+			<div class="user_center">
+
+				<div class="left" style="margin-left:50px;">
+					<div class="left-title">
+						<div class="head_user_pic">
+							<a href="#{facesContext.externalContext.requestContextPath}/talk/UserCenter.jspx">
+								<img
+									src="#{(empty clientSession.usr.picUrl)?('../HJ/image/notlogin.png'):
+                                        clientSession.usr.picUrl}"
+									class="headPic" />
+							</a>
+						</div>
+						<div class="user_info">
+							<div class="user_name">#{clientSession.usr.tel}</div>
+							<div class="user_course">
+								<!-- <div class="user_course_num">我的课程 #{myLessonTypeList.courseNum}</div>
+								<div class="divide">|</div> -->
+								<div class="user_class_hour">累计学时 #{myLessonTypeList.totalFinishNum}</div>
+								<div style="clear: both;"></div>
+							</div>
+						</div>
+					</div>
+					<div class="left-tree">
+						<p:panelMenu>
+							<p:submenu label="个人设置" >
+
+								<p:menuitem value="个人信息" url="/talk/UserDetail.jspx?id=#{userCenter.user.id}" rendered="#{clientSession.ifLogin}" icon="ui-icon-person" />
+								<p:menuitem value="实名信息" url="/talk/UserRealDetail.jspx?id=#{userCenter.user.id}" rendered="#{clientSession.ifLogin}" icon="ui-icon-info" /> 
+								<p:menuitem value="账号安全" url="/talk/AccountSecurity.jspx?id=#{accountSecurity.user.id}" rendered="#{clientSession.ifLogin}" icon="ui-icon-key"></p:menuitem>
+								<p:menuitem value="讲师信息" url="/talk/TeacherInfo.jspx" icon="ui-icon-folder-open"></p:menuitem>
+								<!--  
+								<p:menuitem value="讲师自建课程" url="/talk/TeacherCourseList.jspx" icon="ui-icon-folder-open"></p:menuitem>
+								-->
+							</p:submenu>
+							<p:submenu label="课程中心">
+								<p:menuitem value="在学课程" url="/talk/UserCourses.jspx?index=1" icon="ui-icon-folder-open" />
+								<p:menuitem value="收藏课程" url="/talk/UserCourses.jspx?index=2" icon="ui-icon-folder-open" />
+								<p:menuitem value="已购课程" url="/talk/UserCourses.jspx?index=3" icon="ui-icon-folder-open" />
+								<p:menuitem value="专属课程" url="/talk/UserCourses.jspx?index=4" icon="ui-icon-folder-open" />
+							</p:submenu>
+							<!--  
+							<p:submenu label="我的消息">
+								<p:menuitem value="我的消息（#{clientSession.usr.unReadedNoticeNum}）"
+									url="/talk/NoticeUserList.jspx?id=#{userCenter.user.id}"
+									rendered="#{userCenter.user.id==clientSession.usr.id}"
+									icon="ui-icon-mail-closed" />
+							</p:submenu>
+							-->
+							<!--  
+							<p:submenu label="成绩和证书">
+								<p:menuitem value="成绩和证书" url="#" icon="ui-icon-folder-open" />
+							</p:submenu>
+							<p:submenu label="讲师课程">
+								<p:menuitem value="创建课程" url="#" icon="ui-icon-folder-open" />
+								<p:menuitem value="暂存课程" url="/talk/HoldCourses.jspx" icon="ui-icon-folder-open" />
+								<p:menuitem value="在审课程" url="#" icon="ui-icon-folder-open" />
+								<p:menuitem value="被驳回课程" url="#" icon="ui-icon-folder-open" />
+								<p:menuitem value="已上架课程" url="#" icon="ui-icon-folder-open" />
+							</p:submenu> -->
+						</p:panelMenu>
+					</div>
+				</div>
+				<div class="right" style="width:800px;">
+                    <ui:insert name="ucontent">
+                    </ui:insert>
+				</div>
+				<div style="clear: both;"></div>
+			</div>
+			<!-- <ui:include src="AdminFilePanel.xhtml"></ui:include>
+                <ui:include src="SendMessagePopup.xhtml"></ui:include>
+                <p:panel id="topNav8" styleClass="frontColumn topNav8Wrapper">
+                    <h:outputLink value="#{facesContext.externalContext.requestContextPath}" styleClass="nav8">
+                        <h:outputText value="首页" />
+                    </h:outputLink>
+                    <h:outputText value="/" styleClass="navSeparator"/>
+                    <h:outputText value="个人中心" styleClass="nav8"/>
+                </p:panel>
+                <p:separator/>
+                <div style="width:100%;overflow: hidden;" >
+
+                    <div style="width:190px;border:0px red solid;float:left;overflow: hidden;">
+                        <div style="margin: 0 auto;text-align: center;width:180px;padding: 10px 10px 0px 10px;">
+
+                            <h:panelGrid style="border:0px solid black;text-align: left;margin: 0 auto;width:90%;" columns="1" styleClass="">
+                                <p:graphicImage  value="#{userCenter.user.picUrl==''?'/resources/images/user_model.gif':userCenter.user.picUrl}" style="width:60px;height:60px;margin: 0px 0px 0px 0px;" />
+                                <p:graphicImage  value="/resources/images/morentouxiang.png" style="width:70px;height:70px;margin: 0px 10px 0px 30px;" rendered="#{userCenter.user.picUrl==null || userCenter.user.picUrl==''}"/>
+                                 <p:graphicImage  value="#{userCenter.user.picUrl}" style="width:70px;height:70px;margin: 0px 10px 0px 30px;" rendered="#{userCenter.user.picUrl!=null || userCenter.user.picUrl!=''}"/> 
+                               
+                               <c:choose>
+                                   <c:when test="#{userCenter.user.picUrl==null || userCenter.user.picUrl==''}">
+                                       <p:graphicImage  value="/resources/images/morentouxiang.png" style="width:70px;height:70px;margin: 0px 10px 0px 30px;" id="pic"/>
+                                   </c:when>
+                                   <c:otherwise>
+                                      <p:graphicImage  value="#{clientSession.usr.picUrl}" style="width:70px;height:70px;margin: 0px 10px 0px 30px;" id="pic" /> 
+                                   </c:otherwise>
+                               </c:choose>
+                               
+                                <h:panelGroup>
+                                    <h:outputText value="" escape="false"></h:outputText>
+                                    <h:outputLink value="#{facesContext.externalContext.requestContextPath}/talk/UserDetail.jspx?id=#{userCenter.user.id}" rendered="#{userCenter.user.id==clientSession.usr.id}" styleClass="operation" style="margin:0px 10px 0px 40px;">
+                                        <h:outputText value="修改资料" rendered="#{clientSession.usr!=null}"/>
+                                    </h:outputLink>
+                                    <br/>
+                                    <p:commandLink action="#{clientSession.exit()}" rendered="#{clientSession.ifLogin}"  value="退出系统"  styleClass="operation" style="margin:0px 10px 0px 40px;"/>
+                                </h:panelGroup>
+                            </h:panelGrid>
+                            <hr/>
+                            <h:outputText value="#{userCenter.user.username}" style="color:#000000;font-weight:bold;"/>
+                            <br/>
+                            <h:outputText value="上次登录：" style="color:#0073ea;font-weight:bold;font-size:12px;"></h:outputText>
+                            <h:outputText value="#{clientSession.lastTime}" rendered="#{clientSession.usr!=null}" style="color:#0073ea;font-weight:bold;font-size:12px;">
+                                <f:convertDateTime pattern="MM月dd日 HH:mm" timeZone="GMT+8" />
+                            </h:outputText>
+                        </div>
+                        <p:separator/>
+						
+
+                    </div>
+                    <div id="ucontent" style="margin-left: 200px;overflow: hidden;border:0px solid blue;margin-right: 5px;">
+
+                        <ui:insert name="ucontent">
+                        </ui:insert>
+                    </div>
+                    <div style="clear:both;"></div>
+                </div> -->
+		</ui:define>
+	</ui:composition>
+
+</h:body>
+</html>
+

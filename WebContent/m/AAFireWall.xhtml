@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:poue="http://primefaces.org/ui/extensions"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head> 
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form>
+                    
+                    <h:outputText id="outputText1" styleClass="tit"
+                                  value="－防火墙设置－" />
+                    <p:separator/>
+                    <h:outputLabel style="color:blue;" value="警告：请确保您有足够专业知识进行防火墙设置，否则容易造成滑稽后果。" />
+                    <p:separator/>
+                    <h:panelGrid columns="2">
+                        <h:outputLabel style="margin-left:10px;"
+                                       value="防火墙开启：" />
+                        <h:selectBooleanCheckbox value="#{aAFireWall.info.ifInUse}"/>
+                        <h:outputLabel style="margin-left:10px;"
+                                       value="IP过滤规则：" />
+                        <h:selectOneRadio value="#{aAFireWall.info.ifBlack}" layout="pageDirection">
+                            <f:selectItem itemLabel="白名单（只要处在白名单中，即允许访问）" itemValue="false"/>
+                            <f:selectItem itemLabel="黑名单（只要处在黑名单中，即不允许访问）" itemValue="true"/>
+                        </h:selectOneRadio>
+                        
+                    </h:panelGrid>
+                    <p:separator />
+                    <h:outputLabel style="color:orange;font-weight: bold" value="再次警告：错误的IP地址过滤规则将导致前台用户无法访问,请万分慎重，非专业人士请自觉远离此操作。" /><br/>
+                    
+                    <p:separator/>
+                    <h:panelGrid columns="2">
+
+                        <p:commandButton  action="#{aAFireWall.apply()}" onclick="if (!confirm('若开启了防火墙，请确保IP过滤规则正确，否则后果自负，您要继续吗？')) return false" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'safety')}"
+                                          value="提交修改" />
+                        <p:growl autoUpdate="true"/>
+                    </h:panelGrid>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"  lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form>
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <div>
+                        <h:outputText styleClass="tit"
+                                      value="－#{aAUser.flag?'修改单位管理员':'添加单位管理员'}－" />
+                        <p:separator/>
+                        <h:panelGrid columns="3">
+                            <h:outputText value="用户名：" />
+                            <h:inputText value="#{aAUser.admin.urn}" style="width:400px">
+                                <p:ajax listener="#{aAUser.onChangeUrn}" update="urnTip" process="@form"/>
+                            </h:inputText>
+                            <h:outputText id="urnTip" value="&nbsp;#{aAUser.urnTip}" style="color:#{aAUser.urnOk?'green;':'red;'}}" />
+							
+                            <h:outputText value="密码：" />
+                            <h:inputText value="#{aAUser.admin.pwd}" style="width:400px" />
+                            <h:outputText/>
+
+<!--                             <h:outputText value="角色名：" />
+                            <h:inputText value="#{aAUser.admin.persona}" disabled="#{!adminSessionBean.ifSuper}" style="width:400px" /> -->
+
+                            <h:outputText value="公司名称：" />
+                            <h:inputText value="#{aAUser.admin.nickname}" style="width:400px" />
+							<h:outputText/>
+							
+							<h:outputText value="E-mail：" />
+                            <h:inputText value="#{aAUser.admin.email}" style="width:400px" >
+                            	<p:ajax listener="#{aAUser.onChangeEmail}" update="emailTip" process="@form"/>
+                            </h:inputText>
+                            <h:outputText id="emailTip" value="&nbsp;#{aAUser.emailTip}" style="color:#{aAUser.emailOk?'green;':'red;'}}" />
+                           
+                            <h:outputText value="手机号：" />
+                            <h:inputText value="#{aAUser.admin.tel}" style="width:400px">
+                            	<p:ajax listener="#{aAUser.onChangePhone}" update="phoneTip" process="@form"/>
+                            </h:inputText>
+							<h:outputText id="phoneTip" value="&nbsp;#{aAUser.phoneTip}" style="color:#{aAUser.phoneOk?'green;':'red;'}}" />
+							
+                            <h:outputLabel  styleClass="text" value="有效期：" rendered="#{aAUser.admin.grp!='company'}"/>
+                            <h:panelGroup rendered="#{aAUser.admin.grp!='company'}">
+                                <p:calendar value="#{aAUser.admin.availableTime}"  disabled="#{aAUser.admin.grp=='company'}" pattern="yyyy-MM-dd HH:mm" navigator="true"  timeZone="GMT+8" locale="zh_CN" yearRange="c:c+100"/>
+                                <h:outputText value=" -- " />
+                                <p:calendar value="#{aAUser.admin.expireTime}"  disabled="#{aAUser.admin.grp=='company'}" pattern="yyyy-MM-dd HH:mm" navigator="true" timeZone="GMT+8" locale="zh_CN"  yearRange="c:c+100"/>
+                            </h:panelGroup>
+							<h:outputText/>
+							
+                            <h:outputText value="启用：" rendered="#{adminSessionBean.ifSuper and aAUser.admin.grp!='admin'}" />
+                            <h:selectBooleanCheckbox id="checkbox1" rendered="#{adminSessionBean.ifSuper and aAUser.admin.grp!='admin'}"
+                             value="#{aAUser.admin.enabled}" />
+                            <h:outputText/>
+                            
+                            <h:outputText value="用户组：" rendered="#{aAUser.admin.grp!='company'}" style="display:none"/>
+                            <h:selectOneMenu value="#{aAUser.admin.grp}" rendered="#{aAUser.admin.grp!='company'}" style="display:none">
+                                <f:selectItem itemLabel="单位管理员" itemValue="company"/>
+                            </h:selectOneMenu>
+                            <h:outputText/>
+                            
+                            <h:outputText value="权限：" style="display:none"/>
+                            <p:dataGrid value="#{aAUser.authList}" var="auth" columns="5" style="display:none">
+                                <h:panelGroup>
+                                    <h:outputText value="#{auth.cnName}"/>
+                                    <h:selectBooleanCheckbox value="#{auth.selected}" disabled="#{!adminSessionBean.ifSuper}"  />
+                                </h:panelGroup>
+                            </p:dataGrid>
+
+                        </h:panelGrid>
+                            <p:treeTable id="dc" value="#{aAUser.moduleRoot}" var="dic" style="width:500px;" rendered="#{copyrightController.sysType!='1'}">
+                                <f:facet name="header">
+                                    <h:outputText value="请选择本管理员拥有权限的试题模块"></h:outputText>
+                                </f:facet>
+
+                                <p:column style="width:200px;">
+                                    <f:facet name="header">
+                                        <h:outputText value="试题模块名称"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{dic.name}" ></h:outputText>
+                                </p:column>
+                                <p:column style="width:100px;">
+                                    <f:facet name="header">
+                                        <h:outputText value="选择"></h:outputText>
+                                    </f:facet>
+                                    <h:selectBooleanCheckbox value="#{dic.selected}"  disabled="#{!adminSessionBean.ifSuper}">
+                                        <p:ajax process="@form" listener="#{aAUser.checkSons(dic.id,dic.selected)}" update="@form"/>
+                                    </h:selectBooleanCheckbox>
+                                </p:column>
+                            </p:treeTable>
+                        <p:dataTable value="#{aAUser.exams}" var="exam"  style="width:500px;" rendered="#{copyrightController.sysType!='1'}">
+                            <f:facet name="header">
+                                <h:outputText value="请选择本管理员能够查看成绩的考试" />
+                            </f:facet>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="考试名称"></h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{exam.name}" escape="false" />
+                            </p:column>
+                            <p:column style="width:100px;">
+                                <f:facet name="header">
+                                    <h:outputText value="选择"></h:outputText>
+                                </f:facet>
+                                <h:selectBooleanCheckbox value="#{exam.selected}"  disabled="#{!adminSessionBean.ifSuper}">
+                                </h:selectBooleanCheckbox>
+                            </p:column>
+                        </p:dataTable>
+
+                        <p:dataTable value="#{aAUser.lessonTypes}" var="lessonType"  style="width:500px;" rendered="#{copyrightController.sysType!='1'}">
+                            <f:facet name="header">
+                                <h:outputText value="请选择本管理员拥有权限的课程" />
+                            </f:facet>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="类别名称"></h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{lessonType.name}" escape="false" />
+                            </p:column>
+                            <p:column style="width:100px;">
+                                <f:facet name="header">
+                                    <h:outputText value="选择"></h:outputText>
+                                </f:facet>
+                                <h:selectBooleanCheckbox value="#{lessonType.selected}"  disabled="#{!adminSessionBean.ifSuper}">
+                                </h:selectBooleanCheckbox>
+                            </p:column>
+                        </p:dataTable>
+
+                        <p:separator/>
+
+                        <p:commandButton action="#{aAUser.submit_action}" ajax="false" value="提交" />
+                        <p:growl autoUpdate="true"/>
+
+                    </div></h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

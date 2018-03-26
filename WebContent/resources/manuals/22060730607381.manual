@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<manual>
+  <id>22060730607381</id>
+  <title>“自动上传插件”的使用方法</title>
+  <content>&lt;p&gt; 为方便题目中含有大量图片的使用场景，本系统专门开发了&amp;ldquo;图片自动上传插件&amp;rdquo;，插件工作原理如下：当从WORD文档整体复制带有图片的题目到系统后台的试题编辑框时，插件能够自动识别WORD文档题目中包含的操作本地图片，并将这些图片自动上传到服务器。此插件在题目中包含有大量图片时（如题目中包含有大量数学公式）将大大提高编辑效率。&lt;/p&gt; &lt;p&gt; 插件启动成功后，应在浏览器底部状态栏显示如下信息：&lt;/p&gt; &lt;p&gt; &lt;span style="color:#0000ff;"&gt;&lt;strong&gt;监控台：欢迎使用&amp;ldquo;本地图片自动上传插件&amp;rdquo;。&lt;/strong&gt;&lt;/span&gt;&lt;/p&gt; &lt;p&gt; 本插件使用JAVA技术开发，任何需要使用本插件的客户机，都需要首先安装JDK，JDK安装完成后到【控制面板】---【Java】----【安全】中将安全级别设置为&amp;ldquo;低&amp;rdquo;。由于本插件要访问客户本地图片，浏览器会不断提示风险，全部点击&amp;ldquo;同意&amp;rdquo;即可。&lt;/p&gt;</content>
+  <gen_time>2014-02-07 18:05:27</gen_time>
+  <ord>13</ord>
+</manual>

@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition>
+            <p:dialog id="alt" header="提示" widgetVar="dlg1" modal="true" height="60">  
+                <h:outputText value="不允许使用ALT或TAB键。" />  
+            </p:dialog>
+            <p:dialog id="modalDialog" header="提示" widgetVar="dlg2" modal="true"  height="60">  
+                <h:outputText value="您离开了考试界面，系统将记录为作弊！！" />  
+            </p:dialog>
+            <p:dialog id="cdts" header="提示" widgetVar="cdts" modal="true">
+                <h:outputText value="试卷还有题目未完成，确认要提交吗？"/><br/>
+                <h:outputText value="点击【取消】定位到未做题目。"/>
+                <p:separator/>
+                <p:commandButton value="提交" onclick="tok11();" type="button"/>
+                <p:commandButton value="取消" onclick="tunok11();" type="button" />
+            </p:dialog>
+            <p:dialog id="dig11" widgetVar="dig11" width="700"  minHeight="200"  modal="true" closable="false" draggable="false" header="考试须知">
+                <div style="max-height: 300px;overflow: auto;">   
+                    <h:outputText value="#{examCaseGeneral.examCase.examination.examInfo}" escape="false"/>
+                </div>
+                <p:separator/>
+                <p:commandButton value="开始考试" type="button" onclick="begain()"  icon="ui-icon-check"/>  
+                <p:commandButton value="退出考试" type="button" onclick="closeWindow2()"  icon="ui-icon-close"/>       
+            </p:dialog>
+            <script>
+                jQuery().ready(function() {
+                    if (#{examCaseGeneral.examCase.examination.showInfo}) {
+                        PF('dig11').show();
+                    } else {
+                        begain();
+                    }
+                });
+            </script>
+        </ui:composition>
+    </h:body>
+</html>
+

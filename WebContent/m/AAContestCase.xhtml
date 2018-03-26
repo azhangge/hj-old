@@ -1,0 +1,354 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <div>
+                    <h:outputText id="outputText1" styleClass="tit" value="-竞赛成绩详情-" />
+                </div>
+                <p:separator/>
+                <h:panelGrid columns="1" style="width:90%;">
+                    <h:panelGroup>
+                        <h:outputText value="竞赛名称："/>
+                        <h:outputText value="#{contestCaseReport.examCase.examination.name}"/>
+                    </h:panelGroup>
+                    <h:panelGroup>
+                        <h:outputText value="竞赛时长："/>
+                        <h:outputText value="#{contestCaseReport.examCase.examination.timeLen}分钟"/>
+                    </h:panelGroup>
+                    <h:panelGroup>
+                        <h:outputText value="开考时间："/>
+                        <h:outputText value="#{contestCaseReport.examCase.genTime}">
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8"/>
+                        </h:outputText>
+                    </h:panelGroup>
+                    <h:panelGroup>
+                        <h:outputText value="提交时间："/>
+                        <h:outputText value="#{contestCaseReport.examCase.submitTime}">
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8"/>
+                        </h:outputText>
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        <h:outputText value="竞赛题型："/>
+                        <ui:repeat value="#{contestCaseReport.examCase.examination.random2Paper.parts}" var="part1" varStatus="row">
+                            <h:outputText value="#{part1.name}：#{part1.itemNum}"/>
+                            <h:outputText value="，" rendered="#{!row.last}"/>
+                        </ui:repeat>
+                    </h:panelGroup>
+                    <h:panelGroup>
+                        <h:outputText value="竞赛成绩："/>
+                        <h:outputText value="#{contestCaseReport.examCase.score}" style="color:red;font-weight: bold;font-size: 16px;">
+                            <f:convertNumber maxFractionDigits="2" minFractionDigits="1"/>
+                        </h:outputText>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup>
+                        <h:outputText value="竞赛排名："/>
+                        <h:outputText value="#{contestCaseReport.examCase.ranking}" style="">
+                        </h:outputText>
+                        <h:outputText value="/#{contestCaseReport.examCase.examination.fetchCaseNum(contestCaseReport.examCase.examination.id,contestCaseReport.examCase.sessionStr)}" style="color:green;"/>
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{applicationBean.systemConfig.showScore and copyrightController.sysType!='1'}">
+                        <h:outputText value="消耗积分："/>
+                        <h:outputText value="#{contestCaseReport.examCase.examination.scorePaid}" >
+                            <f:convertNumber maxFractionDigits="2" minFractionDigits="1"/>
+                        </h:outputText>
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{applicationBean.systemConfig.showScore and copyrightController.sysType!='1'}">
+                        <h:outputText value="满分积分："/>
+                        <h:outputText value="#{contestCaseReport.examCase.examination.bbsScore}" >
+                            <f:convertNumber maxFractionDigits="2" minFractionDigits="1"/>
+                        </h:outputText>
+                    </h:panelGroup>
+
+                    <h:panelGroup rendered="#{applicationBean.systemConfig.showScore and copyrightController.sysType!='1'}">
+                        <h:outputText value="实得积分："/>
+                        <h:outputText value="#{contestCaseReport.examCase.bbsScore}" >
+                            <f:convertNumber maxFractionDigits="2" minFractionDigits="1"/>
+                        </h:outputText>
+                    </h:panelGroup>
+
+                </h:panelGrid>
+                <p:separator/>
+                <!--
+                <h:panelGrid columns="2" style="width:100%;text-align: center;" rendered="#{contestCaseReport.examCase.examination.id!='7'}">
+                    <p:pieChart id="sample" value="#{contestCaseReport.pieModel1}" legendPosition="w"  showDataLabels="true" 
+                                title="试卷分值构成比例图" style="width:400px;height:300px"  sliceMargin="5" />  
+                    <p:pieChart id="custom" value="#{contestCaseReport.pieModel2}" legendPosition="e" fill="true" showDataLabels="true"  
+                                title="考生得分构成比例图" style="width:400px;height:300px" sliceMargin="5"  />  
+                </h:panelGrid>
+                -->
+                <ui:repeat value="#{contestCaseReport.examCase.cparts}" var="part">
+                    <p:panel styleClass="mainPanel">
+                        <f:facet name="header">
+                            <h:outputText value="※#{part.name}（#{part.description}），共#{part.itemNum}小题。"/>
+                        </f:facet>
+                        <ui:repeat value="#{part.cadapters}" var="adapter"  varStatus="row">
+
+                            <h:panelGroup rendered="#{adapter.qtype=='choice'}">
+                                <h:outputText value="#{row.index+1}、#{adapter.choiceItem.question.name}" escape="false" styleClass="choiceTitle"/>
+                                <h:outputText value="（#{part.choiceScore}分）" styleClass="choiceTitle" escape="false"/>
+                                <div style="margin-left: 30px;">
+                                    <ui:repeat value="#{adapter.choiceItem.question.choices}" var="ch">
+                                        <h:outputText value="#{ch.label}.&nbsp;#{ch.name}" styleClass="choiceTitle"/>
+                                        <br/>
+                                    </ui:repeat>
+                                </div>
+                                <div style="margin-left: 30px;">
+                                    <h:outputText value="正确答案：" styleClass="answer" />
+                                    <h:outputText value="#{contestCaseReport.examCase.examination.showAnswer?adapter.choiceItem.rightAnswer:'不显示'}" style="color:green;font-weight: bold;"/>&nbsp;
+                                    <h:outputText value="，考生填写：" styleClass="answer"/>
+                                    <h:outputText value="#{adapter.choiceItem.userAnswer==null?'未填写':adapter.choiceItem.userAnswer}"  style="color:green;font-weight: bold;"/>&nbsp;&nbsp;
+                                    <h:outputText value="#{adapter.choiceItem.ifRight?'√':'×'}" style="color:#{adapter.choiceItem.ifRight?'green':'red'};font-weight:bolder;font-size:25px;font-family:宋体;"/>
+                                    <br/>
+                                    <h:outputText value="试题解析：" styleClass="answer"/>
+                                    <h:outputText value="#{contestCaseReport.examCase.examination.showRightStr?adapter.choiceItem.question.rightStr:'不显示'}" escape="false"  style="color:green;"/>
+                                    <br/>
+                                </div>
+                            </h:panelGroup>
+
+                            <h:panelGroup rendered="#{adapter.qtype=='mchoice'}">
+                                <h:outputText value="#{row.index+1}、#{adapter.multiChoiceItem.question.name}" escape="false" styleClass="choiceTitle"/>
+                                <h:outputText value="（#{part.multiChoiceScore}分）" styleClass="choiceTitle" escape="false"/>
+                                <div style="margin-left: 30px;">
+                                    <ui:repeat value="#{adapter.multiChoiceItem.question.choices}" var="ch">
+                                        <h:outputText value="#{ch.label}.&nbsp;#{ch.name}" styleClass="choiceTitle"/>
+                                        <br/>
+                                    </ui:repeat>
+                                </div>
+                                <div style="margin-left: 30px;">
+                                    <h:outputText value="正确答案：" styleClass="answer"/>
+                                    <h:outputText value="#{contestCaseReport.examCase.examination.showAnswer?adapter.multiChoiceItem.rightAnswer:'不显示'}" style="color:green;font-weight: bold;"/>&nbsp;
+                                    <h:outputText value="，考生填写：" styleClass="answer"/>
+                                    <h:outputText value="#{adapter.multiChoiceItem.userAnswer==''?'未填写':adapter.multiChoiceItem.userAnswer}"  style="color:green;font-weight: bold;"/>&nbsp;&nbsp;
+                                    <h:outputText value="#{adapter.multiChoiceItem.ifRight?'√':'×'}" style="color:#{adapter.multiChoiceItem.ifRight?'green':'red'};font-weight:bolder;font-size:25px;font-family:宋体;"/>
+                                    <br/>
+                                    <h:outputText value="试题解析：" styleClass="answer"/>
+                                    <h:outputText value="#{contestCaseReport.examCase.examination.showRightStr?adapter.multiChoiceItem.question.rightStr:'不显示'}" escape="false"  style="color:green;"/>
+                                    <br/>
+                                </div>
+                            </h:panelGroup>
+                            <h:panelGroup rendered="#{adapter.qtype=='fill'}">
+                                <h:outputText value="#{row.index+1}、" styleClass="choiceTitle"/>
+                                <ui:repeat value="#{adapter.fillItem.blocks}" var="b">
+                                    <h:outputText value="#{b.preStr}" escape="false" styleClass="choiceTitle"/>
+                                    <h:outputText value="________"/>
+                                </ui:repeat>
+                                <h:outputText value="#{adapter.fillItem.lastStr}" escape="false" styleClass="choiceTitle"/>
+                                <h:outputText value="（#{part.fillScore}分）" styleClass="choiceTitle" escape="false"/>
+                                <br/>
+                                <div style="margin-left: 30px;">
+                                    <h:outputText value="正确答案：" styleClass="answer"/>
+                                    <h:outputText value="#{contestCaseReport.examCase.examination.showAnswer?adapter.fillItem.rightAnswerStr:'不显示'}" style="color:green;font-weight: bold;"/>
+                                    <h:outputText value="考生填写：" styleClass="answer"/>
+                                    <h:outputText value="#{adapter.fillItem.userAnswerStr==''?'未填写':adapter.fillItem.userAnswerStr}" style="color:green;font-weight: bold;"/>&nbsp;
+                                    <h:outputText value="正确数：" styleClass="answer"/>
+                                    <h:outputText value="#{adapter.fillItem.rightNum}"  style="color:green;font-weight: bold;"/>
+                                    <br/>
+                                    <h:outputText value="试题解析："  styleClass="answer"/>
+                                    <h:outputText value="#{contestCaseReport.examCase.examination.showRightStr?adapter.fillItem.question.rightStr:'不显示'}"  escape="false" style="color:green;"/>
+                                    <br/>
+                                </div>
+                            </h:panelGroup>
+                            <h:panelGroup rendered="#{adapter.qtype=='judge'}">
+                                <h:outputText value="#{row.index+1}、#{adapter.judgeItem.question.name}" styleClass="choiceTitle"/>
+                                <h:outputText value="（#{part.judgeScore}分）" styleClass="choiceTitle" escape="false"/>
+                                <br/>
+                                <div style="margin-left: 30px;">
+                                    <h:outputText value="正确答案：" styleClass="answer"/>
+                                    <h:outputText value="#{contestCaseReport.examCase.examination.showAnswer?adapter.judgeItem.rightAnswer:'不显示'}"  style="color:green;font-weight: bold;"/>
+                                    <h:outputText value="，考生填写：" styleClass="answer"/>
+                                    <h:outputText value="#{adapter.judgeItem.userAnswer}"  style="color:green;font-weight: bold;"/>&nbsp;&nbsp;
+                                    <h:outputText value="#{adapter.judgeItem.ifRight?'√':'×'}" style="color:#{adapter.judgeItem.ifRight?'green':'red'};font-weight:bolder;font-size:25px;font-family:宋体;"/>
+                                    <br/>
+                                    <h:outputText value="试题解析：" styleClass="answer"/>
+                                    <h:outputText value="#{contestCaseReport.examCase.examination.showRightStr?adapter.judgeItem.question.rightStr:'不显示'}" escape="false"  style="color:green;"/>
+                                    <br/>
+                                </div>
+                            </h:panelGroup>
+                            <h:panelGroup rendered="#{adapter.qtype=='essay'}">
+                                <h:outputText value="#{row.index+1}、#{adapter.essayItem.question.name}" styleClass="choiceTitle" escape="false"/>
+                                <h:outputText value="（#{part.essayScore}分）" styleClass="choiceTitle" escape="false"/>
+                                <br/>
+                                <div style="margin-left: 30px;">
+                                    <h:outputText value="正确答案：" styleClass="answer"/>
+                                    <h:outputText value="#{contestCaseReport.examCase.examination.showAnswer?adapter.essayItem.question.answer:'不显示'}" escape="false"  style="color:green;font-weight: bold;"/><br/>
+                                    <h:outputText value="考生填写：" styleClass="answer"/>
+                                    <h:outputText value="#{adapter.essayItem.userAnswer}"  escape="false" style="color:green;font-weight: bold;"/><br/>
+                                    <h:outputText value="正确率："  styleClass="answer"/>
+                                    <h:outputText value="#{adapter.essayItem.rightRatio}" style="color:red;font-weight:bold;">
+                                        <f:convertNumber maxFractionDigits="2" type="percent"/>
+                                    </h:outputText>
+                                    <br/>
+                                    <h:outputText value="试题解析：" styleClass="answer"/>
+                                    <h:outputText value="#{contestCaseReport.examCase.examination.showRightStr?adapter.essayItem.question.rightStr:'不显示'}" escape="false"  style="color:green;"/>
+                                    <br/>
+                                </div>
+                            </h:panelGroup>
+                            <h:panelGroup rendered="#{adapter.qtype=='file'}">
+                                <h:outputText value="#{row.index+1}、#{adapter.fileItem.question.name}" styleClass="choiceTitle" escape="false"/>
+                                <h:outputText value="（#{part.fileScore}分）" styleClass="choiceTitle" escape="false"/>
+                                <div style="margin-left: 30px;">
+                                    <h:outputText value="操作步骤：" styleClass="answer" escape="false"/>
+                                    <h:outputText value="#{adapter.fileItem.question.answer}"  style="color:green;font-weight: bold;" escape="false"/><br/>
+                                    <h:outputText value="考生操作步骤：" styleClass="answer" escape="false"/>
+                                    <h:outputText value="#{adapter.fileItem.userAnswer}"  style="color:green;font-weight: bold;" escape="false"/><br/>
+                                    <h:outputText value="附件：" styleClass="answer" />
+                                    <h:outputLink target="_blank" value="#{facesContext.externalContext.requestContextPath}/DownloadFileQuestionAttach?id=#{adapter.fileItem.id}" rendered="#{adapter.fileItem.attached}">
+                                        <h:outputText value="#{adapter.fileItem.id}.rar"/>
+                                    </h:outputLink><br/>
+                                    <h:outputText value="正确率："  styleClass="answer" />
+                                    <h:outputText value="#{adapter.fileItem.rightRatio}" style="color:red;font-weight:bold;">
+                                        <f:convertNumber maxFractionDigits="2" type="percent"/>
+                                    </h:outputText><br/>
+                                    <h:outputText value="教师评语：" styleClass="answer"/>
+                                    <h:outputText value="#{adapter.fileItem.remark}"  escape="false" style="color:green;"/><br/>
+                                    <h:outputText value="试题解析：" styleClass="answer"/>
+                                    <h:outputText value="#{contestCaseReport.examCase.examination.showRightStr?adapter.fileItem.question.rightStr:'不显示'}" escape="false"  style="color:green;"/>
+                                    <br/>
+                                </div>
+                            </h:panelGroup>
+                            <h:panelGroup rendered="#{adapter.qtype=='case'}">
+                                <p:panel style="width:100%;">
+                                    <f:facet name="header">
+                                        <h:outputText value="#{adapter.caseItem.question.nickName}" style="" styleClass="choiceTitle" escape="false"/>
+                                        <h:outputText value="，得分："/>
+                                        <h:outputText value="#{contestCaseReport.examCase.caseScore}"/>
+                                    </f:facet>
+                                    <h:outputText value="#{adapter.caseItem.question.content}" styleClass="choiceTitle" escape="false" style="padding:5px 10px 5px 10px;"/>
+                                    <br/>
+                                    <p:separator/>
+
+                                    <ui:repeat  value="#{adapter.caseItem.choiceItems}" var="choice" varStatus="row" rendered="#{fn:length(adapter.caseItem.choiceItems)!=0}">
+                                        <a id="archor-#{choice.id}" href="#"></a>
+                                        <h:outputText value="（#{row.index+1}）#{choice.question.name}" style="#{choice.marked?'color:red;':''}" styleClass="choiceTitle" escape="false"/>
+                                        <div style="margin-left: 30px;">
+                                            <ui:repeat value="#{choice.question.choices}" var="ch">
+                                                <h:outputText value="#{ch.label}.&nbsp;#{ch.name}" styleClass="choiceTitle"/>
+                                                <br/>
+                                            </ui:repeat>
+                                        </div>
+                                        <div style="margin-left: 30px;">
+                                            <h:outputText value="正确答案：" styleClass="answer"/>
+                                            <h:outputText value="#{contestCaseReport.examCase.examination.showAnswer?choice.question.answer:'不显示'}" style="color:green;font-weight: bold;"/>&nbsp;
+                                            <h:outputText value="，考生填写：" styleClass="answer"/>
+                                            <h:outputText value="#{choice.userAnswer==null?'未填写':choice.userAnswer}"  style="color:green;font-weight: bold;"/>&nbsp;&nbsp;
+                                            <h:outputText value="#{choice.ifRight?'√':'×'}" style="color:#{choice.ifRight?'green':'red'};font-weight:bolder;font-size:25px;font-family:宋体;"/>
+                                            <br/>
+                                            <h:outputText value="试题解析：" styleClass="answer"/>
+                                            <h:outputText value="#{contestCaseReport.examCase.examination.showRightStr?choice.question.rightStr:'不显示'}" escape="false"  style="color:green;"/>
+                                        </div>
+
+                                        <hr/>
+                                    </ui:repeat>
+
+                                    <ui:repeat value="#{adapter.caseItem.multiChoiceItems}" var="choice" varStatus="row" rendered="#{fn:length(adapter.caseItem.multiChoiceItems)!=0}">
+                                        <a id="archor-#{choice.id}" href="#"></a>
+                                        <h:outputText value="（#{fn:length(adapter.caseItem.choiceItems)+row.index+1}）#{choice.question.name}" styleClass="choiceTitle" escape="false"/>
+
+                                        <div style="margin-left: 30px;">
+                                            <ui:repeat value="#{choice.question.choices}" var="ch">
+                                                <h:outputText value="#{ch.label}.&nbsp;#{ch.name}" styleClass="choiceTitle"/>
+                                                <br/>
+                                            </ui:repeat>
+                                        </div>
+                                        <div style="margin-left: 30px;">
+                                            <h:outputText value="正确答案：" styleClass="answer"/>
+                                            <h:outputText value="#{contestCaseReport.examCase.examination.showAnswer?choice.rightAnswer:'不显示'}" style="color:green;font-weight: bold;"/>&nbsp;
+                                            <h:outputText value="，考生填写：" styleClass="answer"/>
+                                            <h:outputText value="#{choice.userAnswer==''?'未填写':choice.userAnswer}"  style="color:green;font-weight: bold;"/>&nbsp;&nbsp;
+                                            <h:outputText value="#{choice.ifRight?'√':'×'}" style="color:#{choice.ifRight?'green':'red'};font-weight:bolder;font-size:25px;font-family:宋体;"/>
+                                            <br/>
+                                            <h:outputText value="试题解析：" styleClass="answer"/>
+                                            <h:outputText value="#{contestCaseReport.examCase.examination.showRightStr?choice.question.rightStr:'不显示'}" escape="false"  style="color:green;"/>
+                                        </div>
+                                        <hr/>
+                                    </ui:repeat>
+                                    <ui:repeat   value="#{adapter.caseItem.fillItems}" var="fill"  varStatus="row" rendered="#{fn:length(adapter.caseItem.fillItems)!=0}">
+                                        <a id="archor-#{fill.id}" href="#"></a>
+                                        <h:outputText value="（#{fn:length(adapter.caseItem.choiceItems)+fn:length(adapter.caseItem.multiChoiceItems)+row.index+1}）"  styleClass="choiceTitle"/>
+                                        <ui:repeat value="#{fill.blocks}" var="b">
+                                            <h:outputText value="#{b.preStr}" escape="false" styleClass="choiceTitle"/>
+                                            <h:outputText value="________"/>
+                                        </ui:repeat>
+                                        <h:outputText value="#{fill.lastStr}" escape="false" styleClass="choiceTitle"/><br/>
+                                        <div style="margin-left: 30px;">
+                                            <h:outputText value="正确答案：" styleClass="answer"/>
+                                            <h:outputText value="#{contestCaseReport.examCase.examination.showAnswer?fill.rightAnswerStr:'不显示'}" style="color:green;font-weight: bold;"/>
+                                            <h:outputText value="考生填写：" styleClass="answer"/>
+                                            <h:outputText value="#{fill.userAnswerStr==''?'未填写':fill.userAnswerStr}" style="color:green;font-weight: bold;"/>&nbsp;
+                                            <h:outputText value="正确数：" styleClass="answer"/>
+                                            <h:outputText value="#{fill.rightNum}"  style="color:green;font-weight: bold;"/>
+                                            <br/>
+                                            <h:outputText value="试题解析："  styleClass="answer"/>
+                                            <h:outputText value="#{contestCaseReport.examCase.examination.showRightStr?fill.question.rightStr:'不显示'}"  escape="false" style="color:green;"/>
+                                        </div>
+                                        <hr/>
+                                    </ui:repeat>
+                                    <ui:repeat  value="#{adapter.caseItem.judgeItems}" var="judge" varStatus="row"  rendered="#{fn:length(adapter.caseItem.judgeItems)!=0}">
+
+                                        <a id="archor-#{judge.id}" href="#"></a>
+                                        <h:outputText value="（#{fn:length(adapter.caseItem.choiceItems)+fn:length(adapter.caseItem.multiChoiceItems)+fn:length(adapter.caseItem.fillItems)+row.index+1}）#{judge.question.name}" escape="false" styleClass="choiceTitle"/>
+                                        <div style="margin-left: 30px;">
+                                            <h:outputText value="正确答案：" styleClass="answer"/>
+                                            <h:outputText value="#{contestCaseReport.examCase.examination.showAnswer?judge.rightAnswer:'不显示'}"  style="color:green;font-weight: bold;"/>
+                                            <h:outputText value="，考生填写：" styleClass="answer"/>
+                                            <h:outputText value="#{judge.userAnswer}"  style="color:green;font-weight: bold;"/>&nbsp;&nbsp;
+                                            <h:outputText value="#{judge.ifRight?'√':'×'}" style="color:#{judge.ifRight?'green':'red'};font-weight:bolder;font-size:25px;font-family:宋体;"/>
+                                            <br/>
+                                            <h:outputText value="试题解析：" styleClass="answer"/>
+                                            <h:outputText value="#{contestCaseReport.examCase.examination.showRightStr?judge.question.rightStr:'不显示'}" escape="false"  style="color:green;"/>
+                                        </div>
+                                        <hr/>
+                                    </ui:repeat>
+                                    <ui:repeat  value="#{adapter.caseItem.essayItems}" var="essay" varStatus="row"  rendered="#{fn:length(adapter.caseItem.essayItems)!=0}">
+                                        <a id="archor-#{essay.id}" href="#"></a>
+                                        <h:outputText value="（#{fn:length(adapter.caseItem.choiceItems)+fn:length(adapter.caseItem.multiChoiceItems)+fn:length(adapter.caseItem.fillItems)+fn:length(adapter.caseItem.judgeItems)+row.index+1}）#{essay.question.name}" style="#{essay.marked?'color:red;':''}" styleClass="choiceTitle" escape="false"/><br/>
+                                        <div style="margin-left: 30px;">
+                                            <h:outputText value="正确答案：" styleClass="answer"/>
+                                            <h:outputText value="#{contestCaseReport.examCase.examination.showAnswer?essay.question.answer:'不显示'}" escape="false"  style="color:green;font-weight: bold;"/><br/>
+                                            <h:outputText value="考生填写：" styleClass="answer"/>
+                                            <h:outputText value="#{essay.userAnswer}"  escape="false" style="color:green;font-weight: bold;"/><br/>
+                                            <h:outputText value="正确率："  styleClass="answer"/>
+                                            <h:outputText value="#{essay.rightRatio}" style="color:red;font-weight:bold;">
+                                                <f:convertNumber maxFractionDigits="2" type="percent"/>
+                                            </h:outputText>
+                                            <br/>
+                                            <h:outputText value="试题解析：" styleClass="answer"/>
+                                            <h:outputText value="#{contestCaseReport.examCase.examination.showRightStr?essay.question.rightStr:'不显示'}" escape="false"  style="color:green;"/>
+                                        </div>
+                                        <hr/>
+                                        <br/>
+                                    </ui:repeat>
+                                </p:panel>
+                            </h:panelGroup>
+                        </ui:repeat>
+
+                    </p:panel>
+                </ui:repeat>
+
+
+
+                <p:separator/>
+                <p:commandButton  value="返回" action="ListContestCase?faces-redirect=true" styleClass="commonSubmit"></p:commandButton>
+
+
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions" lang="en">
+<head>
+<title>My Facelets Page</title>
+<meta http-equiv="keywords" content="enter,your,keywords,here" />
+<meta http-equiv="description"
+	content="A short description of this page." />
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+</head>
+<body>
+	<ui:composition template="/m/BackGeneral.xhtml">
+		<ui:define name="content">
+			<h:form>
+				<ui:include src="/AjaxStatus2.xhtml" />
+				<div style="text-align: left; margin: 10px 0px 0px 0px; width: 98%;">
+					<div>
+						<h:outputText styleClass="tit"
+							value="-集中#{lang['exam.exam']}#{lang['exam.mag']}-" />
+						<p:growl id="growl" />
+					</div>
+					<p:separator />
+					<div>
+						<p:dataTable paginator="true" paginatorPosition="bottom"
+							value="#{listIntensiveExam.exams}" var="us" id="dataTable1"
+							emptyMessage="无考试" styleClass="list" rowIndexVar="row"
+							style="width:100%" rows="20" editable="true" editMode="cell" liveResize="true" resizableColumns="true">
+							<p:column id="num" style="width:40px;text-align: center;" resizable="true" >
+								<h:outputText style="height: 5%" value="#{row+1}" />
+								<f:facet name="header">
+									<h:outputText id="outputTextnum" value="序号" />
+								</f:facet>
+							</p:column>
+							<p:column filterBy="#{us.name}" filterMatchMode="contains" sortBy="#{us.name}" resizable="true" >
+								<h:outputLink
+									value="#{facesContext.externalContext.requestContextPath}/servlet/pc/ExamCaseController?exam_id=#{us.id}"
+									target="_blank">
+									<h:outputText
+										value="#{fn:substring(us.name,0,20)}#{fn:length(us.name)>20?'..':''}"
+										escape="false" />
+								</h:outputLink>
+
+								<f:facet name="header">
+									<h:outputText value="#{lang['exam.exam']}#{lang['exam.name']}" />
+								</f:facet>
+							</p:column>
+							<!-- 
+							<p:column style="width:60px;" resizable="true" >
+								<h:outputText rendered="#{us.paperType=='random'}" value="简单随机" />
+								<h:outputText rendered="#{us.paperType=='random2'}" value="随机" />
+								<h:outputText rendered="#{us.paperType=='manual'}" value="人工" />
+								<f:facet name="header">
+									<h:outputText value="试卷类型" />
+								</f:facet>
+							</p:column>
+							<p:column resizable="true" >
+								<h:outputText rendered="#{us.paperType=='random'}"
+									value="#{us.randomPaper.name}" />
+								<h:outputText rendered="#{us.paperType=='random2'}"
+									value="#{us.random2Paper.name}" />
+								<h:outputText rendered="#{us.paperType=='manual'}"
+									value="#{us.manualPaper.name}" />
+
+								<h:outputText
+									rendered="#{us.paperType=='random' and us.randomPaper==null}"
+									value="无试卷，考试将出错" style="color:red;" />
+								<h:outputText
+									rendered="#{us.paperType=='random2'and us.random2Paper==null}"
+									value="无试卷，考试将出错" style="color:red;" />
+								<h:outputText
+									rendered="#{us.paperType=='manual' and us.manualPaper==null}"
+									value="无试卷，考试将出错" style="color:red;" />
+								<f:facet name="header">
+									<h:outputText value="试卷" />
+								</f:facet>
+							</p:column>
+							 -->
+							<p:column style="width:60px;text-align: center;" resizable="true" >
+								<h:outputText rendered="#{us.displayMode=='single'}" value="单题" />
+								<h:outputText rendered="#{us.displayMode=='multiple'}"
+									value="多题" />
+								<f:facet name="header">
+									<h:outputText value="显示模式" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:40px;text-align: center;" sortBy="#{us.timeLen} #{lang['exam.minute']}" resizable="true" >
+								<h:outputText value="#{us.timeLen} #{lang['exam.minute']}" />
+								<f:facet name="header">
+									<h:outputText value="#{lang['exam.length']}" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:40px;text-align: center;" sortBy="#{us.ifShow}" resizable="true" >
+								<h:outputText
+									value="#{us.ifShow?lang['exam.yes']:lang['exam.no']}" />
+								<f:facet name="header">
+									<h:outputText value="#{lang['exam.show']}" />
+								</f:facet>
+							</p:column>
+							<p:column sortBy="#{us.ord}"
+								style="width:40px;text-align: center;"  resizable="true" >
+								<p:tooltip for="modelOutput" value="点击编辑" />
+								<p:cellEditor>
+									<f:facet name="output">
+										<p:outputPanel autoUpdate="true">
+											<h:outputText id="modelOutput" value="#{us.ord}" />
+										</p:outputPanel>
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText id="modelInput" value="#{us.ord}"
+											style="width:40px;">
+											<p:ajax event="change" process="@this"
+												listener="#{listIntensiveExam.editOrd(us.id)}" />
+										</p:inputText>
+									</f:facet>
+								</p:cellEditor>
+								<f:facet name="header">
+									<h:outputText value="次序" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:70px;" sortBy="#{us.availableBegain}" resizable="true" >
+								<h:outputText value="#{us.availableBegain}">
+									<f:convertDateTime pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" />
+								</h:outputText>
+								<f:facet name="header">
+									<h:outputText value="#{lang['exam.examination.begain']}" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:70px;" sortBy="#{us.availableEnd}" resizable="true" >
+								<h:outputText value="#{us.availableEnd}">
+									<f:convertDateTime pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" />
+								</h:outputText>
+								<f:facet name="header">
+									<h:outputText value="#{lang['exam.examination.end']}" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:60px;text-align: center;">
+                                <h:outputLink value="ListIntensiveExamCase.jspx?id=#{us.id}" target="_blank" title="点击查看本考试的全部成绩" style="color:blue;">
+                                    <h:outputText value="成绩列表" />
+                                </h:outputLink>
+                                <f:facet name="header">
+                                    <h:outputText value="成绩列表" />
+                                </f:facet>
+                            </p:column>
+                            
+                            <p:column style="width:60px;text-align: center;">
+                                <h:outputLink value="IntensiveExamUser.jspx?id=#{us.id}&amp;name=#{us.name}" target="_blank" title="确认考生" style="color:blue;">
+                                    <h:outputText value="确认考生" />
+                                </h:outputLink>
+                                <f:facet name="header">
+                                    <h:outputText value="确认考生" />
+                                </f:facet>
+                            </p:column>
+                            <!-- <p:column style="width:30px;" resizable="true" >
+								<h:outputLink value="/exam2/m/AAExaminationTabView.jspx?id=#{us.id}">
+									<h:outputText value="#{lang['exam.alter']}" />
+								</h:outputLink>
+								<f:facet name="header">
+									<h:outputText value="#{lang['exam.alter']}" />
+								</f:facet>
+							</p:column> -->
+							<!-- <p:column style="width:30px;" resizable="true" >
+								<p:commandLink action="#{listExamination.delete(us.id)}"
+									update="@form"
+									onclick="if (!confirm('#{lang['exam.examination.delete.tip']}'))
+                                                return false"
+									disabled="#{!fn:contains(adminSessionBean.admin.authstr,'examination')}">
+									<h:outputText value="#{lang['exam.delete']}" />
+								</p:commandLink>
+								<f:facet name="header">
+									<h:outputText value="#{lang['exam.delete']}" />
+								</f:facet>
+							</p:column> -->
+						</p:dataTable>
+					</div>
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions" lang="en">
+<head>
+<title>My Facelets Page</title>
+<meta http-equiv="keywords" content="enter,your,keywords,here" />
+<meta http-equiv="description"
+	content="A short description of this page." />
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+</head>
+<body>
+	<ui:composition template="BackGeneral.xhtml">
+		<ui:define name="content">
+			<h:form id="myForm">
+				<ui:include src="/AjaxStatus2.xhtml" />
+				<div style="text-align: left; margin: 10px 0px 0px 0px; width: 98%;">
+					<div>
+                            <h:outputText id="outputText1" styleClass="tit" value="-学习资料学习记录-" />
+					</div>
+					<p:separator />
+					<div>
+						<!--  
+						<p:commandButton value="全部删除"
+							action="#{lessonLogList.deleteAll()}" update="@form"
+							onclick="if (!confirm('确认要删除所有的条目吗？'))
+                                        return false" />
+						<p:commandButton 
+							value="批量删除" action="#{lessonLogList.batchDel}" update="@form"
+							onclick="if (!confirm('确认要删除所选的条目吗？'))
+                                        return false" />
+                         -->
+                         <p:commandButton id="export" value="导出表格" onclick="javascript:void()">
+                        	<p:dataExporter type="xls" target="dataTable1" fileName="%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95" />
+                    	</p:commandButton>
+					</div>
+					<p:separator />
+					<div>
+					<script type="text/javascript">
+							$(function() {
+								$("#myForm\\:dataTable1\\:checkAll").click(
+										function() {
+											$('input[type="checkbox"]').prop(
+													"checked", this.checked);
+										});
+							});
+						</script>
+						<p:dataTable paginator="true" paginatorPosition="bottom"
+							value="#{lessonLogList.logs}" var="us" id="dataTable1"
+							emptyMessage="#{lang['exam.empty_result']}" styleClass="list"
+							rowIndexVar="row" style="width:100%" rows="15" resizableColumns="true" liveResize="true">
+							<p:column id="num" style="width:30px;text-align: center;" resizable="true" >
+								<h:outputText style="height: 5%" value="#{row+1}" />
+								<f:facet name="header">
+									<h:outputText id="outputTextnum" value="序号" />
+								</f:facet>
+							</p:column>
+							<!--  
+							<p:column style="width: 30px;" resizable="true" >
+								<h:selectBooleanCheckbox value="#{us.selected}">
+								</h:selectBooleanCheckbox>
+								<f:facet name="header">
+									<h:outputText value="选择" />
+									<br />
+									<h:selectBooleanCheckbox id="checkAll">
+									</h:selectBooleanCheckbox>
+								</f:facet>
+							</p:column>
+							-->
+							<p:column filterBy="#{us.lesson.name}" style="width: 150px;" filterStyle="width:150px;"  filterMatchMode="contains" sortBy="#{us.lesson.name}" resizable="true" >
+								<h:outputText value="#{us.lesson.name}" />
+								<f:facet name="header">
+									<h:outputText value="学习资料名称" />
+								</f:facet>
+							</p:column>
+							<p:column filterBy="#{us.lesson.lessonType.name}" style="width: 150px;" filterStyle="width:150px;"  filterMatchMode="contains" sortBy="#{us.lesson.lessonType.name}" resizable="true" >
+								<h:outputText value="#{us.lesson.lessonType.name}" />
+								<f:facet name="header">
+									<h:outputText value="所属课程" />
+								</f:facet>
+							</p:column>
+							<p:column filterBy="#{us.user.username}" style="width: 100px;text-align:center;" filterStyle="width:80px;"  filterMatchMode="contains" sortBy="#{us.user.username}"
+								resizable="true" >
+								<h:outputText value="#{us.user.username}" />
+								<f:facet name="header">
+									<h:outputText value="用户名" />
+								</f:facet>
+							</p:column>
+							<p:column filterBy="#{us.user.postType}" style="width: 100px;text-align:center;" filterStyle="width:80px;"  filterMatchMode="contains" sortBy="#{us.user.postType}"
+								resizable="true" >
+								<h:outputText value="#{us.user.postType}" />
+								<f:facet name="header">
+									<h:outputText value="岗位类别" />
+								</f:facet>
+							</p:column>
+							<p:column filterBy="#{us.user.groupCnStr}" style="width: 100px;text-align:center;" filterStyle="width:80px;"  filterMatchMode="contains" sortBy="#{us.user.groupCnStr}"
+								resizable="true" >
+								<h:outputText value="#{us.user.groupCnStr}" />
+								<f:facet name="header">
+									<h:outputText value="部门" />
+								</f:facet>
+							</p:column>
+							<p:column filterBy="#{us.user.lastTime}" style="width: 100px;text-align:center;" filterStyle="width:80px;"  filterMatchMode="contains" sortBy="#{us.user.lastTime}"
+								resizable="true" >
+								<h:outputText value="#{us.user.lastTime}" >
+									<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8" />
+								</h:outputText>
+								<f:facet name="header">
+									<h:outputText value="登录时间"/>
+								</f:facet>
+							</p:column>
+
+							<!--
+							<p:column sortBy="#{us.genTime}"
+								style="text-align:center;width: 130px;" resizable="true" >
+								<h:outputText value="#{us.genTime}">
+									<f:convertDateTime pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" />
+								</h:outputText>
+								<f:facet name="header">
+									<h:outputText value="开始时间" />
+								</f:facet>
+							</p:column>
+							 <p:column style="text-align:center;width:65px;" sortBy="#{us.scorePaid}">
+								<h:outputText value="#{us.scorePaid}" />
+								<f:facet name="header">
+									<h:outputText value="消耗积分" />
+								</f:facet>
+							</p:column> -->
+							<!-- <p:column style="text-align:center;width:40px;" filterBy="#{us.lesson.bbsScore}" filterMatchMode="contains" sortBy="#{us.lesson.bbsScore}">
+								<h:outputText value="#{us.lesson.bbsScore}" />
+								<f:facet name="header">
+									<h:outputText value="完成获取积分" />
+								</f:facet>
+							</p:column>
+							<p:column style="text-align:center;width:40px;" filterBy="#{us.lesson.timeLen}" filterMatchMode="contains" sortBy="#{us.lesson.timeLen}">
+								<h:outputText value="#{us.lesson.timeLen}分" />
+								<f:facet name="header">
+									<h:outputText value="学习资料时长" />
+								</f:facet>
+							</p:column>
+							-->
+							<p:column style="text-align:center;width:80px;" filterBy="#{us.lesson.leastTime}" filterMatchMode="contains" sortBy="#{us.lesson.leastTime}">
+								<h:outputText value="#{us.lesson.leastTime}分" />
+								<f:facet name="header">
+									<h:outputText value="最低要求时间" />
+								</f:facet>
+							</p:column> 
+							<p:column style="text-align:center;width:80px;" sortBy="#{applicationBean.wrapperTimeLen(us.timeFinished)}" resizable="true" >
+								<h:outputText
+									value="#{applicationBean.wrapperTimeLen(us.timeFinished)}" />
+								<f:facet name="header">
+									<h:outputText value="已学习时间" />
+								</f:facet>
+							</p:column>
+							<p:column style="text-align: center;width: 40px;" sortBy="#{us.finished}">
+								<f:facet name="header">
+									<h:outputText value="状态"></h:outputText>
+								</f:facet>
+								<h:outputText value="#{us.finished?'完成':'未完成'}"
+									style="color:#{us.finished?'green':'orange'};" styleClass="tip"></h:outputText>
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

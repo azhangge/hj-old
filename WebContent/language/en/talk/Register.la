@@ -1,0 +1,17 @@
+
+#public
+
+register=Register
+new_register=Register
+register.user_name=UserName
+register.password=Password
+register.password_confirm=Confirm
+register.name=Name
+register.position=Position
+register.pid=Pid
+register.identifying_code=PID
+register.change_code=Click to change
+register.read_and_accept=I have read and accept
+register.user_agreement=User Agreement
+
+choose=Choose

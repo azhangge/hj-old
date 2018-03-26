@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<manual>
+  <id>201471388189792</id>
+  <title>各种考试之间有什么差别？</title>
+  <content>在线考试系统根据需求的不同，内置了4种原理截然不同的考试----综合考试、自助练习、章节练习、错题练习。考试中的关键要素包括考试的时间、针对的部门、展现的形式、考试须知等等。错题练习主要用于在错题中心针对出过错的试题针对性练习，其它三种考试的区别见下表：&lt;br /&gt; &amp;nbsp; &lt;table style="width:568px" border="1"&gt; &lt;tbody&gt; &lt;tr&gt; &lt;td style="width:78px"&gt;&amp;nbsp;&lt;/td&gt; &lt;td style="width:123px"&gt;综合考试&lt;/td&gt;  &lt;td style="width:123px"&gt;自助练习&lt;/td&gt; &lt;td style="width:123px"&gt;章节练习&lt;/td&gt; &lt;/tr&gt; &lt;tr&gt; &lt;td style="width:78px"&gt;特点&lt;/td&gt; &lt;td style="width:123px"&gt;正式考试；&lt;br /&gt; 配置项丰富；&lt;br /&gt; 试卷池；&lt;br /&gt; 交卷队列；&lt;br /&gt; 手动生成排名；&lt;br /&gt; 成绩分析、作答分析；&lt;/td&gt;  &lt;td style="width:123px"&gt;考生自主选择练习题量；&lt;br /&gt; 后台设置试题章节分布情况（权重）；&lt;/td&gt; &lt;td style="width:123px"&gt;按章节逐题练习；&lt;br /&gt; 显示练习进度；&lt;/td&gt; &lt;/tr&gt; &lt;tr&gt; &lt;td style="width:78px"&gt;设计目的&lt;/td&gt; &lt;td style="width:123px"&gt;规范正式考试；&lt;br /&gt; 承受高强度、大并发考试；&lt;br /&gt; 高可靠性&lt;/td&gt;  &lt;td style="width:123px"&gt;自由随机练习&lt;/td&gt; &lt;td style="width:123px"&gt;按章节逐题练习；不漏知识点&lt;/td&gt; &lt;/tr&gt; &lt;tr&gt; &lt;td style="width:78px"&gt;使用试卷&lt;/td&gt; &lt;td style="width:123px"&gt;简单随机试卷&lt;br /&gt; 人工试卷&lt;br /&gt; 随机试卷&lt;/td&gt;  &lt;td style="width:123px"&gt;内置专用试卷&lt;/td&gt; &lt;td style="width:123px"&gt;内置专用试卷&lt;/td&gt; &lt;/tr&gt; &lt;/tbody&gt; &lt;/table&gt; &amp;nbsp;</content>
+  <gen_time>2014-10-30 22:10:39</gen_time>
+  <ord>3</ord>
+</manual>

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions" lang="en">
+<head>
+<title>My Facelets Page</title>
+<meta http-equiv="keywords" content="enter,your,keywords,here" />
+<meta http-equiv="description"
+	content="A short description of this page." />
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+<!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+</head>
+<body>
+	<ui:composition template="BackGeneral.xhtml">
+		<ui:define name="content">
+			<h:form>
+				<ui:include src="/AjaxStatus2.xhtml" />
+				<div style="text-align: left; margin: 10px 0px 0px 0px; width: 98%;">
+					<div>
+						<h:outputText id="outputText1" styleClass="tit" value="－课程－" />
+						<p:button href="/m/AALessonType.jspx" value="添加新课程"
+							rendered="#{fn:contains(adminSessionBean.admin.authstr,'lesson')}" />
+							<!-- <p:commandButton value="生成所有课程文件" action="#{listLessonType.createZipAll}" /> -->
+					</div>
+					<p:separator />
+					<p:outputPanel autoUpdate="true">
+						<p:growl />
+					</p:outputPanel>
+					<div>
+						<p:dataTable paginator="true" id="dataTable1" paginatorPosition="bottom"
+							styleClass="list" value="#{listLessonType.lessonTypes}" var="us" 
+							emptyMessage="暂无数据" 
+							rowIndexVar="row" style="width:100%" rows="15" editable="true"
+							editMode="cell" liveResize="true" resizableColumns="true">
+							<p:column style="width:30px;text-align: center;" resizable="true" >
+								<h:outputText value="#{row+1}" />
+								<f:facet name="header">
+									<h:outputText value="序号" />
+								</f:facet>
+							</p:column>
+							<p:column filterBy="#{us.name}" filterStyle="width:100%;" filterMatchMode="contains" 
+							sortBy="#{us.name}" style="width:300px;" resizable="true" >
+								<h:outputText value="#{us.name}" />
+								<f:facet name="header">
+									<h:outputText value="课程名称" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:60px;text-align: center;"  sortBy="#{us.lessonNum}" resizable="true" >
+								<h:outputText value="#{us.lessonNum}" />
+								<f:facet name="header">
+									<h:outputText value="资料数" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:60px;text-align: center;" sortBy="#{us.totalClassNum}" resizable="true" >
+								<h:outputText value="#{us.totalClassNum}" />
+								<f:facet name="header">
+									<h:outputText value="课时" />
+								</f:facet>
+							</p:column>
+							<p:column  resizable="true" >
+								<ui:repeat value="#{us.exams}" var="exam">
+									<h:outputText value="#{exam.name}" />
+									<br />
+								</ui:repeat>
+								<f:facet name="header">
+									<h:outputText value="关联考试" />
+								</f:facet>
+							</p:column>
+							<p:column  resizable="true"  sortBy="#{us.totalScorePaid}" style="text-align: center;width:60px;">
+								<h:outputText value="#{us.totalScorePaid}" />
+								<f:facet name="header">
+									<h:outputText value="积分" />
+								</f:facet>
+							</p:column>
+
+							<p:column sortBy="#{us.ord}" style="text-align: center;width: 40px;" resizable="true" >
+								<p:tooltip for="modelOutput" value="点击编辑" />
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText id="modelOutput" value="#{us.ord}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText id="modelInput" value="#{us.ord}"
+											style="width:30px;">
+											<p:ajax event="change" update="@none"
+												listener="#{listLessonType.editOrd(us.id)}" />
+										</p:inputText>
+									</f:facet>
+								</p:cellEditor>
+								<f:facet name="header">
+									<h:outputText value="次序" />
+								</f:facet>
+							</p:column>
+
+
+							<p:column style="width:70px;text-align: center;"  sortBy="#{us.enabled}" resizable="true" >
+								<h:outputText value="（已上架）" style="color:green"
+									rendered="#{us.enabled}">
+								</h:outputText>
+								<h:outputText value="（已下架）" style="color:red"
+									rendered="#{!us.enabled}" />
+								<br />
+								<p:commandLink rendered="#{us.enabled}"
+									disabled="#{!fn:contains(adminSessionBean.admin.authstr,'user')}"
+									actionListener="#{listLessonType.someAbleUser(us.id)}"
+									update="@form" value="下架">
+								</p:commandLink>
+								<p:commandLink rendered="#{!us.enabled}"
+									disabled="#{!fn:contains(adminSessionBean.admin.authstr,'user')}"
+									actionListener="#{listLessonType.someAbleUser(us.id)}"
+									update="@form" value="上架">
+								</p:commandLink>
+								<f:facet name="header">
+									<h:outputText value="上/下架" />
+								</f:facet>
+							</p:column>
+
+							<!-- <p:column style="width:110px;text-align: center;"
+								sortBy="#{us.genTime}">
+								<h:outputText value="#{us.genTime}">
+									<f:convertDateTime pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" />
+								</h:outputText>
+								<f:facet name="header">
+									<h:outputText value="添加时间" />
+								</f:facet>
+							</p:column> -->
+							<p:column style="width:40px;text-align: center;" resizable="true" >
+								<h:outputLink value="AALessonType.jspx?id=#{us.id}">
+									<h:outputText value="修改" />
+								</h:outputLink>
+								<f:facet name="header">
+									<h:outputText value="修改" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:40px;text-align: center;" resizable="true" >
+								<p:commandLink
+									disabled="#{!fn:contains(adminSessionBean.admin.authstr,'lesson')}"
+									action="#{listLessonType.delete(us.id)}" update="@form"
+									onclick="if (!confirm('确认要删除此课程吗？')) return false">
+
+									<h:outputText value="删除" />
+								</p:commandLink>
+								<f:facet name="header">
+									<h:outputText value="删除" />
+								</f:facet>
+							</p:column>
+							<!-- <p:column style="width:60px;text-align: center;" resizable="true" >
+								<p:commandLink
+									disabled="#{!fn:contains(adminSessionBean.admin.authstr,'lesson')}"
+									action="#{listLessonType.createZip(us.id)}">
+
+									<h:outputText value="生成文件" />
+								</p:commandLink>
+								<f:facet name="header">
+									<h:outputText value="生成文件" />
+								</f:facet>
+							</p:column> -->
+						</p:dataTable>
+					</div>
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

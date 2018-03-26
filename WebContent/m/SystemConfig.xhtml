@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"  lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <ui:composition template="BackGeneral.xhtml">
+        <ui:define name="content">
+            <h:form>
+                <ui:include src="/ManualPanel.xhtml"></ui:include>
+                <ui:include src="/AjaxStatus2.xhtml"/>
+                <p:outputPanel autoUpdate="true">
+                    <p:growl/>
+                </p:outputPanel>
+                <h:outputText id="outputText1" styleClass="tit"
+                              value="－系统设置－" />
+                <p:separator style="margin:5px 0px 10px 0px" />
+                <p:panel style="margin-top:20px;width:100%;border:1px solid gray;">
+                    <f:facet name="header">
+                        <h:outputText value="系统邮箱设置（系统邮箱用于给用户发送邮件）" />
+                    </f:facet>
+                    <h:panelGroup>
+                        <h:panelGrid columns="5">
+                            <h:outputLink value="EditEmail.jspx" >
+                                <h:outputText value="系统邮箱管理" />
+                            </h:outputLink>
+                            <ui:include src="/GeneralHelper.xhtml">
+                                <ui:param name="id" value="103159057150280"></ui:param>
+                            </ui:include>
+                        </h:panelGrid>
+                    </h:panelGroup>
+                </p:panel>
+
+                <p:panel style="margin-top:20px;width:100%;border:1px solid gray;">
+                    <f:facet name="header">
+                        <h:outputText value="文件存储位置" />
+
+                    </f:facet>
+                    <h:panelGroup>
+                        <h:panelGrid columns="5">
+                            <h:outputText value="路径值：" />
+                            <h:inputText value="#{alterFilePath.scm.filePath}"
+                                         style="width:300px" />
+                            <h:selectOneRadio value="#{alterFilePath.scm.ifRelative}">
+                                <f:selectItem itemLabel="绝对路径" itemValue="false" />
+                                <f:selectItem itemLabel="相对路径" itemValue="true" />
+                            </h:selectOneRadio>
+                            <ui:include src="/GeneralHelper.xhtml">
+                                <ui:param name="id" value="17666099032698"></ui:param>
+                            </ui:include>
+                            <p:commandButton action="#{alterFilePath.finish}" value="确定"  disabled="#{!fn:contains(adminSessionBean.admin.authstr,'sys')}"/>
+                        </h:panelGrid>
+
+                    </h:panelGroup>
+
+                </p:panel>
+
+                    <p:separator/>
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <head>
+        <title>#{i18nBean.lang('register2')}</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+    </head>
+    <body>
+        <ui:composition template="General3.xhtml">
+            <ui:define name="title">#{i18nBean.lang('talk/Register','new_register')}</ui:define>
+            <ui:define name="content">
+                <p:outputPanel autoUpdate="true">
+                    <p:growl/>
+                </p:outputPanel>
+                <p:panel id="topNav8" styleClass="frontColumn topNav8Wrapper" style="margin-bottom: 10px!important;">
+                    <h:outputLink value="#{facesContext.externalContext.requestContextPath}" styleClass="nav8">
+                        <h:outputText value="#{i18nBean.lang('talk/Default','index')}"/>
+                    </h:outputLink>
+                    <h:outputText value="/" styleClass="navSeparator"/>
+                    <h:outputText value="#{i18nBean.lang('talk/Register','new_register')}" styleClass="nav8"/>
+                </p:panel>
+                <p:panel style="width:500px;margin: 0 auto;">
+                    <h:outputText value="#{i18nBean.lang('talk/Register','new_register')}" styleClass="headLine"></h:outputText>
+                    <p:separator/>
+                    
+                    <h:panelGrid columns="2" styleClass="generalInfo" style="vertical-align: middle!important;" columnClasses="rleft,rright">
+                    
+                    	<p:outputLabel for="type" style="margin-bottom:10px; font-size:12px;font-family:Verdana,Arial,Microsoft YaHei,simhei,simsun!important;" value="账号类型：" />
+				        <p:selectOneRadio id="type" style="margin:8px 0 5px;"  value="#{register5.type}" onclick="charge()">
+				            <f:selectItem itemLabel="个人" itemValue="1" />
+				            <f:selectItem itemLabel="单位" itemValue="2" />
+				        </p:selectOneRadio>
+                    
+<!--                         <h:outputLabel value="#{i18nBean.lang('talk/Register','register.user_name')}：" />
+                        <h:panelGroup>
+                            <p:inputText value="#{register5.adminInfo.urn}" style="width:200px;">
+                                <p:ajax listener="#{register5.onChangeUrn}" update="urnTip" process="@form"/>
+                            </p:inputText>
+                            <span style="color:red;margin-left:2px" >*</span>
+                            <h:outputText id="urnTip" value="&nbsp;#{register5.urnTip}" style="color:#{register5.urnOk?'green;':'red;'}}" />
+                        </h:panelGroup> -->
+                        
+                        <h:outputLabel value="#{i18nBean.lang('talk/Register','register.phone')}：" />
+                        <h:panelGroup>
+                        	<p:inputText value="#{register5.adminInfo.tel}"  style="width:340px;height:35px;margin-bottom:10px;-webkit-box-shadow:inset 0 2px 2px #ffffff;box-shadow:inset 0 2px 2px #ffffff;">
+                        		<p:ajax listener="#{register5.onChangePhone}" update="phoneTip" process="@form"/>
+                        	</p:inputText>
+                        	<span style="color:red;margin-left:2px;">*</span>
+                        	<br/>
+                        	<h:outputText id="phoneTip" value="#{register5.phoneTip}" style="color:#{register5.phoneOk?'green;':'red;'}" />
+                        </h:panelGroup>
+                        
+                        <h:outputLabel value="#{i18nBean.lang('talk/Register','register.password')}：" />
+                        <h:panelGroup>
+                        	<p:password value="#{register5.adminInfo.pwd}"  style="width:340px;height:35px;margin-bottom:10px;-webkit-box-shadow:inset 0 2px 2px #ffffff;box-shadow:inset 0 2px 2px #ffffff;"/>
+                        	<span style="color:red;margin-left:2px" >*</span>
+                        </h:panelGroup>
+                        
+                        <h:outputLabel value="#{i18nBean.lang('talk/Register','register.password_confirm')}：" />
+                        <h:panelGroup>
+                        	<p:password value="#{register5.pwd_re}"  style="width:340px;height:35px;margin-bottom:10px;-webkit-box-shadow:inset 0 2px 2px #ffffff;box-shadow:inset 0 2px 2px #ffffff;"/>
+                        	<span style="color:red;margin-left:2px" >*</span>
+                        </h:panelGroup>
+                        
+                        <h:outputLabel value="单位名称：" />
+                        <p:inputText value="#{register5.adminInfo.nickname}"  style="width:340px;height:35px;margin-bottom:10px;-webkit-box-shadow:inset 0 2px 2px #ffffff;box-shadow:inset 0 2px 2px #ffffff;"/>
+
+                        <!-- <h:outputLabel value="#{i18nBean.lang('talk/Register','register.pid')}：" rendered="#{applicationBean.systemConfig.usePid}"/>
+                        <h:panelGroup rendered="#{applicationBean.systemConfig.usePid}">
+                            <p:inputText value="#{register5.user.pid}" style="width:200px;">
+                            </p:inputText>
+                        </h:panelGroup> -->
+
+                        <h:outputLabel value="E-mail：" />
+                        <h:panelGroup>
+                            <p:inputText value="#{register5.adminInfo.email}" style="width:340px;height:35px;margin-bottom:10px;-webkit-box-shadow:inset 0 2px 2px #ffffff;box-shadow:inset 0 2px 2px #ffffff;">
+                                <p:ajax listener="#{register5.onChangeEmail}" update="emailTip" process="@form"/>
+                            </p:inputText>
+                            <br/>
+                            <h:outputText id="emailTip" value="#{register5.emailTip}" style="color:#{register5.emailOk?'green;':'red;'}" />
+                        </h:panelGroup>
+
+                        <!-- <h:outputLabel value="#{i18nBean.lang('talk/Register','register.position')}：" rendered="#{applicationBean.systemConfig.openPosition}"/>
+                        <h:panelGroup rendered="#{applicationBean.systemConfig.openPosition}">
+                            <p:inputText value="#{register5.user.position}" style="width:100px;">
+                            </p:inputText>
+                        </h:panelGroup> -->
+
+<!--                         <h:outputText value="选择#{applicationBean.departmentStr}："/>
+                        <h:panelGrid columns="5" >
+                            <p:outputPanel id="module1">
+                                <h:selectOneMenu  value="#{register2.moduleId1}">
+                                    <f:selectItem itemValue="10000000000000000" itemLabel="请选择"/>
+                                    <f:selectItems value="#{register2.modules1}" var="module" itemLabel="#{module.name}" itemValue="#{module.id}"/>
+                                    <p:ajax process="@form" listener="#{register2.changeModule(1)}" update="module2"/>
+                                </h:selectOneMenu>
+                            </p:outputPanel>
+                            <p:outputPanel id="module2">
+                                <h:selectOneMenu  value="#{register2.moduleId2}" rendered="#{register2.modules2.size()!=0}">
+                                    <f:selectItem itemValue="10" itemLabel="请选择"/>
+                                    <f:selectItems value="#{register2.modules2}" var="module" itemLabel="#{module.name}" itemValue="#{module.id}"/>
+                                    <p:ajax listener="#{register2.changeModule(2)}" update="module3"/>
+                                </h:selectOneMenu>
+                            </p:outputPanel>
+                            <p:outputPanel id="module3">
+                                <h:selectOneMenu  value="#{register2.moduleId3}" rendered="#{register2.modules3.size()!=0}">
+                                    <f:selectItem itemValue="100" itemLabel="请选择"/>
+                                    <f:selectItems value="#{register2.modules3}" var="module" itemLabel="#{module.name}" itemValue="#{module.id}"/>
+                                    <p:ajax listener="#{register2.changeModule(3)}" />
+                                </h:selectOneMenu>
+                            </p:outputPanel>
+                            <p:outputPanel autoUpdate="true">
+                                <h:outputText value="#{register2.ifOnlyOne?'✔':'请选择'}" style="color:#{register2.ifOnlyOne?'green':'red'};"/>
+                            </p:outputPanel>
+                        </h:panelGrid> -->
+
+                        <h:outputLabel value="#{i18nBean.lang('talk/Register','register.identifying_code')}：" />
+                        <h:panelGroup>
+                            <p:inputText value="#{register5.authStr}" style="width:150px;height:35px;margin-bottom:10px;-webkit-box-shadow:inset 0 2px 2px #ffffff;box-shadow:inset 0 2px 2px #ffffff;"/>
+                            <p:commandLink update="auth" action="#{register5.refreshAuth}">
+                                <h:graphicImage id="auth" title="#{i18nBean.lang('talk/Register','register.change_code')}" style="border:black 0px solid;vertical-align:bottom;width:100px;height:22px;margin-bottom:15px;"
+                                                url="/servlet/AuthImage?id=#{register5.id_temp}" />
+                            </p:commandLink>
+                            <span style="color:red;margin-left:2px;">*</span>
+                        </h:panelGroup>
+                        
+                        
+                        
+                        <h:outputLabel value="短信验证码：" />
+                        <h:panelGroup>
+                        	<p:inputText value="#{register5.verifyCode}"  style="width:200px;height:35px;margin-bottom:10px;-webkit-box-shadow:inset 0 2px 2px #ffffff;box-shadow:inset 0 2px 2px #ffffff;"/>
+                        	<span style="color:red;margin-left:2px;margin-right:5px" >*</span>
+                        	<p:commandButton id="verifyCode" widgetVar="verifyCode"  value="免费获取验证码" update="phoneTip" actionListener="#{register5.sendCode}"/>
+						</h:panelGroup>
+                        
+                        <h:outputText/>
+                        <h:panelGroup>
+                            <h:selectBooleanCheckbox value="#{register5.accept}" style="vertical-align:bootom; margin:10px 0 6px;" >
+                                <f:ajax render="reg" execute="@form"/>
+                            </h:selectBooleanCheckbox>
+                            <h:outputText value="#{i18nBean.lang('talk/Register','register.read_and_accept')}" />
+                            <h:outputLink value="Agreement.jspx" target="_blank" styleClass="operation">
+                                <h:outputText value="《#{applicationBean.info.siteName}#{i18nBean.lang('register.user_agreement')}》" />
+                            </h:outputLink>
+                        </h:panelGroup>
+
+                    </h:panelGrid>
+                    <p:separator/>
+                    <p:commandButton id="reg" widgetVar="reg" style=" width:430px; height:35px; margin:20px 0;" value="#{i18nBean.lang('talk/Register','register')}" disabled="#{!register5.accept}" onclick="reg.disable();" oncomplete="reg.enable();" action="#{register5.reg_ok}"></p:commandButton>
+                    <script type="text/javascript" language="javascript">
+                        function regDisabled() {
+
+                        }
+                        
+                        var wait=60;  
+                        function time(o){
+                        	var phoneTip = document.getElementById("myForm:phoneTip").innerHTML.trim().substring(6);
+                        	if(phoneTip=="此手机号可以注册" || phoneTip=="已发送验证码" || phoneTip=="此手机号的发送间隔小于1分钟" || phoneTip=="此ip超过24小时内最多发送次数" || phoneTip=="此手机号超过24小时内最多发送次数"){
+								if(wait == 0){  
+		                            o.setAttribute("class", "ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only");
+		                            o.setAttribute("aria-disabled","false");
+		                            o.removeAttribute("disabled");
+		                            o.innerHTML="免费获取验证码";  
+		                            wait = 60;  
+	                            }else{  
+		                            o.setAttribute("class", "ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only ui-state-disabled");
+		                            o.setAttribute("aria-disabled","true");
+		                            o.setAttribute("disabled","true");
+		                            o.innerHTML="重新发送(" + wait + ")";  
+		                            wait--;  
+		                            setTimeout(function() {  
+		                                time(o)  
+		                            },  
+		                            1000)  
+	                            }
+                        	}else{
+                        		o.setAttribute("class", "ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only");
+	                            o.setAttribute("aria-disabled","false");
+	                            o.removeAttribute("disabled");
+	                            o.innerHTML="免费获取验证码";  
+	                            wait = 60;
+                        		return;
+                        	}
+                        }
+                        
+                        function charge(){
+                        	var selPerson= myForm['myForm:type'][0].checked;
+                        	if(selPerson) {
+                        		window.location.href= "Register3.jspx "; 
+                        	}
+                        }
+                    </script>
+                </p:panel>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

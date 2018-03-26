@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:p="http://primefaces.org/ui">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head> 
+    <body>
+        <ui:composition template="GeneralAdd.xhtml">
+            <ui:define name="content">
+
+                <ui:include src="/AjaxStatus2.xhtml"/>
+                <div>
+                    <h:outputText  styleClass="headLine"
+                                   value="#{aASaleOrder.flag?'-修改订单-':'-添加订单-'}" />
+                    <p:separator/>
+
+                    <p:panel id="memberInfo">
+                        <f:facet name="header">
+                            <h:outputText value="会员信息" />
+                        </f:facet>
+
+                        <h:panelGrid columns="2">
+                            <h:outputText value="会员编号" />
+                            <h:inputText value="#{aASaleOrder.memberId}" >
+                                <p:ajax event="change" listener="#{aASaleOrder.loadMember()}" update="memberInfo"/>
+                            </h:inputText>
+                        </h:panelGrid>
+                        <p:separator/>
+
+                        <h:panelGrid columns="4" style="width:95%;">
+                            <h:panelGroup>
+                                <h:outputText value="姓名：" />
+                                <h:outputText value="#{aASaleOrder.member.name}" />
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <h:outputText value="电话：" />
+                                <h:outputText value="#{aASaleOrder.member.tel}" />
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <h:outputText value="积分：" />
+                                <h:outputText value="#{aASaleOrder.member.score}" />
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <h:outputText value="开通时间：" />
+                                <h:outputText value="#{aASaleOrder.member.genTime}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8"/>
+                                </h:outputText>
+                            </h:panelGroup>
+
+
+
+
+                        </h:panelGrid>
+                    </p:panel>
+
+
+                    <p:separator/>
+
+
+                    <ui:include src="OrderItemPanel.xhtml"/>
+                    <p:dataTable paginator="true" paginatorPosition="bottom" value="#{aASaleOrder.cq.items}" var="us" id="dataTable2" liveResize="true" emptyMessage="无条目"
+                                 styleClass="list" rowIndexVar="row" style="" rows="30" editable="true" editMode="cell">
+                        <f:facet name="header">
+                            <h:outputText value="商品条目列表" style="margin-right: 50px;"/>
+                            <p:commandButton action="#{aASaleOrder.preAddNewOrderItem()}" value="添加新条目" oncomplete="PF('orderItemDialog').show();" update=":fm:orderItemPanel"/>
+
+                            
+                        </f:facet>
+                        <p:ajax event="cellEdit"  update="dataTable2" /> 
+                        <p:column>
+                            <h:outputText value="#{row+1}"/>
+                            <f:facet name="header">
+                                <h:outputText value="序号" />
+                            </f:facet>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{us.goods.name}"/>
+                            <f:facet name="header">
+                                <h:outputText value="商品/服务" />
+                            </f:facet>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{us.goods.price}"/>
+                            <f:facet name="header">
+                                <h:outputText value="参考价" />
+                            </f:facet>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{us.goods.discount}"/>
+                            <f:facet name="header">
+                                <h:outputText value="参考折扣" />
+                            </f:facet>
+                        </p:column>
+                        <p:column>
+                            <h:inputText value="#{us.realPrice}"/>
+                            <f:facet name="header">
+                                <h:outputText value="实收价格" />
+                            </f:facet>
+                        </p:column>
+
+                        <p:column>
+                            <p:commandLink action="#{aASaleOrder.delOrderItem(us.id)}" value="删除"  process="@form"  update=":fm:dataTable2"/>
+                            <f:facet name="header">
+                                <h:outputText value="删除" />
+                            </f:facet>
+                        </p:column>
+                    </p:dataTable>
+                    <p:separator/>
+
+                    <h:panelGrid columns="2">
+
+                        <h:outputText value="合作商：" />
+                        <h:selectOneMenu value="#{aASaleOrder.cq.agentId}">
+                            <f:selectItem itemValue="-1" itemLabel="--请选择--"/>
+                            <f:selectItems value="#{aASaleOrder.agents}" var="agent" itemValue="#{agent.id}" itemLabel="#{agent.name}（#{agent.urn}）"/>
+                        </h:selectOneMenu>
+
+                        <h:outputText value="总价格：" />
+                        <h:panelGroup>
+                            <h:inputText id="totalMoney" value="#{aASaleOrder.cq.totalMoney}" />
+                        <p:commandButton action="#{aASaleOrder.reloadTotalMoney()}" value="更新总价"  update=":fm:totalMoney"/>
+                        </h:panelGroup>
+                        
+                    </h:panelGrid>
+
+                    <p:separator/>
+                    <h:panelGrid columns="2">
+
+                        <h:outputText value="备注：" />
+                        <h:inputTextarea value="#{aASaleOrder.cq.description1}" style="height: 60px;"/>
+                    </h:panelGrid>
+                    <p:separator/>
+                    <p:commandButton action="#{aASaleOrder.done}" value="保存修改并返回" styleClass="" style=""  ajax="false"/>
+
+                </div>
+                <br/><br/>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core"  lang="en"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </h:head>
+    <h:body>
+        <ui:composition template="General.xhtml">
+            <ui:define name="title">
+                <h:outputText value="首页" />
+            </ui:define>
+            <ui:define name="content">
+                <div style="width:100%;margin: 0px auto;border:0px solid red;">
+
+                    <div style="height: 100%;float:left;">
+                        <h:panelGrid columns="1" style="height:100%;border:0px solid red;">
+                           <!--  <p:panel header="考试分类" style="width: 180px;">
+                                <ui:repeat value="#{listExamLabelType.labelTypes}" var="labelType" >
+                                    <h:outputText value="#{labelType.name}" style="font-weight: bold;"/>
+                                    <p:separator/>
+                                    <p:dataGrid value="#{labelType.examLabels}" var="label" columns="2" styleClass="threadColumn3" emptyMessage="">
+                                        <h:outputLink value="#{facesContext.externalContext.requestContextPath}/talk/ExaminationList.jspx?lid=#{label.id}" style="margin-left: -10px;">
+                                            <h:outputText value="#{label.name}" style="margin:0px 10px 0px 10px;"/>  
+                                        </h:outputLink>
+                                    </p:dataGrid>
+                                </ui:repeat>
+
+                            </p:panel> -->
+
+
+
+
+
+                            <p:panel header="课程分类" rendered="#{copyrightController.sysType!='1' and copyrightController.sysType!='2' and applicationBean.systemConfig.openLesson}" style="width: 180px;">
+
+                                <h:panelGrid columns="1" style="width:100%;">
+                                    <c:forEach items="#{lessonTypeList.lessonTypes}" var="zone">
+                                        <h:outputLink value="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{zone.id}">
+                                            <h:outputText value="#{zone.name}"></h:outputText>
+                                        </h:outputLink>
+                                    </c:forEach>
+                                </h:panelGrid>
+                            </p:panel>
+
+                        </h:panelGrid>
+                    </div>
+
+                    <div style="">
+                        <ui:insert name="xcontent">
+
+                        </ui:insert>
+
+                    </div>
+
+
+
+                    <div style="clear: both;"></div>
+
+                </div>
+                <script type="text/javascript">
+                    
+                </script>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

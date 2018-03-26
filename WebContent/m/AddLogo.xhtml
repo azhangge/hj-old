@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form id="fm">
+                    <div>
+                        <h:outputText id="outputText1"
+                                      styleClass="tit"
+                                      value="－修改系统图片－" />
+                        <h:outputLink value="ListAdv.jspx" styleClass="common">
+                            <h:outputText value="返回"></h:outputText>
+                        </h:outputLink>
+                        <p:separator/>
+                        <h:panelGrid columns="2" columnClasses="thdL,thdR">
+                            <h:outputText value="名称：" />
+                            <h:inputText value="#{addLogo.adv.name}" style="width:400px"/>
+                            <h:outputText value="链接地址：" />
+                            <h:inputText value="#{addLogo.adv.url}" style="width:400px"/>
+
+                            <h:outputText value="图像：" />
+                            <h:graphicImage  id="simg" url="#{addLogo.adv.src}" style="width:100%;border:1px solid gray;background-color: black;"/>
+
+                            <h:outputLabel style="" 
+                                           value="图片源：" />
+
+                            <h:panelGrid columns="1">
+                                <h:panelGroup>
+                                    <h:inputText id="title" value="#{addLogo.adv.src}"
+                                                 style="width:400px" >
+                                        <f:ajax event="change" render="simg" />
+                                    </h:inputText>
+                                </h:panelGroup>
+                                <!-- <h:outputText style="color:red" value="本图宽应为：#{addLogo.adv.width}，高为：#{addLogo.adv.height}，若要融入背景色，请选择背景透明的GIF图片。" /> -->
+                            </h:panelGrid>
+                            <h:outputLabel style="" 
+                                           value="上传：" />
+                            <p:fileUpload id="upl" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'sys')}" fileUploadListener="#{addLogo.up_action}"  update="simg title upl" uploadLabel="上传" auto="true" label="选择图片" allowTypes="/(\.|\/)(gif|jpe?g|png)$/">
+                            </p:fileUpload>
+                            <h:outputText value="描述：" />
+                            <h:inputTextarea value="#{addLogo.adv.description}" style="width:400px;height:100px"/>
+                        </h:panelGrid>
+                        <p:separator/>
+                        <p:commandButton ajax="false" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'sys')}" action="#{addLogo.button1_action}" value="提交" styleClass="commonSubmit"/>
+
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

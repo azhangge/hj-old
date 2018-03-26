@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form>
+
+
+                    <div style="text-align: left; margin: 10px 0px 0px 0px; width: 98%;">
+                        <div>
+                            <h:panelGrid columns="2" style="width:100%">
+                                <h:outputText id="outputText1" styleClass="tit"
+                                              value="－支付记录－" />
+                            </h:panelGrid>
+                        </div>
+                        <div>
+                            <p:dataTable paginator="true" paginatorPosition="bottom" emptyMessage="暂无订单"  rows="8"  styleClass="tabTable"
+                                         value="#{listSaleOrder.orders}" var="order" rowIndexVar="row">
+
+
+                                <p:column>
+                                    <h:outputText style="" value="#{order.oid}" />
+                                    <f:facet name="header">
+                                        <h:outputText  value="订单号" />
+                                    </f:facet>
+                                </p:column>
+
+                                <p:column style="width:280px;">
+                                    <h:outputText  value="#{order.name}" />
+                                    <f:facet name="header">
+                                        <h:outputText  value="订单内容" />
+                                    </f:facet>
+                                    <ui:repeat value="#{order.items}" var="item1">
+                                        <h:outputText value="商品：#{item1.goods.name}，" />
+                                        <h:outputText value="数量：#{item1.quantity}，" />
+                                        <h:outputText value="实付：#{item1.realPrice}" />
+                                        <br/>
+                                    </ui:repeat>
+                                </p:column>
+
+                                <p:column>
+                                    <h:outputText style="" value="#{order.totalMoney}" />
+                                    <f:facet name="header">
+                                        <h:outputText  value="总价" />
+                                    </f:facet>
+                                </p:column>
+
+                                <p:column filterBy="#{order.user.username}" filterMatchMode="contains" filterStyle="width:30px;">
+                                    <h:outputText  value="#{order.user.username}" />
+
+                                    <f:facet name="header">
+                                        <h:outputText  value="用户名" />
+                                    </f:facet>
+                                </p:column>
+
+
+                                <p:column style="text-align: center;width:120px;">
+                                    <h:outputText style="height: 5%" value="#{order.genTime}">
+                                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8" />
+                                    </h:outputText>
+                                    <f:facet name="header">
+                                        <h:outputText  value="下单时间" />
+                                    </f:facet>
+                                </p:column>
+                                
+                                <p:column>
+                                    <h:outputText style="" value="待支付" rendered="#{order.status=='created'}" />
+                                    <h:outputText style="" value="已支付" rendered="#{order.status=='paid'}" />
+                                    <f:facet name="header">
+                                        <h:outputText  value="状态" />
+                                    </f:facet>
+                                </p:column>
+
+                                <p:column style="text-align: center;width:50px;">
+
+                                    <p:commandLink action="#{listSaleOrder.delete(order.id)}" value="删除" onclick="if (!confirm('确认要删除吗？'))
+                                                return false" update="@form"/>
+                                    <f:facet name="header">
+                                        <h:outputText  value="操作" />
+                                    </f:facet>
+                                </p:column>
+
+                            </p:dataTable>
+                            <p:separator style="margin:10px 0px 5px 0px"></p:separator>
+                        </div>
+
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

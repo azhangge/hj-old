@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:p="http://primefaces.org/ui">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head> 
+    <body>
+        <ui:composition>
+            <script>
+                
+            </script>
+            <p:dialog id="choiceDialog"  widgetVar="choiceDialog" resizable="true" closable="true" width="680" height="550">  
+                <f:facet name="header">  
+                    <h:outputText value="查看单选题" /> 
+                </f:facet>  
+                <h:panelGroup id="choicePanel">
+                    <h:panelGrid columns="2" columnClasses="thdL,thdR">
+                        <h:outputText value="题目内容：" />
+                        <h:panelGroup>
+                            <pe:ckEditor id="newChoice" widgetVar="newChoice" value="#{caseEditChoice.choiceAgent.cq.name}"  customConfig="#{facesContext.externalContext.requestContextPath}/resources/js/ckeditor_config2.js" width="560" height="60">
+                                <pe:javascript  event="initialize" execute="onLoadCallback('newChoice')" />
+                                <pe:javascript rendered="#{applicationBean.systemConfig.autoUpload}"  event="blur" execute="uploader.uploadWordImagesFromCKEditor(PF('newChoice').instance,'#{caseEditChoice.cq.id}')" />
+                            </pe:ckEditor>
+                        </h:panelGroup>
+                        <h:outputText value="次序：" />
+                        <h:inputText  value="#{caseEditChoice.choiceAgent.cq.ord}" style="width: 50px;"/>
+                        <h:outputText value="试题解析：" />
+                        <pe:ckEditor id="newChoice1" widgetVar="newChoice1" value="#{caseEditChoice.choiceAgent.cq.rightStr}"  customConfig="#{facesContext.externalContext.requestContextPath}/resources/js/ckeditor_config2.js" width="560" height="60">
+                            <pe:javascript  event="initialize" execute="onLoadCallback('newChoice1')" />
+                            <pe:javascript  rendered="#{applicationBean.systemConfig.autoUpload}" event="blur" execute="uploader.uploadWordImagesFromCKEditor(PF('newChoice1').instance,'#{caseEditChoice.cq.id}')" />
+                        </pe:ckEditor>
+                        <h:outputText value="题目选项：" />
+                        <p:dataTable id="choices" value="#{caseEditChoice.choiceAgent.choices}" var="us">
+                            <p:column>
+                                <h:selectBooleanCheckbox  value="#{us.selected}"  onclick="clickChoice(this);">
+                                </h:selectBooleanCheckbox>
+                                <f:facet name="header">
+                                    <h:outputText value="选项" />
+                                </f:facet>
+                            </p:column>
+                            <p:column>
+                                <h:inputText value="#{us.label}" style="width:60px;"/>
+                                <f:facet name="header">
+                                    <h:outputText value="选项标号" />
+                                </f:facet>
+                            </p:column>
+                            <p:column>
+                                <h:inputText value="#{us.name}"  style="width:300px;"/>
+                                <f:facet name="header">
+                                    <h:outputText value="选择内容" />
+                                </f:facet>
+                            </p:column>
+                            <p:column >
+                                <p:commandLink action="#{caseEditChoice.choiceAgent.deleteChoice(us.id)}" update=":myForm:choices" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}">                                       
+                                    <h:outputText value="删除" />
+                                </p:commandLink>
+                                <f:facet name="header">
+                                    <h:outputText value="删除" />
+                                </f:facet>
+                            </p:column>
+                        </p:dataTable>
+                    </h:panelGrid>
+                    <p:separator/>
+                    <h:panelGrid columns="5">
+                        <h:outputText value="标号：" />
+                        <h:inputText value="#{caseEditChoice.choiceAgent.newChoice.label}"  style="width:60px;"/>
+                        <h:outputText value="内容：" />
+                        <h:inputText value="#{caseEditChoice.choiceAgent.newChoice.name}"  style="width:360px;"/>
+                        <p:commandButton value="添加新选项" action="#{caseEditChoice.choiceAgent.addNewChoice()}" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}" update=":myForm:choices :myForm:choicePanel"/>
+                    </h:panelGrid>
+
+                </h:panelGroup>  
+                <p:separator/>
+                <p:commandButton action="#{caseEditChoice.choiceAgent.caseMBDone()}" process="@form" value="完成" oncomplete="PF('choiceDialog').hide();" update=":myForm:dataTable1 :myForm:choicePanel"/>
+            </p:dialog>
+        </ui:composition>
+    </body>
+</html>

@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      >
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <body>
+        <ui:composition>
+                <p:dialog id="newFile" width="500" widgetVar="newFile"  modal="false" 
+                          style="text-align:left;position: absolute;">
+                    <f:facet name="header">
+                        <h:panelGroup>
+                            <h:outputText value="文件"></h:outputText>
+                        </h:panelGroup>
+                    </f:facet>
+                    <h:panelGrid columns="2">
+                        <h:outputText value="文件名称："></h:outputText>
+                        <p:outputPanel autoUpdate="true">
+                            <h:outputText value="#{adminNewFile2.fileName}"></h:outputText>
+                        </p:outputPanel>
+                        <h:outputText value="重命名："></h:outputText>
+                        <h:panelGroup>
+                            <p:outputPanel autoUpdate="true">
+                                <h:selectBooleanCheckbox value="#{adminNewFile2.rename}">
+                                    <p:ajax event="click" update="fName"></p:ajax>
+                                </h:selectBooleanCheckbox>
+                            </p:outputPanel>
+                            <h:inputText value="#{adminNewFile2.fileName}" id="fName"
+                                         disabled="#{!adminNewFile2.rename}" style="width:260px">
+                                <p:ajax event="keyup" update="fClink1"
+                                        listener="#{adminNewFile2.checkName}"></p:ajax>
+                            </h:inputText>
+                        </h:panelGroup>
+
+                    </h:panelGrid>
+
+                    <p:separator style="margin-top:0px;margin-bottom:2px" />
+
+                    <p:fileUpload fileUploadListener="#{adminNewFile2.up_action2}"  id="upl1" mode="advanced" auto="true" widgetVar="upl1" 
+                                  cancelLabel="取消" uploadLabel="上传" label="选择文件" sizeLimit="2004800000" invalidSizeMessage="文件最大限制1G" update="upl1 :myForm:ajaxStatusPanel"/>
+                    <h:panelGrid columns="4" style="width:100%">
+                        <p:outputPanel autoUpdate="true">
+                            <h:outputText value="格式："></h:outputText>
+                            <h:outputText value="#{adminNewFile2.project2.fileExt}"></h:outputText>
+                            <h:outputText value="大小：" style="margin-left:40px"></h:outputText>
+                            <h:outputText value="#{adminNewFile2.project2.fileSize}"></h:outputText>
+                        </p:outputPanel>
+                    </h:panelGrid>
+                    <p:separator/>
+                    <h:panelGrid columns="2" style="width:100%">
+                        <h:outputText value="备注："></h:outputText>
+                        <p:outputPanel autoUpdate="true">
+                            <h:inputTextarea value="#{adminNewFile2.project2.fileAbstract}" style="width:400px;height:50px;"/>
+                        </p:outputPanel>
+                    </h:panelGrid>
+                    <p:separator/>
+                    <p:outputPanel autoUpdate="true">
+                        <p:commandButton id="fClink1" action="#{adminNewFile2.createFile}" onclick="PF('newFile').hide();" 
+                                         disabled="#{adminNewFile2.errStr!=''}" value="完成" update=":myForm:tabView:dc"
+                                         style="margin-top:6px">
+                        </p:commandButton>
+                    </p:outputPanel>
+
+                    <br />
+                    <p:outputPanel  autoUpdate="true" style="color:red">
+                        <h:outputText value="#{adminNewFile2.errStr}"></h:outputText>
+                    </p:outputPanel>
+                </p:dialog>
+        </ui:composition>
+    </body>
+</html>
+

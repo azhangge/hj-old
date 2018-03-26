@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html ng-app="ExamModule" ng-controller="examCaseCtr">
+    <head>
+        <meta charset="utf-8"/>
+
+        <title></title>
+        
+        <script src="js/angular.min.js"></script>
+        <script src="js/controllers.js"></script>
+        <script src="js/model/exam_case.js"></script>
+    </head>
+
+    <body>
+
+        <div ng-controller="examCaseCtr">
+
+            <div class="bar-calm">
+                <div class="buttons">
+                    <a class="button button-clear" >
+                        <i class="ion-arrow-left-c"></i> 返回
+                    </a>
+                </div>
+                <h1 class="title">{{examCase.data.examination.name}}</h1>
+                <div class="buttons">
+                    <button ng-click='save()' class="button button-clear">保存</button>
+                    <button ng-click='submit()' class="button button-clear">提交</button>
+                </div>
+            </div>
+
+            <div class="bar bar-subheader" style="text-align: center;">
+                <span id="remain">{{countDownStr}}</span>
+            </div>
+
+            <div>
+                <div style="height:50px;"></div>
+
+                <div ng-show="loading" style="margin: auto 0px;text-align: center;">
+
+                </div>
+
+                <div id="chociePanel" ng-if="examCase.adapter.qtype === 'choice'" class="">
+                    <div style="padding: 20px 10px 20px 10px">
+                        <a href="#"></a>
+                        <span class="choiceTitle2" >
+                            {{examCase.adapter.ord}}、（{{examCase.adapter.partName}}，{{examCase.adapter.score}}分）
+                        </span><hr/><br/>
+                        <span class="choiceTitle2">
+                            {{examCase.adapter.question.name}}
+                        </span><br/><br/>
+                    </div>
+                    <div style="border:0px solid red;" class="list">
+                        <table style="width:100%;">
+                            <tr ng-repeat="choice in examCase.adapter.question.choices| orderBy: 'labelRendered'" class="item"><td>
+                                    <input id="{{choice.label}}" type="radio" ng-model="examCase.adapter.choiceItem.userAnswer" value="{{choice.label}}" class="radio-icon"/>
+                                    <label for="{{choice.label}}" style="margin-left: 10px;">{{choice.labelRendered}}、&nbsp{{choice.name}}</label>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="mchociePanel" ng-if="examCase.adapter.qtype === 'mchoice'" class="">
+                    <div style="padding: 20px 10px 20px 10px">
+                        <a href="#"></a>
+                        <span class="choiceTitle2" >
+                            {{examCase.adapter.ord}}、（{{examCase.adapter.partName}}，{{examCase.adapter.score}}分）
+                        </span><hr/><br/>
+                        <span class="choiceTitle2">
+                            {{examCase.adapter.question.name}}
+                        </span><br/><br/>
+                    </div>
+                    <div style="border:0px solid red;" class="list">
+                        <table style="width:100%;">
+                            <tr ng-repeat="choice in examCase.adapter.question.choices| orderBy: 'labelRendered'" class="item">
+                                <td>
+                                    <input id="{{choice.label}}" type="checkbox" ng-model="examCase.adapter.multiChoiceItem.userAnswers[$index]" ng-true-value="'{{choice.label}}'" ng-false-value="'{{''}}'" class="radio-icon"/>
+                                    <label for="{{choice.label}}" style="margin-left: 10px;">{{choice.labelRendered}}、&nbsp{{choice.name}}</label>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="fillPanel" ng-if="examCase.adapter.qtype === 'fill'" class="">
+                    <div style="padding: 20px 10px 20px 10px">
+                        <a href="#"></a>
+                        <span class="choiceTitle2" >
+                            {{examCase.adapter.ord}}、（{{examCase.adapter.partName}}，{{examCase.adapter.score}}分）
+                        </span><hr/><br/>
+                    </div>
+                    <div style="border:0px solid red;" class="list">
+                        <span ng-repeat="block in examCase.adapter.fillItem.blocks" class="choiceTitle2">
+                            {{block.preStr}}
+                            <input type="text" ng-model="block.userAnswer" style="border-bottom: 1px solid black;"/>
+                        </span>
+                        <span  class="choiceTitle2">
+                            {{examCase.adapter.fillItem.lastStr}}
+                        </span>
+                    </div>
+                </div>
+
+                <div id="judgePanel" ng-if="examCase.adapter.qtype === 'judge'" class="">
+                    <div style="padding: 20px 10px 20px 10px">
+                        <a href="#"></a>
+                        <span class="choiceTitle2" >
+                            {{examCase.adapter.ord}}、（{{examCase.adapter.partName}}，{{examCase.adapter.score}}分）
+                        </span><hr/><br/>
+                        <span class="choiceTitle2">
+                            {{examCase.adapter.question.name}}
+                        </span><br/><br/>
+                    </div>
+                    <div style="border:0px solid red;" class="list">
+                        <table style="width:100%;">
+                            <tr class="item"><td>
+                                    <input id="right" type="radio" ng-model="examCase.adapter.judgeItem.userAnswer" value="true" class="radio-icon"/>
+                                    <label for="right" style="margin-left: 10px;">正确</label>
+                                </td>
+                            </tr>
+                            <tr class="item"><td>
+                                    <input id="wrong" type="radio" ng-model="examCase.adapter.judgeItem.userAnswer"  value="false" class="radio-icon"/>
+                                    <label for="wrong" style="margin-left: 10px;">错误</label>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="essayPanel" ng-if="examCase.adapter.qtype === 'essay'" class="">
+                    <div style="padding: 20px 10px 20px 10px">
+                        <a href="#"></a>
+                        <span class="choiceTitle2" >
+                            {{examCase.adapter.ord}}、（{{examCase.adapter.partName}}，{{examCase.adapter.score}}分）
+                        </span><hr/><br/>
+                        <span class="choiceTitle2">
+                            {{examCase.adapter.question.name}}
+                        </span><br/><br/>
+                    </div>
+                    <div style="border:0px solid red;" class="list">
+                        <textarea ng-model="examCase.adapter.essayItem.userAnswer"></textarea>
+                    </div>
+                </div>
+
+                <div id="filePanel" ng-if="examCase.adapter.qtype === 'file'" class="">
+                    <div style="padding: 20px 10px 20px 10px">
+                        <a href="#"></a>
+                        <span class="choiceTitle2" >
+                            {{examCase.adapter.ord}}、（{{examCase.adapter.partName}}，{{examCase.adapter.score}}分）
+                        </span><hr/><br/>
+                        <span class="choiceTitle2">
+                            {{examCase.adapter.question.name}}
+                        </span><br/><br/>
+                    </div>
+                    <div style="border:0px solid red;" class="list">
+                        <textarea ng-model="examCase.adapter.fileItem.userAnswer"></textarea>
+                    </div>
+                </div>
+                <div ng-if="examCase.data.examination.showAnswer">
+                    <br/>
+                    <a ng-controller="clientSessionCtr" href="#" ng-click="showQuestion(examCase.adapter.qtype, examCase.adapter.question)" class="news">查看解析</a>&nbsp;&nbsp;&nbsp;
+                    <a ng-controller="clientSessionCtr" href='#' ng-click="collectQuestion(examCase.adapter.qtype, examCase.adapter.question.id)" class="news">收藏试题</a>&nbsp;&nbsp;&nbsp;
+                    <a ng-controller="clientSessionCtr" href='#' ng-click="reportWrong(examCase.adapter.qtype, examCase.adapter.question.id)" class="news">报告错误</a>
+                </div>
+
+
+
+            </div>
+
+            <div class="bar-light">
+                <div class="buttons">
+                    <button ng-click="examCase.previousQuestion()" ng-disabled="examCase.currentIndex === 0" class="button button-calm buttons-left">上一题</button>
+                </div>
+                <span id="progressX" style="line-height:50px;" class="title">进度：{{examCase.currentIndex + 1}} / {{examCase.allAdapters.length}}</span>
+                <div class="buttons">
+                    <button ng-click="examCase.nextQuestion()" ng-disabled="examCase.currentIndex === (examCase.allAdapters.length - 1)" class="button button-calm buttons-left">下一题</button>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

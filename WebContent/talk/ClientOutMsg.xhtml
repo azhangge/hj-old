@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" lang="en">
+	<head>
+		<title>My Facelets Page</title>
+		<meta http-equiv="keywords" content="enter,your,keywords,here" />
+		<meta http-equiv="description"
+			content="A short description of this page." />
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+		<!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+	</head>
+	<body>
+		<ui:composition template="UserCenterGeneral.xhtml">
+			<ui:define name="content">
+				<div style="text-align: left; margin: 10px 0px 0px 0px; width: 98%;">
+					<div>
+						<h:panelGrid columns="2" style="width:100%">
+							<h:outputText id="outputText1" styleClass="tit"
+								value="－－－管理员消息－－－" />
+						</h:panelGrid>
+
+					</div>
+					<p:separator></p:separator>
+					<div>
+                                            <p:dataTable id="dataTable1" styleClass="list" style="width:100%" rowIndexVar="r"
+							value="#{clientListMsg.commentList}" var="Case">
+							<h:column id="num">
+								<h:outputText style="height: 5%"
+									value="#{r+1}" />
+								<f:facet name="header">
+									<h:outputText id="outputTextnum" value="序号" />
+								</f:facet>
+							</h:column>
+							<h:column>
+								<h:outputText style="height: 5%" value="#{Case.title}" />
+								<f:facet name="header">
+									<h:outputText id="outputText3" value="标题" />
+								</f:facet>
+							</h:column>
+							<h:column>
+								<h:outputText style="height: 5%" value="#{Case.sender.urn}">
+								</h:outputText>
+								<f:facet name="header">
+									<h:outputText value="发件人" />
+								</f:facet>
+							</h:column>
+							<h:column>
+								<h:outputText style="height: 5%" value="#{Case.genTime}">
+									<f:convertDateTime pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" />
+								</h:outputText>
+								<f:facet name="header">
+									<h:outputText value="发送时间" />
+								</f:facet>
+							</h:column>
+							<h:column>
+								<h:outputLink value="AAComment.jsf?id=#{Case.id}">
+									<h:outputText value="查看/回复"></h:outputText>
+								</h:outputLink>
+								<f:facet name="header">
+									<h:outputText style="height: 5%" value="查看/回复" />
+								</f:facet>
+							</h:column>
+							<h:column>
+								<h:commandLink action="#{clientListMsg.deleteCasus(Case.id)}"
+									value="删除" />
+								<f:facet name="header">
+									<h:outputText style="height: 5%" value="删除" />
+								</f:facet>
+							</h:column>
+						</p:dataTable>
+						<p:separator></p:separator>
+					</div>
+					
+				</div>
+
+			</ui:define>
+		</ui:composition>
+	</body>
+</html>

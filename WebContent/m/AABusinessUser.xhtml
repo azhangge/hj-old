@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"  lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form id="myForm">
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <script type="text/javascript">
+                         function changeStatus(obj){
+                        	var type = obj.value;
+                        	var id = 'myForm:'+type;
+                        	var urlId = id+'Url';
+                        	var grp = document.getElementById('myForm:grp');
+                        	var authList = document.getElementsByName('myForm:authList');
+                        	if(type == 'company'){
+                        		for(var k in authList){
+                        			if(k.value=='user'||k.value=='lesson'){
+                        				k.checked == true;
+                        			}
+                        		}
+                        	}
+                        } 
+
+                    </script>
+                    <div>
+                        <h:outputText styleClass="tit"
+                                      value="－#{aABusinessUser.flag?'修改企业客户':'添加企业客户'}－" />
+                        <p:separator/>
+                        <h:panelGrid columns="3">
+                            <h:outputText value="企业名称：" />
+                            <h:inputText value="#{aABusinessUser.businessUser.businessNameCn}" style="width:400px"/>
+                            <h:outputText/>
+							
+                            <h:outputText value="法人名称：" />
+                            <h:inputText value="#{aABusinessUser.businessUser.legalPerson}" style="width:400px" />
+                            <h:outputText/>
+                            
+                            <h:outputText value="域名：" />
+                            <h:inputText value="#{aABusinessUser.businessUser.domainName}" style="width:400px" />
+                            <h:outputText/>
+                            
+                            <h:outputText value="端口：" />
+                            <h:inputText value="#{aABusinessUser.businessUser.port}" style="width:400px" />
+                            <h:outputText/>
+                            
+                        </h:panelGrid>
+                        <p:separator/>
+
+                        <p:commandButton action="#{aABusinessUser.submit_action}" ajax="false" value="提交" />
+                        <p:growl autoUpdate="true"/>
+
+                    </div></h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui" 
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="UserCenterGeneral.xhtml">
+            <ui:define name="ucontent">
+                <div>
+                    <h:panelGrid columns="2" style="width:100%">
+                        <h:outputText id="outputText1" styleClass="mark" value="－消息发送成功－" />
+                    </h:panelGrid>
+                </div>
+                <script type="text/javascript">
+                    $(function () {
+                        //在文本之前添加一个div，用来显示数值，当然别的也行，个人偏好。什么p啊a啊span啊em啊b啊等等都行。
+                        $("#gx").before("<div id='jishu'> 3 </div>");
+                        //为添加显示div的css。这里就可以实现很酷的效果。比如背景图片啊什么的。当然为了简化没有用它。
+                        $("#jishu").addClass('jishubg');
+                        //前面添加的是直接添加的没有任何的显示效果，我们需要把它先隐藏了。这样会更有视觉效果。
+                        $("#jishu").hide();
+                        //现在就可以让它显示出来了。这里用的是show。如果本页上别的模块还用到了jquery ui show，那么就可以用show的更多动画效果了。这里因为没有加载别的插件，就用jquery本身的show。为了直观看到效果，这里将show的时间设置的是1500毫秒。
+                        //逻辑当jishu显示完之后显示jishu1，以此类推。最后链接指定页面。
+
+                        $("#jishu").show(1500, function () {
+                            $("#gx").before("<div id='jishu1'> 2 </div>");
+                            $("#jishu1").addClass('jishubg');
+                            $("#jishu1").hide();
+                            $("#jishu").hide();
+                            $("#jishu1").show(1500, function () {
+                                $("#gx").before("<div id='jishu2'> 1</div>");
+                                $("#jishu2").addClass('jishubg');
+                                $("#jishu1").hide();
+                                $("#jishu2").hide();
+                                $("#jishu2").show(1500, function () { window.location.href = "./ClientListMsg.jspx"; });
+                            }
+                        );
+                        });
+                    });
+                </script>
+                <p:separator/>
+
+                <p:panel id="gx">
+                    <f:facet name="header">
+                        <h:outputText value="消息已发送成功！"/>
+                    </f:facet>
+                    <br/>
+                    <a href="ClientListMsg.jspx" class="header">请点击此处返回消息列表！</a>
+                    <br/><br/>
+                </p:panel>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

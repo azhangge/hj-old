@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form>
+                    <p:growl id="grow"/>
+                    <div style="text-align: left; margin: 10px 0px 0px 0px; width: 98%;">
+                        <div>
+                            <h:panelGrid columns="3" style="">
+                                <h:outputText styleClass="tit"
+                                              value="－系统帮助－" />
+                                <p:button href="/m/AAManual.jspx" value="添加新帮助" rendered="#{listManual.ifAlter}"/>
+                                <p:commandButton action="#{listManual.outputAllManual()}" value="输出帮助文档" rendered="#{listManual.ifAlter}" update="grow"/>
+                            </h:panelGrid>
+                        </div>
+                        <div>
+                            <p:dataTable  paginator="true" paginatorPosition="bottom" editable="true" editMode="cell"
+                                          rowIndexVar="row" styleClass="list" style="width:100%" rows="10" value="#{listManual.manualList}" var="manual">
+                                <p:column style="width:30px;">
+                                    <h:outputText value="#{row+1}" />
+                                    <f:facet name="header">
+                                        <h:outputText  value="序号" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column filterBy="#{manual.title}" filterMatchMode="contains">
+                                    <p:commandLink styleClass="notice" action="#{listManual.viewManual(manual.id)}"  oncomplete="PF('ManualPanel').show()" title="查看">
+                                        <h:outputText value="#{manual.title}"/>
+                                    </p:commandLink>
+                                    <f:facet name="header">
+                                        <h:outputText  value="标题" />
+                                    </f:facet> 
+                                </p:column>
+                                <p:column sortBy="#{manual.ord}" style="width:60px;" rendered="#{listManual.ifAlter}">
+                                    <p:tooltip for="modelOutput" value="点击编辑"/>
+                                    <p:cellEditor>  
+                                        <f:facet name="output">
+                                            <h:outputText id="modelOutput" value="#{manual.ord}" />
+                                        </f:facet>  
+                                        <f:facet name="input">
+                                            <p:inputText id="modelInput" value="#{manual.ord}" style="width:30px;">
+                                                <p:ajax event="change" update="@none" listener="#{listManual.editOrd(manual.id)}"/>
+                                            </p:inputText>
+                                        </f:facet>  
+                                    </p:cellEditor> 
+                                    <f:facet name="header">
+                                        <h:outputText value="次序" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="width:150px;" sortBy="#{manual.inputdate}">
+                                    <h:outputText  value="#{manual.inputdate}">
+                                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8" />
+                                    </h:outputText>
+                                    <f:facet name="header">
+                                        <h:outputText value="录入时间" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column rendered="#{listManual.ifAlter}">
+                                    <h:outputText  value="#{manual.id}" />
+                                    <f:facet name="header">
+                                        <h:outputText  value="ID" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column rendered="#{listManual.ifAlter}">
+                                    <h:outputLink value="AAManual.jspx?id=#{manual.id}">
+                                        <h:outputText value="查看/修改"></h:outputText>
+                                    </h:outputLink>
+                                    <f:facet name="header">
+                                        <h:outputText  value="查看/修改" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column rendered="#{listManual.ifAlter}">
+                                    <p:commandLink action="#{listManual.deleteManual(manual.id)}" update="@form"
+                                                   value="删除">
+                                    </p:commandLink>
+                                    <f:facet name="header">
+                                        <h:outputText value="删除" />
+                                    </f:facet>
+                                </p:column>
+                            </p:dataTable>
+                            <p:separator></p:separator>
+                        </div>
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

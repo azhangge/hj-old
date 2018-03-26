@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core"  lang="en"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </h:head>
+    <h:body>
+        <ui:composition template="UserCenterGeneral.xhtml">
+            <ui:define name="title">
+                <h:outputText value="支付方式" />
+            </ui:define>
+            <ui:define name="ucontent">
+                <div style="text-align: left; margin: 0px 0px 0px 0px; width: 98%;">
+                    <div>
+                        <h:panelGrid columns="2" style="width:100%">
+                            <h:outputText id="outputText1" styleClass="mark"
+                                          value="－确认订单－" />
+                        </h:panelGrid>
+                    </div>
+                    <p:separator/>
+                    <div>
+                        <h:panelGroup>
+                            <h:outputText value="订单编号："/>
+                            <h:outputText value="#{payMethod.order.oid}"/>
+                        </h:panelGroup>
+
+
+
+                        <h:panelGroup rendered="#{payMethod.order.orderType=='goods'}">
+                            <h:outputText value="订单内容：#{payMethod.order.items.size()}"/>
+                            <ui:repeat value="#{payMethod.order.items}" var="item1">
+                                <h:outputText value="#{item1.goods.name}"/>
+                                <h:outputText value="&nbsp;X&nbsp;"/>
+                                <h:outputText value="#{item1.quantity}">
+                                    <f:convertNumber maxFractionDigits="0"/>
+                                </h:outputText><br/>
+                            </ui:repeat>
+                        </h:panelGroup>
+
+                        <p:separator/>
+                        <h:panelGroup>
+                            <h:outputText value="订单金额："/>
+                            <h:outputText value="#{payMethod.order.totalMoney}"/>
+                        </h:panelGroup>
+                        <br/>
+                        <h:panelGroup>
+                            <h:outputText value="帐户余额："/>
+                            <h:outputText  value="#{clientSession.usr.financeBalance}元"/>
+                        </h:panelGroup>
+                        <br/>
+                        <h:panelGroup rendered="#{payMethod.order.orderType=='goods' and clientSession.usr.financeBalance!=0}">
+                            <h:outputText value="使用余额？"/>
+                            <h:selectBooleanCheckbox value="#{payMethod.useBalance}">
+                                <p:ajax listener="#{payMethod.reloadPayMoney()}" update="payingMoney payMethod"/>
+                            </h:selectBooleanCheckbox>
+                            <br/>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <h:outputText value="支付金额："/>
+                            <h:outputText id="payingMoney" value="#{payMethod.order.payMoney}"/>
+                        </h:panelGroup>
+                        <p:separator/>
+                        <h:panelGroup id="payMethod">
+                            <h:panelGroup rendered="#{payMethod.order.payMoney!=0}">
+                                <h:outputText value="支付方式："/>
+                                <h:selectOneRadio  value="#{payMethod.method}"  style="display: inline;"> 
+                                    <f:selectItem itemLabel="支付宝" itemValue="alipay1"/>
+                                </h:selectOneRadio> 
+                            </h:panelGroup>
+                        </h:panelGroup>
+
+                        <p:separator/>
+
+                        <p:commandButton action="#{payMethod.gotoPay()}" value="开始支付" ajax="false"/>
+                    </div>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

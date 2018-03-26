@@ -1,0 +1,249 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui" lang="en">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition>
+
+            <p:tabView activeIndex="#{listAllQuestion.activeId}">
+                <p:tab title="单选题">
+                    <div>
+                        <p:dataTable paginator="true" paginatorPosition="bottom" value="#{listChoiceQuestion2.questions}" var="us" id="dataTable1" liveResize="true" emptyMessage="#{lang['exam.empty_result']}"
+                                     styleClass="list" rowIndexVar="row" style="width:100%;" rows="30" lazy="true">
+                            <p:column>
+                                <h:selectBooleanCheckbox value="#{us.selected}"/>
+                                <f:facet name="header">
+                                    <h:outputText value="选择" />
+                                </f:facet>
+                            </p:column>
+                            <p:column sortBy="#{us.cleanName}" filterBy="#{us.cleanName}" style="width:370px!important;word-wrap:break-word!important;word-break:break-all!important;">
+                                <h:outputText value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}" escape="false"/>
+                                <f:facet name="header">
+                                    <h:outputText value="题目名称" />
+                                </f:facet>
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{us.answer}" />
+                                <f:facet name="header">
+                                    <h:outputText value="答案" />
+                                </f:facet>
+                            </p:column>
+                            <p:column sortBy="#{us.genTime}">
+                                <h:outputText value="#{us.genTime}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                       timeZone="GMT+8" />
+                                </h:outputText>
+                                <f:facet name="header">
+                                    <h:outputText value="添加时间" />
+                                </f:facet>
+                            </p:column>
+                        </p:dataTable>
+                        <h:outputText value="共有#{listChoiceQuestion.module.choiceNum}条数据！" />
+                    </div>
+                </p:tab>
+                <p:tab title="多选题">
+                    <div>
+                        <p:dataTable paginator="true" paginatorPosition="bottom" value="#{listMultiChoiceQuestion2.questions}" var="us" id="dataTable4" emptyMessage="#{lang['exam.empty_result']}"
+                                     styleClass="list" rowIndexVar="row" style="width:100%" rows="30" lazy="true">
+                            <p:column>
+                                <h:selectBooleanCheckbox value="#{us.selected}"/>
+                                <f:facet name="header">
+                                    <h:outputText value="选择" />
+                                </f:facet>
+                            </p:column>
+                            <p:column sortBy="#{us.cleanName}" filterBy="#{us.cleanName}" style="width:370px;">
+                                <h:outputText value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}" escape="false"/>
+                                <f:facet name="header">
+                                    <h:outputText value="题目名称" />
+                                </f:facet>
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{us.answer}" />
+                                <f:facet name="header">
+                                    <h:outputText value="答案" />
+                                </f:facet>
+                            </p:column>
+                            <p:column sortBy="#{us.genTime}">
+                                <h:outputText value="#{us.genTime}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                       timeZone="GMT+8" />
+                                </h:outputText>
+                                <f:facet name="header">
+                                    <h:outputText value="添加时间" />
+                                </f:facet>
+                            </p:column>
+                        </p:dataTable>
+                        <h:outputText value="共有#{listChoiceQuestion.module.multiChoiceNum}条数据！" />
+                    </div>
+                </p:tab>
+                <p:tab title="填空题">
+                    <div>
+                        <p:dataTable paginator="true" paginatorPosition="bottom" value="#{listFillQuestion2.questions}" var="us" id="dataTable2" emptyMessage="#{lang['exam.empty_result']}"
+                                     styleClass="list" rowIndexVar="row" style="width:100%" rows="30" lazy="true">
+                            <p:column>
+                                <h:selectBooleanCheckbox value="#{us.selected}"/>
+                                <f:facet name="header">
+                                    <h:outputText value="选择" />
+                                </f:facet>
+                            </p:column>
+                            <p:column sortBy="#{us.cleanName}" filterBy="#{us.cleanName}" style="width:430px;">
+                                <h:outputText value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}" escape="false"/>
+                                <f:facet name="header">
+                                    <h:outputText value="题目名称" />
+                                </f:facet>
+                            </p:column>
+                            <p:column sortBy="#{us.genTime}">
+                                <h:outputText value="#{us.genTime}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                       timeZone="GMT+8" />
+                                </h:outputText>
+                                <f:facet name="header">
+                                    <h:outputText value="添加时间" />
+                                </f:facet>
+                            </p:column>
+                        </p:dataTable>
+                        <h:outputText value="共有#{listChoiceQuestion.module.fillNum}条数据！" />
+                    </div>
+                </p:tab>
+
+                <p:tab title="判断题">
+                    <div>
+                        <p:dataTable paginator="true" paginatorPosition="bottom" value="#{listJudgeQuestion2.questions}" var="us" id="dataTable3" emptyMessage="#{lang['exam.empty_result']}"
+                                     styleClass="list" rowIndexVar="row" style="width:100%" rows="30" lazy="true">
+                            <p:column>
+                                <h:selectBooleanCheckbox value="#{us.selected}"/>
+                                <f:facet name="header">
+                                    <h:outputText value="选择" />
+                                </f:facet>
+                            </p:column>
+                            <p:column  sortBy="#{us.cleanName}" filterBy="#{us.cleanName}" style="width:370px;">
+                                <h:outputText value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}" escape="false"/>
+                                <f:facet name="header">
+                                    <h:outputText value="题目内容" />
+                                </f:facet>
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{us.answer}" />
+                                <f:facet name="header">
+                                    <h:outputText value="答案" />
+                                </f:facet>
+                            </p:column>
+                            <p:column sortBy="#{us.genTime}">
+                                <h:outputText value="#{us.genTime}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                       timeZone="GMT+8" />
+                                </h:outputText>
+                                <f:facet name="header">
+                                    <h:outputText value="添加时间" />
+                                </f:facet>
+                            </p:column>
+                        </p:dataTable>
+                        <h:outputText value="共有#{listChoiceQuestion.module.judgeNum}条数据！" />
+                    </div>
+                </p:tab>
+
+                <p:tab title="问答题">
+                    <div>
+                        <p:dataTable paginator="true" paginatorPosition="bottom" value="#{listEssayQuestion2.questions}" var="us" id="dataTable5" emptyMessage="#{lang['exam.empty_result']}"
+                                     styleClass="list" rowIndexVar="row" style="width:100%" rows="30" lazy="true">
+                            <p:column>
+                                <h:selectBooleanCheckbox value="#{us.selected}"/>
+                                <f:facet name="header">
+                                    <h:outputText value="选择" />
+                                </f:facet>
+                            </p:column>
+                            <p:column  sortBy="#{us.cleanName}" filterBy="#{us.cleanName}" style="width:370px;">
+                                <h:outputText value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}" escape="false"/>
+                                <f:facet name="header">
+                                    <h:outputText value="题目内容" />
+                                </f:facet>
+                            </p:column>
+                            <p:column sortBy="#{us.genTime}">
+                                <h:outputText value="#{us.genTime}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                       timeZone="GMT+8" />
+                                </h:outputText>
+                                <f:facet name="header">
+                                    <h:outputText value="添加时间" />
+                                </f:facet>
+                            </p:column>
+                        </p:dataTable>
+                        <h:outputText value="共有#{listChoiceQuestion.module.essayNum}条数据！" />
+                    </div>
+                </p:tab>
+
+                <p:tab title="文件题">
+                    <div>
+                        <p:dataTable paginator="true" paginatorPosition="bottom" value="#{listFileQuestion2.questions}" var="us" id="dataTable6" emptyMessage="#{lang['exam.empty_result']}"
+                                     styleClass="list" rowIndexVar="row" style="width:100%" rows="30" lazy="true">
+                            <p:column>
+                                <h:selectBooleanCheckbox value="#{us.selected}"/>
+                                <f:facet name="header">
+                                    <h:outputText value="选择" />
+                                </f:facet>
+                            </p:column>
+                            <p:column  sortBy="#{us.cleanName}" filterBy="#{us.cleanName}" style="width:370px;">
+                                <h:outputText value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}" escape="false"/>
+                                <f:facet name="header">
+                                    <h:outputText value="题目内容" />
+                                </f:facet>
+                            </p:column>
+                            <p:column sortBy="#{us.genTime}">
+                                <h:outputText value="#{us.genTime}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                       timeZone="GMT+8" />
+                                </h:outputText>
+                                <f:facet name="header">
+                                    <h:outputText value="添加时间" />
+                                </f:facet>
+                            </p:column>
+                        </p:dataTable>
+                        <h:outputText value="共有#{listChoiceQuestion.module.fileNum}条数据！" />
+                    </div>
+                </p:tab>
+
+
+                <p:tab title="综合题">
+                    <div>
+                        <p:dataTable paginator="true" paginatorPosition="bottom" value="#{listCaseQuestion2.questions}" var="us" id="dataTable7" emptyMessage="#{lang['exam.empty_result']}"
+                                     styleClass="list" rowIndexVar="row" style="width:100%" rows="30" lazy="true">
+                            <p:column>
+                                <h:selectBooleanCheckbox value="#{us.selected}"/>
+                                <f:facet name="header">
+                                    <h:outputText value="选择" />
+                                </f:facet>
+                            </p:column>
+                            <p:column  sortBy="#{us.cleanName}" filterBy="#{us.cleanName}" style="width:370px;">
+                                <h:outputText value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}" escape="false"/>
+                                <f:facet name="header">
+                                    <h:outputText value="题目说明" />
+                                </f:facet>
+                            </p:column>
+                            <p:column sortBy="#{us.genTime}">
+                                <h:outputText value="#{us.genTime}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                       timeZone="GMT+8" />
+                                </h:outputText>
+                                <f:facet name="header">
+                                    <h:outputText value="添加时间" />
+                                </f:facet>
+                            </p:column>
+                        </p:dataTable>
+                        <h:outputText value="共有#{listChoiceQuestion.module.caseNum}条数据！" />
+                    </div>
+                </p:tab>
+
+
+            </p:tabView>
+
+        </ui:composition>
+    </h:body>
+</html>
+

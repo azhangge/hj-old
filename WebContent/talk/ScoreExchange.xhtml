@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core"  lang="en"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </h:head>
+    <h:body>
+        <ui:composition template="UserCenterGeneral.xhtml">
+            <ui:define name="title">
+                <h:outputText value="积分兑换" />
+            </ui:define>
+            <ui:define name="ucontent">
+                <style>
+                    .newsLine{
+                        color:black;font-size: 12px;font-family: 宋体;
+                    }
+                    .tdStyle{
+                        border-bottom: 1px gray dotted;height:30px;
+                    }
+                </style>
+                <div  style="text-align: left; margin: 0px 0px 0px 0px; width: 98%;">
+                    <div>
+                        <h:panelGrid columns="2" style="width:100%">
+                            <h:outputText id="outputText1" styleClass="mark"
+                                          value="－积分兑换－" />
+                        </h:panelGrid>
+                    </div>
+                    <p:separator/>
+                    <!--页面顶端导航结束-->
+                    <div style="width:95%;margin: 0px auto;">
+
+                        <h:panelGrid columns="2">
+                            <h:outputText value="用户名：" />
+                            <h:panelGroup>
+                                <h:outputText  value="#{clientSession.usr.username}" />
+                                <h:outputText value="元" />
+                            </h:panelGroup>
+                            <h:outputText value="帐户余额：" />
+                            <h:panelGroup>
+                                <h:outputText  value="#{clientSession.fetchRealMoney(clientSession.usr.id)}" />
+                                <h:outputText value="元" />
+                            </h:panelGroup>
+                            <h:outputText value="帐户剩余积分：" />
+                            <h:panelGroup>
+                                <h:outputText value="#{clientSession.fetchRealScore(clientSession.usr.id)}"/>
+                            </h:panelGroup>
+                            
+                        </h:panelGrid>
+                        <p:separator/>
+                        <h:panelGrid columns="2">
+                            <h:outputText value="兑换积分数：" />
+                            <h:panelGroup>
+                                <h:inputText value="#{scoreExchange.score}" styleClass="">
+                                    <p:ajax listener="#{scoreExchange.reloadMoney()}" update="money"/>
+                                </h:inputText>
+                                <h:outputText value="（每#{scoreExchange.config.scorePerYuan}积分花费1元）" style="color:green;"/>
+                            </h:panelGroup>
+                            <h:outputText value="花费：" />
+                            <h:panelGroup>
+                                <h:outputText id="money" value="#{scoreExchange.money}" />
+                                <h:outputText value="元" />
+                            </h:panelGroup>
+                        </h:panelGrid>
+                        <p:outputPanel autoUpdate="true">
+                            <p:growl/>
+                        </p:outputPanel>
+                        
+                        <p:separator/>
+                        <p:commandButton id="done" ajax="true" action="#{scoreExchange.exchange()}" update="@form"  value="确定兑换" onclick="if (!confirm('此操作会花费您的帐户余额，确定操作吗？'))
+                                    return false" styleClass="" style="" />
+                    </div>
+                </div>
+
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

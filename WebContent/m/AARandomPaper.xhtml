@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"  lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+
+
+                <h:form id="myForm">
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <div>
+                        <h:outputText  styleClass="tit"
+                                       value="－#{aARandomPaper.flag?'修改简单随机试卷':'添加简单随机试卷'}－" />
+                        <p:separator/>
+                        <h:panelGrid columns="2"  cellpadding="0"  columnClasses="thdL,thdR">
+                            <h:outputText value="试卷名称：" />
+                            <h:inputText value="#{aARandomPaper.paper.name}" style="width:600px;" />
+                            
+                            <h:outputText value="模拟考试：" />
+                            <!-- <h:panelGroup>
+                                <h:selectBooleanCheckbox id="ifSimulate" value="#{aARandomPaper.paper.ifSimulate}"/>
+                                <h:outputLabel for="ifSimulate" value="（是否可以进行模拟考试）。" />
+                            </h:panelGroup> -->
+                            <h:selectOneMenu value="#{aARandomPaper.paper.ifSimulate}">
+                                <f:selectItem itemValue="0" itemLabel="可以进行正式或者模拟考试"/>
+                                <f:selectItem itemValue="1" itemLabel="仅能进行正式考试"/>
+                                <f:selectItem itemValue="2" itemLabel="仅能进行模拟考试"/>
+                            </h:selectOneMenu>
+                            
+                            <h:outputText value="模块题数：" />
+                            <p:treeTable value="#{aARandomPaper.root2}" var="me" >
+                                <f:facet name="header">
+                                    <h:outputText value="请设置每个模块抽取的试题数量" />
+                                </f:facet>
+                                <p:column style="text-align: center;">
+                                    <h:outputText value="#{me.name}" />
+                                    <f:facet name="header">
+                                        <h:outputText value="模块名称" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="text-align: center;">
+                                    <h:panelGroup rendered="#{fn:length(me.sons)==0}">
+                                        <h:inputText value="#{me.modulePaper.choiceNum}"  styleClass="scoreInput">
+                                        </h:inputText><br/>
+                                        <h:outputText value="共#{me.choiceNum}道"/>
+                                    </h:panelGroup>
+                                    <f:facet name="header">
+                                        <h:outputText value="单选题" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="text-align: center;">
+                                    <h:panelGroup rendered="#{fn:length(me.sons)==0}">
+                                        <h:inputText value="#{me.modulePaper.multiChoiceNum}"  styleClass="scoreInput">
+                                        </h:inputText><br/>
+                                        <h:outputText value="共#{me.multiChoiceNum}道"/>
+                                    </h:panelGroup>
+                                    <f:facet name="header">
+                                        <h:outputText value="多选题" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="text-align: center;">
+                                    <h:panelGroup rendered="#{fn:length(me.sons)==0}">
+                                        <h:inputText value="#{me.modulePaper.fillNum}" styleClass="scoreInput"/><br/>
+                                        <h:outputText value="共#{me.fillNum}道"/>
+                                    </h:panelGroup>
+                                    <f:facet name="header">
+                                        <h:outputText value="填空题" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="text-align: center;">
+                                    <h:panelGroup rendered="#{fn:length(me.sons)==0}">
+                                        <h:inputText value="#{me.modulePaper.judgeNum}" styleClass="scoreInput"/><br/>
+                                        <h:outputText value="共#{me.judgeNum}道" />
+                                    </h:panelGroup>
+                                    <f:facet name="header">
+                                        <h:outputText value="判断题" />
+                                    </f:facet>
+                                </p:column> 
+                                <!-- <p:column style="text-align: center;">
+                                    <h:panelGroup rendered="#{fn:length(me.sons)==0}">
+                                        <h:inputText value="#{me.modulePaper.essayNum}" styleClass="scoreInput"/><br/>
+                                        <h:outputText value="共#{me.essayNum}道" />
+                                    </h:panelGroup>
+                                    <f:facet name="header">
+                                        <h:outputText value="问答题" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="text-align: center;">
+                                    <h:panelGroup rendered="#{fn:length(me.sons)==0}">
+                                        <h:inputText value="#{me.modulePaper.fileNum}" styleClass="scoreInput"/><br/>
+                                        <h:outputText value="共#{me.fileNum}道" />
+                                    </h:panelGroup>
+                                    <f:facet name="header">
+                                        <h:outputText value="文件题" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="text-align: center;">
+                                    <h:panelGroup rendered="#{fn:length(me.sons)==0}">
+                                        <h:inputText value="#{me.modulePaper.caseNum}" styleClass="scoreInput"/><br/>
+                                        <h:outputText value="共#{me.caseNum}道" />
+                                    </h:panelGroup>
+                                    <f:facet name="header">
+                                        <h:outputText value="综合题" />
+                                    </f:facet>
+                                </p:column> -->
+                            </p:treeTable>
+
+                        </h:panelGrid>
+                        <p:separator/>
+                        <h:panelGrid columns="2" columnClasses="" cellpadding="0" >
+
+                            <h:outputText value="单选题分值：" />
+                            <p:spinner value="#{aARandomPaper.paper.choiceScore}"  min="0" size="5" stepFactor="0.5"/>
+                            <h:outputText value="多选题分值：" />
+                            <p:spinner value="#{aARandomPaper.paper.multiChoiceScore}"  min="0" size="5" stepFactor="0.5"/>
+                            <h:outputText value="填空题分值：" />
+                            <p:spinner value="#{aARandomPaper.paper.fillScore}"  min="0" size="5" stepFactor="0.5"/>
+                            <h:outputText value="判断题分值：" />
+                            <p:spinner value="#{aARandomPaper.paper.judgeScore}"  min="0" size="5" stepFactor="0.5"/>
+                            <h:outputText value="问答题分值：" />
+                            <p:spinner value="#{aARandomPaper.paper.essayScore}" min="0" size="5" stepFactor="0.5"/>
+                            <!-- <h:outputText value="文件题分值：" />
+                            <p:spinner value="#{aARandomPaper.paper.fileScore}" min="0" size="5" stepFactor="0.5"/> -->
+                        </h:panelGrid>
+                        <p:separator/>
+
+                        <p:commandButton value="统计总分" action="#{aARandomPaper.computeTotalNumAndScore()}" process="@form" update="totalPanel"/>
+
+                        <p:outputPanel id="totalPanel">
+                            <h:panelGrid columns="4" columnClasses="w7,w12,w7,w12" style="height:200px;" cellpadding="0" >
+
+                                <h:outputText value="单选题数量：" />
+                                <h:outputText value="#{aARandomPaper.paper.choiceNum}" />
+                                <h:outputText value="单选题总分：" />
+                                <h:outputText value="#{aARandomPaper.paper.choiceTotalScore}" />
+
+                                <h:outputText value="多选题数量：" />
+                                <h:outputText value="#{aARandomPaper.paper.mchoiceNum}" />
+                                <h:outputText value="多选题总分：" />
+                                <h:outputText value="#{aARandomPaper.paper.mchoiceTotalScore}" />
+
+                                <h:outputText value="填空题数量：" />
+                                <h:outputText value="#{aARandomPaper.paper.fillNum}" />
+                                <h:outputText value="填空题总分：" />
+                                <h:outputText value="#{aARandomPaper.paper.fillTotalScore}" />
+
+                                <h:outputText value="判断题数量：" />
+                                <h:outputText value="#{aARandomPaper.paper.judgeNum}" />
+                                <h:outputText value="判断题总分：" />
+                                <h:outputText value="#{aARandomPaper.paper.judgeTotalScore}" />
+
+                                <h:outputText value="问答题数量：" />
+                                <h:outputText value="#{aARandomPaper.paper.essayNum}" />
+                                <h:outputText value="问答题总分：" />
+                                <h:outputText value="#{aARandomPaper.paper.essayTotalScore}" />
+
+                                <!-- <h:outputText value="文件题数量：" />
+                                <h:outputText value="#{aARandomPaper.paper.fileNum}" />
+                                <h:outputText value="文件题总分：" />
+                                <h:outputText value="#{aARandomPaper.paper.fileTotalScore}" />
+
+                                <h:outputText value="综合题数量：" />
+                                <h:outputText value="#{aARandomPaper.paper.caseNum}" /> -->
+                            </h:panelGrid>
+                            <h:outputText value="试卷总分：" style="font-weight: bold;"/>
+                            <h:outputText value="#{aARandomPaper.paper.totalScore}" style="font-weight: bold;color:red;"/>
+                            <h:outputText value="+N" rendered="#{aARandomPaper.paper.caseNum!=0}" style="font-weight: bold;color:red;"/>
+                            <br/>
+                            <h:outputText value="N指综合题分值" rendered="#{aARandomPaper.paper.caseNum!=0}" style="color:blue;"/>
+                        </p:outputPanel>
+
+                        <p:growl/>
+                        <p:separator/>
+                        <p:commandButton ajax="false" action="#{aARandomPaper.done}" value="提交"  styleClass="commonSubmit" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'examination')}"/>
+
+                    </div></h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:poue="http://primefaces.org/ui/extensions"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head> 
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form>
+                    <script type="text/javascript" src="../resources/ckfinder/ckfinder.js"></script>
+                    <script type="text/javascript" language="javascript" src="#{facesContext.externalContext.requestContextPath}/rere_wimg_up/js/wordimage_uploader1.1.js"></script>
+
+                    <script type="text/javascript">
+                        //var editor1 = CKEDITOR.replace('myForm:editor1');
+                        function onLoadCallback(editor1) {
+                        var ed = PF(editor1).instance;
+                        CKFinder.setupCKEditor(ed, '../resources/ckfinder/');
+                    }
+
+                    </script>
+                    <h:outputScript target="body" rendered="#{applicationBean.systemConfig.autoUpload}">
+                        var sUrl = 'http://#{facesContext.externalContext.requestServerName}:#{facesContext.externalContext.requestServerPort}#{facesContext.externalContext.requestContextPath}/servlet/WordImageUploader';
+                    var appName = '#{facesContext.externalContext.requestContextPath}';
+                    var repStr1 = 'http://#{facesContext.externalContext.requestServerName}:#{facesContext.externalContext.requestServerPort}#{facesContext.externalContext.requestContextPath}';
+                    var repStr2 = '..';
+                    var uploader = new WordImageUploader(sUrl, appName,repStr1,repStr2);
+                    </h:outputScript>
+                    <h:outputScript name="chinese_locale.js" library="js"/>
+                    <h:outputText id="outputText1" styleClass="tit"
+                                  value="－#{aAManual.flag?'修改':'添加'}系统帮助－" />
+                    <p:separator/>
+                    <h:panelGrid columns="2">
+                        <h:outputLabel style="margin-left:10px;"
+                                       value="标题：" />
+                        <h:inputText id="title" value="#{aAManual.manual.title}"
+                                     style="width:400px" />
+                        <h:outputLabel style="margin-left:10px" value="录入时间：" />
+                        <p:calendar value="#{aAManual.manual.inputdate}" pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8" locale="zh_CN"/>
+                    </h:panelGrid>
+                    <p:separator />
+                    <poue:ckEditor id="editor1" widgetVar="editor1" value="#{aAManual.manual.content}"  customConfig="#{facesContext.externalContext.requestContextPath}/resources/js/ckeditor_config1.js" width="700" height="350">
+                       <poue:javascript  event="initialize" execute="onLoadCallback('editor1')" />
+                                <poue:javascript rendered="#{applicationBean.systemConfig.autoUpload}" event="blur" execute="uploader.uploadWordImagesFromCKEditor(PF('editor1').instance,'#{aAManual.manual.id}')" />
+                            </poue:ckEditor>
+                    <h:panelGrid columns="2">
+
+                        <p:commandButton ajax="false" action="#{aAManual.submit_action}"
+                                         style="width:80px" value="提交" />
+                    </h:panelGrid>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

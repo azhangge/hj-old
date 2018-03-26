@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"  lang="en">
+    <h:head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </h:head>
+    <h:body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form>
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <p:dialog id="PartnerPanel" widgetVar="PartnerPanel" style="text-align:left" width="600">
+                        <f:facet name="header">
+                            <h:panelGroup>
+                                <h:outputText value="#{lang['exam.edit']} #{lang['exam.partner']} #{lang['exam.type']}"></h:outputText>
+                            </h:panelGroup>
+                        </f:facet>
+                        <p:outputPanel autoUpdate="true"> 
+
+                            <p:dataTable value="#{listPartner.typeList}" var="type" paginator="true" paginatorPosition="bottom">
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{lang['exam.name']}"/>
+                                    </f:facet>
+                                    <h:inputText value="#{type.name}"></h:inputText>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{lang['exam.index']}"/>
+                                    </f:facet>
+                                    <h:inputText value="#{type.ord}" size="3"></h:inputText>
+                                </p:column>
+                                <p:column style="text-align:center;">
+                                    <p:commandLink action="#{listPartner.deleteType}" value="#{lang['exam.delete']}" onclick="if (!confirm('#{lang['exam.partner.delete.tip.type']}'))
+                                                return false">
+                                        <f:param name="tid" value="#{type.id}"/>
+                                    </p:commandLink>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{lang['exam.delete']}"/>
+                                    </f:facet>
+                                </p:column>
+                            </p:dataTable>
+                            <p:commandButton action="#{listPartner.batchUpdateType}" value="#{lang['exam.alter']}">
+                            </p:commandButton>
+                            <h:panelGrid columns="5">
+                                <h:outputText value="#{lang['exam.name']}："></h:outputText>
+                                <h:inputText value="#{listPartner.pt.name}"/>
+                                <h:outputText value="#{lang['exam.ord']}："></h:outputText>
+                                <h:inputText value="#{listPartner.pt.ord}" size="3"/>
+                                <p:commandButton action="#{listPartner.addType}" value="#{lang['exam.add']}">
+                                </p:commandButton>
+                            </h:panelGrid>
+                        </p:outputPanel>
+                    </p:dialog>
+                    <div style="text-align: left; margin: 10px 0px 0px 0px; width: 98%;">
+                        <h:outputText id="outputText1"
+                                      styleClass="tit"
+                                      value="－#{lang['exam.partner']}－" />
+
+                        <p:button href="AAPartner.jspx" value="#{lang['exam.add']} #{lang['exam.link']}"/>
+                        &nbsp;&nbsp;&nbsp;
+                        <p:commandButton value="#{lang['exam.edit']} #{lang['exam.partner']} #{lang['exam.type']}" onclick="PF('PartnerPanel').show()" type="button"/>
+                        <p:separator/>
+                        <h:outputText value="*当友情链接为空时，前台友情链接模块将自动关闭。" style="color:green;"/>
+                        <p:dataTable  paginator="true" paginatorPosition="bottom" id="dataTable1" styleClass="list" style="width:100%" emptyMessage="#{lang['exam.empty_result']}"
+                                      value="#{listPartner.partnerList}" var="partner" rowIndexVar="row" rows="15">
+                            <p:column style="width: 40px;text-align: center;">
+                                <h:outputText value="#{row+1}" />
+                                <f:facet name="header">
+                                    <h:outputText value="序号" />
+                                </f:facet>
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{partner.name}" />
+                                <f:facet name="header">
+                                    <h:outputText value="#{lang['exam.name']}" />
+                                </f:facet>
+                            </p:column>
+
+                            <p:column sortBy="#{partner.ord}" style="width:30px;text-align: center;">
+                                <p:tooltip for="modelOutput" value="点击编辑"/>
+                                <p:cellEditor>  
+                                    <f:facet name="output">
+                                        <h:outputText id="modelOutput" value="#{partner.ord}" />
+                                    </f:facet>  
+                                    <f:facet name="input">
+                                        <p:inputText id="modelInput" value="#{partner.ord}" style="width:30px;">
+                                            <p:ajax event="change" update="@none" listener="#{listPartner.editOrd(us.id)}"/>
+                                        </p:inputText>
+                                    </f:facet>  
+                                </p:cellEditor> 
+                                <f:facet name="header">
+                                    <h:outputText value="次序" />
+                                </f:facet>
+                            </p:column>
+
+                            <p:column sortBy="#{partner.typeId}" style="width: 180px;text-align: center;">
+                                <h:outputText value="#{listPartner.partnerMap[partner.typeId]}" />
+                                <f:facet name="header">
+                                    <h:outputText value="#{lang['exam.type']}" />
+                                </f:facet>
+                            </p:column>
+                            <p:column style="width: 100px;text-align: center;">
+                                <h:outputLink value="AAPartner.jspx?id=#{partner.id}">
+                                    <h:outputText value="#{lang['exam.alter']}" />
+                                </h:outputLink>
+                                <f:facet name="header">
+                                    <h:outputText value="#{lang['exam.alter']}" />
+                                </f:facet>
+                            </p:column>
+                            <p:column style="width: 100px;text-align: center;">
+                                <p:commandLink actionListener="#{listPartner.delete}" update="@form" onclick="if (!confirm('#{lang['exam.partner.delete.tip']}'))
+                                            return false">
+                                    <f:param name="id" value="#{partner.id}"></f:param>
+                                    <h:outputText value="#{lang['exam.delete']}" />
+                                </p:commandLink>
+                                <f:facet name="header">
+                                    <h:outputText value="#{lang['exam.delete']}" />
+                                </f:facet>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

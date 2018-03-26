@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    </head>
+    <body>
+        <ui:composition>
+
+            <p:dialog id="msg1" widgetVar="msg1" width="700">
+                <f:facet name="header">
+                    <h:outputText value="发送消息" />
+                </f:facet>
+                <f:facet name="controls">
+                    <h:graphicImage value="/resources/images/close.png"
+                                    style="cursor:pointer" onclick="msg1.hide()" />
+                </f:facet>
+                <p:outputPanel autoUpdate="true">
+                    <script>
+                        function testSendOK(){
+                            //alert('ok');
+                            if(true==#{clientSendMsg.ifSendOK})
+                            {
+                                PF('msg1').hide();
+		
+                            }
+                        }
+                    </script>
+                </p:outputPanel>
+                <h:panelGrid columns="2" styleClass="generalInfo">
+                    <h:outputLabel value="收件人：" />
+                    <p:outputPanel autoUpdate="true">
+                        <h:outputText value="#{clientSendMsg.mm.receiver.username}" />
+                    </p:outputPanel>
+                    <h:outputLabel value="标题：" />
+                    <p:inputText value="#{clientSendMsg.mm.title}" style="width:590px;"/>
+                    <h:outputLabel value="内容：" />
+                    <h:panelGroup>
+                        <p:panel  style="">
+                            <h:outputLink value="#{facesContext.externalContext.requestContextPath}/fm/ClientListFile.jspx" styleClass="common" target="_blank">
+                                <h:outputText value="上传文件"></h:outputText>
+                            </h:outputLink>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <p:commandLink value="选择个人文件" action="#{clientListFile.synDB}" styleClass="common" update="AdminFilePanel" oncomplete="PF('AdminFilePanel').show();return false"/>
+                        </p:panel>
+                        <pe:ckEditor value="#{clientSendMsg.mm.content}"  width="600" height="200"  customConfig="#{facesContext.externalContext.requestContextPath}/resources/js/ckeditor_config2.js"/>
+                    </h:panelGroup>
+
+                </h:panelGrid>
+                <p:separator/>
+                <p:commandButton value="发送" action="#{clientSendMsg.sendOK}" oncomplete="javascript:testSendOK();"></p:commandButton>
+                <p:outputPanel autoUpdate="true">
+                    <h:messages></h:messages>
+                </p:outputPanel>
+
+
+            </p:dialog>
+        </ui:composition>
+    </body>
+</html>

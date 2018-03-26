@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form><div>
+                        <h:outputText styleClass="tit"
+                                      value="－客服中心－" />
+                        <p:separator/>
+                        <div class="introduction">
+                            <h:outputText value="*【客服中心】的开放与关闭应该到【个性化&amp;附加】 - 【功能设置】中进行设置。"/>
+                        </div>
+
+                        <p:outputPanel autoUpdate="true">
+                            <h:panelGrid columns="2" columnClasses="thdL,thdR" style="width:100%;">
+                                <h:outputText value="位置：" />
+                                <h:selectOneMenu value="#{aACustomerService.customerService.position1}">
+                                    <f:selectItem itemLabel="左" itemValue="left"/>
+                                    <f:selectItem itemLabel="右" itemValue="right"/>
+                                </h:selectOneMenu>
+                                <h:outputText value="顶部距离：" />
+                                <p:inputText id="top" value="#{aACustomerService.customerService.top1}" style="width:100px" >
+                                    <f:validateLongRange minimum="0" maximum="500"/>
+                                </p:inputText>
+                                <h:outputText value="面板宽度：" />
+                                <p:inputText id="width" value="#{aACustomerService.customerService.width1}" style="width:100px">
+                                    <f:validateLongRange minimum="0" maximum="500"/>
+                                </p:inputText>
+                                <h:outputText value="颜色：" />
+                                <h:selectOneMenu value="#{aACustomerService.customerService.color1}">
+                                    <f:selectItem itemLabel="蓝色" itemValue="default_blue"/>
+                                    <f:selectItem itemLabel="灰色" itemValue="gray"/>
+                                    <f:selectItem itemLabel="绿色" itemValue="green"/>
+                                    <f:selectItem itemLabel="红色" itemValue="red"/>
+                                    <f:selectItem itemLabel="透明色" itemValue="public"/>
+                                </h:selectOneMenu>
+                                <h:outputText value="效果：" />
+                                <h:selectOneMenu value="#{aACustomerService.customerService.defaultOpen}">
+                                    <f:selectItem itemLabel="默认展开" itemValue="true"/>
+                                    <f:selectItem itemLabel="默认闭合" itemValue="false"/>
+                                </h:selectOneMenu>
+                                <h:outputText value="显示：" />
+                                <h:selectOneMenu value="#{aACustomerService.customerService.effect1}">
+                                    <f:selectItem itemLabel="滚动" itemValue="true"/>
+                                    <f:selectItem itemLabel="固定" itemValue="false"/>
+                                </h:selectOneMenu>
+
+                                <h:outputText value="热线电话：" />
+                                <p:inputText value="#{aACustomerService.customerService.tel}" style="width:400px" />
+                                <h:outputText value="QQ列表：" />
+                                <h:panelGroup>
+                                    <p:inputText value="#{aACustomerService.customerService.qqList}" style="width:400px" /><br/>
+                                    <h:outputText style="color:green;" value="QQ号码和说明之间用'|'分隔，多组QQ之间用','号分隔，如：192|客户服务,754|定制开发"/>
+                                </h:panelGroup>
+
+                                <h:outputText value="QQ群：" />
+                                <h:panelGroup>
+                                    <p:inputText value="#{aACustomerService.customerService.qunList}" style="width:400px" /><br/>
+                                    <h:outputText style="color:green;" value="QQ群和说明之间用'|'分隔，多组QQ群之间用','号分隔，如：101|技术交流1,102|技术交流2"/>
+                                </h:panelGroup>
+                                <h:outputText value="旺旺列表：" />
+                                <h:panelGroup>
+                                    <p:inputText value="#{aACustomerService.customerService.wwList}" style="width:400px;" /><br/>
+                                    <h:outputText style="color:green;" value="旺旺号码和说明之间用'|'分隔，多组旺旺号码之间用','号分隔，如：abc|客户服务,def|定制开发"/>
+                                </h:panelGroup>
+                            </h:panelGrid>
+                        </p:outputPanel>
+                        <p:separator/>
+                        <p:commandButton  action="#{aACustomerService.apply()}" value="应用"  disabled="#{!(fn:contains(adminSessionBean.admin.authstr,'market'))}" update="@form"/>
+
+                        <p:growl/>
+
+
+                    </div></h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

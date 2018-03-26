@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:poue="http://primefaces.org/ui/extensions" lang="en">
+    <h:head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" href="../resources/js/jquery_lined_text/linedtextarea.css"/>
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </h:head>
+    <h:body>
+        <!--
+        <div id='editableDiv' style="height:500px;" contenteditable='true'>Paste</div>
+        -->
+
+
+        <h:form id="myForm">
+            <script type="text/javascript" src="../resources/js/jquery_lined_text/linedtextarea.js"></script>
+            
+            <script type="text/javascript" src="../resources/js/rere_exam/ImportCase.js"></script>
+            <script type="text/javascript" src="../resources/js/rere_exam/ChoiceQuestion1.0.js"></script>
+            <script type="text/javascript" src="../resources/js/rere_exam/RereChoice.js"></script>
+            <script type="text/javascript">
+                //<![CDATA[
+                function onLoadCallback(editor1) {
+                    var ed = PF(editor1).instance;
+                    CKFinder.setupCKEditor(ed, '../resources/ckfinder/');
+                }
+
+                function onChange(editor1) {
+                    var ed = PF(editor1).instance;
+
+                    var cont = ed.getData();
+                    //console.log(cont);
+                    var imCase = new ImportCase();
+                    imCase.parse(cont);
+                    imCase.read();
+                    var str = JSON.stringify(imCase, undefined, 2);
+                    //var cm = jQuery("#myForm\\:view1\\:stdCnt");
+                    stdCnt.val(str);
+                    
+                }
+                //]]>
+            </script>
+            <p:tabView id="view1" >
+                <p:tab title="原始内容" id="tab1">
+                    <poue:ckEditor id="editor1" widgetVar="editor1"  customConfig="#{facesContext.externalContext.requestContextPath}/resources/js/ckeditor_config3.js"  width="98%" height="400">
+                        <poue:javascript  event="change" execute="onChange('editor1')" />
+                    </poue:ckEditor>
+                </p:tab>
+                <p:tab title="预览标准代码" id="tab2" >
+                    <poue:codeMirror id="stdCnt2" widgetVar="stdCnt2" value="1234" lineNumbers="true"/>
+                </p:tab>
+            </p:tabView>
+
+
+            <h:panelGroup>
+
+            </h:panelGroup>
+        </h:form>
+        
+        <script type="text/javascript">
+                //<![CDATA[
+                var stdCnt;
+                jQuery().ready(function () {
+                    stdCnt = jQuery("#myForm\\:view1\\:stdCnt");
+                    //alert(stdCnt);
+                    $(function () {
+                        //jQuery("#myForm\\:view1\\:stdCnt").linedtextarea();
+                    });
+                });
+                //]]>
+            </script>
+        
+    </h:body>
+</html>

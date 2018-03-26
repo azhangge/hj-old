@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core"  lang="en"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </h:head>
+    <h:body>
+        <ui:composition template="General3.xhtml"> 
+            <ui:define name="title">
+                <h:outputText value="竞赛列表" />
+            </ui:define>
+            <ui:define name="content">
+                <script type="text/javascript" language="javascript">
+                    function aabbcc(url) {
+                        var scrWidth = screen.availWidth;
+                        var scrHeight = screen.availHeight;
+                        var self = window.open(url, '', "fullscreen=3,resizable=false,toolbar=no,menubar=no,scrollbars=yes,location=no,top=0,left=0,width=" + scrWidth + ",height=" + scrHeight);
+                        //self.resizeTo(scrWidth,scrHeight);
+                        self.moveTo(0, 0);
+                    }
+
+                </script> 
+                <p:poll interval="10" update="examDc"/>
+                <p:panel id="topNav8" styleClass="frontColumn topNav8Wrapper">
+                    <h:outputLink value="#{facesContext.externalContext.requestContextPath}" styleClass="nav8">
+                        <h:outputText value="首页" />
+                    </h:outputLink>
+                    <h:outputText value="/" styleClass="navSeparator"/>
+                    <h:outputText value="考试" styleClass="nav8"/>
+                    <h:outputText value="/" styleClass="navSeparator"/>
+                    <h:outputText value="每日竞赛" styleClass="nav8"/>
+                </p:panel>
+                <p:panel styleClass="frontColumn">
+                    <ui:repeat value="#{examContestList.labelTypes}" var="labelType" >
+                        <h:panelGrid columns="2">
+                            <h:outputText value="#{labelType.name}：" rendered="#{(applicationBean.systemConfig.onlyDept and clientSession.ifLogin)?labelType.contestLabels2.size()!=0:labelType.contestLabels.size()!=0}" style="font-weight: bold;"/>
+                            <p:dataGrid value="#{(applicationBean.systemConfig.onlyDept and clientSession.ifLogin)?labelType.contestLabels2:labelType.contestLabels}"
+                                        rendered="#{(applicationBean.systemConfig.onlyDept and clientSession.ifLogin)?labelType.contestLabels2.size()!=0:labelType.contestLabels.size()!=0}"
+                                        var="label" columns="11"  styleClass="noBorderGrid" emptyMessage="">
+                                <h:outputLink value="#{facesContext.externalContext.requestContextPath}/talk/ExamContestList.jspx?lid=#{label.id}">
+                                    <h:outputText value="#{label.name}" style="margin:0px 10px 0px 10px;"/>  
+                                </h:outputLink>
+                            </p:dataGrid>
+                        </h:panelGrid>
+                    </ui:repeat>
+                </p:panel>
+                <p:dataTable id="examDc" value="#{examContestList.todayExams}" var="exam" style="width:100%" styleClass="frontColumn" emptyMessage="暂无竞赛" rows="10" paginator="true" paginatorPosition="bottom" >
+                    <p:column id="columnRefType" style="width:300px!important;text-align: left;" filterBy="#{exam.name}" filterMatchMode="contains" filterStyle="width:60%;display:inline;margin-left:10px;">
+                        <f:facet name="header" >
+                            <h:outputText value="竞赛" />
+                        </f:facet>
+                        <h:outputText value="#{exam.name}（#{exam.sessionStr}）"></h:outputText><br/>
+                        <h:outputText value="#{exam.begainTime}" styleClass="tip">
+                            <f:convertDateTime pattern="开始时间：HH:mm" timeZone="GMT+8"/>
+                        </h:outputText><br/>
+                        <h:outputText value="#{exam.endTime}" styleClass="tip">
+                            <f:convertDateTime pattern="结束时间：HH:mm" timeZone="GMT+8"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:80px!important;text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="竞赛时长" />
+                        </f:facet>
+                        <h:outputText value="#{exam.timeLen}分钟" styleClass="tip"/><br/>
+                    </p:column>
+                    <p:column style="width:120px!important;text-align: center;" rendered="#{applicationBean.systemConfig.showScore and copyrightController.sysType!='1'}">
+                        <f:facet name="header">
+                            <h:outputText value="积分奖励与消耗" />
+                        </f:facet>
+                        
+                        <h:outputText  value="状元奖：#{exam.firstScore}" styleClass="tip"/><br/>
+                        <h:outputText  value="榜眼奖：#{exam.secondScore}" styleClass="tip"/><br/>
+                        <h:outputText  value="探花奖：#{exam.thirdScore}" styleClass="tip"/><br/>
+                        <h:outputText  value="参与奖：#{exam.participateScore}" styleClass="tip"/><br/>
+                        <h:outputText id="scorePaid" value="积分消耗：#{exam.scorePaid}" styleClass="tip"/>
+                        <p:tooltip for="scorePaid" value="参加竞赛时消耗积分#{exam.scorePaid}"/><br/>
+                        
+                    </p:column>
+                    <p:column style="width:140px!important;text-align: center;"> 
+                        <f:facet name="header">
+                            <h:outputText value="题目" />
+                        </f:facet>
+                        <h:panelGrid  columns="1" styleClass="threadColumn special1 special2" style="text-align: center;" cellpadding="0" cellspacing="0">
+                            <ui:repeat value="#{exam.random2Paper.parts}"   var="part1" varStatus="row">
+                                <h:outputText value="#{part1.name}：#{part1.itemNum}" styleClass="tip"/>
+                                <h:outputText value="，" rendered="#{!row.last}" styleClass="tip"/>
+                            </ui:repeat>
+                        </h:panelGrid>
+                        
+                        
+                    </p:column>
+                    <p:column style="width:60px!important;text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="参加数/允许数" />
+                        </f:facet>
+                        <h:outputText value="#{exam.caseNum} / #{exam.allowCaseMax}" styleClass="tip"/><br/>
+                    </p:column>
+                    <p:column style="text-align: center;width:100px;">
+                        <f:facet name="header">
+                            <h:outputText value="开始竞赛" />
+                        </f:facet>
+                        <p:button href="ContestCaseStep.jspx?exam_id=#{exam.id}" value="开始竞赛"  rendered="#{((((clientSession.ifLogin and exam.available)and(!exam.retry))and clientSession.usr.testIfIn(exam.groupStr))and(!(exam.scoreExsits and (!exam.allowUserRepeat)))) and clientSession.usr.score ge exam.scorePaid and clientSession.usr.checked and exam.checkParticipateTimes(clientSession.usr.id)&lt;exam.maxNum}"/>
+                        <p:commandLink value="请登录"  rendered="#{!clientSession.ifLogin and exam.available}" onclick="PF('login1').show()" />
+                        <h:outputText value="您还未被审核&lt;br/>" escape="false"   rendered="#{!clientSession.usr.checked and clientSession.ifLogin}"/>
+                        <h:outputText value="未开放&lt;br/>" escape="false"   rendered="#{!exam.available}"/>
+                        <h:outputText value="不允许重复参加"  rendered="#{exam.scoreExsits and (!exam.allowUserRepeat)}"/>
+                        <h:outputText value="抽卷间隔不能少于#{exam.retryInterval}分钟&lt;br/>" escape="false"   rendered="#{(exam.retry) and exam.available}"/>
+                        <h:outputText value="不对您的#{applicationBean.departmentStr}开放&lt;br/>" escape="false"  rendered="#{!clientSession.usr.testIfIn(exam.groupStr) and clientSession.ifLogin}"/>
+                        <h:outputText value="积分不够"  rendered="#{exam.scorePaid>clientSession.usr.score}"/>
+                        <h:outputText value="您已经参加过该竞赛" rendered="#{exam.checkParticipateTimes(clientSession.usr.id)>=exam.maxNum}"/>
+                    </p:column>
+                </p:dataTable>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

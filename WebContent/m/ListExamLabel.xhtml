@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form>
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <div style="text-align: left; margin: 10px 0px 0px 0px; width: 98%;">
+                        <div>
+                            <h:outputText id="outputText1" styleClass="tit"
+                                          value="-标签列表-" />
+                            <p:button href="/m/AAExamLabel.jspx" value="添加新标签" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'lesson')}"/>
+                        </div>
+                        <p:separator/>
+                        <div class="introduction">
+                            <h:outputText value="*分类标签是一种对考试进行分类的机制；考试与分类标签为多对多关系。" />
+                        </div>
+                        <div>
+                            <p:dataTable paginator="true" paginatorPosition="bottom" value="#{listExamLabel.labels}" var="us" id="dataTable1" emptyMessage="暂无数据"
+                                         styleClass="list" rowIndexVar="row" style="width:100%" rows="10" editable="true" editMode="cell">
+                                <p:column  style="text-align: center;width: 40px;">
+                                    <h:outputText value="#{row+1}" />
+                                    <f:facet name="header">
+                                        <h:outputText value="序号" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{fn:substring(us.name,0,20)}#{fn:length(us.name)>20?'..':''}" escape="false"/>
+                                    <f:facet name="header">
+                                        <h:outputText value="标签名称" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column filterBy="#{us.labelType.id}" filterOptions="#{listExamLabel.filterOptions}" filterMatchMode="exact" style="text-align: center;width: 150px;">
+                                    <h:outputText value="#{us.labelType.name}" />
+                                    <f:facet name="header">
+                                        <h:outputText value="类别" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="text-align: center;width:80px;">
+                                    <h:outputText value="#{us.typeStr.contains('exam')?'综合考试':''}" />
+                                    <h:outputText value="#{us.typeStr.contains('contest')?'&lt;br&gt;每日竞赛':''}" escape="false"/>
+                                    <h:outputText value="#{us.typeStr.contains('buffet')?'&lt;br&gt;自助练习':''}"  escape="false"/>
+                                    <f:facet name="header">
+                                        <h:outputText value="适用对象" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column sortBy="#{us.ord}" style="text-align: center;width: 50px;">
+                                    <p:tooltip for="modelOutput" value="点击编辑"/>
+                                    <p:cellEditor>  
+                                        <f:facet name="output">
+                                            <h:outputText id="modelOutput" value="#{us.ord}" />
+                                        </f:facet>  
+                                        <f:facet name="input">
+                                            <p:inputText id="modelInput" value="#{us.ord}" style="width:30px;">
+                                                <p:ajax event="change" update="@none" listener="#{listExamLabel.editOrd(us.id)}"/>
+                                            </p:inputText>
+                                        </f:facet>  
+                                    </p:cellEditor> 
+                                    <f:facet name="header">
+                                        <h:outputText value="次序" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="text-align: center;width: 110px;">
+                                    <h:outputText value="#{us.genTime}">
+                                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                           timeZone="GMT+8" />
+                                    </h:outputText>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{lang['exam.examination.add']}" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="text-align: center;width: 40px;">
+                                    <h:outputLink value="AAExamLabel.jspx?id=#{us.id}">
+                                        <h:outputText value="#{lang['exam.alter']}" />
+                                    </h:outputLink>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{lang['exam.alter']}" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column  style="text-align: center;width: 40px;">
+                                    <p:commandLink action="#{listExamLabel.delete(us.id)}" update="@form" onclick="if (!confirm('确认要删除此标签吗？'))
+                                                return false" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'lesson')}">                                       
+                                        <h:outputText value="#{lang['exam.delete']}" />
+                                    </p:commandLink>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{lang['exam.delete']}" />
+                                    </f:facet>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

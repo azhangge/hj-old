@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <head>
+        <title>#{i18nBean.lang('register')}</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="General3.xhtml">
+            <ui:define name="title">#{i18nBean.lang('new_register')}</ui:define>
+            <ui:define name="content">
+                <p:outputPanel autoUpdate="true">
+                    <p:growl/>
+                </p:outputPanel>
+                <p:panel id="topNav8" styleClass="frontColumn topNav8Wrapper" style="margin-bottom: 10px!important;">
+                    <h:outputLink value="#{facesContext.externalContext.requestContextPath}" styleClass="nav8">
+                        <h:outputText value="#{i18nBean.lang('talk/Default','index')}"/>
+                    </h:outputLink>
+                    <h:outputText value="/" styleClass="navSeparator"/>
+                    <h:outputText value="#{i18nBean.lang('new_register')}" styleClass="nav8"/>
+                </p:panel>
+                <p:panel style="width:500px;margin: 0 auto;">
+                    <h:outputText value="#{i18nBean.lang('new_register')}" styleClass="headLine"></h:outputText>
+                    <p:separator/>
+                    <h:panelGrid columns="2" styleClass="generalInfo" style="vertical-align: middle!important;" columnClasses="rleft,rright">
+                        <h:outputLabel value="#{i18nBean.lang('register.user_name')}：" />
+                        <h:panelGroup>
+                            <p:inputText value="#{register.user.username}" style="width:200px;">
+                                <p:ajax listener="#{register.onChangeUrn}" update="urnTip" process="@form"/>
+                            </p:inputText>
+                            <h:outputText id="urnTip" value="&nbsp;#{register.urnTip}" style="color:#{register.urnOk?'green;':'red;'}}" />
+                        </h:panelGroup>
+                        <h:outputLabel value="#{i18nBean.lang('register.password')}：" />
+                        <p:password value="#{register.user.password}"  style="width:200px;"/>
+                        <h:outputLabel value="#{i18nBean.lang('register.password_confirm')}：" />
+                        <p:password value="#{register.pwd_re}"  style="width:200px;"/>
+                        <h:outputLabel value="#{i18nBean.lang('register.name')}：" />
+                        <p:inputText value="#{register.user.name}"  style="width:200px;"/>
+                        
+                        <h:outputLabel value="#{i18nBean.lang('register.pid')}：" rendered="#{applicationBean.systemConfig.usePid}"/>
+                        <h:panelGroup rendered="#{applicationBean.systemConfig.usePid}">
+                            <p:inputText value="#{register.user.pid}" style="width:200px;">
+                            </p:inputText>
+                        </h:panelGroup>
+                        
+                        
+                        <h:outputLabel value="E-mail：" />
+                        <h:panelGroup>
+                            <p:inputText value="#{register.user.email}" style="width:200px;">
+                                <p:ajax listener="#{register.onChangeEmail}" update="emailTip" process="@form"/>
+                            </p:inputText>
+                            <h:outputText id="emailTip" value="&nbsp;#{register.emailTip}" style="color:#{register.emailOk?'green;':'red;'}}" />
+                        </h:panelGroup>
+                        
+                        
+                        <h:outputLabel value="#{i18nBean.lang('register.position')}：" rendered="#{applicationBean.systemConfig.openPosition}"/>
+                        <h:panelGroup rendered="#{applicationBean.systemConfig.openPosition}">
+                            <p:selectOneMenu value="#{register.user.position}">
+                                <f:selectItem itemLabel="--请选择--" itemValue=""/>
+                                <f:selectItems value="#{applicationBean.positions}" var="position" itemLabel="#{position.name}" itemValue="#{position.name}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                        
+                        <h:outputText value="#{i18nBean.lang('register.choose')}#{applicationBean.departmentStr}："></h:outputText>
+                        <p:tree value="#{register.root}" var="dic" selectionMode="multiple" selection="#{register.selectedNodes}" style="">
+                            <p:treeNode  expandedIcon="ui-icon-folder-open"  collapsedIcon="ui-icon-folder-collapsed">
+                                <h:outputText value="#{dic.name}" ></h:outputText>
+                            </p:treeNode>
+                        </p:tree>
+                        
+                        <h:outputLabel value="#{i18nBean.lang('register.identifying_code')}：" />
+                        <h:panelGroup>
+                            <p:inputText value="#{register.authStr}" style="width:100px"/>
+                            <p:commandLink update="auth"
+                                           action="#{register.refreshAuth}">
+                                <h:graphicImage id="auth" title="#{i18nBean.lang('register.change_code')}" style="border:black 0px solid;vertical-align:bottom;width:100px;height:22px;"
+                                                url="/servlet/AuthImage?id=#{register.id_temp}" />
+                            </p:commandLink>
+                        </h:panelGroup>
+                        <h:outputText/>
+                        <h:panelGroup>
+                            <h:selectBooleanCheckbox value="#{register.accept}" style="vertical-align: bootom" >
+                                <f:ajax render="reg" execute="@form"/>
+                            </h:selectBooleanCheckbox>
+                            <h:outputText value="#{i18nBean.lang('register.read_and_accept')}" />
+                            <h:outputLink value="Agreement.jspx" target="_blank" styleClass="operation">
+                                <h:outputText value="《#{applicationBean.info.siteName}#{i18nBean.lang('register.user_agreement')}》" />
+                            </h:outputLink>
+                        </h:panelGroup>
+
+                    </h:panelGrid>
+                    <p:separator/>
+                    <p:commandButton id="reg" widgetVar="reg" value="#{i18nBean.lang('register')}" disabled="#{!register.accept}" onclick="reg.disable();" oncomplete="reg.enable();" action="#{register.reg_ok}"></p:commandButton>
+                    <script type="text/javascript" language="javascript">
+                        function regDisabled() {
+
+                        }
+                    </script>
+                </p:panel>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

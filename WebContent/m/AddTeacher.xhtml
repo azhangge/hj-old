@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:poue="http://primefaces.org/ui/extensions"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    </head>
+    <body>
+
+        <f:view>
+            <ui:composition template="BackGeneral.xhtml">
+                <ui:define name="content">
+                    <h:form id="form11">
+                        <h:outputScript name="chinese_locale.js" library="js"/>
+                        <h:outputText id="outputText1" styleClass="tit"
+                                    value="－#{addTeacher.flag?'修改讲师':'添加讲师'}－" />
+                        <p:separator />
+                        <h:panelGrid columns="2"  columnClasses="thdL,thdR">
+                            <h:outputLabel styleClass="text" value="姓名：" />
+                            <h:inputText value="#{addTeacher.teacher.name}"></h:inputText>
+                            
+                           <!--  <h:outputLabel styleClass="text" value="性别：" />
+                            <h:selectOneMenu value="#{addTeacher.teacher.gender}">
+                                <f:selectItem itemLabel="男" itemValue="男"/>
+                                <f:selectItem itemLabel="女" itemValue="女"/>
+                            </h:selectOneMenu> -->
+                            
+                            
+                            <h:outputText value="关联用户：" rendered="#{(empty addTeacher.userid)}"/>
+                            <h:selectOneMenu value="#{addTeacher.userid}" rendered="#{(empty addTeacher.userid)}">
+                            	<f:selectItem  itemValue="0" itemLabel="-无-"/>
+                                <f:selectItems value="#{addTeacher.uslist}" var="usl" itemValue="#{usl.id}" itemLabel="#{usl.name}"/>
+                            </h:selectOneMenu>
+               
+                            <h:outputText value="讲师类型：" />
+                            <h:selectOneMenu value="#{addTeacher.teacher.teacherType}">
+                                <f:selectItem itemValue="0" itemLabel="外部讲师"/>
+                                <f:selectItem itemValue="1" itemLabel="内部讲师"/>
+                            </h:selectOneMenu>
+                            
+                            <h:outputText value="是否展示：" />
+                       		<h:selectBooleanCheckbox id="checkbox1" value="#{addTeacher.teacher.ifShow}" />
+                       		
+                       		<h:outputText value="是否有审核其他讲师权限：" />
+                       		<h:selectBooleanCheckbox id="checkbox2" value="#{addTeacher.teacher.canApproved}" />
+                            
+                            <!--  
+                            <h:outputText value="是否需要被其他讲师审核：" />
+                       		<h:selectBooleanCheckbox id="checkbox3" value="#{addTeacher.teacher.needApproved}" />
+                            -->
+                            
+                            <h:outputLabel styleClass="text" value="QQ：" />
+	                        <h:panelGroup>
+	                            <h:inputText value="#{addTeacher.teacher.qq}"></h:inputText>
+	                        </h:panelGroup>
+	                        <h:outputLabel styleClass="text" value="邮箱：" />
+	                        <h:panelGroup>
+	                            <h:inputText value="#{addTeacher.teacher.email}"></h:inputText>
+	                        </h:panelGroup>
+                            <!-- 用户头像 -->
+	                        <h:outputText value="头像：" />
+	                        <p:graphicImage  id="simg"
+	                                         url="#{(empty addTeacher.teacher.picture)?'/HJ/image/notlogin.png':
+                                         fn:replace(addTeacher.teacher.picture,'showimage','showabstractimage')}"
+	                                         style="width: 160px; height: 120px;" />
+	                        <h:outputLabel value="图片源：" />
+	                        <h:panelGrid columns="1">
+	                            <h:panelGroup>
+	                                <h:inputText id="title" value="#{addTeacher.teacher.picture}"
+	                                             style="width:400px" >
+	                                    <f:ajax event="change" render="simg" />
+	                                </h:inputText>
+	                            </h:panelGroup>
+	                        </h:panelGrid>
+	                        <h:outputLabel value="上传：" />
+	                        <p:fileUpload id="upl" fileUploadListener="#{addTeacher.up_action}" update="simg title" uploadLabel="上传" auto="true" label="选择图片" allowTypes="/(\.|\/)(gif|jpe?g|png)$/">
+	                        </p:fileUpload>
+                            <h:outputText value="讲师简介：" />
+                            <p:inputTextarea rows="6" cols="88" value="#{addTeacher.teacher.introduction}"/>
+                            <!-- <poue:ckEditor id="editor2" widgetVar="editor2" value="#{addTeacher.teacher.introduction}" customConfig="#{facesContext.externalContext.requestContextPath}/resources/js/ckeditor_config2.js" >
+                            </poue:ckEditor> -->
+                            <h:outputLabel styleClass="text" value="次序：" />
+                            <h:panelGroup>
+                                <h:inputText value="#{addTeacher.teacher.ord}" style="width:250px;"></h:inputText>
+                            </h:panelGroup>
+<!--                             <h:outputLabel styleClass="text" value="职称：" />
+                            <h:panelGroup>
+                                <h:inputText value="#{addTeacher.teacher.jobTitle}" style="width:250px;"></h:inputText>
+                            </h:panelGroup> -->
+                            
+                            
+                            <h:outputText value="讲师可审核课程的分类标签：" />
+                            <p:treeTable value="#{addTeacher.root}" var="dic"  selectionMode="multiple" selection="#{addTeacher.selectedNodes}" style="width:600px" >
+                            <f:facet name="header">
+                                <h:outputText value="请使用Ctrl、Shift键完成课程分类的多选"></h:outputText>
+                            </f:facet>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="课程分类名称"></h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{dic.name}" ></h:outputText>
+                            </p:column>
+                        	</p:treeTable>
+                        </h:panelGrid>
+                        <p:separator/>
+                        <p:commandButton action="#{addTeacher.finish}" update="@form" value="提交" />
+                        <p:outputPanel autoUpdate="true">
+                            <p:growl/>
+                        </p:outputPanel>
+
+                    </h:form>
+                </ui:define>
+            </ui:composition>
+        </f:view>
+    </body>
+</html>

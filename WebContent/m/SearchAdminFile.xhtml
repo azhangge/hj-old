@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form>
+                    <h:outputScript name="chinese_locale.js" library="js"/>
+                    <div  style="overflow:hidden;clear:both">
+                        <p:growl/>
+                        <h:panelGrid columns="2" style="width:90%">
+                            <h:outputText value="－文件检索－" styleClass="tit"></h:outputText>
+                        </h:panelGrid>
+                        <p:separator ></p:separator>
+                        <h:panelGrid columns="10" style="width:750px;text-align:center;">
+                            <h:outputText value="关键词:"></h:outputText>
+                            <h:inputText value="#{searchAdminFile.str}" style="width:100px;"></h:inputText>
+                            <h:outputText value="字段:"></h:outputText>
+                            <h:selectOneMenu value="#{searchAdminFile.field}">
+                                <f:selectItems value="#{searchAdminFile.ss}" />
+                            </h:selectOneMenu>
+
+                            <h:outputText value="时间:"></h:outputText>
+                            <h:panelGroup>
+                                <h:panelGrid columns="3">
+                                    <p:calendar value="#{searchAdminFile.fromDate}" navigator="true" pattern="yyyy-MM-dd HH:mm" locale="zh_CN">
+                                    </p:calendar>
+                                    - 
+                                    <p:calendar value="#{searchAdminFile.toDate}"  navigator="true"  pattern="yyyy-MM-dd HH:mm" locale="zh_CN"></p:calendar>
+                                </h:panelGrid>
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <p:commandButton value="检索" action="#{searchAdminFile.search}"
+                                                 update="@form"></p:commandButton><br/>
+                            </h:panelGroup>
+                        </h:panelGrid>
+                        <p:separator/>
+                        <p:outputPanel autoUpdate="true">
+                            <p:dataTable value="#{searchAdminFile.pro2s}" var="pro" style="text-align:center"  paginator="true" paginatorPosition="bottom"  emptyMessage="无记录"
+                                         rendered="#{searchAdminFile.pro2s!=null}" id="dc" rows="15" styleClass="tabTable">
+
+                                <p:column style="text-align:left">
+                                    <f:facet name="header">
+                                        <h:outputText value="文件名称"></h:outputText>
+                                    </f:facet>
+                                    
+                                    
+                            <h:graphicImage rendered="#{pro.ifFolder}"
+                                            value="/resources/images/folder.gif" style="vertical-align: middle;"></h:graphicImage>
+                            <h:graphicImage rendered="#{!pro.ifFolder}"
+                                            value="/resources/images/file.gif" style="vertical-align: middle;"></h:graphicImage>
+                            <h:outputLink value="ListAdminFile.jspx?fid=#{pro.id}"  title="点击进入文件夹"
+                                          rendered="#{pro.ifFolder}">
+                                <h:outputText value="#{fn:length(pro.fileName)>20?fn:substring(pro.fileName,0,20):pro.fileName}"></h:outputText>
+                            </h:outputLink>
+
+                            <h:outputLink title="点击下载文件" target="_blank" styleClass="common"
+                                          value="../servlet/DownloadFile?id=#{pro.id}"
+                                          rendered="#{(!pro.ifFolder)&amp;&amp;(!(((pro.fileExt=='.jpg'||pro.fileExt=='.gif')||(pro.fileExt=='.png'||(pro.fileExt=='.flv')||(pro.fileExt=='.mp3')))||(pro.fileExt=='.mp4')))}">
+                                <h:outputText value="#{fn:length(pro.fileName)>20?(fn:substring(pro.fileName,0,20)):pro.fileName}#{pro.fileExt}"></h:outputText>
+                            </h:outputLink>
+                            <h:outputLink title="点击播放视频" target="_blank" styleClass="common"
+                                          value="#{facesContext.externalContext.requestContextPath}/CuPlayer/CuPlayerMiniV3_Black_S.swf?CuPlayerFile=../#{applicationBean.relativePath}#{pro.id}.flv&amp;CuPlayerAutoPlay=false&amp;CuPlayerAutoRepeat=false&amp;allowfullscreen=true"
+                                          rendered="#{(!pro.ifFolder)&amp;&amp;(pro.fileExt=='.flv'||pro.fileExt=='.mp4')}">
+                                <h:outputText value="#{fn:length(pro.fileName)>20?(fn:substring(pro.fileName,0,20)):pro.fileName}#{pro.fileExt}"></h:outputText>
+                            </h:outputLink>
+                            <h:outputLink title="点击播放MP3" target="_blank" styleClass="common"
+                                          value="#{facesContext.externalContext.requestContextPath}/dewplayer/dewplayer-vol.swf?mp3=../#{applicationBean.relativePath}#{pro.id}.mp3&amp;autostart=0"
+                                          rendered="#{(!pro.ifFolder)&amp;&amp;(pro.fileExt=='.mp3')}">
+                                <h:outputText value="#{fn:length(pro.fileName)>20?(fn:substring(pro.fileName,0,20)):pro.fileName}#{pro.fileExt}"></h:outputText>
+                            </h:outputLink>
+                            <h:outputLink title="点击查看图片" target="_blank" styleClass="common"
+                                          value="#{facesContext.externalContext.requestContextPath}/servlet/ShowImage?id=#{pro.id}"
+                                          rendered="#{(!pro.ifFolder)&amp;&amp;((pro.fileExt=='.jpg'||pro.fileExt=='.gif')||pro.fileExt=='.png')}">
+                                <h:outputText value="#{fn:length(pro.fileName)>20?(fn:substring(pro.fileName,0,20)):pro.fileName}#{pro.fileExt}"></h:outputText>
+                            </h:outputLink>
+
+                            <h:outputText value="(#{pro.sonNum})" rendered="#{pro.ifFolder}"></h:outputText>
+
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="大小"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{pro.fileSize}"></h:outputText>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="上传者"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{pro.user.name}"></h:outputText>
+                                </p:column>
+                                <p:column style="text-align:left">
+                                    <f:facet name="header">
+                                        <h:outputText value="路径"></h:outputText>
+                                    </f:facet>
+                                    <h:panelGroup>
+                                        <ui:repeat var="path" value="#{pro.familyTree}">
+                                            ${path.fileName}>>
+                                        </ui:repeat>
+                                    </h:panelGroup>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="上传时间"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{pro.uploadTime}">
+                                        <f:convertDateTime timeZone="GMT+8"
+                                                           pattern="yyyy-MM-dd HH:mm" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column style="width:30px;">
+                                <f:facet name="header">
+                                    <h:outputText value="下载"></h:outputText>
+                                </f:facet>
+                                <h:outputLink title="点击直接下载文件" target="_blank" styleClass="common"
+                                              value="../servlet/DownloadFile?id=#{pro.id}"
+                                              rendered="#{(!pro.ifFolder)}">
+                                    <h:outputText value="下载"></h:outputText>
+                                </h:outputLink>
+                            </p:column>
+                            </p:dataTable>
+                            <p:separator styleClass="botLine"/>
+                        </p:outputPanel>
+                    </div>
+                    <ui:include src="/AjaxStatus2.xhtml"></ui:include>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

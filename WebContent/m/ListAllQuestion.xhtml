@@ -1,0 +1,964 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:p="http://primefaces.org/ui">
+<head>
+<title>My Facelets Page</title>
+<meta http-equiv="keywords" content="enter,your,keywords,here" />
+<meta http-equiv="description"
+	content="A short description of this page." />
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+<!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+</head>
+<body>
+	<ui:composition template="BackGeneral.xhtml">
+		<ui:define name="content">
+			<h:form id="myForm">
+				<ui:include src="/AjaxStatus2.xhtml" />
+				<ui:include src="DMTargetPanel.xhtml" />
+				<ui:include src="BasketPopup.xhtml" />
+
+				<p:graphicImage id="basket1" value="/resources/images/basket1.png"
+					title="请将试题拖入篮中。双击查看试题！" styleClass="basket"
+					ondblclick="PF('basketPopup').show();" />
+				<p:draggable for="basket1" opacity="0.6" />
+				<p:droppable for="basket1" tolerance="touch"
+					activeStyleClass="ui-state-highlight">
+					<p:ajax listener="#{basketSession.onQustionDrop}"
+						update="myForm:views:dataTable1 myForm:views:dataTable2 myForm:views:dataTable3 myForm:views:dataTable4 myForm:views:dataTable5" />
+				</p:droppable>
+
+				<p:panel id="main_panel"
+					style="text-align: left;border:0px solid red; margin: 0px 0px 0px 0px!important; width: 98%;padding: 0px 0px 0px 0px!important;">
+					<div>
+						<h:outputText id="outputText1" styleClass="tit"
+							value="试题管理>>#{listFillQuestion.module.name}" />
+						<script type="text/javascript">
+							function checkAll(whichTable) {
+								var idds = '#myForm\\:views\\:' + whichTable
+										+ '\\:checkAll';
+								var vv = $(idds).is(':checked');
+								//alert(vv);
+								$('input[type="checkbox"]')
+										.each(
+												function(index, element) {
+													try {
+														var idd = $(element)
+																.attr('id');
+														if (idd
+																.indexOf(whichTable) >= 0) {
+															$(element).prop(
+																	'checked',
+																	vv);
+															//alert(idd);
+														}
+													} catch (e) {
+													}
+												});
+							}
+						</script>
+
+
+					</div>
+					<p:separator />
+					<p:tabView id="views" activeIndex="#{listAllQuestion.activeId}"
+						dynamic="false">
+						<p:ajax event="tabChange" process="@this"
+							listener="#{listAllQuestion.onChange}" />
+						<p:tab title="单选类" id="view1">
+							<div>
+								<p:sticky target="tool1" />
+								<p:toolbar id="tool1">
+									<f:facet name="left">
+										<p:button value="添加"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											href="/m/AAChoiceQuestion.jspx?module_id=#{listChoiceQuestion.module.id}"
+											image="ui-icon-document">
+										</p:button>
+										<p:commandButton value="移动"
+											onclick="PF('DMTargetPanel').show()"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											image="fa fa-fw fa-truck" />
+										<p:commandButton value="删除"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											action="#{listChoiceQuestion.batchDelete()}" update="@form"
+											image="ui-icon-trash"
+											onclick="if (!confirm('确认要删除所选的条目吗？'))
+                                                        return false" />
+										<p:commandButton value="清空"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											action="#{listChoiceQuestion.deleteAll()}" update="@form"
+											image="fa fa-fw fa-send"
+											onclick="if (!confirm('确认要清空所有题目吗？'))
+                                                        return false" />
+									</f:facet>
+									<f:facet name="right">
+										<p:commandButton value="加入试题篮"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											action="#{listChoiceQuestion.addToBasket()}"
+											icon="fa fa-fw fa-yelp" update="@form" />
+
+										<ui:include src="/GeneralHelper.xhtml">
+											<ui:param name="name" value=""></ui:param>
+											<ui:param name="id" value="202214341647965"></ui:param>
+										</ui:include>
+									</f:facet>
+								</p:toolbar>
+							</div>
+							<p:separator />
+							<div>
+								<p:dataTable paginator="true" paginatorPosition="bottom"
+									value="#{listChoiceQuestion.lcqs}" var="us1" id="dataTable1"
+									liveResize="true" emptyMessage="#{lang['exam.empty_result']}"
+									editable="true" editMode="cell" styleClass="list"
+									rowIndexVar="row" style="width:100%;" rows="50" lazy="true">
+									<p:column id="num" style="width:20px;text-align: center;">
+										<h:outputText style="height: 5%" value="#{row+1}" />
+										<f:facet name="header">
+											<h:outputText id="outputTextnum" value="序号" />
+										</f:facet>
+									</p:column>
+									<p:column style="width:30px;text-align: center;">
+										<h:selectBooleanCheckbox id="checkMe" value="#{us1.selected}" />
+										<f:facet name="header">
+											<h:outputText value="选择" />
+											<br />
+											<h:selectBooleanCheckbox id="checkAll"
+												onclick="checkAll('dataTable1');">
+											</h:selectBooleanCheckbox>
+
+										</f:facet>
+									</p:column>
+									<p:column sortBy="#{us1.cleanName}" filterBy="#{us1.cleanName}"
+										filterMatchMode="contains" filterStyle="width:300px"
+										style="width:370px!important;word-wrap:break-word!important;word-break:break-all!important;">
+										<h:outputLink value="#" onclick="return false;"
+											title="标题可以被拖动 点击查看详情">
+											<h:outputText id="choiceTitle"
+												style="#{basketSession.basket.choices.contains(us1)?'color:green!important;':''}"
+												value="#{fn:substring(us1.cleanName,0,25)}#{fn:length(us1.cleanName)>25?'...':''}"
+												escape="false" />
+										</h:outputLink>
+										<p:draggable for="choiceTitle" helper="clone" zindex="105" />
+										<p:overlayPanel for="choiceTitle" showEffect="blind"
+											dynamic="true">
+											<h:outputText value="#{us1.name}" escape="false" />
+											<div style="margin-left: 30px;">
+												<ui:repeat value="#{us1.choices}" var="ch">
+													<h:outputText value="#{ch.label}.&nbsp;#{ch.name}" />
+													<br />
+												</ui:repeat>
+											</div>
+											<h:outputText value="正确答案：" style="color:red;" />
+											<h:outputText value="#{us1.answer}"
+												style="color:green;font-weight: bold;" />&nbsp;
+                                                <br />
+											<h:outputText value="试题解析：" style="color:red;" />
+											<h:outputText value="#{us1.rightStr}" escape="false"
+												style="color:green;" />
+										</p:overlayPanel>
+										<f:facet name="header">
+											<h:outputText value="题目名称" />
+										</f:facet>
+									</p:column>
+									<p:column style="width:60px;text-align: center;" filterStyle="40px"
+										filterBy="#{us1.answer}" filterMatchMode="contains"
+										sortBy="#{us1.answer}">
+										<h:outputText value="#{us1.answer}" />
+										<f:facet name="header">
+											<h:outputText value="答案" />
+										</f:facet>
+									</p:column>
+									<p:column sortBy="#{us1.ord}"
+										style="width:40px;text-align: center;">
+										<p:tooltip for="modelOutput" value="点击编辑" />
+										<p:cellEditor>
+											<f:facet name="output">
+												<h:outputText id="modelOutput" value="#{us1.ord}" />
+											</f:facet>
+											<f:facet name="input">
+												<p:inputText id="modelInput" value="#{us1.ord}"
+													style="width:30px;">
+													<p:ajax event="change" update="@none"
+														listener="#{listChoiceQuestion.editOrd(us1.id)}" />
+												</p:inputText>
+											</f:facet>
+										</p:cellEditor>
+										<f:facet name="header">
+											<h:outputText value="次序" />
+										</f:facet>
+									</p:column>
+									<p:column sortBy="#{us1.genTime}"
+										style="width:100px;text-align: center;">
+										<h:outputText value="#{us1.genTime}">
+											<f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+												timeZone="GMT+8" />
+										</h:outputText>
+										<f:facet name="header">
+											<h:outputText value="添加时间" />
+										</f:facet>
+									</p:column>
+									<p:column style="width:40px;text-align: center;">
+										<h:outputLink
+											value="AAChoiceQuestion.jspx?id=#{us1.id}&amp;module_id=#{listChoiceQuestion.module.id}">
+											<h:outputText value="修改" />
+										</h:outputLink>
+										<f:facet name="header">
+											<h:outputText value="修改" />
+										</f:facet>
+									</p:column>
+								</p:dataTable>
+								<p:outputPanel autoUpdate="true">
+									<h:outputText value="共有#{listChoiceQuestion.lcqs.rowCount}条数据！" />
+								</p:outputPanel>
+
+							</div>
+						</p:tab>
+						<p:tab title="多选类">
+							<div>
+								<p:sticky target="tool2" />
+								<p:toolbar id="tool2">
+									<f:facet name="left">
+										<p:button value="添加"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											href="/m/AAMultiChoiceQuestion.jspx?module_id=#{listMultiChoiceQuestion.module.id}"
+											image="ui-icon-document">
+										</p:button>
+										<p:commandButton value="移动"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											onclick="PF('DMTargetPanel').show()" />
+										<p:commandButton value="删除"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											action="#{listMultiChoiceQuestion.batchDelete()}"
+											update="@form"
+											onclick="if (!confirm('确认要删除所选的条目吗？'))
+                                                        return false" />
+										<p:commandButton value="清空"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											action="#{listMultiChoiceQuestion.deleteAll()}"
+											update="@form"
+											onclick="if (!confirm('确认要清空所有题目吗？'))
+                                                        return false" />
+									</f:facet>
+									<f:facet name="right">
+										<p:commandButton value="加入试题篮"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											action="#{listMultiChoiceQuestion.addToBasket()}"
+											update="@form" />
+									</f:facet>
+								</p:toolbar>
+							</div>
+							<p:separator />
+							<div>
+								<p:dataTable paginator="true" paginatorPosition="bottom"
+									value="#{listMultiChoiceQuestion.lcqs}" var="us"
+									id="dataTable4" emptyMessage="#{lang['exam.empty_result']}"
+									editable="true" editMode="cell" styleClass="list"
+									rowIndexVar="row" style="width:100%" rows="50" lazy="true">
+									<p:column id="num" style="width:20px;text-align: center;">
+										<h:outputText style="height: 5%" value="#{row+1}" />
+										<f:facet name="header">
+											<h:outputText id="outputTextnum" value="序号" />
+										</f:facet>
+									</p:column>
+									<p:column style="width:30px;text-align: center;">
+										<h:selectBooleanCheckbox id="checkMe" value="#{us.selected}" />
+										<f:facet name="header">
+											<h:outputText value="选择" />
+											<br />
+											<h:selectBooleanCheckbox id="checkAll"
+												onclick="checkAll('dataTable4');">
+											</h:selectBooleanCheckbox>
+										</f:facet>
+									</p:column>
+									<p:column sortBy="#{us.cleanName}" filterBy="#{us.cleanName}"
+										filterMatchMode="contains" style="width:370px;">
+										<h:outputLink value="#" onclick="return false;"
+											title="标题可以被拖动 点击查看详情">
+											<h:outputText id="multiChoiceTitle"
+												style="#{basketSession.basket.choices.contains(us)?'color:green!important;':''}"
+												value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}"
+												escape="false" />
+										</h:outputLink>
+										<p:draggable for="multiChoiceTitle" helper="clone"
+											zindex="105" />
+										<p:overlayPanel for="multiChoiceTitle" showEffect="blind"
+											dynamic="true">
+											<h:outputText value="#{us.name}" escape="false" />
+											<div style="margin-left: 30px;">
+												<ui:repeat value="#{us.choices}" var="ch">
+													<h:outputText value="#{ch.label}.&nbsp;#{ch.name}" />
+													<br />
+												</ui:repeat>
+											</div>
+											<h:outputText value="正确答案：" style="color:red;" />
+											<h:outputText value="#{us.answer}"
+												style="color:green;font-weight: bold;" />&nbsp;
+                                                <br />
+											<h:outputText value="试题解析：" style="color:red;" />
+											<h:outputText value="#{us.rightStr}" escape="false"
+												style="color:green;" />
+										</p:overlayPanel>
+										<f:facet name="header">
+											<h:outputText value="题目名称" />
+										</f:facet>
+									</p:column>
+									<p:column style="width:40px;text-align: center;"
+										filterBy="#{us.answer}" filterMatchMode="contains"
+										sortBy="#{us.answer}">
+										<h:outputText value="#{us.answer}" />
+										<f:facet name="header">
+											<h:outputText value="答案" />
+										</f:facet>
+									</p:column>
+									<p:column sortBy="#{us.ord}"
+										style="width:40px;text-align: center;" >
+										<p:tooltip for="modelOutput" value="点击编辑" />
+										<p:cellEditor>
+											<f:facet name="output">
+												<h:outputText id="modelOutput" value="#{us.ord}" />
+											</f:facet>
+											<f:facet name="input">
+												<p:inputText id="modelInput" value="#{us.ord}"
+													style="width:30px;">
+													<p:ajax event="change" update="@none"
+														listener="#{listMultiChoiceQuestion.editOrd(us.id)}" />
+												</p:inputText>
+											</f:facet>
+										</p:cellEditor>
+										<f:facet name="header">
+											<h:outputText value="次序" />
+										</f:facet>
+									</p:column>
+									<p:column sortBy="#{us.genTime}"
+										style="width:100px;text-align: center;">
+										<h:outputText value="#{us.genTime}">
+											<f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+												timeZone="GMT+8" />
+										</h:outputText>
+										<f:facet name="header">
+											<h:outputText value="添加时间" />
+										</f:facet>
+									</p:column>
+									<p:column style="width:40px;text-align: center;">
+										<h:outputLink
+											value="AAMultiChoiceQuestion.jspx?id=#{us.id}&amp;module_id=#{listMultiChoiceQuestion.module.id}">
+											<h:outputText value="修改" />
+										</h:outputLink>
+										<f:facet name="header">
+											<h:outputText value="修改" />
+										</f:facet>
+									</p:column>
+								</p:dataTable>
+								<p:outputPanel autoUpdate="true">
+									<h:outputText
+										value="共有#{listMultiChoiceQuestion.lcqs.rowCount}条数据！" />
+								</p:outputPanel>
+							</div>
+						</p:tab>
+						<p:tab title="填空类">
+							<div>
+								<p:sticky target="tool3" />
+								<p:toolbar id="tool3">
+									<f:facet name="left">
+										<p:button value="添加"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											href="/m/AAFillQuestion.jspx?module_id=#{listFillQuestion.module.id}"
+											image="ui-icon-document">
+										</p:button>
+										<p:commandButton value="移动"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											onclick="PF('DMTargetPanel').show()" />
+										<p:commandButton value="删除"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											action="#{listFillQuestion.batchDelete()}" update="@form"
+											onclick="if (!confirm('确认要删除所选的条目吗？'))
+                                                        return false" />
+										<p:commandButton value="清空"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											action="#{listFillQuestion.deleteAll()}" update="@form"
+											onclick="if (!confirm('确认要清空所有题目吗？'))
+                                                        return false" />
+									</f:facet>
+									<f:facet name="right">
+										<p:commandButton value="加入试题篮"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											action="#{listFillQuestion.addToBasket()}" update="@form" />
+									</f:facet>
+								</p:toolbar>
+							</div>
+							<p:separator />
+							<div>
+								<p:dataTable paginator="true" paginatorPosition="bottom"
+									value="#{listFillQuestion.lcqs}" var="us" id="dataTable2"
+									emptyMessage="#{lang['exam.empty_result']}" editable="true"
+									editMode="cell" styleClass="list" rowIndexVar="row"
+									style="width:100%" rows="50" lazy="true">
+									<p:column style="width:30px;text-align: center;">
+										<h:selectBooleanCheckbox id="checkMe" value="#{us.selected}" />
+										<f:facet name="header">
+											<h:outputText value="选择" />
+											<br />
+											<h:selectBooleanCheckbox id="checkAll"
+												onclick="checkAll('dataTable2');">
+											</h:selectBooleanCheckbox>
+										</f:facet>
+									</p:column>
+									<p:column sortBy="#{us.cleanName}" filterBy="#{us.cleanName}"
+										filterMatchMode="contains" style="width:430px;">
+										<h:outputLink value="#" onclick="return false;"
+											title="标题可以被拖动 点击查看详情">
+											<h:outputText id="fillTitle"
+												style="#{basketSession.basket.fills.contains(us)?'color:green!important;':''}"
+												value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}"
+												escape="false" />
+										</h:outputLink>
+										<p:draggable for="fillTitle" helper="clone" zindex="105" />
+										<p:overlayPanel for="fillTitle" showEffect="blind"
+											dynamic="true">
+											<h:outputText value="#{us.name}" escape="false" />&nbsp;
+                                                <br />
+											<h:outputText value="试题解析：" style="color:red;" />
+											<h:outputText value="#{us.rightStr}" escape="false"
+												style="color:green;" />
+										</p:overlayPanel>
+										<f:facet name="header">
+											<h:outputText value="题目名称" />
+										</f:facet>
+									</p:column>
+									<p:column sortBy="#{us.ord}"
+										style="width:40px;text-align: center;">
+										<p:tooltip for="modelOutput" value="点击编辑" />
+										<p:cellEditor>
+											<f:facet name="output">
+												<h:outputText id="modelOutput" value="#{us.ord}" />
+											</f:facet>
+											<f:facet name="input">
+												<p:inputText id="modelInput" value="#{us.ord}"
+													style="width:30px;">
+													<p:ajax event="change" update="@none"
+														listener="#{listFillQuestion.editOrd(us.id)}" />
+												</p:inputText>
+											</f:facet>
+										</p:cellEditor>
+										<f:facet name="header">
+											<h:outputText value="次序" />
+										</f:facet>
+									</p:column>
+									<p:column sortBy="#{us.genTime}"
+										style="width:100px;text-align: center;">
+										<h:outputText value="#{us.genTime}">
+											<f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+												timeZone="GMT+8" />
+										</h:outputText>
+										<f:facet name="header">
+											<h:outputText value="添加时间" />
+										</f:facet>
+									</p:column>
+									<p:column style="width:40px;text-align: center;">
+										<h:outputLink
+											value="AAFillQuestion.jspx?id=#{us.id}&amp;module_id=#{listFillQuestion.module.id}">
+											<h:outputText value="修改" />
+										</h:outputLink>
+										<f:facet name="header">
+											<h:outputText value="修改" />
+										</f:facet>
+									</p:column>
+								</p:dataTable>
+								<p:outputPanel autoUpdate="true">
+									<h:outputText value="共有#{listFillQuestion.lcqs.rowCount}条数据！" />
+								</p:outputPanel>
+							</div>
+						</p:tab>
+
+						<p:tab title="判断类">
+							<div>
+								<p:sticky target="tool4" />
+								<p:toolbar id="tool4">
+									<f:facet name="left">
+										<p:button value="添加"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											href="/m/AAJudgeQuestion.jspx?module_id=#{listJudgeQuestion.module.id}"
+											image="ui-icon-document">
+										</p:button>
+										<p:commandButton value="移动"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											onclick="PF('DMTargetPanel').show()" />
+										<p:commandButton value="删除"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											action="#{listJudgeQuestion.batchDelete()}" update="@form"
+											onclick="if (!confirm('确认要删除所选的条目吗？'))
+                                                        return false" />
+										<p:commandButton value="清空"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											action="#{listJudgeQuestion.deleteAll()}" update="@form"
+											onclick="if (!confirm('确认要清空所有题目吗？'))
+                                                        return false" />
+									</f:facet>
+									<f:facet name="right">
+										<p:commandButton value="加入试题篮"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											action="#{listJudgeQuestion.addToBasket()}" update="@form" />
+									</f:facet>
+								</p:toolbar>
+							</div>
+							<p:separator />
+							<div>
+								<p:dataTable paginator="true" paginatorPosition="bottom"
+									value="#{listJudgeQuestion.lcqs}" var="us" id="dataTable3"
+									emptyMessage="#{lang['exam.empty_result']}" editable="true"
+									editMode="cell" styleClass="list" rowIndexVar="row"
+									style="width:100%" rows="50" lazy="true">
+									<p:column id="num" style="width:20px;text-align: center;">
+										<h:outputText style="height: 5%" value="#{row+1}" />
+										<f:facet name="header">
+											<h:outputText id="outputTextnum" value="序号" />
+										</f:facet>
+									</p:column>
+									<p:column style="width:30px;text-align: center;">
+										<h:selectBooleanCheckbox id="checkMe" value="#{us.selected}" />
+										<f:facet name="header">
+											<h:outputText value="选择" />
+											<br />
+											<h:selectBooleanCheckbox id="checkAll"
+												onclick="checkAll('dataTable3');">
+											</h:selectBooleanCheckbox>
+										</f:facet>
+									</p:column>
+									<p:column sortBy="#{us.cleanName}" filterBy="#{us.cleanName}"
+										filterMatchMode="contains" style="width:370px;">
+										<h:outputLink value="#" onclick="return false;"
+											title="标题可以被拖动 点击查看详情">
+											<h:outputText id="judgeTitle"
+												style="#{basketSession.basket.judges.contains(us)?'color:green!important;':''}"
+												value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}"
+												escape="false" />
+										</h:outputLink>
+										<p:draggable for="judgeTitle" helper="clone" zindex="105" />
+										<p:overlayPanel for="judgeTitle" showEffect="blind"
+											dynamic="true">
+											<h:outputText value="#{us.name}" escape="false" />&nbsp;
+                                                <br />
+											<h:outputText value="正确答案：" style="color:red;" />
+											<h:outputText value="正确"
+												style="color:green;font-weight:bold;"
+												rendered="#{us.answer==true}" />&nbsp;  
+										   	  	<h:outputText value="错误"
+												style="color:green;font-weight:bold;"
+												rendered="#{us.answer==false}" />&nbsp;  
+                                                <br />
+											<h:outputText value="试题解析：" style="color:red;" />
+											<h:outputText value="#{us.rightStr}" escape="false"
+												style="color:green;" />
+										</p:overlayPanel>
+										<f:facet name="header">
+											<h:outputText value="题目内容" />
+										</f:facet>
+									</p:column>
+									<p:column style="width:40px;text-align: center;"
+										filterBy="#{us.answer}" filterMatchMode="contains"
+										sortBy="#{us.answer}">
+										<h:outputText value="#{us.answer}" />
+										<f:facet name="header">
+											<h:outputText value="答案" />
+										</f:facet>
+									</p:column>
+									<p:column sortBy="#{us.ord}"
+										style="width:40px;text-align: center;" >
+										<p:tooltip for="modelOutput" value="点击编辑" />
+										<p:cellEditor>
+											<f:facet name="output">
+												<h:outputText id="modelOutput" value="#{us.ord}" />
+											</f:facet>
+											<f:facet name="input">
+												<p:inputText id="modelInput" value="#{us.ord}"
+													style="width:30px;">
+													<p:ajax event="change" update="@none"
+														listener="#{listJudgeQuestion.editOrd(us.id)}" />
+												</p:inputText>
+											</f:facet>
+										</p:cellEditor>
+										<f:facet name="header">
+											<h:outputText value="次序" />
+										</f:facet>
+									</p:column>
+									<p:column sortBy="#{us.genTime}"
+										style="width:100px;text-align: center;">
+										<h:outputText value="#{us.genTime}">
+											<f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+												timeZone="GMT+8" />
+										</h:outputText>
+										<f:facet name="header">
+											<h:outputText value="添加时间" />
+										</f:facet>
+									</p:column>
+									<p:column style="width:40px;text-align: center;">
+										<h:outputLink
+											value="AAJudgeQuestion.jspx?id=#{us.id}&amp;module_id=#{listJudgeQuestion.module.id}">
+											<h:outputText value="修改" />
+										</h:outputLink>
+										<f:facet name="header">
+											<h:outputText value="修改" />
+										</f:facet>
+									</p:column>
+								</p:dataTable>
+								<p:outputPanel autoUpdate="true">
+									<h:outputText value="共有#{listJudgeQuestion.lcqs.rowCount}条数据！" />
+								</p:outputPanel>
+							</div>
+						</p:tab>
+
+						<p:tab title="问答类">
+							<div>
+								<p:sticky target="tool5" />
+								<p:toolbar id="tool5">
+									<f:facet name="left">
+										<p:button value="添加"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											href="/m/AAEssayQuestion.jspx?module_id=#{listJudgeQuestion.module.id}"
+											image="ui-icon-document">
+										</p:button>
+										<p:commandButton value="移动"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											onclick="PF('DMTargetPanel').show()" />
+										<p:commandButton value="删除"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											action="#{listEssayQuestion.batchDelete()}" update="@form"
+											onclick="if (!confirm('确认要删除所选的条目吗？'))
+                                                        return false" />
+										<p:commandButton value="清空"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											action="#{listEssayQuestion.deleteAll()}" update="@form"
+											onclick="if (!confirm('确认要清空所有题目吗？'))
+                                                        return false" />
+									</f:facet>
+									<f:facet name="right">
+										<p:commandButton value="加入试题篮"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											action="#{listEssayQuestion.addToBasket()}" update="@form" />
+									</f:facet>
+								</p:toolbar>
+							</div>
+							<p:separator />
+							<div>
+								<p:dataTable paginator="true" paginatorPosition="bottom"
+									value="#{listEssayQuestion.lcqs}" var="us" id="dataTable5"
+									emptyMessage="#{lang['exam.empty_result']}" editable="true"
+									editMode="cell" styleClass="list" rowIndexVar="row"
+									style="width:100%" rows="50" lazy="true">
+									<p:column style="width:20px;text-align: center;">
+										<h:selectBooleanCheckbox id="checkMe" value="#{us.selected}" />
+										<f:facet name="header">
+											<h:outputText value="选择" />
+											<br />
+											<h:selectBooleanCheckbox id="checkAll"
+												onclick="checkAll('dataTable5');">
+											</h:selectBooleanCheckbox>
+										</f:facet>
+									</p:column>
+									<p:column sortBy="#{us.cleanName}" filterBy="#{us.cleanName}"
+										filterMatchMode="contains" style="width:370px;">
+										<h:outputLink value="#" onclick="return false;"
+											title="标题可以被拖动 点击查看详情">
+											<h:outputText id="essayTitle"
+												style="#{basketSession.basket.essaies.contains(us)?'color:green!important;':''}"
+												value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}"
+												escape="false" />
+										</h:outputLink>
+										<p:draggable for="essayTitle" helper="clone" zindex="105" />
+										<p:overlayPanel for="essayTitle" showEffect="blind"
+											dynamic="true">
+											<h:outputText value="#{us.name}" escape="false" />&nbsp;
+                                                <br />
+											<h:outputText value="正确答案：" style="color:red;" />
+											<h:outputText value="#{us.answer}"
+												style="color:green;font-weight: bold;" />&nbsp;
+                                                <br />
+											<h:outputText value="试题解析：" style="color:red;" />
+											<h:outputText value="#{us.rightStr}" escape="false"
+												style="color:green;" />
+										</p:overlayPanel>
+										<f:facet name="header">
+											<h:outputText value="题目内容" />
+										</f:facet>
+									</p:column>
+									<p:column sortBy="#{us.ord}"
+										style="width:40px;text-align: center;">
+										<p:tooltip for="modelOutput" value="点击编辑" />
+										<p:cellEditor>
+											<f:facet name="output">
+												<h:outputText id="modelOutput" value="#{us.ord}" />
+											</f:facet>
+											<f:facet name="input">
+												<p:inputText id="modelInput" value="#{us.ord}"
+													style="width:30px;">
+													<p:ajax event="change" update="@none"
+														listener="#{listEssayQuestion.editOrd(us.id)}" />
+												</p:inputText>
+											</f:facet>
+										</p:cellEditor>
+										<f:facet name="header">
+											<h:outputText value="次序" />
+										</f:facet>
+									</p:column>
+									<p:column sortBy="#{us.genTime}"
+										style="width:100px;text-align: center;">
+										<h:outputText value="#{us.genTime}">
+											<f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+												timeZone="GMT+8" />
+										</h:outputText>
+										<f:facet name="header">
+											<h:outputText value="添加时间" />
+										</f:facet>
+									</p:column>
+									<p:column style="width:40px;text-align: center;">
+										<h:outputLink
+											value="AAEssayQuestion.jspx?id=#{us.id}&amp;module_id=#{listEssayQuestion.module.id}">
+											<h:outputText value="修改" />
+										</h:outputLink>
+										<f:facet name="header">
+											<h:outputText value="修改" />
+										</f:facet>
+									</p:column>
+								</p:dataTable>
+								<p:outputPanel autoUpdate="true">
+									<h:outputText value="共有#{listEssayQuestion.lcqs.rowCount}条数据！" />
+								</p:outputPanel>
+							</div>
+						</p:tab>
+
+						<!-- <p:tab title="文件类">
+							<div>
+								<p:sticky target="tool6" />
+								<p:toolbar id="tool6">
+									<f:facet name="left">
+										<p:button value="添加"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											href="/m/AAFileQuestion.jspx?module_id=#{listJudgeQuestion.module.id}"
+											image="ui-icon-document">
+										</p:button>
+										<p:commandButton value="移动"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											onclick="PF('DMTargetPanel').show()" />
+										<p:commandButton value="删除"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											action="#{listFileQuestion.batchDelete()}" update="@form"
+											onclick="if (!confirm('确认要删除所选的条目吗？'))
+                                                        return false" />
+										<p:commandButton value="清空"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											action="#{listFileQuestion.deleteAll()}" update="@form"
+											onclick="if (!confirm('确认要清空所有题目吗？'))
+                                                        return false" />
+									</f:facet>
+									<f:facet name="right">
+										<p:commandButton value="加入试题篮"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											action="#{listFileQuestion.addToBasket()}" update="@form" />
+									</f:facet>
+								</p:toolbar>
+							</div>
+							<p:separator />
+							<div>
+								<p:dataTable paginator="true" paginatorPosition="bottom"
+									value="#{listFileQuestion.questions}" var="us" id="dataTable6"
+									emptyMessage="#{lang['exam.empty_result']}" editable="true"
+									editMode="cell" styleClass="list" rowIndexVar="row"
+									style="width:100%" rows="50">
+									<p:column style="width:30px;text-align: center;">
+										<h:selectBooleanCheckbox id="checkMe" value="#{us.selected}" />
+										<f:facet name="header">
+											<h:outputText value="选择" />
+											<br />
+											<h:selectBooleanCheckbox id="checkAll"
+												onclick="checkAll('dataTable6');">
+											</h:selectBooleanCheckbox>
+										</f:facet>
+									</p:column>
+									<p:column sortBy="#{us.cleanName}" filterBy="#{us.cleanName}"
+										filterMatchMode="contains" style="width:370px;">
+										<h:outputText id="fileTitle"
+											style="#{basketSession.basket.files.contains(us)?'color:green!important;':''}"
+											value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}"
+											escape="false" />
+										<p:draggable for="fileTitle" helper="clone" zindex="105" />
+										<f:facet name="header">
+											<h:outputText value="题目内容" />
+										</f:facet>
+									</p:column>
+									<p:column sortBy="#{us.ord}"
+										style="width:40px;text-align: center;">
+										<p:tooltip for="modelOutput" value="点击编辑" />
+										<p:cellEditor>
+											<f:facet name="output">
+												<h:outputText id="modelOutput" value="#{us.ord}" />
+											</f:facet>
+											<f:facet name="input">
+												<p:inputText id="modelInput" value="#{us.ord}"
+													style="width:30px;">
+													<p:ajax event="change" update="@none"
+														listener="#{listFileQuestion.editOrd(us.id)}" />
+												</p:inputText>
+											</f:facet>
+										</p:cellEditor>
+										<f:facet name="header">
+											<h:outputText value="次序" />
+										</f:facet>
+									</p:column>
+									<p:column sortBy="#{us.genTime}"
+										style="width:100px;text-align: center;">
+										<h:outputText value="#{us.genTime}">
+											<f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+												timeZone="GMT+8" />
+										</h:outputText>
+										<f:facet name="header">
+											<h:outputText value="添加时间" />
+										</f:facet>
+									</p:column>
+									<p:column style="width:40px;text-align: center;">
+										<h:outputLink
+											value="AAFileQuestion.jspx?id=#{us.id}&amp;module_id=#{listFileQuestion.module.id}">
+											<h:outputText value="修改" />
+										</h:outputLink>
+										<f:facet name="header">
+											<h:outputText value="修改" />
+										</f:facet>
+									</p:column>
+								</p:dataTable>
+								<p:outputPanel autoUpdate="true">
+									<h:outputText
+										value="共有#{listFileQuestion.questions.size()}条数据！" />
+								</p:outputPanel>
+							</div>
+						</p:tab> -->
+
+
+						<!-- <p:tab title="综合类" rendered="#{copyrightController.sysType!='1'}">
+							<div>
+								<p:sticky target="tool7" />
+								<p:toolbar id="tool7">
+									<f:facet name="left">
+										<p:button value="添加"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											href="/m/AACaseQuestion.jspx?module_id=#{listCaseQuestion.module.id}"
+											image="ui-icon-document">
+										</p:button>
+										<p:commandButton value="移动"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											onclick="PF('DMTargetPanel').show()" />
+										<p:commandButton value="删除"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											action="#{listCaseQuestion.batchDelete()}" update="@form"
+											onclick="if (!confirm('确认要删除所选的条目吗？'))
+                                                        return false" />
+										<p:commandButton value="清空"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											action="#{listCaseQuestion.deleteAll()}" update="@form"
+											onclick="if (!confirm('确认要清空所有题目吗？'))
+                                                        return false" />
+									</f:facet>
+									<f:facet name="right">
+										<p:commandButton value="加入试题篮"
+											disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"
+											action="#{listCaseQuestion.addToBasket()}" update="@form" />
+									</f:facet>
+								</p:toolbar>
+							</div>
+							<p:separator />
+							<div>
+								<p:dataTable paginator="true" paginatorPosition="bottom"
+									value="#{listCaseQuestion.questions}" var="us" id="dataTable7"
+									emptyMessage="#{lang['exam.empty_result']}" editable="true"
+									editMode="cell" styleClass="list" rowIndexVar="row"
+									style="width:100%" rows="50">
+									<p:column style="width:30px;text-align: center;">
+										<h:selectBooleanCheckbox id="checkMe" value="#{us.selected}" />
+										<f:facet name="header">
+											<h:outputText value="选择" />
+											<br />
+											<h:selectBooleanCheckbox id="checkAll"
+												onclick="checkAll('dataTable7');">
+											</h:selectBooleanCheckbox>
+										</f:facet>
+									</p:column>
+									<p:column sortBy="#{us.nickName}" filterBy="#{us.nickName}"
+										filterMatchMode="contains" style="width:250px;">
+										<h:outputText id="caseTitle2"
+											style="#{basketSession.basket.cases.contains(us)?'color:green!important;':''}"
+											value="#{fn:substring(us.nickName,0,25)}#{fn:length(us.nickName)>25?'...':''}"
+											escape="false" />
+										<p:draggable for="caseTitle2" helper="clone" zindex="105" />
+										<f:facet name="header">
+											<h:outputText value="题目别称" />
+										</f:facet>
+									</p:column>
+									<p:column sortBy="#{us.innerName}" filterBy="#{us.innerName}"
+										filterMatchMode="contains" style="width:250px;">
+										<h:outputText id="caseTitle"
+											style="#{basketSession.basket.cases.contains(us)?'color:green!important;':''}"
+											value="#{us.innerName}" escape="false" />
+										<p:draggable for="caseTitle" helper="clone" zindex="105" />
+										<f:facet name="header">
+											<h:outputText value="内部标识名" />
+										</f:facet>
+									</p:column>
+									<p:column sortBy="#{us.ord}"
+										style="width:40px;text-align: center;">
+										<p:tooltip for="modelOutput" value="点击编辑" />
+										<p:cellEditor>
+											<f:facet name="output">
+												<h:outputText id="modelOutput" value="#{us.ord}" />
+											</f:facet>
+											<f:facet name="input">
+												<p:inputText id="modelInput" value="#{us.ord}"
+													style="width:30px;">
+													<p:ajax event="change" update="@none"
+														listener="#{listCaseQuestion.editOrd(us.id)}" />
+												</p:inputText>
+											</f:facet>
+										</p:cellEditor>
+										<f:facet name="header">
+											<h:outputText value="次序" />
+										</f:facet>
+									</p:column>
+									<p:column sortBy="#{us.genTime}"
+										style="width:100px;text-align: center;">
+										<h:outputText value="#{us.genTime}">
+											<f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+												timeZone="GMT+8" />
+										</h:outputText>
+										<f:facet name="header">
+											<h:outputText value="添加时间" />
+										</f:facet>
+									</p:column>
+									<p:column style="width:40px;text-align: center;">
+										<h:outputLink
+											value="AACaseQuestion.jspx?id=#{us.id}&amp;module_id=#{listCaseQuestion.module.id}">
+											<h:outputText value="修改" />
+										</h:outputLink>
+										<f:facet name="header">
+											<h:outputText value="修改" />
+										</f:facet>
+									</p:column>
+								</p:dataTable>
+								<p:outputPanel autoUpdate="true">
+									<h:outputText
+										value="共有#{listCaseQuestion.questions.size()}条数据！" />
+								</p:outputPanel>
+							</div>
+						</p:tab> -->
+
+
+					</p:tabView>
+
+				</p:panel>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

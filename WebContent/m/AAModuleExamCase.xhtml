@@ -1,0 +1,356 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <div>
+                    <h:outputText id="outputText1" styleClass="tit" value="-章节练习成绩详情-" />
+                </div>
+                <p:separator/>
+                <h:panelGrid columns="1" style="width:90%;">
+                    <h:panelGroup>
+                        <h:outputText value="章节名称："/>
+                        <h:outputText value="#{moduleExamCaseReport.examCase.examModule.name}"/>
+                    </h:panelGroup>
+                    <h:panelGroup>
+                        <h:outputText value="考生姓名："/>
+                        <h:outputText value="#{moduleExamCaseReport.examCase.user.name}（#{moduleExamCaseReport.examCase.user.username}）"/>
+                    </h:panelGroup>
+                    <h:panelGroup>
+                        <h:outputText value="开始时间："/>
+                        <h:outputText value="#{moduleExamCaseReport.examCase.genTime}">
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8"/>
+                        </h:outputText>
+                    </h:panelGroup>
+                    <h:panelGroup>
+                        <h:outputText value="结束时间："/>
+                        <h:outputText value="#{moduleExamCaseReport.examCase.submitTime}">
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8"/>
+                        </h:outputText>
+                    </h:panelGroup>
+                    <h:panelGroup>
+                        <h:outputText value="IP地址："/>
+                        <p:commandLink value="#{moduleExamCaseReport.examCase.ip}" title="#{moduleExamCaseReport.examCase.ipAddr}" />
+                    </h:panelGroup>
+                    <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                        <h:outputText value="练习题型："/>
+                        <h:panelGroup>
+                            <h:outputText value="单选题：#{moduleExamCaseReport.examCase.choiceTotal}，多选题：#{moduleExamCaseReport.examCase.multiChoiceTotal}，填空题：#{moduleExamCaseReport.examCase.fillTotal}"/>
+                            <h:outputText value="判断题：#{moduleExamCaseReport.examCase.judgeTotal}，问答题：#{moduleExamCaseReport.examCase.essayTotal}，文件题：#{moduleExamCaseReport.examCase.fileTotal}"/>
+                            <h:outputText value="，综合题：#{moduleExamCaseReport.examCase.caseTotal}" rendered="#{copyrightController.sysType!='1'}"/>
+                        </h:panelGroup>
+                    </h:panelGrid>
+                    <h:panelGroup rendered="#{moduleExamCaseReport.examCase.moduleType eq 'random'}">
+                        <h:outputText value="练习成绩："/>
+                        <h:outputText value="#{moduleExamCaseReport.examCase.score}" style="color:red;font-weight: bold;font-size: 16px;">
+                            <f:convertNumber maxFractionDigits="2" minFractionDigits="1"/>
+                        </h:outputText>
+                    </h:panelGroup>
+
+                </h:panelGrid>
+                <p:separator/>
+
+                <p:dataTable value="#{moduleExamCaseReport.choices}" var="choice" rowIndexVar="row" rendered="#{fn:length(moduleExamCaseReport.examCase.choiceItems)!=0}">
+                    <p:column style="text-align:left;">
+                        <f:facet name="header">
+                            <h:outputText value="※单选题，每题#{moduleExamCaseReport.examInfo.choiceScore}分，共#{fn:length(moduleExamCaseReport.examCase.choiceItems)}题，得分："/>
+                            <h:outputText value="#{moduleExamCaseReport.examCase.choiceScore}">
+                                <f:convertNumber maxFractionDigits="2"/>
+                            </h:outputText>
+                        </f:facet>
+                        <h:outputText value="#{row+1}、#{choice.question.name}" escape="false" styleClass="choiceTitle"/>
+                        <div style="margin-left: 30px;">
+                            <ui:repeat value="#{choice.question.choices}" var="ch">
+                                <h:outputText value="#{ch.label}.&nbsp;#{ch.name}" styleClass="choiceTitle"/>
+                                <br/>
+                            </ui:repeat>
+                        </div>
+                        <div style="margin-left: 30px;">
+                            <h:outputText value="正确答案：" styleClass="answer" />
+                            <h:outputText value="#{choice.question.answer}" style="color:green;font-weight: bold;"/>&nbsp;
+                            <h:outputText value="，考生填写：" styleClass="answer"/>
+                            <h:outputText value="#{choice.userAnswer==null?'未填写':choice.userAnswer}"  style="color:green;font-weight: bold;"/>&nbsp;&nbsp;
+                            <h:outputText value="#{choice.ifRight?'√':'×'}" style="color:#{choice.ifRight?'green':'red'};font-weight:bolder;font-size:25px;font-family:宋体;"/>
+                            <br/>
+                            <h:outputText value="试题解析：" styleClass="answer"/>
+                            <h:outputText value="#{choice.question.rightStr}" escape="false"  style="color:green;"/>
+                            <br/>
+                        </div>
+                    </p:column>
+                </p:dataTable>
+
+                <p:dataTable value="#{moduleExamCaseReport.mchoices}" var="choice" rowIndexVar="row" rendered="#{fn:length(moduleExamCaseReport.examCase.multiChoiceItems)!=0}">
+                    <p:column style="text-align:left;">
+                        <f:facet name="header">
+                            <h:outputText value="※多选题，每题#{moduleExamCaseReport.examInfo.multiChoiceScore}分，共#{fn:length(moduleExamCaseReport.examCase.multiChoiceItems)}题，得分："/>
+                            <h:outputText value="#{moduleExamCaseReport.examCase.multiChoiceScore}">
+                                <f:convertNumber maxFractionDigits="2"/>
+                            </h:outputText>
+                        </f:facet>
+                        <h:outputText value="#{row+1}、#{choice.question.name}" escape="false" styleClass="choiceTitle"/>
+
+                        <div style="margin-left: 30px;">
+                            <ui:repeat value="#{choice.question.choices}" var="ch">
+                                <h:outputText value="#{ch.label}.&nbsp;#{ch.name}" styleClass="choiceTitle"/>
+                                <br/>
+                            </ui:repeat>
+                        </div>
+                        <div style="margin-left: 30px;">
+                            <h:outputText value="正确答案：" styleClass="answer"/>
+                            <h:outputText value="#{choice.question.answer}" style="color:green;font-weight: bold;"/>&nbsp;
+                            <h:outputText value="，考生填写：" styleClass="answer"/>
+                            <h:outputText value="#{choice.userAnswer==''?'未填写':choice.userAnswer}"  style="color:green;font-weight: bold;"/>&nbsp;&nbsp;
+                            <h:outputText value="#{choice.ifRight?'√':'×'}" style="color:#{choice.ifRight?'green':'red'};font-weight:bolder;font-size:25px;font-family:宋体;"/>
+                            <br/>
+                            <h:outputText value="试题解析：" styleClass="answer"/>
+                            <h:outputText value="#{choice.question.rightStr}" escape="false"  style="color:green;"/>
+                            <br/>
+                        </div>
+                    </p:column>
+                </p:dataTable>
+
+                <p:dataTable  value="#{moduleExamCaseReport.fills}" var="fill" rowIndexVar="row" rendered="#{fn:length(moduleExamCaseReport.examCase.fillItems)!=0}">
+                    <p:column style="text-align:left;">
+                        <f:facet name="header">
+                            <h:outputText value="※填空题，每题#{moduleExamCaseReport.examInfo.fillScore}分，共#{fn:length(moduleExamCaseReport.examCase.fillItems)}题，得分："/>
+                            <h:outputText value="#{moduleExamCaseReport.examCase.fillScore}">
+                                <f:convertNumber maxFractionDigits="2"/>
+                            </h:outputText>
+                        </f:facet>
+                        <h:outputText value="#{row+1}、" styleClass="choiceTitle"/>
+                        <ui:repeat value="#{fill.blocks}" var="b">
+                            <h:outputText value="#{b.preStr}" escape="false" styleClass="choiceTitle"/>
+                            <h:outputText value="________"/>
+                        </ui:repeat>
+                        <h:outputText value="#{fill.lastStr}" escape="false" styleClass="choiceTitle"/><br/>
+                        <div style="margin-left: 30px;">
+                            <h:outputText value="正确答案：" styleClass="answer"/>
+                            <h:outputText value="#{fill.rightAnswerStr}" style="color:green;font-weight: bold;"/>
+                            <h:outputText value="考生填写：" styleClass="answer"/>
+                            <h:outputText value="#{fill.userAnswerStr==''?'未填写':fill.userAnswerStr}" style="color:green;font-weight: bold;"/>&nbsp;
+                            <h:outputText value="正确数：" styleClass="answer"/>
+                            <h:outputText value="#{fill.rightNum}"  style="color:green;font-weight: bold;"/>
+                            <br/>
+                            <h:outputText value="试题解析："  styleClass="answer"/>
+                            <h:outputText value="#{fill.question.rightStr}"  escape="false" style="color:green;"/>
+                            <br/>
+                        </div>
+                    </p:column>
+                </p:dataTable>
+
+                <p:dataTable  value="#{moduleExamCaseReport.judges}" var="judge" rowIndexVar="row"  rendered="#{fn:length(moduleExamCaseReport.examCase.judgeItems)!=0}">
+                    <p:column style="text-align:left;">
+                        <f:facet name="header" >
+                            <h:outputText value="※判断题，每题#{moduleExamCaseReport.examInfo.judgeScore}分，共#{fn:length(moduleExamCaseReport.examCase.judgeItems)}题，得分："/>
+                            <h:outputText value="#{moduleExamCaseReport.examCase.judgeScore}">
+                                <f:convertNumber maxFractionDigits="2"/>
+                            </h:outputText>
+                        </f:facet>
+                        <h:outputText value="#{row+1}、#{judge.question.name}" styleClass="choiceTitle"/><br/>
+                        <div style="margin-left: 30px;">
+                            <h:outputText value="正确答案：" styleClass="answer"/>
+                            <h:outputText value="#{judge.question.answer eq 'true'?'正确':'错误'}"  style="color:green;font-weight: bold;"/>
+                            <h:outputText value="，考生填写：" styleClass="answer"/>
+                            <h:outputText value="#{judge.userAnswer}"  style="color:green;font-weight: bold;"/>&nbsp;&nbsp;
+                            <h:outputText value="#{judge.ifRight?'√':'×'}" style="color:#{judge.ifRight?'green':'red'};font-weight:bolder;font-size:25px;font-family:宋体;"/>
+                            <br/>
+                            <h:outputText value="试题解析：" styleClass="answer"/>
+                            <h:outputText value="#{judge.question.rightStr}" escape="false"  style="color:green;"/>
+                            <br/>
+                        </div>
+                    </p:column>
+                </p:dataTable>
+
+                <p:dataTable  value="#{moduleExamCaseReport.essaies}" var="essay" rowIndexVar="row"  rendered="#{fn:length(moduleExamCaseReport.examCase.essayItems)!=0}">
+                    <p:column style="text-align:left;">
+                        <f:facet name="header" >
+                            <h:outputText value="※问答题，每题#{moduleExamCaseReport.examInfo.essayScore}分，共#{fn:length(moduleExamCaseReport.examCase.essayItems)}题，得分："/>
+                            <h:outputText value="#{moduleExamCaseReport.examCase.essayScore}">
+                                <f:convertNumber maxFractionDigits="2"/>
+                            </h:outputText>
+                        </f:facet>
+                        <h:outputText value="#{row+1}、#{essay.question.name}" styleClass="choiceTitle" escape="false"/><br/>
+                        <div style="margin-left: 30px;">
+                            <h:outputText value="正确答案：" styleClass="answer"/>
+                            <h:outputText value="#{essay.question.answer}" escape="false"  style="color:green;font-weight: bold;"/><br/>
+                            <h:outputText value="考生填写：" styleClass="answer"/>
+                            <h:outputText value="#{essay.userAnswer}"  escape="false" style="color:green;font-weight: bold;"/><br/>
+                            <h:outputText value="正确率："  styleClass="answer"/>
+                            <h:outputText value="#{essay.rightRatio}" style="color:red;font-weight:bold;">
+                                <f:convertNumber maxFractionDigits="2" type="percent"/>
+                            </h:outputText>
+                            <br/>
+                            <h:outputText value="试题解析：" styleClass="answer"/>
+                            <h:outputText value="#{essay.question.rightStr}" escape="false"  style="color:green;"/>
+                            <br/>
+                        </div>
+                    </p:column>
+                </p:dataTable>
+
+                <p:dataTable  value="#{moduleExamCaseReport.files}" var="file" rowIndexVar="row"  rendered="#{fn:length(moduleExamCaseReport.examCase.fileItems)!=0}">
+                    <p:column style="text-align:left;">
+                        <f:facet name="header" >
+                            <h:outputText value="※文件题，每题#{moduleExamCaseReport.examInfo.fileScore}分，共#{fn:length(moduleExamCaseReport.examCase.fileItems)}题，得分："/>
+                            <h:outputText value="#{moduleExamCaseReport.examCase.fileScore}">
+                                <f:convertNumber maxFractionDigits="2"/>
+                            </h:outputText>
+                        </f:facet>
+                        <h:outputText value="#{row+1}、#{file.question.name}" styleClass="choiceTitle" escape="false"/>
+                        <div style="margin-left: 30px;">
+                            <h:outputText value="操作步骤：" styleClass="answer" escape="false"/>
+                            <h:outputText value="#{file.question.answer}"  style="color:green;font-weight: bold;" escape="false"/><br/>
+                            <h:outputText value="考生操作步骤：" styleClass="answer" escape="false"/>
+                            <h:outputText value="#{file.userAnswer}"  style="color:green;font-weight: bold;" escape="false"/><br/>
+                            <h:outputText value="附件：" styleClass="answer" />
+                            <h:outputLink target="_blank" value="#{facesContext.externalContext.requestContextPath}/DownloadFileQuestionAttach?id=#{file.id}" rendered="#{file.attached}">
+                                <h:outputText value="#{file.id}.rar"/>
+                            </h:outputLink><br/>
+                            <h:outputText value="正确率："  styleClass="answer" />
+                            <h:outputText value="#{file.rightRatio}" style="color:red;font-weight:bold;">
+                                <f:convertNumber maxFractionDigits="2" type="percent"/>
+                            </h:outputText><br/>
+                            <h:outputText value="教师评语：" styleClass="answer"/>
+                            <h:outputText value="#{file.remark}"  escape="false" style="color:green;"/><br/>
+                            <h:outputText value="试题解析：" styleClass="answer"/>
+                            <h:outputText value="#{file.question.rightStr}" escape="false"  style="color:green;"/>
+                            <br/>
+                        </div>
+                    </p:column>
+                </p:dataTable>
+
+
+                <ui:repeat value="#{moduleExamCaseReport.examCase.caseItems}" var="case1">
+                    <p:panel style="width:100%;">
+                        <f:facet name="header">
+                            <h:outputText value="#{case1.question.nickName}" style="" styleClass="choiceTitle" escape="false"/>
+                            <h:outputText value="，得分："/>
+                            <h:outputText value="#{moduleExamCaseReport.examCase.caseScore}"/>
+                        </f:facet>
+                        <h:outputText value="#{case1.question.content}" styleClass="choiceTitle" escape="false" style="padding:5px 10px 5px 10px;"/>
+                        <br/>
+                        <p:separator/>
+
+                        <ui:repeat  value="#{case1.choiceItems}" var="choice" varStatus="row" rendered="#{fn:length(case1.choiceItems)!=0}">
+                            <a id="archor-#{choice.id}" href="#"></a>
+                            <h:outputText value="（#{row.index+1}）#{choice.question.name}" style="#{choice.marked?'color:red;':''}" styleClass="choiceTitle" escape="false"/>
+                            <div style="margin-left: 30px;">
+                                <ui:repeat value="#{choice.question.choices}" var="ch">
+                                    <h:outputText value="#{ch.label}.&nbsp;#{ch.name}" styleClass="choiceTitle"/>
+                                    <br/>
+                                </ui:repeat>
+                            </div>
+                            <div style="margin-left: 30px;">
+                                <h:outputText value="正确答案：" styleClass="answer"/>
+                                <h:outputText value="#{choice.question.answer}" style="color:green;font-weight: bold;"/>&nbsp;
+                                <h:outputText value="，考生填写：" styleClass="answer"/>
+                                <h:outputText value="#{choice.userAnswer==null?'未填写':choice.userAnswer}"  style="color:green;font-weight: bold;"/>&nbsp;&nbsp;
+                                <h:outputText value="#{choice.ifRight?'√':'×'}" style="color:#{choice.ifRight?'green':'red'};font-weight:bolder;font-size:25px;font-family:宋体;"/>
+                                <br/>
+                                <h:outputText value="试题解析：" styleClass="answer"/>
+                                <h:outputText value="#{choice.question.rightStr}" escape="false"  style="color:green;"/>
+                            </div>
+
+                            <hr/>
+                        </ui:repeat>
+
+                        <ui:repeat value="#{case1.multiChoiceItems}" var="choice" varStatus="row" rendered="#{fn:length(case1.multiChoiceItems)!=0}">
+                            <a id="archor-#{choice.id}" href="#"></a>
+                            <h:outputText value="（#{fn:length(case1.choiceItems)+row.index+1}）#{choice.question.name}" styleClass="choiceTitle" escape="false"/>
+
+                            <div style="margin-left: 30px;">
+                                <ui:repeat value="#{choice.question.choices}" var="ch">
+                                    <h:outputText value="#{ch.label}.&nbsp;#{ch.name}" styleClass="choiceTitle"/>
+                                    <br/>
+                                </ui:repeat>
+                            </div>
+                            <div style="margin-left: 30px;">
+                                <h:outputText value="正确答案：" styleClass="answer"/>
+                                <h:outputText value="#{choice.question.answer}" style="color:green;font-weight: bold;"/>&nbsp;
+                                <h:outputText value="，考生填写：" styleClass="answer"/>
+                                <h:outputText value="#{choice.userAnswer==''?'未填写':choice.userAnswer}"  style="color:green;font-weight: bold;"/>&nbsp;&nbsp;
+                                <h:outputText value="#{choice.ifRight?'√':'×'}" style="color:#{choice.ifRight?'green':'red'};font-weight:bolder;font-size:25px;font-family:宋体;"/>
+                                <br/>
+                                <h:outputText value="试题解析：" styleClass="answer"/>
+                                <h:outputText value="#{choice.question.rightStr}" escape="false"  style="color:green;"/>
+                            </div>
+                            <hr/>
+                        </ui:repeat>
+                        <ui:repeat   value="#{case1.fillItems}" var="fill"  varStatus="row" rendered="#{fn:length(case1.fillItems)!=0}">
+                            <a id="archor-#{fill.id}" href="#"></a>
+                            <h:outputText value="（#{fn:length(case1.choiceItems)+fn:length(case1.multiChoiceItems)+row.index+1}）"  styleClass="choiceTitle"/>
+                            <ui:repeat value="#{fill.blocks}" var="b">
+                                <h:outputText value="#{b.preStr}" escape="false" styleClass="choiceTitle"/>
+                                <h:outputText value="________"/>
+                            </ui:repeat>
+                            <h:outputText value="#{fill.lastStr}" escape="false" styleClass="choiceTitle"/><br/>
+                            <div style="margin-left: 30px;">
+                                <h:outputText value="正确答案：" styleClass="answer"/>
+                                <h:outputText value="#{fill.rightAnswerStr}" style="color:green;font-weight: bold;"/>
+                                <h:outputText value="考生填写：" styleClass="answer"/>
+                                <h:outputText value="#{fill.userAnswerStr==''?'未填写':fill.userAnswerStr}" style="color:green;font-weight: bold;"/>&nbsp;
+                                <h:outputText value="正确数：" styleClass="answer"/>
+                                <h:outputText value="#{fill.rightNum}"  style="color:green;font-weight: bold;"/>
+                                <br/>
+                                <h:outputText value="试题解析："  styleClass="answer"/>
+                                <h:outputText value="#{fill.question.rightStr}"  escape="false" style="color:green;"/>
+                            </div>
+                            <hr/>
+                        </ui:repeat>
+                        <ui:repeat  value="#{case1.judgeItems}" var="judge" varStatus="row"  rendered="#{fn:length(case1.judgeItems)!=0}">
+
+                            <a id="archor-#{judge.id}" href="#"></a>
+                            <h:outputText value="（#{fn:length(case1.choiceItems)+fn:length(case1.multiChoiceItems)+fn:length(case1.fillItems)+row.index+1}）#{judge.question.name}" escape="false" styleClass="choiceTitle"/>
+                            <div style="margin-left: 30px;">
+                                <h:outputText value="正确答案：" styleClass="answer"/>
+                                <h:outputText value="#{judge.rightAnswer}"  style="color:green;font-weight: bold;"/>
+                                <h:outputText value="，考生填写：" styleClass="answer"/>
+                                <h:outputText value="#{judge.userAnswer}"  style="color:green;font-weight: bold;"/>&nbsp;&nbsp;
+                                <h:outputText value="#{judge.ifRight?'√':'×'}" style="color:#{judge.ifRight?'green':'red'};font-weight:bolder;font-size:25px;font-family:宋体;"/>
+                                <br/>
+                                <h:outputText value="试题解析：" styleClass="answer"/>
+                                <h:outputText value="#{judge.question.rightStr}" escape="false"  style="color:green;"/>
+                            </div>
+                            <hr/>
+                        </ui:repeat>
+                        <ui:repeat  value="#{case1.essayItems}" var="essay" varStatus="row"  rendered="#{fn:length(case1.essayItems)!=0}">
+                            <a id="archor-#{essay.id}" href="#"></a>
+                            <h:outputText value="（#{fn:length(case1.choiceItems)+fn:length(case1.multiChoiceItems)+fn:length(case1.fillItems)+fn:length(case1.judgeItems)+row.index+1}）#{essay.question.name}" style="#{essay.marked?'color:red;':''}" styleClass="choiceTitle" escape="false"/><br/>
+                            <div style="margin-left: 30px;">
+                                <h:outputText value="正确答案：" styleClass="answer"/>
+                                <h:outputText value="#{essay.question.answer}" escape="false"  style="color:green;font-weight: bold;"/><br/>
+                                <h:outputText value="考生填写：" styleClass="answer"/>
+                                <h:outputText value="#{essay.userAnswer}"  escape="false" style="color:green;font-weight: bold;"/><br/>
+                                <h:outputText value="正确率："  styleClass="answer"/>
+                                <h:outputText value="#{essay.rightRatio}" style="color:red;font-weight:bold;">
+                                    <f:convertNumber maxFractionDigits="2" type="percent"/>
+                                </h:outputText>
+                                <br/>
+                                <h:outputText value="试题解析：" styleClass="answer"/>
+                                <h:outputText value="#{essay.question.rightStr}" escape="false"  style="color:green;"/>
+                            </div>
+                            <hr/>
+                        </ui:repeat>
+                    </p:panel>
+                </ui:repeat>
+
+
+
+
+                <p:separator/>
+                <p:commandButton  value="返回" action="ListModuleExamCase?faces-redirect=true" styleClass="commonSubmit"></p:commandButton>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

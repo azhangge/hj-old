@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:p="http://primefaces.org/ui">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body> 
+        <ui:composition>
+            <p:dialog id="judgeDialog" widgetVar="judgeDialog" resizable="false" closable="true" width="680">  
+                <f:facet name="header">  
+                    <h:outputText value="查看判断题" /> 
+                </f:facet>  
+                <h:panelGroup id="judgePanel">
+                    <h:panelGrid columns="2" columnClasses="thdL,thdR">
+                        <h:outputText value="题目内容：" />
+                        <h:panelGroup>
+                            <pe:ckEditor id="newJudge" widgetVar="newJudge" value="#{caseEditJudge.judgeAgent.cq.name}"  customConfig="#{facesContext.externalContext.requestContextPath}/resources/js/ckeditor_config2.js" width="560" height="80">
+                                <pe:javascript  event="initialize" execute="onLoadCallback('newJudge')" />
+                                <pe:javascript  rendered="#{applicationBean.systemConfig.autoUpload}" event="blur" execute="uploader.uploadWordImagesFromCKEditor(PF('newJudge').instance,'#{caseEditJudge.cq.id}')" />
+                            </pe:ckEditor>
+                        </h:panelGroup>
+                        <h:outputText value="次序：" />
+                        <h:inputText  value="#{caseEditJudge.judgeAgent.cq.ord}" style="width: 50px;"/>
+                        <h:outputText value="题目答案：" />
+                        <h:panelGroup>
+                            <h:outputText value="正确？" />
+                            <h:selectBooleanCheckbox value="#{caseEditJudge.judgeAgent.cq.answer}"/>
+                        </h:panelGroup>
+                        <h:outputText value="试题解析：" />
+                        <h:panelGroup>
+                            <pe:ckEditor id="newJudge3" widgetVar="newJudge3" value="#{caseEditJudge.judgeAgent.cq.rightStr}"  customConfig="#{facesContext.externalContext.requestContextPath}/resources/js/ckeditor_config2.js" width="560" height="80">
+                                <pe:javascript  event="initialize" execute="onLoadCallback('newJudge3')" />
+                                <pe:javascript  rendered="#{applicationBean.systemConfig.autoUpload}" event="blur" execute="uploader.uploadWordImagesFromCKEditor(PF('newJudge3').instance,'#{caseEditJudge.cq.id}')" />
+                            </pe:ckEditor>
+                        </h:panelGroup>
+                    </h:panelGrid>
+                </h:panelGroup>  
+                <p:separator/>
+                <p:commandButton action="#{caseEditJudge.judgeAgent.caseMBDone()}" process="@form" value="完成" oncomplete="PF('judgeDialog').hide();" update=":myForm:dataTable2"/>
+            </p:dialog>
+        </ui:composition>
+    </body>
+</html>

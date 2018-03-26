@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <h:head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </h:head>
+    <h:body>
+        <ui:composition template="General3.xhtml">
+            <ui:define name="title">
+                <h:outputText value="课程分类" />
+            </ui:define>
+            <ui:define name="content">
+                <p:panel id="topNav8" styleClass="frontColumn topNav8Wrapper">
+                    <h:outputLink value="#{facesContext.externalContext.requestContextPath}" styleClass="nav8">
+                        <h:outputText value="首页" />
+                    </h:outputLink>
+                    <h:outputText value="/" styleClass="navSeparator"/>
+                    <h:outputText value="课程" styleClass="nav8"/>
+                    <br/>
+                    <!-- 图标列表 -->
+                    <h:outputLink value="#{facesContext.externalContext.requestContextPath}/talk/LessonTypeList2.jspx" styleClass="headerx">
+                            <h:outputText value="图标列表"></h:outputText>
+                    </h:outputLink>
+                </p:panel>
+                <p:dataTable value="#{lessonTypeList.lessonTypes}" var="zone" style="width:100%"  styleClass="frontColumn" rows="10" emptyMessage="暂无课程" paginator="true" paginatorPosition="bottom" >
+                    <p:column style="width:250px!important;text-align: left;">
+                        <f:facet name="header">
+                            <h:outputText value="课程" />
+                        </f:facet>
+                        <h:outputLink value="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{zone.id}" styleClass="headerx">
+                            <h:outputText value="#{zone.name}"></h:outputText>
+                        </h:outputLink><br/>
+                        <h:outputText value="类别介绍：" styleClass="tip"/>
+                        <h:outputText value="#{zone.description1}" styleClass="tip"/>
+                    </p:column>
+                    <p:column style="width:80px!important;text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="课程总数" />
+                        </f:facet>
+                        <h:outputText value="#{zone.showedLessonNum}" styleClass="tip"/><br/>
+                    </p:column>
+                    <p:column style="width:80px!important;text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="最低要求数" />
+                        </f:facet>
+                        <h:outputText value="#{zone.openExamNum}" styleClass="tip"/><br/>
+                    </p:column>
+                    <p:column style="width:80px!important;text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="已完成数" />
+                        </f:facet>
+                        <h:outputText value="#{zone.finishedNum}" styleClass="tip"/><br/>
+                    </p:column>
+                    <p:column style="width:80px!important;text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="相关考试数" />
+                        </f:facet>
+                        <h:outputText value="#{zone.exams.size()}" styleClass="tip"/><br/>
+                    </p:column>
+                    <p:column style="text-align: center;width:100px;">
+                        <f:facet name="header">
+                            <h:outputText value="课程学习" />
+                        </f:facet>
+                        <p:button value="进入学习" href="/talk/LessonList.jspx?tid=#{zone.id}"/>
+                    </p:column>
+                </p:dataTable>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

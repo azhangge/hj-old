@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:f="http://java.sun.com/jsf/core" lang="en"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:head>
+	<title>My Facelets Page</title>
+	<meta http-equiv="keywords" content="enter,your,keywords,here" />
+	<meta http-equiv="description"
+		content="A short description of this page." />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+	<!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+</h:head>
+<h:body>
+	<ui:composition template="../HJ/HJGeneral.xhtml">
+		<ui:define name="title">
+			<h:outputText value="自助练习列表" />
+		</ui:define>
+		<ui:define name="content">
+		<link type="text/css" rel="stylesheet" href="../HJ/css/navigation.css" />
+			<script type="text/javascript" language="javascript">
+				function aabbcc(url) {
+					var scrWidth = screen.availWidth;
+					var scrHeight = screen.availHeight;
+					var self = window
+							.open(
+									url,
+									'',
+									"fullscreen=3,resizable=false,toolbar=no,menubar=no,scrollbars=yes,location=no,top=0,left=0,width="
+											+ scrWidth + ",height=" + scrHeight);
+					//self.resizeTo(scrWidth,scrHeight);
+					self.moveTo(0, 0);
+				}
+			</script>
+			<!-- <p:panel id="topNav8" styleClass="frontColumn topNav8Wrapper">
+				<h:outputLink value="#{facesContext.externalContext.requestContextPath}" styleClass="nav8">
+					<h:outputText value="首页" />
+				</h:outputLink>
+				<h:outputText value=">" styleClass="navSeparator" />
+				<h:outputText value="自助练习" styleClass="nav8" />
+                <h:outputLink value="#{facesContext.externalContext.requestContextPath}/talk/BuffetExamCaseReportList.jspx" styleClass="nav8" style="float:right;">
+                    <h:outputText value="练习成绩查询" />
+                </h:outputLink>
+			</p:panel> -->
+			<div class="navigation yahei bold" >
+				<div class="navigation_div">
+					<a href="#{facesContext.externalContext.requestContextPath}/" class="navigation_link">首页</a>
+				</div>
+				<div class="navigation_separate">/</div>
+				<div class="navigation_div">自助练习</div>
+			</div>
+			<div class="div-content">
+				<div class="div-panel">
+				<p:dataTable id="examDc"
+					value="#{(applicationBean.systemConfig.onlyDept and clientSession.ifLogin)?buffetExaminationList.accessibleExams:buffetExaminationList.exams}"
+					var="exam" style="width:100%" styleClass="frontColumn" rowIndexVar="row" emptyMessage="暂无练习" rows="10"
+					paginator="true" paginatorPosition="bottom">
+					<p:column id="num" style="width:50px;text-align: center;">
+						<h:outputText style="height: 5%" value="#{row+1}" />
+						<f:facet name="header">
+							<h:outputText id="outputTextnum" value="序号" />
+						</f:facet>
+					</p:column>
+					<p:column id="columnRefType" sortBy="#{exam.name}" style="width:300px!important;text-align: left;"
+						filterBy="#{exam.name}" filterMatchMode="contains" filterStyle="width:60%;display:inline;margin-left:10px;">
+						<f:facet name="header">
+							<h:outputText value="练习名称" />
+						</f:facet>
+
+						<h:outputText value="#{exam.name}"></h:outputText>
+					</p:column>
+					<p:column style="width:100px!important;text-align: center;" sortBy="#{exam.timeLen}">
+						<f:facet name="header">
+							<h:outputText value="练习时长" />
+						</f:facet>
+						<h:outputText value="#{exam.timeLen}分钟" styleClass="tip" />
+						<br />
+					</p:column>
+					<!-- <p:column style="text-align: center;width:80px"  sortBy="#{exam.scorePaid}"
+					rendered="#{applicationBean.systemConfig.showScore and copyrightController.sysType!='1'}">
+					<f:facet name="header">
+						<h:outputText value="积分" />
+					</f:facet>
+					<h:outputText id="scorePaid" value="积分消耗：#{exam.scorePaid}"
+						styleClass="tip" />
+					<br />
+					<h:outputText id="fullScore" value="满分积分：#{exam.bbsScore}"
+						styleClass="tip" />
+					<p:tooltip for="scorePaid" value="参加考试时消耗积分#{exam.scorePaid}" />
+					<p:tooltip for="fullScore" value="实际获得积分=实际成绩/满分*#{exam.bbsScore}" />
+
+				</p:column> -->
+					<p:column style="text-align: center;width:100px;">
+						<f:facet name="header">
+							<h:outputText value="参加练习" />
+						</f:facet>
+						<p:button value="进入练习" href="PreBuffetExamCase.jspx?exam_id=#{exam.id}"
+							rendered="#{clientSession.ifLogin and clientSession.usr.checked and exam.scorePaid le clientSession.usr.score}" />
+						<p:commandLink value="请登录" rendered="#{!clientSession.ifLogin}" onclick="PF('login1').show()" />
+						<h:outputText value="您还未被审核&lt;br/>" escape="false"
+							rendered="#{!clientSession.usr.checked and clientSession.ifLogin}" />
+						<h:outputText value="积分不够" rendered="#{exam.scorePaid gt clientSession.usr.score and clientSession.ifLogin}" />
+					</p:column>
+				</p:dataTable>
+				</div>
+			</div>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

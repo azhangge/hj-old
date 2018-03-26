@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <body>
+        <ui:composition>
+            <p:dialog id="shareToPers1" width="650" widgetVar="shareToPers1" header="分享"
+                      style="text-align:left;position:absolute;">
+                <h:panelGrid columns="2">
+
+                    <h:outputLabel style="" id="outputText2"
+                                   value="文件：" />
+                    <h:outputText id="title" value="#{shareToPers.file.fileName}"
+                                  style="width:400px" />
+                    
+                    <h:outputText value="部门：" styleClass="text"></h:outputText>
+                    <h:panelGroup>
+                    <p:tree id="ss" value="#{shareToPers.root}" var="dic" selectionMode="single" selection="#{shareToPers.selectedNode}" style="" >
+                        <p:treeNode  expandedIcon="ui-icon-folder-open"  collapsedIcon="ui-icon-folder-collapsed" >
+                            <h:outputText value="#{dic.name}" ></h:outputText>
+                        </p:treeNode>
+                    </p:tree>
+                    <p:commandButton action="#{shareToPers.selectChange}" update="ddc" value="查找"/>
+                   </h:panelGroup>
+                    <h:outputLabel style="" value="对象：" />
+                    <h:panelGrid id="ddc" style="width:550px;" columns="8">
+                        <ui:repeat value="#{shareToPers.usersShowed}" var="co">
+                            <h:panelGroup>
+                            <h:selectBooleanCheckbox value="#{co.selected}" >
+                                <f:ajax event="change"></f:ajax>
+                            </h:selectBooleanCheckbox>
+                            <h:outputText value="#{co.user.name}"/>
+                            </h:panelGroup>
+                        </ui:repeat>
+                    </h:panelGrid>
+                </h:panelGrid>
+                <p:separator  />
+
+                <h:panelGrid columns="2">
+                    <p:commandButton id="fClink" action="#{shareToPers.save_action}" value="完成" update="dddc22" onclick="PF('shareToPers1').hide();">
+                    </p:commandButton>
+                </h:panelGrid>
+
+            </p:dialog>
+        </ui:composition>
+    </body>
+</html>
+

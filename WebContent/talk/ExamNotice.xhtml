@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<title>Facelet Title</title>
+</h:head>
+<h:body>
+	<ui:composition template="UserCenterGeneral.xhtml">
+		<ui:define name="ucontent">
+			<link type="text/css" rel="stylesheet" href="../HJ/css/exam_notice.css" />
+			<script type="text/javascript" src="../HJ/js/account_security.js"></script>
+			<div class="as_title">
+				<div class="title_1">考试中心</div>
+				<a>
+					<div class="title_2 onclick">考试通知</div>
+				</a>
+				<a>
+					<div class="title_3">考试日程</div>
+				</a>
+				<a>
+					<div class="title_3">过期考试</div>
+				</a>
+			</div>
+			<div class="accountsecurity">
+				<div class="as_content">
+					考试通知
+					<p:dataTable value="" var="" paginator="true" paginatorPosition="bottom">
+						
+					</p:dataTable>
+				</div>
+				<div class="as_content" style="display: none;">考试日程</div>
+				<div class="as_content" style="display: none;">过期考试</div>
+			</div>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>
+

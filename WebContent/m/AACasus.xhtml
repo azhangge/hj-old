@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:poue="http://primefaces.org/ui/extensions"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head> 
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+
+                <script type="text/javascript" src="../resources/ckfinder/ckfinder.js"></script>
+                <script type="text/javascript" language="javascript" src="#{facesContext.externalContext.requestContextPath}/rere_wimg_up/js/wordimage_uploader1.1.js"></script>
+
+                <script type="text/javascript">
+                    //var editor1 = CKEDITOR.replace('myForm:editor1');
+                    function onLoadCallback(editor1) {
+                        var ed = PF(editor1).instance;
+                        CKFinder.setupCKEditor(ed, '../resources/ckfinder/');
+                    }
+
+                </script>
+                <h:outputScript target="body" rendered="#{applicationBean.systemConfig.autoUpload}">
+
+                    var sUrl = 'http://#{facesContext.externalContext.requestServerName}:#{facesContext.externalContext.requestServerPort}#{facesContext.externalContext.requestContextPath}/servlet/WordImageUploader';
+                    var appName = '#{facesContext.externalContext.requestContextPath}';
+                    var repStr1 = 'http://#{facesContext.externalContext.requestServerName}:#{facesContext.externalContext.requestServerPort}#{facesContext.externalContext.requestContextPath}';
+                    var repStr2 = '..';
+                    var uploader = new WordImageUploader(sUrl, appName,repStr1,repStr2);
+                </h:outputScript>
+                <h:outputScript name="chinese_locale.js" library="js"/>
+                <h:form id="myForm" style="border:0px solid green;">
+                    <div>
+                        <h:outputText id="outputText1" styleClass="tit"
+                                      value="－#{aACasus.flag?'修改系统公告':'添加系统公告'}－" />
+                        <h:outputLink value="ListCasus.jspx" styleClass="common">
+                            <h:outputText value="返回"></h:outputText>
+                        </h:outputLink>
+                        <p:separator/>
+                        <h:panelGrid columns="2"  columnClasses="thdL,thdR" style="width:100%;">
+                            <h:outputLabel style="margin-left:10px;"
+                                           value="标题：" />
+                            <h:inputText id="title" value="#{aACasus.casus.title}"
+                                         style="width:700px" />
+                            <h:outputLabel style="margin-left:10px" value="录入时间：" />
+                            <p:calendar value="#{aACasus.casus.inputdate}" pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8" locale="zh_CN"/>
+                            <h:outputLabel style="margin-left:10px"
+                                           value="邮件通知：" />
+                            <h:panelGroup>
+                                <h:selectBooleanCheckbox value="#{aACasus.ifSendEmail}"/>
+                                <h:outputText value="（选中此项会向所有用户同步发送邮件通知，用户较多时将消耗大量资源，请慎重选择。）" style="color:green;"/>
+                            </h:panelGroup>
+                            
+                            <h:outputLabel style="margin-left:10px"
+                                           value="发送站内信：" />
+                            <h:panelGroup>
+                                <h:selectBooleanCheckbox value="#{aACasus.ifSendMessage}"/>
+                                <h:outputText value="（选中此项会向所有用户同步发送站内信）" style="color:green;"/>
+                            </h:panelGroup>
+                            
+                            <h:outputLabel style="margin-left:10px;"
+                                           value="内容：" />
+                            <poue:ckEditor id="editor1" widgetVar="editor1" value="#{aACasus.casus.content}" customConfig="#{facesContext.externalContext.requestContextPath}/resources/js/ckeditor_config1.js"  width="98%" height="250">
+                                <poue:javascript  event="initialize" execute="onLoadCallback('editor1')" />
+                                <poue:javascript rendered="#{applicationBean.systemConfig.autoUpload}" event="blur" execute="uploader.uploadWordImagesFromCKEditor(PF('editor1').instance,'#{aACasus.casus.id}')" />
+                            </poue:ckEditor>
+                        </h:panelGrid>
+                        <p:separator />
+
+                        <p:commandButton ajax="false" action="#{aACasus.submit_action}" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'notice')}" style="width:80px" value="提交" />
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

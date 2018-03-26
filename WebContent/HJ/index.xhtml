@@ -1,0 +1,273 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+
+</head>
+<ui:composition template="/HJ/GeneralW.xhtml">
+<ui:define name="title">
+    <h:outputText value="首页" />
+</ui:define>
+<ui:define name="content">
+<link type="text/css"  rel="stylesheet"  href="css/index.css"/>
+<script type="text/javascript" src="js/banner.js"></script>
+<script type="text/javascript" src="js/nav.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		var time = "#{welcomePage.picChangeTime}";
+		$(".fullSlide").slide({
+		    titCell: ".hd ul",
+		    mainCell: ".bd ul",
+		    effect: "fold",
+		    autoPlay: true,
+		    autoPage: true,
+		    trigger: "click",
+		    interTime : time,
+		    startFun: function(i) {
+		        var curLi = jQuery(".fullSlide .bd li").eq(i);
+		        if ( !! curLi.attr("_src")) {
+		            curLi.css("background-image", curLi.attr("_src")).removeAttr("_src")
+		        }
+		    }
+		});
+	});
+	
+	function ifLogin(){
+		if(#{empty clientSession.usr}){
+			PF('login1').show();
+			return false;
+		}
+	}
+</script>
+<body>
+<!--banner 开始-->
+<!--课程分类开始-->
+<div class="nav">
+      <div class="nav_allclass">
+           <div class="nav_course_classification">
+                <div class="nav_left">
+                      <div class="menu">
+                           <div class="all-sort"><h3><a href="#{facesContext.externalContext.requestContextPath}/talk/LessonTypeList2.jspx">全部课程</a></h3></div>
+                		</div>
+							<div class="wrap">
+								<div class="all-sort-list">
+									<ui:repeat  value="#{welcomePage.courseTypes}" var="labelType" >
+										<div class="item bo">
+											<h3>
+												<span>·</span><a href="#{facesContext.externalContext.requestContextPath}/talk/LessonTypeList2.jspx?lid=#{labelType.id}">#{labelType.name}</a>
+											</h3>
+											<div class="item-list clearfix">
+												<div class="subitem">
+													<dl class="fore1">
+														<dt>
+															<a href="#"></a>
+														</dt>
+														<dd>
+															<ui:repeat  value="#{labelType.sons}" var="label" >
+																<span><a href="#{facesContext.externalContext.requestContextPath}/talk/LessonTypeList2.jspx?lid=#{label.id}">#{label.name}</a></span>
+															</ui:repeat>
+														</dd>
+													</dl>
+												</div>
+											</div>
+										</div>
+									</ui:repeat>
+									
+								</div>
+							</div>
+						</div>
+						<h:panelGroup  id="personalInfo">
+			                <div class="nav_right">
+		                		  <c:if test="#{!clientSession.ifLogin}">
+		                		  	<div class="personal_info">
+							            <a href="#" onclick="PF('login1').show();"> 
+							            	<div class="notlogin_portrait"></div>
+							            </a>
+							            <a href="#" onclick="PF('login1').show();">
+							            	<div class="notlogin_login">马上登录</div>
+							            </a>
+						            </div>
+		                		  </c:if>
+			                      <c:if test="#{clientSession.ifLogin}">
+			                      <div class="personal_info">
+			                      
+			                            <!-- <div class="info_portrait">
+			                                  <ul>
+			                                       <li class="info_portrait_head"><a href="#"><img src="#{(empty clientSession.usr.picUrl)?('../HJ/image/notlogin.png'):
+                                         clientSession.usr.picUrl}" class="user_pic"/></a></li>
+			                                       <li class="info_name"><a href="#">#{clientSession.usr.name}</a></li>
+			                                       <li class="info_exit">
+			                                       	<p:commandLink value="退出" action="#{clientSession.exit}" update="@form" />
+			                                       </li>
+			                                  </ul>
+			                            </div> -->
+			                            <div class="info_course">
+			                                  <div class="info_course_left">
+			                                        <ul>
+			                                            <li><span class="gray">我的课程</span></li>
+			                                            <li><span class="num">#{myLessonTypeList.courseNum}</span></li>
+			                                        </ul>
+			                                  </div>
+			                                  <div class="info_course_line"></div>
+			                                  <div class="info_course_right">
+			                                       <ul>
+			                                           <li><span class="gray">累计学时</span></li>
+			                                           <li><span class="num">#{myLessonTypeList.totalFinishNum}</span></li>
+			                                       </ul>
+			                                  </div>
+			                            </div>
+			                            <div class="info_learn_courses">
+			                                 <ul>
+			                                 <ui:repeat var="course" value="#{myLessonTypeList.ltLogs}" size="#{myLessonTypeList.ltLogs.size() ge 4?4 : myLessonTypeList.ltLogs.size()}">
+			                                      <li><a href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{course.lessonType.id}">#{course.lessonType.name}</a></li>
+			                                 </ui:repeat>
+			                                 </ul>
+			                            </div>
+			                           <div class="info_coerse_table">
+			                           <a href="#{facesContext.externalContext.requestContextPath}/talk/MyLessonTypeList.jspx"><span>查看我的课程表</span></a>
+			                                
+			                                
+			                           </div>
+			                      </div>
+			                      </c:if>
+			                </div>
+						</h:panelGroup>
+           </div>
+      </div>
+</div>
+    <!--课程分类结束-->
+  <div style="width:1200px;margin: 0px auto;">
+    <div class="banner" style="height:260px;border:0px solid red;">
+      <div class="fullSlide">
+        <div class="bd">
+          <ul>
+          	<ui:repeat value="#{listPicture.pictureList}" var="pic">
+            	<li  style="background:##{pic.backcolor} center 0 no-repeat;" >
+            	<a href="#{pic.link}">
+            		<img src="../#{fn:replace(pic.url,'showimage','showabstractimage')}" style="width:800px;height:260px;"/>
+            	</a>
+            	</li>
+			</ui:repeat>
+          </ul>
+        </div>
+        <div class="hd" style="width:20%;left:40%;">
+             <ul></ul>
+        </div>
+    </div>
+    </div>
+  </div>
+  <!--banner 结束-->
+<!--主要内容开始-->
+<div class="course_content">
+<!--功能模块开始-->
+     <div class="function_module">
+     <div class="function_module_content">
+          <ul>
+              <li>
+                   <a href="#{facesContext.externalContext.requestContextPath}/talk/BuffetExaminationList.jspx" onclick="return ifLogin()">
+                       <span class="num">练习</span><br /><span class="gray">学习后练习巩固知识</span></a>
+              </li>
+                <li>
+                    <a href="#{facesContext.externalContext.requestContextPath}/talk/WrongQuestionList.jspx" onclick="return ifLogin()">
+                       <span class="num">错题</span><br /><span class="gray">错题自动收集</span>
+                   </a>
+              </li>
+                <li>
+                    <a href="#{facesContext.externalContext.requestContextPath}/talk/QuestionCollectionList.jspx" onclick="return ifLogin()">
+                       <span class="num">收藏</span><br /><span class="gray">随时随地收藏题目</span>
+                   </a>
+              </li>
+               <li>
+                     <a href="#{facesContext.externalContext.requestContextPath}/talk/MyExaminationList.xhtml" onclick="return ifLogin()">
+                     <span class="num">考试</span><br /><span class="gray">快速进入考试界面</span>
+                   </a>
+              </li>
+                <li>
+                     <a href="#{facesContext.externalContext.requestContextPath}/HJ/OutLecturerList.xhtml">
+                       <span class="num">讲师风采</span><br /><span class="gray">查看教师信息</span>
+                   </a>
+              </li>
+               <!-- <li>
+                     <a href="#{facesContext.externalContext.requestContextPath}/talk/IntensiveExaminationNoticeList.xhtml"  onclick="return ifLogin()">
+                     <span class="num">考试通知</span><br /><span class="gray">了解最新的考试动态</span>
+                      
+                     <a href="#{facesContext.externalContext.requestContextPath}/talk/MyExaminationList.xhtml">
+                     <span class="num">考试</span><br /><span class="gray">快速进入考试界面</span>
+                    
+                   </a>
+              </li> -->
+          </ul>
+     </div>
+     </div>
+<!--功能模块结束-->
+    <div class="course">
+    <ui:repeat value="#{welcomePage.FSCourseTypes}" var="labelType">
+         <div class="course_info">
+              <div class="course_left">
+                   <div class="course_left_title">#{labelType.name}</div>
+                   <div><img src="../#{fn:replace(labelType.picture,'showimage','showabstractimage')}" style="width:270px;height: 200px;" /></div>
+              </div>
+              <div class="course_right">
+                   <div class="slideTxtBox">
+                          <div class="hd"> 
+                                <ul class="hd_left">
+                                	<ui:repeat value="#{labelType.sons}" var="label">
+	                                  <li>#{label.name}</li>
+                                	</ui:repeat>
+                                </ul>
+                                <div class="hd_right lightgray"><a href="#{facesContext.externalContext.requestContextPath}/talk/LessonTypeList2.jspx?lid=#{labelType.id}">更多</a></div>
+                          </div>
+                          <div class="bd">
+	                          <ui:repeat value="#{labelType.sons}" var="label">
+	                            <ul>
+	                              <li>
+	                                 <div class="class-category">
+	                                      <ul>
+	                                      <h:panelGroup rendered="#{empty (welcomePage.getLessonTypesByIdAndNum(label.id,'4'))}">
+	                                      	    <div class="class-category_none">
+	                                      		<img src="../HJ/image/none.png"  class="" width="200px" height="146px" /> 
+	                                      	</div>
+	                                      </h:panelGroup>
+                                      	  <h:panelGroup rendered="#{!empty (welcomePage.getLessonTypesByIdAndNum(label.id,'4'))}">
+	                                      	<ui:repeat value="#{welcomePage.getLessonTypesByIdAndNum(label.id,'4')}" var="course">
+		                                        <li class="learncourse"> 
+			                                        <a href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{course.id}" target="_blank" class="course-img-link"> 
+			                                        	<img src="../#{fn:replace(course.picture,'showimage','showabstractimage')}"  class="course-img" width="207px" height="203px"/> 
+			                                        </a>
+		                                          <div class="course-tt"><a href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{course.id}" target="_blank" class="course-tt-link">#{course.name}</a></div>
+		                                          <div class="course-line course-line-bottom"> <span class="line-cell course-price hour">#{course.totalClassNum}课时</span> 
+		                                          <span class="course-source">
+		                                          <h:panelGroup rendered="#{!(empty course.teacher)}">
+			                                          <a href="#{facesContext.externalContext.requestContextPath}/HJ/LecturerStyle.xhtml?name=#{course.teacher.name}">
+			                                          <img src="image/img_lecturer.png"  class="course-lecturer"/>
+				                                          #{course.teacher.name}
+			                                          </a>
+		                                          </h:panelGroup>
+		                                          </span> </div>
+		                                          <!-- <ui:include src="CourseTemplate.xhtml"></ui:include> -->
+		                                        </li>
+	                                        </ui:repeat>
+	                                       </h:panelGroup>
+	                                      </ul>
+	                                    </div>
+	                              </li>
+	                            </ul>
+                              </ui:repeat>
+                          </div>
+                   </div>
+              </div>
+          </div>
+    </ui:repeat>
+    </div>
+</div>
+</body>
+</ui:define>
+</ui:composition>
+</html>

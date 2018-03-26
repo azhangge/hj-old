@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core"  lang="en">
+    <h:head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </h:head>
+    <h:body>
+        <ui:composition template="General3.xhtml">
+            <ui:define name="title">
+                <h:outputText value="章节练习" />
+            </ui:define>
+            <ui:define name="content">
+                <style>
+                    .tipAddOn{
+                        line-height: 25px;
+                    }
+                </style>
+                <p:panel id="topNav8" styleClass="frontColumn topNav8Wrapper">
+                    <h:outputLink value="#{facesContext.externalContext.requestContextPath}" styleClass="nav8">
+                        <h:outputText value="首页" />
+                    </h:outputLink>
+                    <h:outputText value=">" styleClass="navSeparator"/>
+                    <h:outputText value="章节练习" styleClass="nav8"/>
+                </p:panel>
+
+                <h:panelGrid columns="5" >
+                    <h:outputText value="按科目及章节筛选："/>
+                    <p:outputPanel id="module1">
+                        <h:selectOneMenu  value="#{examModule2List.moduleId1}">
+                            <f:selectItem itemValue="10000000000000000" itemLabel="--请选择--"/>
+                            <f:selectItems value="#{examModule2List.modules1}" var="module" itemLabel="#{module.name}" itemValue="#{module.id}"/>
+                            <p:ajax process="@form" listener="#{examModule2List.changeModule(1)}" update="module2 goodsTable"/>
+                        </h:selectOneMenu>
+                    </p:outputPanel>
+                    <p:outputPanel id="module2">
+                        <h:selectOneMenu  value="#{examModule2List.moduleId2}" rendered="#{examModule2List.modules2.size()!=0}">
+                            <f:selectItem itemValue="10" itemLabel="--请选择--"/>
+                            <f:selectItems value="#{examModule2List.modules2}" var="module" itemLabel="#{module.name}" itemValue="#{module.id}"/>
+                            <p:ajax listener="#{examModule2List.changeModule(2)}" update="module3 goodsTable"/>
+                        </h:selectOneMenu>
+                    </p:outputPanel>
+                    <p:outputPanel id="module3">
+                        <h:selectOneMenu  value="#{examModule2List.moduleId3}" rendered="#{examModule2List.modules3.size()!=0}">
+                            <f:selectItem itemValue="100" itemLabel="--请选择--"/>
+                            <f:selectItems value="#{examModule2List.modules3}" var="module" itemLabel="#{module.name}" itemValue="#{module.id}"/>
+                            <p:ajax listener="#{examModule2List.changeModule(3)}" update="goodsTable"/>
+                        </h:selectOneMenu>
+                    </p:outputPanel>
+                </h:panelGrid>
+
+                <p:treeTable id="goodsTable" value="#{examModule2List.root}"  var="dic" style="width:100%;" styleClass="frontColumn" emptyMessage="没有您可以参加的章节练习！">
+                    <p:column id="treeNode">
+                        <f:facet name="header" >
+                            <h:outputText value="章节名称" />
+                        </f:facet>
+                        <h:outputText value="#{dic.name}" ></h:outputText>
+                    </p:column>
+                    <p:column style="text-align:center;width:100px"  rendered="#{applicationBean.systemConfig.showScore and copyrightController.sysType!='1'}">
+                        <f:facet name="header" >
+                            <h:outputText value="积分消耗" />
+                        </f:facet>
+                        <h:outputText value="#{dic.exam.scorePaid}"  rendered="#{dic.exam.totalNum ne 0}"></h:outputText>
+                    </p:column>
+                    <p:column style="text-align: center;width:100px"> 
+                        <f:facet name="header" >
+                            <h:outputText value="练习进度" />
+                        </f:facet>
+                        <h:outputText value="#{dic.doneNum}/#{dic.exam.totalNum}题"  rendered="#{dic.exam.totalNum ne 0}"></h:outputText>
+                    </p:column>
+                    <p:column style="text-align: center;width:80px"> 
+                        <f:facet name="header" >
+                            <h:outputText value="错题数" />
+                        </f:facet>
+                        <h:outputText value="#{dic.examCase.wrongNum}"  rendered="#{dic.exam.totalNum ne 0}"></h:outputText>
+                    </p:column>
+                    <p:column style="text-align: center;width:230px"> 
+                        <f:facet name="header" >
+                            <h:outputText value="操作" />
+                        </f:facet>
+                        <h:panelGroup rendered="#{(dic.exam.ifPaid or dic.exam.scorePaid le clientSession.usr.score) and dic.exam.totalNum ne 0}">
+                            <h:outputLink value="#{facesContext.externalContext.requestContextPath}/servlet/pc/ExamCaseModule2Controller?type=1&amp;exam_id=#{dic.exam.id}#{dic.examCase==null?'':'&amp;case_id='}#{dic.examCase==null?'':dic.examCase.id}&amp;mode=#{dic.exam.displayMode}">
+                                <h:outputText value="全部试题"/>
+                            </h:outputLink>&nbsp;&nbsp;&nbsp;
+                            <h:outputLink value="#{facesContext.externalContext.requestContextPath}/servlet/pc/ExamCaseModule2Controller?type=3&amp;exam_id=#{dic.exam.id}#{dic.examCase==null?'':'&amp;case_id='}#{dic.examCase==null?'':dic.examCase.id}&amp;mode=#{dic.exam.displayMode}">
+                                <h:outputText value="未做试题"/>
+                            </h:outputLink>&nbsp;&nbsp;&nbsp;
+                            <h:outputLink value="#{facesContext.externalContext.requestContextPath}/servlet/pc/ExamCaseModule2Controller?type=2&amp;exam_id=#{dic.exam.id}#{dic.examCase==null?'':'&amp;case_id='}#{dic.examCase==null?'':dic.examCase.id}&amp;mode=#{dic.exam.displayMode}">
+                                <h:outputText value="已做试题"/>
+                            </h:outputLink>&nbsp;&nbsp;&nbsp;
+                            <p:commandLink rendered="#{dic.exam!=null and dic.examCase!=null}" action="#{examModule2List.delCases(dic.examCase.id)}" value="清除记录" update="@form"/>
+                        </h:panelGroup>
+                        <h:outputText value="积分不够" rendered="#{!dic.exam.ifPaid and dic.exam.scorePaid gt clientSession.usr.score}"/>
+                    </p:column>
+                </p:treeTable>
+                <p:outputPanel autoUpdate="true">
+                    <p:growl/>
+                </p:outputPanel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

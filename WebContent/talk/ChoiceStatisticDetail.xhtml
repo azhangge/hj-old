@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition>
+            <p:dialog id="statisticDig1" widgetVar="statisticDig1" width="600"  modal="true" closable="true" draggable="true" header="作答情况统计">
+                <p:outputPanel autoUpdate="true">
+                    <h:outputText value="#{questionStatisticDetail.choiceQuestion.name}" escape="false" styleClass="choiceTitle"/>
+                    <div style="margin-left: 30px;">
+                        <ui:repeat value="#{questionStatisticDetail.choiceQuestion.choices}" var="ch">
+                            <h:outputText value="#{ch.label}.&nbsp;#{ch.name}" styleClass="choiceTitle"/>
+                            <br/>
+                            <h:panelGrid columns="3" style="width:500px;">
+                                <p:progressBar value="#{ch.selectNum/questionStatisticDetail.choiceQuestion.choicesTotalSelectNum * 100}"  displayOnly="true" style="width:350px;"/>
+                                <h:panelGroup>
+                                    <h:outputText value="#{ch.selectNum/questionStatisticDetail.choiceQuestion.choicesTotalSelectNum*100}">
+                                        <f:convertNumber maxFractionDigits="1" minFractionDigits="1"/>
+                                    </h:outputText>
+                                    <h:outputText value="%"/>
+                                </h:panelGroup>
+                                <h:outputText value="（#{ch.selectNum}）" />
+                            </h:panelGrid>
+                        </ui:repeat>
+                        <br/>
+                    </div>
+                </p:outputPanel>
+            </p:dialog>
+
+        </ui:composition>
+    </h:body>
+</html>
+

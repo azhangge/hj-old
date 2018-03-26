@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:p="http://primefaces.org/ui" lang="en">
+<head>
+<title>My Facelets Page</title>
+<meta http-equiv="keywords" content="enter,your,keywords,here" />
+<meta http-equiv="description" content="A short description of this page." />
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+<!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+</head>
+<body>
+	<ui:composition template="BackGeneral.xhtml">
+		<ui:define name="content">
+			<ui:include src="/AjaxStatus2.xhtml" />
+			<h:form>
+				<div>
+					<p:commandButton action="#{hJExamTest.createImageOfMp4()}" value="更新缩略图" />
+					<p:commandButton action="#{hJExamTest.updateVideoTimeOfMp4()}" value="更新视频时长" />
+					<p:commandButton action="#{hJExamTest.updateMD5OfFile()}" value="更新文件md5" />
+					<p:commandButton action="#{hJExamTest.updateLessonTypeLaberStr2()}" value="更新课程标签字段" />
+					<p:commandButton action="#{hJExamTest.updateLessonTypeScore()}" value="更新课程标积分和课时" />
+					<p:commandButton action="#{hJExamTest.updateUserLessonTypeStr()}" value="更新用户免费课程" />
+					<p:commandButton action="#{hJExamTest.createTeacherBylessonType()}" value="根据课程创建讲师" />
+					<p:commandButton action="#{hJExamTest.copyEpubFile()}" value="复制epub文件" />
+					<p:commandButton action="#{hJExamTest.createLessonTypeLog()}" value="创建课程记录" />
+					<p:commandButton action="#{hJExamTest.updateLessonTypeToExam()}" value="关联课程和考试" />
+					<p:commandButton action="#{hJExamTest.updateExamCaseIfPassed()}" value="更新考试和课程记录" />
+					<p:commandButton action="#{hJExamTest.updatePracticeNum()}" value="更新资料和课程练习数目" />
+					<!-- <p:commandButton value="Send" icon="ui-icon-refresh" /> -->
+					<!-- 提示 -->
+					<p:commandButton action="#{hJExamTest.test2()}" value="测试" />
+					<p:growl autoUpdate="true" />
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

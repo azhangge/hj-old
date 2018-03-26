@@ -1,0 +1,28 @@
+.myTip {
+	/* font-weight: bold; */
+}
+.generalInfo{
+    font-size: 15px!important;
+    text-align: center;
+}
+a.operation:link {
+    font-size: 12px!important;
+    color: #0073ea;
+    text-decoration: none;
+}
+a.operation:visited {
+    font-size: 12px!important;
+    text-decoration:none;
+}
+a.operation:hover {
+    font-size: 12px!important;
+    text-decoration: underline!important;
+}
+a.operation:active {
+    font-size: 12px!important;
+    text-decoration: none;
+}
+.ui-widget {
+    font: normal 14px/24px Verdana, Arial, Microsoft YaHei, simhei,
+ simsun !important;
+}

@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+</head>
+<ui:composition template="/HJ/HJGeneral.xhtml">
+	<ui:define name="title">
+		<h:outputText value="讲师风采" />
+	</ui:define>
+	<ui:define name="content">
+		<link type="text/css" rel="stylesheet" href="css/lecturer_list.css" />
+		<!-- <script type="text/javascript" src="js/jquery.js"></script> -->
+		<script>
+			$(function() {
+				$(".lecturer_introduction").each(
+						function(i) {
+							var divH = $(this).height();
+							var $p = $("p", $(this)).eq(0);
+							while ($p.outerHeight() > divH) {
+								$p.text($p.text().replace(
+										/(\s)*([a-zA-Z0-9]+|\W)(\.\.\.)?$/,
+										"..."));
+							}
+							;
+						});
+			});
+		</script>
+		<!-- <link rel="stylesheet" type="text/css" href="../resources/rerebbs.css"></link>
+<link rel="stylesheet" type="text/css" href="../resources/rerebbs_a.css"></link> -->
+		<style>
+.navSeparator {
+	font-size: 14px;
+	font-weight: bold;
+	color: #ccc;
+	margin: 0px 10px 0px 10px;
+}
+
+.nav8 {
+	font-family: 姘撴埉搴愮尗闄嗙倝鑼呴垾琛★拷纬鈹炵儵锟斤拷 !important;
+	font-size: 14px !important;
+}
+
+a.nav8:link {
+	text-decoration: none;
+	font-family: 姘撴埉搴愮尗闄嗙倝鑼呴垾琛★拷纬鈹炵儵锟斤拷 !important;
+	font-size: 14px !important;
+}
+
+a.nav8:visited {
+	text-decoration: none;
+	font-family: 姘撴埉搴愮尗闄嗙倝鑼呴垾琛★拷纬鈹炵儵锟斤拷 !important;
+	font-size: 14px !important;
+}
+
+a.nav8:hover {
+	color: #3260a2 !important;
+	text-decoration: none !important;
+	font-family: 姘撴埉搴愮尗闄嗙倝鑼呴垾琛★拷纬鈹炵儵锟斤拷 !important;
+	font-size: 14px !important;
+}
+
+a.nav8:active {
+	text-decoration: none;
+	font-family: 姘撴埉搴愮尗闄嗙倝鑼呴垾琛★拷纬鈹炵儵锟斤拷 !important;
+	font-size: 14px !important;
+}
+</style>
+		<body>
+			<div class="lecturer-div">
+				<link type="text/css" rel="stylesheet" href="../HJ/css/navigation.css" />
+				<div class="navigation yahei bold">
+					<div class="navigation_div">
+						<a href="#{facesContext.externalContext.requestContextPath}/" class="navigation_link">首页</a>
+					</div>
+					<div class="navigation_separate">/</div>
+					<div class="navigation_div">外部讲师</div>
+				</div>
+				<div class="div-content">
+					<div class="div-panel">
+						<p:tabView>
+							<p:tab title="内部讲师">
+								<div style="width: 1024px; margin: 0 auto; background: #fff; padding: 15px 12px 0; overflow: hidden;">
+									<div class="lecturer_content">
+										<div class="lecturer">
+											<p:dataGrid var="teacher" value="#{listTeacher.innerCasusList}" columns="2" rows="6" paginator="true" >
+												<a href="#{facesContext.externalContext.requestContextPath}/HJ/LecturerStyle.xhtml?name=#{teacher.name}">
+													<div class="lecturer_info">
+														<div class="lecturer_img">
+															<div class="lecturer_img_info">
+																<img style="width: 130px; height: 205px"
+																	src="#{(empty teacher.picture)?facesContext.externalContext.requestContextPath.concat('/HJ/image/notlogin.png'):facesContext.externalContext.requestContextPath.concat('/').concat(teacher.picture)}" />
+															</div>
+														</div>
+														<div class="lecturer_introduction">
+															<div class="lecturer_name">#{teacher.name}</div>
+															<span>#{teacher.company}</span>
+															<p>个人简介：#{teacher.introduction}</p>
+														</div>
+													</div>
+												</a>
+											</p:dataGrid>
+										</div>
+									</div>
+								</div>
+							</p:tab>
+							<p:tab title="外部讲师">
+								<div style="width: 1024px; margin: 0 auto; background: #fff; padding: 15px 12px 0; overflow: hidden;">
+									<div class="lecturer_content">
+										<div class="lecturer">
+											<p:dataGrid var="teacher" value="#{listTeacher.outCasusList}" columns="2" rows="6" paginator="true">
+												<a href="#{facesContext.externalContext.requestContextPath}/HJ/LecturerStyle.xhtml?name=#{teacher.name}">
+													<div class="lecturer_info">
+														<div class="lecturer_img">
+															<div class="lecturer_img_info">
+																<img style="width: 130px; height: 205px"
+																	src="#{(empty teacher.picture)?facesContext.externalContext.requestContextPath.concat('/HJ/image/notlogin.png'):facesContext.externalContext.requestContextPath.concat('/').concat(teacher.picture)}" />
+															</div>
+														</div>
+														<div class="lecturer_introduction">
+															<div class="lecturer_name">#{teacher.name}</div>
+															<span>#{teacher.company}</span>
+															<p>个人简介：#{teacher.introduction}</p>
+														</div>
+													</div>
+												</a>
+											</p:dataGrid>
+										</div>
+									</div>
+								</div>
+							</p:tab>
+						</p:tabView>
+					</div>
+				</div>
+			</div>
+		</body>
+	</ui:define>
+</ui:composition>
+</html>

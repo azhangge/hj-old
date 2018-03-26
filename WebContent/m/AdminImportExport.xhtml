@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form>
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <div>
+                        <h:outputText styleClass="tit"
+                                      value="－管理员导入导出－" />
+                        <p:separator/>
+                        <h:panelGrid columns="2">
+
+
+                            <h:outputLabel style="" 
+                                           value="导入管理员：" />
+                            <h:panelGroup>
+                                <p:fileUpload id="upl" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'user')}" fileUploadListener="#{adminImportExport.up_action}" cancelLabel="取消导入" multiple="false"   uploadLabel="开始导入" auto="false" label="选择用户文件(.xls)" allowTypes="/(\.|\/)(xls)$/">
+                                </p:fileUpload><br/>
+                                <h:outputText style="color:red;" value="注：导入的用户文件必须严格遵守本系统的格式要求，保险起见，导入新用户文件前先将原用户导出。"/>
+
+                            </h:panelGroup>
+                        </h:panelGrid>
+                        <p:separator/>
+                        <br/>
+                        <h:outputLabel style="" 
+                                       value="导出管理员：" />
+                        <h:panelGroup>
+                            <p:button href="/servlet/ExportAdmin" value="导出用户"  disabled="#{!fn:contains(adminSessionBean.admin.authstr,'user')}"/>
+                        </h:panelGroup>
+                        <br/><br/>
+                        
+                        <p:separator/>
+                        <br/>
+                        <!-- <h:outputLabel style="" 
+                                       value="清空用户：" />
+                        <h:panelGroup>
+                            <p:commandButton  disabled="#{!(fn:contains(adminSessionBean.admin.authstr,'user'))}" value="清空用户" action="#{adminImportExport.clearAllUsers()}" update="@form"  onclick="if (!confirm('确认要清空用户吗？此动作将删除所有的用户和相关资料！清空前请先确认已经导出并备份好了原来的用户！清空操作需要检查和用户关联的所有信息，将消耗较多时间，清空期间可以离开本页面，清空操作将自行完成。')) return false"/>
+                        <br/><br/>
+                        <p:separator/>
+                        </h:panelGroup> -->
+                        <br/>
+                        <h:outputLabel style="" 
+                                       value="管理员导入模板：" />
+                        <h:panelGroup>
+                            <h:outputLink value="#{facesContext.externalContext.requestContextPath}/upload/AdminTemplate.xls">
+                                <h:outputText value="AdminTemplate.xls"/>
+                            </h:outputLink>
+                        </h:panelGroup>
+                        <br/><br/>
+                        <p:separator/>
+                        <p:outputPanel autoUpdate="true">
+                            <p:growl/>
+                        </p:outputPanel>
+
+                    </div></h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

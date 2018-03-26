@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title></title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <link rel="stylesheet" type="text/css"
+              href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs.css" />
+        <link rel="stylesheet" type="text/css"
+              href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs_a.css" />
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+        <style >
+        	.ui-icon-seek-first ,.ui-icon-seek-prev ,.ui-icon-seek-next ,.ui-icon-seek-end{
+				height: 20px!important;
+			}
+        </style>
+    </h:head>
+    <h:body>
+    	<ui:composition template="General3.xhtml">
+    	<ui:define name="title">
+			<h:outputText value="考试通知" />
+		</ui:define>
+    	<ui:define name="content">
+   			<script type="text/javascript" language="javascript">
+				function abc(url) {
+					window.location.href=url;
+				}
+			</script>
+    		<p:panel id="topNav8" styleClass="frontColumn topNav8Wrapper"
+				style="margin-bottom: 10px!important;">
+				<h:outputLink value="#{facesContext.externalContext.requestContextPath}" styleClass="nav8">
+					<h:outputText value="首页" />
+				</h:outputLink>
+				<h:outputText value=">" styleClass="navSeparator" />
+				<h:outputLink value="#{facesContext.externalContext.requestContextPath}/talk/IntensiveExaminationNoticeList.xhtml" styleClass="nav8">
+					<h:outputText value="考试通知" styleClass="nav8" />
+				</h:outputLink>
+					<h:outputText value=">" styleClass="navSeparator" />
+				<h:outputText value="考试通知详情" styleClass="nav8" />
+			</p:panel>
+    
+
+   
+            <div style="clear:both;height:0px;background-color: white;"/>
+
+            <div style="background-color: white;/* margin-left:40px; */ ">
+                <div style="text-align: left;font-size:15px;height:0px;line-height: 30px;font-family: 微软雅黑;"></div>
+                <div id="learnContent" style="text-align: center;float: left;overflow: hidden;width:100%;border:0px solid #ccc; /* min-width:800px; */">
+	                <h:outputText value="#{regIntensiveExam.exam.examNoticeName}" style="font-weight: bold;font-size:20px"/>
+	                <br/>
+	               
+	               	<h:outputText value="发布日期："/>
+	                <h:outputText value="#{regIntensiveExam.exam.pubTime}" escape="false" style="margin-left:0px;color:blue;line-height: 25px;">
+	                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" locale="zh_CN"/>
+	                </h:outputText>
+	                <p:separator/>
+	                <h:outputText value="#{regIntensiveExam.exam.examNotice}" escape="false"/>
+	                <br/><br/>
+	                <p:commandButton value="申请考试"  disabled="false" rendered="#{clientSession.ifLogin and !isReg}" onclick="abc('#{facesContext.externalContext.requestContextPath}/servlet/pc/CompleteInformationController?id=#{regIntensiveExam.exam.id}&amp;exam_type=1')"/>
+	                <!--  onclick="abc('#{facesContext.externalContext.requestContextPath}/servlet/pc/CompleteInformationController?id=#{exam.id}&amp;exam_type=1')" -->
+	                <p:commandButton value="已申请" disabled="false" rendered="#{clientSession.ifLogin and isReg}" onclick="abc('#{facesContext.externalContext.requestContextPath}/servlet/pc/CompleteInformationController?id=#{regIntensiveExam.exam.id}&amp;exam_type=1')"/>
+                </div>
+            </div>
+
+        	</ui:define>
+        </ui:composition>
+    </h:body>
+</html>

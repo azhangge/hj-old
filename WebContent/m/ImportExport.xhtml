@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form>
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <div>
+                        <h:outputText styleClass="tit"
+                                      value="－导入导出－" />
+                        <p:separator/>
+                        <div class="introduction">
+                            注意事项：<br/>
+                            <!-- 1、综合类题型和其它题型请分开设置到不同的模板文件，综合题与其它题型共用同导入接口，但分别用不同的导出接口；<br/> -->
+                            1、导入的题库文件必须严格遵守本系统的格式要求，不能更改模板结构，保险起见，导入新题库前先将原题库导出。<br/>
+                            2、同试题模块下不能重复导入试题。导入时会验证题干与选项，核实是否已存在。强制导入模板中的试题时请先删除原有相同试题。
+                        </div>
+                        <p:separator/>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel style="" 
+                                           value="导入题库：" />
+                            <h:panelGroup>
+                                <p:fileUpload id="upl" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'export')}" fileUploadListener="#{importExport.up_action}" cancelLabel="取消导入" multiple="false"   uploadLabel="开始导入" auto="false" label="选择题库文件(.xls)" allowTypes="/(\.|\/)(xls)$/">
+                                </p:fileUpload><br/>
+                            </h:panelGroup>
+                        </h:panelGrid>
+                        <p:separator/>
+                        <br/>
+                        <h:outputLabel style="" 
+                                       value="导出题库：" />
+
+
+                        <!-- <h:panelGroup>
+                            <p:button href="/servlet/ExportExam?qtype=case" value="导出综合题类" target="_blank"  disabled="#{!fn:contains(adminSessionBean.admin.authstr,'export')}"/>
+                        </h:panelGroup> -->
+
+                        <h:panelGroup>
+                            <p:button href="/servlet/ExportExam" value="导出题库" target="_blank"  disabled="#{!fn:contains(adminSessionBean.admin.authstr,'export')}"/>
+                        </h:panelGroup>
+
+
+                        <br/><br/>
+
+                        <p:separator/>
+                        <br/>
+                        <h:outputLabel style="" 
+                                       value="清空题库：" />
+                        <h:panelGroup>
+                            <p:commandButton  disabled="#{!(fn:contains(adminSessionBean.admin.authstr,'export'))}" value="清空题库" action="#{importExport.clearAllQuestions()}" update="@form"  onclick="if (!confirm('确认要清空题库吗？此动作将删除所有的试题模块和试题！清空前请先确认已经导出并备份好了原来的题库！'))
+                                        return false"/>
+                        </h:panelGroup>
+                        <br/><br/>
+                        <p:separator/>
+                        <br/>
+                        <h:outputLabel style=""  value="题库模板：" />
+                        <h:panelGroup>
+                            <h:outputLink value="#{facesContext.externalContext.requestContextPath}/upload/RereExamTemplate.xls">
+                                <h:outputText value="RereExamTemplate.xls"/>
+                            </h:outputLink>
+                        </h:panelGroup>
+                        <br/><br/>
+                        <p:separator/>
+                        <p:outputPanel autoUpdate="true">
+                            <p:growl/>
+                        </p:outputPanel>
+
+                    </div></h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

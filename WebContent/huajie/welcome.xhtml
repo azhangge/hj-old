@@ -1,0 +1,453 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>华杰云教育</title>
+</head>
+
+<ui:composition template="GeneralW.xhtml">
+	<ui:define name="content">
+<link href="css/huajiemain.css" type="text/css"  rel="stylesheet"/>
+<link href="css/iconfont.css" type="text/css"  rel="stylesheet"/>
+<link href="css/public.css" type="text/css"  rel="stylesheet"/>
+<link href="css/jquery.lightbox.css" type="text/css"  rel="stylesheet"/>
+<link rel="stylesheet" type="text/css" href="css/index.css"/>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/superslide.2.1.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+<style>
+<!--
+banner部分button的样式--> #onebyone_slider .oneByOne_course span.ob1_button .default_button {
+	margin:0;
+	padding:10px 25px;
+	border:1px solid #0b7bb0;
+	font-size:13px;
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+	-o-border-radius:3px;
+	border-radius:3px
+}
+.default_button {
+	font:11px Helvetica, Arial, sans-serif;
+	font-weight:400;
+	text-decoration:none;
+	text-transform:uppercase;
+	padding:8px 18px;
+	margin:2px 3px;
+	vertical-align:middle;
+	display:inline-block;
+	border:solid 1px #39cafb;
+	color:#fff;
+	background:#4fcfff;
+	cursor:pointer;
+	-webkit-border-radius:2px;
+	-moz-border-radius:2px;
+	-o-border-radius:2px;
+	border-radius:2px;
+	-webkit-box-shadow:inset 0 1px 0 rgba(255, 255, 255, .8), inset 0 -1px 0 rgba(255, 255, 255, .1);
+	-moz-box-shadow:inset 0 1px 0 rgba(255, 255, 255, .2), inset 0 -1px 0 rgba(255, 255, 255, .1);
+	box-shadow:inset 0 1px 0 rgba(255, 255, 255, .2), inset 0 -1px 0 rgba(255, 255, 255, .1);
+-moz-transition:all .5s;
+-webkit-transition:all .5s;
+-o-transition:all .5s;
+transition:all .5s;
+	zoom:1;
+*display:inline
+}
+.default_button:hover {
+	color:#fff;
+	background:#0aa3dc;
+	border-color:#0aa3dc
+}
+.default_button:active {
+	color:#fff;
+	background:#26a1ce;
+	border-color:#333;
+	box-shadow:inset 0 1px 2px rgba(0, 0, 0, 0.50), 0px 0 1px rgba(255, 255, 255, 0.50);
+	-moz-box-shadow:inset 0 1px 2px rgba(255, 255, 255, 0.50), 0px 0 1px rgba(255, 255, 255, 0.50);
+	-webkit-box-shadow:inset 0 1px 2px rgba(255, 255, 255, 0.50), 0px 0 1px rgba(255, 255, 255, 0.50)
+}
+#onebyone_slider .oneByOne_course span.ob1_button {
+	clear:left;
+	position:relative;
+	float:left;
+	margin:40px 12px 0 330px;
+	padding:5px;
+	border:1px solid #27b8ee;
+	background:#fff;
+	background:rgba(255, 255, 255, .1);
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+	-o-border-radius:3px;
+	border-radius:3px;
+	z-index:50
+}
+.fullSlide {
+	width:100%;
+	position:relative;
+	height:260px;
+	background:#000;
+	zoom:1;
+}
+.fullSlide .bd {
+	margin:0 auto;
+	position:relative;
+	z-index:0;
+	overflow:hidden;
+}
+.fullSlide .bd ul {
+	width:100% !important;
+}
+.fullSlide .bd li {
+	width:100% !important;
+	height:260px;
+	overflow:hidden;
+	text-align:center;
+}
+.fullSlide .bd li a {
+	display:block;
+	height:260px;
+}
+.fullSlide .hd {
+	width:100%;
+	position:absolute;
+	z-index:0;
+	bottom:0;
+	left:0;
+	height:30px;
+	line-height:30px;
+}
+.fullSlide .hd ul {
+	text-align:center;
+}
+.fullSlide .hd ul li {
+	cursor:pointer;
+	display:inline-block;
+*display:inline;
+	zoom:1;
+	width:42px;
+	height:11px;
+	margin:1px;
+	overflow:hidden;
+	background:#000;
+	filter:alpha(opacity=50);
+	opacity:0.5;
+	line-height:999px;
+}
+.fullSlide .hd ul .on {
+	background:#f00;
+}
+.fullSlide .prev, .fullSlide .next {
+	display:block;
+	position:absolute;
+	z-index:1;
+	top:50%;
+	margin-top:-30px;
+	left:23%;
+	z-index:1;
+	width:40px;
+	height:60px;
+	background:url(image/slider-arrow.png) -126px -137px #000 no-repeat;
+	cursor:pointer;
+	filter:alpha(opacity=50);
+	opacity:0.5;
+	display:none;
+}
+.fullSlide .prev {
+	left:auto;
+	left:30%;
+}
+.fullSlide .next {
+	left:auto;
+	right:23%;
+	background-position:-6px -137px;
+}
+</style>
+	
+<body>
+<!-- <div class="header-top">
+  <div class="header-content">
+    <div class="logo"><img src="image/title.png" /></div>
+    <div class="search">
+      <input value="请输入课程名称" class="search-input" />
+      <a href="#" class="search-text">搜索</a></div>
+    <div class="nav">
+      <ul>
+        <li><a href="#">首页</a></li>
+        <li><a href="#">登录</a></li>
+        <li><a href="#">注册</a></li>
+      </ul>
+    </div>
+  </div>
+</div> -->
+
+
+<form id="myForm" name="myForm" method="post" action="http://192.168.1.245:8080/exam2/talk/Default.jspx" enctype="application/x-www-form-urlencoded">
+  <input type="hidden" name="myForm" value="myForm"/>
+  <div style="width:100%;margin: 0px auto;">
+    <div class="banner" style="height:260px;border:0px solid red;margin-top: 75px;">
+      <div class="fullSlide">
+        <div class="bd">
+          <ul>
+            <li _src="url(image/banner.jpg)" style="background:#b0d3d9 center 0 no-repeat;"><a href="#"></a></li>
+            <li _src="url(image/banner.jpg)" style="background:#b0d3d9 center 0 no-repeat;"><a href="#"></a></li>
+            <li _src="url(image/banner.jpg)" style="background:#b0d3d9 center 0 no-repeat;"><a href="#"></a></li>
+          </ul>
+        </div>
+        <div class="hd">
+          <ul>
+          </ul>
+        </div>
+        <span class="prev"></span> <span class="next"></span> </div>
+    </div>
+  </div>
+</form>
+<div class="popularClass">
+  <div class="class-content">
+    <div class="class-title">
+      <p><span class="class-icon"></span>热门推荐</p>
+    </div>
+    <div class="class-category class-category-paddiing">
+      <div class="class-category-left">
+      <!--  顶部    start-->
+            <div class="yHeader"> 
+              <!-- 导航   start  -->
+              <div class="yNavIndex">
+                <div class="pullDown">
+                  <h2 class="pullDownTitle"> 全部课程 </h2>
+                  <ul class="pullDownList">
+                    <!-- <li class="menulihover menuclass" > <a href="" target="_blank" >行政部</a>、 <a href="" target="_blank">人事部</a> 、<a href="" target="_blank">企事部</a> <span></span> </li>
+                    <li class="menuclass"> <a href="" target="_blank" >设计部</a> 、<a href="" target="_blank">招标部</a> 、<a href="" target="_blank">隧道室</a> <span></span> </li>
+                    <li class="menuclass"> <a href="" target="_blank" >财务部</a> 、<a href="" target="_blank">概预算室</a> 、<a href="" target="_blank">交安室</a><span></span> </li>
+                    <li class="menuclass"> <a href="" target="_blank" >生产管理与预算考核部</a>  <span></span> </li>
+                    <li class="menuclass"> <a href="" target="_blank" >技质部</a>、<a href="" target="_blank">项目管理部</a> 、 <a href="" target="_blank">运规部</a><span></span> </li>
+                    <li class="menuclass"> <a href="" target="_blank" >国际项目部</a> <span></span> </li> -->
+                    <ui:repeat  value="#{lessonClassify.labelTypes}" var="labelType" size="6" >
+						<li class="menulihover menuclass">
+							<a href="" target="_blank" class="menuclass">#{labelType.name}</a> 
+							<span></span>
+						</li>
+					</ui:repeat>
+                  </ul>
+                  <!-- 下拉详细列表具体分类 -->
+                  <div class="yMenuListCon">
+                    <!-- <div class="yMenuListConin">
+                      <div class="yMenuLCinList">
+                        <ul>
+                          <li><a href="" class="ecolor610">精品男装</a></li>
+                          <li><span class="line">|</span></li>
+                          <li><a href="">商场同款</a></li>
+                          <li><span>/</span></li>
+                          <li><a href="">男装集结</a></li>
+                        </ul>
+                      </div>
+                    </div> -->
+                    <ui:repeat  value="#{lessonClassify.labelTypes}" var="labelType">
+						<div class="yMenuListConin">
+							<div class="yMenuLCinList">
+								<ul>
+									<ui:repeat value="#{labelType.labels}" var="label">
+										<li><a href="#{facesContext.externalContext.requestContextPath}/talk/LessonTypeList2.jspx?lid=#{label.id}" class="ecolor610">#{label.name}</a></li>
+									</ui:repeat>
+								</ul>
+							</div>
+						</div>
+					</ui:repeat>
+                  </div>
+                </div>
+              </div>
+              <!-- 导航   end  --> 
+            </div>
+<!--  顶部    end-->
+      </div>
+      <div class="class-category-middle">
+        <div>
+          <ul>
+            <!-- <li class="popular_course"> 
+            		<a href="login.html" target="_blank" class="popular_course-img-link"> 
+            			<img src="image/qingxu.jpg"  class="course-img"  width="434px" height="300px"/> 
+            		</a>
+              		<div class="popular_course-tt">
+              			<a href="#" target="_blank" class="popular_course-tt-link">行政执法规范探讨</a>
+              		</div>
+              		<div class="popular_course-line popular_course-line-bottom">
+	              		<span class="line-cell popular_course-price hour">12课时</span>
+	              		<span class="popular_course-source">
+	              			<img src="image/img_lecturer.png"  class="popular_course-lecturer"/>候健
+	              		</span>
+              		</div>
+            </li> -->
+            <ui:repeat value="#{welcomePage.getLessonTypesByNameAndNum('热门课程','7','8')}" var="car">
+				<li class="popular_course">
+					<a href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{car.id}" target="_blank" title="#{car.name}" class="popular_course-img-link">
+						<p:graphicImage id="simg" url="../#{fn:replace(car.picture,'showimage','showabstractimage')}" style="width: 434px; height: 300px;" styleClass="course-img" />
+						<!-- <img src="#{fn:replace(car.picture,'showimage','showabstractimage')}"  class="course-img"  width="434px" height="300px"/>  -->
+					</a>
+					<div class="popular_course-tt">
+						<a href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{car.id}" target="_blank" title="#{car.name}" class="popular_course-tt-link">#{car.name}</a>
+					</div>
+					<div class="popular_course-line popular_course-line-bottom">
+						<span class="line-cell popular_course-price hour">#{car.totalClassNum}学时</span> 
+						<span class="popular_course-source">
+	              			<img src="image/img_lecturer.png"  class="popular_course-lecturer"/>#{car.teacher}
+	              		</span>
+					</div>
+				</li>
+			</ui:repeat>
+          </ul>
+        </div>
+        
+      </div>
+    <div class="class-category-right">
+        <div>
+          <ul>
+            <!-- <li class="course"> <a href="login.html" target="_blank" class="course-img-link"> <img src="image/img1.jpg"  class="course-img" width="207px" height="109px"/> </a>
+              <div class="course-tt"><a href="#" target="_blank" class="course-tt-link">水路运输行政执法基本问题</a></div>
+              <div class="course-line course-line-bottom"> <span class="line-cell course-price hour">12课时</span> <span class="course-source"><img src="image/img_lecturer.png"  class="course-lecturer"/>刘振峰</span> </div>
+            </li>-->
+            <ui:repeat value="#{welcomePage.getLessonTypesByNameAndNum('热门课程','1','5')}" var="car">
+            	<li class="course"> 
+            		<a href="login.html" target="_blank" class="course-img-link"> 
+            			<!-- <img src="image/img1.jpg"  class="course-img" width="207px" height="109px"/>  -->
+            			<p:graphicImage id="simg" url="../#{fn:replace(car.picture,'showimage','showabstractimage')}" style="width: 207px; height: 109px;" styleClass="course-img" />
+            		</a>
+	              	<div class="course-tt">
+	              		<a href="#" target="_blank" class="course-tt-link">#{car.name}</a>
+	              	</div>
+	              	<div class="course-line course-line--bottom"> 
+	              		<span class="line-cell course-price hour">#{car.totalClassNum}学时</span> 
+	              		<span class="course-source">
+	              			<img src="image/img_lecturer.png"  class="course-lecturer"/>#{car.teacher}
+	              		</span> 
+	              	</div>
+	            </li>
+            </ui:repeat>
+          </ul>
+        </div>
+      </div>
+      <div class="clear"></div>
+    </div>
+  </div>
+</div>
+
+<ui:repeat value="#{welcomePage.labelTypes}" var="labelType">
+<div class="Department_course">
+  <div class="class-content">
+    <div class="class-title">
+      <span class="class-icon"></span>
+      #{labelType.name}
+      <ui:repeat value="#{labelType.labels}" var="label">
+	      <a href="#{facesContext.externalContext.requestContextPath}/talk/LessonTypeList2.jspx?lid=#{label.id}" class="Department_course_classification">#{label.name}</a>
+      </ui:repeat>
+      <!-- <a href="#" class="Department_course_classification">财务部</a> -->
+      <a href="#"><span class="more">更多>></span></a>
+    </div>
+    <div class="class-category">
+      <ul>
+        <li class="Coursetitle"><img src="../#{fn:replace(labelType.picture,'showimage','showabstractimage')}"/>
+        </li>
+        <!-- <li class="course"> <a href="login.html" target="_blank" class="course-img-link"> <img src="image/zhifa.jpg"  class="course-img" width="207px" height="124px"/> </a>
+          <div class="course-tt"><a href="#" target="_blank" class="course-tt-link">道路运输行政执法基本问题</a></div>
+          <div class="course-line course-line-bottom"> <span class="line-cell course-price hour">12课时</span> <span class="course-source"><img src="image/img_lecturer.png"  class="course-lecturer"/>张雅萍</span> </div>
+        </li>-->
+        <ui:repeat value="#{labelType.getLessonTypes('1','5')}" var="car">
+            	<li class="course"> 
+            		<a href="login.html" target="_blank" class="course-img-link"> 
+            			<!-- <img src="image/img1.jpg"  class="course-img" width="207px" height="109px"/>  -->
+            			<p:graphicImage id="simg" url="../#{fn:replace(car.picture,'showimage','showabstractimage')}" style="width: 207px; height: 109px;" styleClass="course-img" />
+            		</a>
+	              	<div class="course-tt">
+	              		<a href="#" target="_blank" class="course-tt-link">#{car.name}</a>
+	              	</div>
+	              	<div class="course-line course-line--bottom"> 
+	              		<span class="line-cell course-price hour">#{car.totalClassNum}学时</span> 
+	              		<span class="course-source">
+	              			<img src="image/img_lecturer.png"  class="course-lecturer"/>#{car.teacher}
+	              		</span> 
+	              	</div>
+	            </li>
+            </ui:repeat>
+      </ul>
+    </div>
+  </div>
+</div>
+</ui:repeat>
+
+<!-- <div class="Department_course_white">
+  <div class="class-content">
+    <div class="class-title">
+      <span class="class-icon"></span>行政部
+      <a href="#"><span class="more">更多>></span></a>
+    </div>
+    <div class="class-category">
+      <ul>
+        <li class="Coursetitle"><img src="image/xingzheng.jpg"/>
+        </li>
+        <li class="course"> <a href="login.html" target="_blank" class="course-img-link"> <img src="image/zhifa.jpg"  class="course-img" width="207px" height="124px"/> </a>
+          <div class="course-tt"><a href="#" target="_blank" class="course-tt-link">道路运输行政执法基本问题</a></div>
+          <div class="course-line course-line-bottom"> <span class="line-cell course-price hour">12课时</span> <span class="course-source"><img src="image/img_lecturer.png"  class="course-lecturer"/>张雅萍</span> </div>
+        </li>
+        <li class="course"> <a href="login.html" target="_blank" class="course-img-link"> <img src="image/gangkou.jpg"  class="course-img"  width="207px" height="124px"/> </a>
+          <div class="course-tt"><a href="#" target="_blank" class="course-tt-link">港口管理行政执法</a></div>
+          <div class="course-line course-line-bottom"> <span class="line-cell course-price hour">12课时</span> <span class="course-source"><img src="image/img_lecturer.png"  class="course-lecturer"/>包继来</span> </div>
+        </li>
+        <li class="course"> <a href="login.html" target="_blank" class="course-img-link"> <img src="image/gonglu.jpg"  class="course-img"  width="207px" height="124px"/> </a>
+          <div class="course-tt"><a href="#" target="_blank" class="course-tt-link">公路路政行政强制与处罚</a></div>
+          <div class="course-line course-line-bottom"> <span class="line-cell course-price hour">12课时</span> <span class="course-source"><img src="image/img_lecturer.png"  class="course-lecturer"/>杨继勇</span> </div>
+        </li>
+        <li class="course"> <a href="login.html" target="_blank" class="course-img-link"> <img src="image/haishi.jpg"  class="course-img"  width="207px" height="124px"/> </a>
+          <div class="course-tt"><a href="#" target="_blank" class="course-tt-link">海事行政执法</a></div>
+          <div class="course-line course-line-bottom"> <span class="line-cell course-price hour">12课时</span> <span class="course-source"><img src="image/img_lecturer.png"  class="course-lecturer"/>包继来</span> </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div> -->
+
+<script src="js/upScroll.js" type="text/javascript" language="javascript"></script> 
+<script type="text/javascript"> 
+	  function autoScroll(obj){  
+			$(obj).find("ul").animate({  
+				marginTop : "-30px"  
+			},500,function(){  
+				$(this).css({marginTop : "0px"}).find("li:first").appendTo(this);  
+			})  
+		}  
+		$(function(){  
+			setInterval('autoScroll(".maquee")',3000);
+			  
+		}) 
+		
+</script> 
+<script type="text/javascript">
+$(".fullSlide").hover(function(){
+    $(this).find(".prev,.next").stop(true, true).fadeTo("show", 0.5)
+},
+function(){
+    $(this).find(".prev,.next").fadeOut()
+});
+$(".fullSlide").slide({
+    titCell: ".hd ul",
+    mainCell: ".bd ul",
+    effect: "fold",
+    autoPlay: true,
+    autoPage: true,
+    trigger: "click",
+    startFun: function(i) {
+        var curLi = jQuery(".fullSlide .bd li").eq(i);
+        if ( !! curLi.attr("_src")) {
+            curLi.css("background-image", curLi.attr("_src")).removeAttr("_src")
+        }
+    }
+});
+</script>
+</body>
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:p="http://primefaces.org/ui">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <script type="text/javascript" src="../resources/ckfinder/ckfinder.js"></script>
+                <script type="text/javascript" language="javascript" src="#{facesContext.externalContext.requestContextPath}/rere_wimg_up/js/wordimage_uploader1.1.js"></script>
+
+                <script type="text/javascript">
+                    //var editor1 = CKEDITOR.replace('myForm:editor1');
+                    function onLoadCallback(editor1) {
+                        var ed = PF(editor1).instance;
+                        CKFinder.setupCKEditor(ed, '../resources/ckfinder/');
+                    }
+
+                </script>
+                <h:outputScript target="body" rendered="#{applicationBean.systemConfig.autoUpload}">
+                    var sUrl = 'http://#{facesContext.externalContext.requestServerName}:#{facesContext.externalContext.requestServerPort}#{facesContext.externalContext.requestContextPath}/servlet/WordImageUploader';
+                    var appName = '#{facesContext.externalContext.requestContextPath}';
+                    var repStr1 = 'http://#{facesContext.externalContext.requestServerName}:#{facesContext.externalContext.requestServerPort}#{facesContext.externalContext.requestContextPath}';
+                    var repStr2 = '..';
+                    var uploader = new WordImageUploader(sUrl, appName,repStr1,repStr2);
+                </h:outputScript>
+                <h:form id="myForm">
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <div>
+                        <h:outputText  styleClass="tit"
+                                       value="#{aAExamKnowledge.flag?'修改知识点':'添加知识点'}>>#{aAExamKnowledge.em.name}" />
+                        <p:separator/>
+                        <h:panelGrid columns="2">
+                            <h:outputText value="知识题标题：" />
+                            <h:inputText id="editor1" value="#{aAExamKnowledge.cq.title}" style="width:635px;" />
+
+                            <h:outputText value="分类标签：" />
+                            <p:panel>
+                                <ui:repeat value="#{aAExamKnowledge.labelTypes}" var="labelType">
+                                    <h:outputText value="#{labelType.name}：" />
+                                    <hr/>
+                                    <p:dataGrid columns="6" value="#{labelType.labels}" var="label" style="max-width:500px" emptyMessage="">
+                                        <h:outputText value="#{label.name}：" />
+                                        <h:selectBooleanCheckbox value="#{label.selected}"/>
+                                    </p:dataGrid>
+                                </ui:repeat>
+                            </p:panel>
+
+                            <h:outputText value="知识点内容：" />
+                            <h:panelGroup>
+                                <pe:ckEditor id="rightStr" widgetVar="rightStr"  value="#{aAExamKnowledge.cq.content}"  customConfig="#{facesContext.externalContext.requestContextPath}/resources/js/ckeditor_config1.js" width="640" height="150">
+                                    <pe:javascript  event="initialize" execute="onLoadCallback('rightStr')" />
+                                    <pe:javascript rendered="#{applicationBean.systemConfig.autoUpload}" event="blur" execute="uploader.uploadWordImagesFromCKEditor(PF('rightStr').instance,'#{aAExamKnowledge.cq.id}')" />
+
+                                </pe:ckEditor>
+                            </h:panelGroup>
+                        </h:panelGrid>
+
+                        <p:panel header="关联试题">
+                            <ui:include src="QuestionsInclude.xhtml"/>
+                        </p:panel>
+
+                        <p:separator/>
+                        <p:commandButton action="#{aAExamKnowledge.done}" value="添加并返回" styleClass="" rendered="#{!aAExamKnowledge.flag}" ajax="false"/>
+                        <p:commandButton action="#{aAExamKnowledge.done}" value="修改完成" styleClass="" rendered="#{aAExamKnowledge.flag}" ajax="false" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"/>
+                        <p:commandButton ajax="false"  action="#{aAExamKnowledge.addAndContinue()}" value="添加并继续" styleClass="" rendered="#{!aAExamKnowledge.flag}" update="@form" style="margin-left: 300px;"/>
+
+                    </div></h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

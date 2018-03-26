@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"  lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+
+
+                <h:form id="myForm">
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <h:outputScript name="chinese_locale.js" library="js"/>
+                    <div>
+                        <h:outputText  styleClass="tit"
+                                       value="－#{aAExamContest.flag?'修改竞赛':'添加竞赛'}－" />
+                        <p:separator/>
+                        <h:panelGrid columns="2" >
+                            <h:outputText value="竞赛名称：" />
+                            <p:inputText value="#{aAExamContest.exam.name}" style="width:600px;" />
+                            <h:outputText value="允许参加数量：" />
+                            <h:panelGroup>
+                                <p:spinner value="#{aAExamContest.exam.allowCaseMax}" min="0" size="5"/>
+                                <h:outputText value="（允许参加竞赛的最大数量）" />
+                            </h:panelGroup>
+                            <h:outputText value="竞赛时长：" />
+                            <h:panelGroup>
+                                <p:spinner value="#{aAExamContest.exam.timeLen}"  min="0" size="5" stepFactor="10"/>
+                                <h:outputText value="分钟" />
+                            </h:panelGroup>
+                            <h:outputText value="允许参加次数：" />
+                            <h:panelGroup>
+                                <p:spinner value="#{aAExamContest.exam.maxNum}" min="0" size="5"/>
+                                <h:outputText value="（允许同一用户参加本竞赛的最大次数）" />
+                            </h:panelGroup>
+                            <h:outputText value="倒计时：" />
+                            <h:panelGroup>
+                                <h:selectBooleanCheckbox value="#{aAExamContest.exam.ifCountDown}"/>
+                                <h:outputText value="（在竞赛界面中倒计时，时间到后自动提交试卷）。" />
+                            </h:panelGroup>
+
+
+                            <h:outputText value="详情页答案：" />
+                            <h:panelGroup>
+                                <h:selectBooleanCheckbox value="#{aAExamContest.exam.showAnswer}"/>
+                                <h:outputText value="竞赛完成后，是否在竞赛详情中显示试题的答案。" />
+                            </h:panelGroup>
+                            <h:outputText value="详情页解析：" />
+                            <h:panelGroup>
+                                <h:selectBooleanCheckbox value="#{aAExamContest.exam.showRightStr}"/>
+                                <h:outputText value="竞赛完成后，是否在竞赛详情中显示试题的详细解析。" />
+                            </h:panelGroup>
+                            <h:outputText value="删除成绩？" />
+                            <h:panelGroup>
+                                <h:selectBooleanCheckbox value="#{aAExamContest.exam.allowUserDelScore}"/>
+                                <h:outputText value="（是否允许用户在前台将自己的竞赛成绩删除（重要竞赛不推荐））。" />
+                            </h:panelGroup>
+
+
+
+                            <h:outputText value="单选选项随机：" />
+                            <h:panelGroup>
+                                <h:selectBooleanCheckbox value="#{aAExamContest.exam.choiceRandom}"/>
+                                <h:outputText value="（随机选项不允许选项间有顺序关系，如类似这样的选项：D. A+B+C ）。" />
+                            </h:panelGroup>
+
+                            <h:outputText value="多选选项随机：" />
+                            <h:panelGroup>
+                                <h:selectBooleanCheckbox value="#{aAExamContest.exam.multiChoiceRandom}"/>
+                                <h:outputText value="（随机选项不允许选项间有顺序关系，如类似这样的选项：D. A+B+C ）。" />
+                            </h:panelGroup>
+
+
+                            <h:outputText value="消耗积分："  rendered="#{copyrightController.sysType!='1'}"/>
+                            <h:panelGroup rendered="#{copyrightController.sysType!='1'}">
+                                <p:spinner value="#{aAExamContest.exam.scorePaid}"  min="0" size="5"/>
+                                <h:outputText value="（用户参加此次竞赛需要消耗的积分数）。" />
+                            </h:panelGroup>
+
+                            <h:outputText value="获得积分："  rendered="#{copyrightController.sysType!='1'}"/>
+                            <h:panelGroup rendered="#{copyrightController.sysType!='1'}">
+                                <p:spinner value="#{aAExamContest.exam.bbsScore}"  min="0" size="5"/>
+                                <h:outputText value="（按分数获得，用户参加竞赛获得的最大积分数，根据成绩/满分比获积分）。" />
+                            </h:panelGroup>
+                            
+                            <h:outputText value="第1名奖励："  rendered="#{copyrightController.sysType!='1'}"/>
+                            <h:panelGroup rendered="#{copyrightController.sysType!='1'}">
+                                <p:spinner value="#{aAExamContest.exam.firstScore}"  min="0" size="5"/>
+                                <h:outputText value="（用户参加竞赛获得第1名的积分奖励）。" />
+                            </h:panelGroup>
+                            
+                            <h:outputText value="第2名奖励："  rendered="#{copyrightController.sysType!='1'}"/>
+                            <h:panelGroup rendered="#{copyrightController.sysType!='1'}">
+                                <p:spinner value="#{aAExamContest.exam.secondScore}"  min="0" size="5"/>
+                                <h:outputText value="（用户参加竞赛获得第2名的积分奖励）。" />
+                            </h:panelGroup>
+                            
+                            <h:outputText value="第3名奖励："  rendered="#{copyrightController.sysType!='1'}"/>
+                            <h:panelGroup rendered="#{copyrightController.sysType!='1'}">
+                                <p:spinner value="#{aAExamContest.exam.thirdScore}"  min="0" size="5"/>
+                                <h:outputText value="（用户参加竞赛获得第3名的积分奖励）。" />
+                            </h:panelGroup>
+                            
+                            <h:outputText value="参与奖励："  rendered="#{copyrightController.sysType!='1'}"/>
+                            <h:panelGroup rendered="#{copyrightController.sysType!='1'}">
+                                <p:spinner value="#{aAExamContest.exam.participateScore}"  min="0" size="5"/>
+                                <h:outputText value="（用户参加竞赛获得参与奖励积分）。" />
+                            </h:panelGroup>
+
+
+                            <h:outputText value="综合题别称：" rendered="#{copyrightController.sysType!='1'}"/>
+                            <p:inputText value="#{aAExamContest.exam.caseAlias}" rendered="#{copyrightController.sysType!='1'}"/>
+
+                            <h:outputText value="开放星期：" />
+                            <h:panelGrid columns="7">
+                                <h:panelGroup>
+                                    <h:outputText value="星期一：" />
+                                    <h:selectBooleanCheckbox value="#{aAExamContest.exam.mon}"/>
+                                </h:panelGroup>
+                                <h:panelGroup>
+                                    <h:outputText value="星期二：" />
+                                    <h:selectBooleanCheckbox value="#{aAExamContest.exam.tues}"/>
+                                </h:panelGroup>
+                                <h:panelGroup>
+                                    <h:outputText value="星期三：" />
+                                    <h:selectBooleanCheckbox value="#{aAExamContest.exam.wed}"/>
+                                </h:panelGroup>
+                                <h:panelGroup>
+                                    <h:outputText value="星期四：" />
+                                    <h:selectBooleanCheckbox value="#{aAExamContest.exam.thur}"/>
+                                </h:panelGroup>
+                                <h:panelGroup>
+                                    <h:outputText value="星期五：" />
+                                    <h:selectBooleanCheckbox value="#{aAExamContest.exam.fri}"/>
+                                </h:panelGroup>
+                                <h:panelGroup>
+                                    <h:outputText value="星期六：" />
+                                    <h:selectBooleanCheckbox value="#{aAExamContest.exam.sat}"/>
+                                </h:panelGroup>
+                                <h:panelGroup>
+                                    <h:outputText value="星期天：" />
+                                    <h:selectBooleanCheckbox value="#{aAExamContest.exam.sun}"/>
+                                </h:panelGroup>
+                            </h:panelGrid>
+
+                            <h:outputText value="开始时间：" />
+                            <p:calendar value="#{aAExamContest.exam.begainTime}" timeOnly="true" pattern="HH:mm" timeZone="GMT+8" locale="zh_CN"/>
+                            <h:outputText value="结束时间：" />
+                            <p:calendar value="#{aAExamContest.exam.endTime}" timeOnly="true" pattern="HH:mm" timeZone="GMT+8" locale="zh_CN"/>
+
+                            <h:outputText value="随机试卷：" />
+                            <p:selectOneMenu id="manualaa" value="#{aAExamContest.exam.random2Id}">
+                                <f:selectItem itemValue="-1" itemLabel="请选择试卷"/>
+                                <f:selectItems value="#{listRandom2Paper.exams}" var="paper" itemValue="#{paper.id}" itemLabel="#{paper.name}"/>
+                            </p:selectOneMenu>
+                            
+                            
+                            <h:outputText value="分类标签：" />
+                            <p:panel>
+                                <ui:repeat value="#{aAExamContest.labelTypes}" var="labelType">
+                                    <h:outputText value="#{labelType.name}：" />
+                                    <hr/>
+                                    <p:dataGrid columns="6" value="#{labelType.contestLabels}" var="label" style="max-width:500px" emptyMessage="">
+                                        <h:outputText value="#{label.name}：" />
+                                        <h:selectBooleanCheckbox value="#{label.selected}"/>
+                                    </p:dataGrid>
+                                </ui:repeat>
+                            </p:panel>
+
+
+
+                            <h:outputText value="开放#{applicationBean.departmentStr}：" />
+
+                            <p:treeTable id="dc" value="#{aAExamContest.root}" var="dic" style="width:500px;">
+                                <p:column style="width:200px;">
+                                    <f:facet name="header">
+                                        <h:outputText value="部门名称"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{dic.name}" ></h:outputText>
+                                </p:column>
+                                <p:column style="width:100px;">
+                                    <f:facet name="header">
+                                        <h:outputText value="选择"></h:outputText>
+                                    </f:facet>
+                                    <h:selectBooleanCheckbox value="#{dic.selected}" >
+                                        <p:ajax process="@form" listener="#{aAExamContest.checkSons(dic.id,dic.selected)}" update="@form"/>
+                                    </h:selectBooleanCheckbox>
+                                </p:column>
+                            </p:treeTable>
+
+
+                        </h:panelGrid>
+                        <p:growl/>
+                        <p:separator/>
+                        <p:commandButton ajax="false" action="#{aAExamContest.done}" value="提交"  styleClass="commonSubmit" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'examination')}"/>
+
+                    </div></h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

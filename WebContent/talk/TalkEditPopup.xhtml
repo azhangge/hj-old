@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head> 
+    <body>
+        <ui:composition>
+            <p:dialog id="editTalk1"  height="320" widgetVar="editTalk1" width="680">
+                <f:facet name="header">
+                    <h:outputText value="编辑发言" />
+                </f:facet>
+                <f:facet name="controls">
+                    <h:graphicImage value="/resources/images/close.png"
+                                    style="cursor:pointer"
+                                    onclick="editTalk1.hide();" />
+                </f:facet>
+                <p:outputPanel autoUpdate="true">
+                    <!--
+                    <p:editor value="#{threadDetail.talk_temp.content}" width="650" height="300">
+                        <ui:include src="EditorConfig.xhtml"></ui:include>
+                    </p:editor>
+                    -->
+                    
+                    <pe:ckEditor  value="#{threadDetail.talk_temp.content}" width="650" height="200"   customConfig="#{facesContext.externalContext.requestContextPath}/resources/js/ckeditor_config2.js"/>
+                    
+                    
+                </p:outputPanel>
+                <br />
+                <p:commandButton value="完成"
+                                 oncomplete="PF('editTalk1').hide();"
+                                 action="#{threadDetail.edit_ok}" update=":myForm:talks">
+                </p:commandButton>
+            </p:dialog>
+
+        </ui:composition>
+    </body>
+</html>

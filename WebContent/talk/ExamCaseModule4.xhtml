@@ -1,0 +1,591 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>
+            <ui:insert name="title"></ui:insert>
+            #{examCaseModule2.examCase.examination.module.name} - 章节练习 - #{applicationBean.info.siteHeader}</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <link rel="stylesheet" type="text/css"
+              href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs.css" />
+        <link rel="stylesheet" type="text/css"
+              href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs_a.css" />
+        <link rel="stylesheet" type="text/css"
+              href="#{facesContext.externalContext.requestContextPath}/resources/external.css" />
+
+
+    </h:head>
+    <h:body style="padding:0;margin:0;">
+
+        <h:form id="myForm" style="padding: 0px 0px 0px 0px;margin: 0px 0px 0px 0px;">
+            <ui:include src="ExamCaseFileUploader.xhtml"/>
+
+            <p:notificationBar position="top"  widgetVar="bar11" autoDisplay="true" effect="slide" style="height: 20px;" > 
+                <div style="margin: 0 auto;width:955px;text-align: left;">
+                    <h:inputHidden value="#{examCaseModule2.secretUrn}" />
+                    <h:panelGrid columns="5" style="width:90%;" cellpadding="0" cellspacing="0">
+                        <h:panelGroup>
+                            <h:outputText value="章节名称：" styleClass="topExamCase1"/>
+                            <h:outputText value="#{examCaseModule2.examCase.examination.module.name}" styleClass="topExamCase2"/>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <h:outputText value="考生姓名：" styleClass="topExamCase1"/>
+                            <h:outputText value="#{clientSession.usr.name}" styleClass="topExamCase2"/>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <h:outputText value="开始时间：" styleClass="topExamCase1"/>
+                            <h:outputText value="#{examCaseModule2.begainTime}" styleClass="topExamCase2">
+                                <f:convertDateTime pattern="HH:mm:ss" timeZone="GMT+8"/>
+                            </h:outputText>
+                        </h:panelGroup>
+
+                    </h:panelGrid>
+                </div>
+            </p:notificationBar>
+
+
+            <p:dialog id="rightStrDialog"  widgetVar="rightStrDialog" resizable="true" closable="true" fitViewport="true"
+                      width="600"  showEffect="explode" hideEffect="explode">  
+                <f:facet name="header">  
+                    <h:outputText value="试题解析" /> 
+                </f:facet>
+                <div  style="display:inline;" class="rightStrTip">正确答案：</div>
+                <div id="rightAnswer" style="display:inline;"></div>
+                <p:separator/>
+                <div class="rightStrTip">试题解析</div>
+                <div id="rightStr"></div>
+            </p:dialog>
+            
+            <p:growl id="collectGrowl"  autoUpdate="true"/>
+            
+            
+            <script type="text/javascript" language="javascript">
+                /**
+                 * 本方法用于显示试题解析
+                 */
+                function viewRightStr(ind) {
+                    var str1 = jQuery('#rightAnswer-' + ind).html();
+                    var str2 = jQuery('#rightStr-' + ind).html();
+                    //alert(str);
+                    jQuery('#rightAnswer').html(str1);
+                    jQuery('#rightStr').html(str2);
+                    PF('rightStrDialog').show();
+                }
+            </script>
+
+            <div style="width:957px;margin: 0px auto;">
+                <div style="height: 30px;"/>
+
+                <p:panel id="mainPanel" style="width:957px;" styleClass="mainPanel">
+
+                    <div style="height:500px;overflow: hidden;">
+                        <br/>
+
+                        <p:outputPanel id="progress" style="text-align:center!important;width:950px;">
+                            <h:inputHidden id="hiddenCurrentIndex" value="#{examCaseModule2.currentIndex}">
+                            </h:inputHidden>
+                            <h:outputText id="outputCurrentIndex" value="第#{examCaseModule2.currentIndex}题/共#{examCaseModule2.total}题" style="font-weight:bold;"/>
+                            <p:slider id="slider" widgetVar="slider" for="hiddenCurrentIndex" onSlide="slide();" onSlideEnd="slide();"  display="outputCurrentIndex" displayTemplate="第{value}题/共#{examCaseModule2.total}题" minValue="1" maxValue="#{examCaseModule2.total}" style="width:850px;margin:0px auto!important;">
+                            </p:slider>
+                            <script type="text/javascript" language="javascript">
+                                function slide() {
+                                    var value = PF('slider').getValue();
+                                    //alert(value);
+                                    switchTo(value);
+                                }
+                                function refreshSlide(ind) {
+                                    PF('slider').setValue(ind);
+                                    var str = '第' + ind + '题/共#{examCaseModule2.total}题';
+                                    //alert(str);
+                                    jQuery('#myForm\\:outputCurrentIndex').text(str);
+                                    jQuery('#myForm\\:hiddenCurrentIndex').val(ind);
+                                }
+                            </script>
+                            <br/>
+                        </p:outputPanel>
+
+
+                        <h:panelGrid columns="2">
+                            <h:outputText value="大题：" style="font-weight: bold;" styleClass="choiceTitle2"/>
+                            <p:dataGrid id="bigQuestion" value="#{examCaseModule2.examCase.cparts}" var="part1" columns="5"  styleClass="noBorderGrid noBackgroundGrid" >
+                                <p:link href="#" disabled="#{examCaseModule2.type ne '1'}" onclick="switchToAndRefreshSlider(#{part1.firstIndex});
+                                        return null;" value="#{part1.name}（#{part1.adapters.size()}）"  style="font-size:14px!important;"/>
+                            </p:dataGrid>
+                        </h:panelGrid>
+                        <hr/>
+
+
+                        <script type="text/javascript" language="javascript">
+                            var questionIndex = #{examCaseModule2.currentIndex};
+                            jQuery(document).ready(function() {
+                                //alert('I\'m here');
+                                jQuery('#question-wrapper-' + questionIndex).show();
+                                checkButton();
+                            });
+                            function switchPrevious() {
+                                jQuery('#question-wrapper-' + questionIndex).hide();
+                                questionIndex--;
+                                jQuery('#question-wrapper-' + questionIndex).show();
+                                checkButton();
+                                refreshSlide(questionIndex);
+                            }
+                            function switchNext() {
+                                jQuery('#question-wrapper-' + questionIndex).hide();
+                                questionIndex++;
+                                jQuery('#question-wrapper-' + questionIndex).show();
+                                checkButton();
+                                refreshSlide(questionIndex);
+                            }
+                            function switchTo(index) {
+                                jQuery('#question-wrapper-' + questionIndex).hide();
+                                questionIndex = index;
+                                //jQuery('.questionWrapper').hide();
+                                jQuery('#question-wrapper-' + questionIndex).show();
+                                checkButton();
+                                //refreshSlide(questionIndex);
+                            }
+                            function switchToAndRefreshSlider(index) {
+                                jQuery('#question-wrapper-' + questionIndex).hide();
+                                questionIndex = index;
+                                //jQuery('.questionWrapper').hide();
+                                jQuery('#question-wrapper-' + questionIndex).show();
+                                checkButton();
+                                refreshSlide(questionIndex);
+                            }
+                            function checkButton() {
+                                if (questionIndex == 1) {
+                                    PF('previousButton').disable();
+                                } else {
+                                    PF('previousButton').enable();
+                                }
+                                if (questionIndex ==#{examCaseModule2.indices.size()}) {
+                                    PF('nextButton').disable();
+                                } else {
+                                    PF('nextButton').enable();
+                                }
+                            }
+                        </script>
+                        <ui:repeat value="#{examCaseModule2.indices}" var="ind">
+
+
+                            <p:outputPanel rendered="#{examCaseModule2.adapterMap[ind].qtype=='choice'}">
+                                <div id="question-wrapper-#{ind}" class="questionWrapper" style="display:none;height:450px;margin-top: 0px;">
+                                    <div id="question-body-#{ind}">
+                                        <div style="height:200px;overflow: auto;">
+                                            <h:outputText value="#{examCaseModule2.adapterMap[ind].choiceItem.index}、（#{examCaseModule2.adapterMap[ind].moduleExam2Part.name}，#{examCaseModule2.adapterMap[ind].moduleExam2Part.description}）" styleClass="choiceTitle2" escape="false"/><hr/>
+                                            <h:outputText value="#{examCaseModule2.adapterMap[ind].choiceItem.question.name}" styleClass="choiceTitle2" escape="false"/><br/><br/>
+                                        </div>
+                                        <div style="margin-left: 30px;height:130px;overflow: auto;">
+                                            <h:selectOneRadio  value="#{examCaseModule2.adapterMap[ind].choiceItem.userAnswer}" layout="pageDirection"  styleClass="threadColumn cell0 choiceTitle2 queSpanJSF" > 
+                                                <f:selectItems value="#{examCaseModule2.adapterMap[ind].choiceItem.question.choices}" var="ch" 
+                                                               itemLabel="#{ch.labelRendered}.&nbsp;#{ch.name}&lt;br&gt;" itemValue="#{ch.label}" />
+                                            </h:selectOneRadio> 
+                                        </div>
+                                    </div>
+                                    <div id="rightAnswer-#{ind}" style="display:none;"><h:outputText value="#{examCaseModule2.adapterMap[ind].question.answer}" escape="false"/></div>
+                                    <div id="rightStr-#{ind}" style="display:none;"><h:outputText value="#{examCaseModule2.adapterMap[ind].question.rightStr}" escape="false"/></div>
+
+                                    <h:outputText value="正确答案：#{examCaseModule2.adapterMap[ind].item.question.answer}，" rendered="#{examCaseModule2.adapterMap[ind].item.done}" style="margin-left:30px;" styleClass="rightStrTip"/>
+                                    <h:outputText value="用户作答：#{examCaseModule2.adapterMap[ind].item.userAnswer}"  rendered="#{examCaseModule2.adapterMap[ind].item.done}" styleClass="rightStrTip"/>
+
+                                    <h:outputText value="#{examCaseModule2.adapterMap[ind].item.ifRight?'√':'×'}" rendered="#{examCaseModule2.adapterMap[ind].item.done}" style="color:#{examCaseModule2.adapterMap[ind].multiChoiceItem.ifRight?'green':'red'};" styleClass="rightStrM"/>
+                                    <p:outputPanel style="display:inline;" rendered="#{applicationBean.systemConfig.openCollection}">
+                                        
+                                        <p:commandLink value="△收藏本题" action="#{questionCollectionMag.collect(examCaseModule2.adapterMap[ind].question.id, examCaseModule2.adapterMap[ind].qtype)}" rendered="#{applicationBean.systemConfig.openCollection}"  process="@this" global="false" update=":myForm:collectGrowl"  styleClass="explain" style="margin-left:30px;" />
+                                        
+                                    </p:outputPanel>
+                                </div>
+                            </p:outputPanel>
+
+
+                            <p:outputPanel rendered="#{examCaseModule2.adapterMap[ind].qtype=='mchoice'}">
+                                <div id="question-wrapper-#{ind}" class="questionWrapper" style="display:none;height:450px;">
+                                    <div id="question-body-#{ind}">
+                                        <div style="height:200px;overflow: auto;">
+                                            <h:outputText value="#{ind}、（#{examCaseModule2.adapterMap[ind].moduleExam2Part.name}，#{examCaseModule2.adapterMap[ind].moduleExam2Part.description}）" styleClass="choiceTitle2" escape="false"/><hr/>
+                                            <h:outputText value="#{examCaseModule2.adapterMap[ind].multiChoiceItem.question.name}" styleClass="choiceTitle2" escape="false"/>
+                                        </div>
+                                        <div id="multi-select-#{examCaseModule2.adapterMap[ind].multiChoiceItem.id}"  style="margin-left: 30px;height:130px;overflow: auto;">
+                                            <h:selectManyCheckbox  value="#{examCaseModule2.adapterMap[ind].multiChoiceItem.selectedLabels}" layout="pageDirection"  styleClass="threadColumn cell0 choiceTitle2 queSpanJSF" > 
+                                                <f:selectItems value="#{examCaseModule2.adapterMap[ind].multiChoiceItem.question.choices}" var="ch" 
+                                                               itemLabel="#{ch.labelRendered}.&nbsp;#{ch.name}&lt;br&gt;" itemValue="#{ch.label}" />
+                                            </h:selectManyCheckbox> 
+                                        </div>
+                                    </div>
+                                    <div id="rightAnswer-#{ind}" style="display:none;"><h:outputText value="#{examCaseModule2.adapterMap[ind].question.answer}" escape="false"/></div>
+                                    <div id="rightStr-#{ind}" style="display:none;"><h:outputText value="#{examCaseModule2.adapterMap[ind].question.rightStr}" escape="false"/></div>
+
+                                    <h:outputText value="正确答案：#{examCaseModule2.adapterMap[ind].question.answer}，" rendered="#{examCaseModule2.adapterMap[ind].item.done}" style="margin-left:30px;" styleClass="rightStrTip"/>
+                                    <h:outputText value="用户作答：#{examCaseModule2.adapterMap[ind].item.userAnswer}"  rendered="#{examCaseModule2.adapterMap[ind].item.done}" styleClass="rightStrTip"/>
+
+                                    <h:outputText value="#{examCaseModule2.adapterMap[ind].item.ifRight?'√':'×'}" rendered="#{examCaseModule2.adapterMap[ind].item.done}" style="color:#{examCaseModule2.adapterMap[ind].multiChoiceItem.ifRight?'green':'red'};" styleClass="rightStrM"/>
+                                    <p:outputPanel style="display:inline;" rendered="#{applicationBean.systemConfig.openCollection}">
+                                      
+                                       <p:commandLink value="△收藏本题" action="#{questionCollectionMag.collect(examCaseModule2.adapterMap[ind].question.id, examCaseModule2.adapterMap[ind].qtype)}" rendered="#{applicationBean.systemConfig.openCollection}"  process="@this" global="false" update=":myForm:collectGrowl"  styleClass="explain" style="margin-left:30px;" />
+                                        
+                                    </p:outputPanel>
+                                </div>
+                            </p:outputPanel>
+
+
+
+                            <p:outputPanel rendered="#{examCaseModule2.adapterMap[ind].qtype=='fill'}">
+                                <div id="question-wrapper-#{ind}" class="questionWrapper" style="display:none;height:450px;">
+                                    <div id="question-body-#{ind}">
+                                        <div style="height:90px;overflow: auto;">
+                                            <h:outputText value="#{ind}、（#{examCaseModule2.adapterMap[ind].moduleExam2Part.name}，#{examCaseModule2.adapterMap[ind].moduleExam2Part.description}）" styleClass="choiceTitle2" escape="false"/><hr/>
+                                        </div>
+                                        <div id="fill-#{examCaseModule2.adapterMap[ind].fillItem.id}" style="margin-left: 0px;margin-left: 30px;height:310px;overflow: auto;">
+                                            <ui:repeat value="#{examCaseModule2.adapterMap[ind].fillItem.blocks}" var="b">
+                                                <h:outputText value="#{b.preStr}" style="#{fill.marked?'color:red;':''}" escape="false" styleClass="choiceTitle2"/>
+                                                <h:inputText  value="#{b.userAnswer}" styleClass="fillBlank"/>
+                                            </ui:repeat>
+                                            <h:outputText value="#{examCaseModule2.adapterMap[ind].fillItem.lastStr}" style="#{examCaseModule2.adapterMap[ind].fillItem.marked?'color:red;':''}" escape="false" styleClass="choiceTitle2"/> 
+                                        </div>
+                                    </div>
+                                    <div id="rightAnswer-#{ind}" style="display:none;"><h:outputText value="#{examCaseModule2.adapterMap[ind].question.name}" escape="false"/></div>
+                                    <div id="rightStr-#{ind}" style="display:none;"><h:outputText value="#{examCaseModule2.adapterMap[ind].question.rightStr}" escape="false"/></div>
+
+                                    <h:outputText value="正确答案：#{examCaseModule2.adapterMap[ind].item.rightAnswerStr}，" rendered="#{examCaseModule2.adapterMap[ind].item.done}" style="margin-left:30px;" styleClass="rightStrTip"/>
+                                    <h:outputText value="用户作答：#{examCaseModule2.adapterMap[ind].item.userAnswerStr}"  rendered="#{examCaseModule2.adapterMap[ind].item.done}" styleClass="rightStrTip"/>
+
+                                    <h:outputText value="#{examCaseModule2.adapterMap[ind].item.ifRight?'√':'×'}" rendered="#{examCaseModule2.adapterMap[ind].item.done}" style="color:#{examCaseModule2.adapterMap[ind].multiChoiceItem.ifRight?'green':'red'};" styleClass="rightStrM"/>
+                                    <p:outputPanel style="display:inline;" rendered="#{applicationBean.systemConfig.openCollection}">
+                                        <p:commandLink value="△收藏本题" action="#{questionCollectionMag.collect(examCaseModule2.adapterMap[ind].question.id, examCaseModule2.adapterMap[ind].qtype)}" rendered="#{applicationBean.systemConfig.openCollection}"  process="@this" global="false" update=":myForm:collectGrowl"  styleClass="explain" style="margin-left:30px;" />
+                                        
+                                    </p:outputPanel>
+                                </div>
+                            </p:outputPanel>
+
+
+
+                            <p:outputPanel rendered="#{examCaseModule2.adapterMap[ind].qtype=='judge'}">
+                                <div id="question-wrapper-#{ind}" class="questionWrapper" style="display:none;height:450px;">
+                                    <div id="question-body-#{ind}">
+                                        <div style="height:200px;overflow: auto;">
+                                            <h:outputText value="#{examCaseModule2.adapterMap[ind].judgeItem.index}、（#{examCaseModule2.adapterMap[ind].moduleExam2Part.name}，#{examCaseModule2.adapterMap[ind].moduleExam2Part.description}）" styleClass="choiceTitle2" escape="false"/><hr/>
+                                            <h:outputText value="#{examCaseModule2.adapterMap[ind].judgeItem.question.name}" styleClass="choiceTitle2" escape="false"/>
+                                        </div>
+                                        <div id="multi-select-#{examCaseModule2.adapterMap[ind].judgeItem.id}"  style="margin-left: 30px;height:130px;overflow: auto;">
+                                            <h:selectOneRadio value="#{examCaseModule2.adapterMap[ind].judgeItem.userAnswer}" layout="pageDirection"   styleClass="threadColumn choiceTitle2 queSpanJSF">
+                                                <f:selectItem itemLabel="正确" itemValue="true"/>
+                                                <f:selectItem itemLabel="错误" itemValue="false"/>
+                                                <!-- <f:selectItem itemLabel="未填写" itemValue="null"/> -->
+                                            </h:selectOneRadio>
+                                        </div>
+                                    </div>
+                                    <div id="rightAnswer-#{ind}" style="display:none;"><h:outputText value="#{examCaseModule2.adapterMap[ind].question.answer}" escape="false"/></div>
+                                    <div id="rightStr-#{ind}" style="display:none;"><h:outputText value="#{examCaseModule2.adapterMap[ind].question.rightStr}" escape="false"/></div>
+
+                                    <h:outputText value="正确答案：#{examCaseModule2.adapterMap[ind].question.answer}，" rendered="#{examCaseModule2.adapterMap[ind].item.done}" style="margin-left:30px;" styleClass="rightStrTip"/>
+                                    <h:outputText value="用户作答：#{examCaseModule2.adapterMap[ind].item.userAnswer}"  rendered="#{examCaseModule2.adapterMap[ind].item.done}" styleClass="rightStrTip"/>
+
+                                    <h:outputText value="#{examCaseModule2.adapterMap[ind].item.ifRight?'√':'×'}" rendered="#{examCaseModule2.adapterMap[ind].item.done}" style="color:#{examCaseModule2.adapterMap[ind].multiChoiceItem.ifRight?'green':'red'};" styleClass="rightStrM"/>
+                                    <p:outputPanel style="display:inline;" rendered="#{applicationBean.systemConfig.openCollection}">
+                                        <p:commandLink value="△收藏本题" action="#{questionCollectionMag.collect(examCaseModule2.adapterMap[ind].question.id, examCaseModule2.adapterMap[ind].qtype)}" rendered="#{applicationBean.systemConfig.openCollection}"  process="@this" global="false" update=":myForm:collectGrowl"  styleClass="explain" style="margin-left:30px;" />
+                                        
+                                    </p:outputPanel>
+                                </div>
+                            </p:outputPanel>
+
+
+                            <p:outputPanel rendered="#{examCaseModule2.adapterMap[ind].qtype=='essay'}">
+                                <div id="question-wrapper-#{ind}" class="questionWrapper" style="display:none;height:400px;">
+                                    <div id="question-body-#{ind}">
+                                        <div style="height:200px;overflow: auto;">
+                                            <h:outputText value="#{ind}、（#{examCaseModule2.adapterMap[ind].moduleExam2Part.name}，#{examCaseModule2.adapterMap[ind].moduleExam2Part.description}）" styleClass="choiceTitle2" escape="false"/><hr/>
+                                            <h:outputText value="#{examCaseModule2.adapterMap[ind].essayItem.question.name}" styleClass="choiceTitle2" escape="false"/>
+                                        </div>
+                                        <div id="multi-select-#{essay.id}"  style="margin-left: 30px;height:130px;overflow: auto;">
+                                            <h:inputTextarea  value="#{examCaseModule2.adapterMap[ind].essayItem.userAnswer}" style="width:600px;height:110px;margin-left: 10px;">
+
+                                            </h:inputTextarea><br/>
+                                        </div>
+                                    </div>
+                                    <div id="rightAnswer-#{ind}" style="display:none;"><h:outputText value="#{examCaseModule2.adapterMap[ind].question.answer}" escape="false"/></div>
+                                    <div id="rightStr-#{ind}" style="display:none;"><h:outputText value="#{examCaseModule2.adapterMap[ind].question.rightStr}" escape="false"/></div>
+
+                                    <p:outputPanel style="display:inline;" rendered="#{applicationBean.systemConfig.openCollection}">
+                                        <p:commandLink value="△收藏本题" action="#{questionCollectionMag.collect(examCaseModule2.adapterMap[ind].question.id, examCaseModule2.adapterMap[ind].qtype)}" rendered="#{applicationBean.systemConfig.openCollection}"  process="@this" global="false" update=":myForm:collectGrowl"  styleClass="explain" style="margin-left:30px;" />
+                                        
+                                    </p:outputPanel>
+                                </div>
+                            </p:outputPanel>
+
+                            <p:outputPanel rendered="#{examCaseModule2.adapterMap[ind].qtype=='file'}">
+
+                                <div id="question-wrapper-#{ind}" class="questionWrapper" style="display:none;height:450px;">
+                                    <div id="question-body-#{ind}">
+                                        <div style="height:160px;overflow: auto;">
+                                            <h:outputText value="#{ind}、（#{examCaseModule2.adapterMap[ind].moduleExam2Part.name}，#{examCaseModule2.adapterMap[ind].moduleExam2Part.description}）" styleClass="choiceTitle2" escape="false"/><hr/>
+                                            <h:outputText value="#{examCaseModule2.adapterMap[ind].fileItem.question.name}" styleClass="choiceTitle2" escape="false"/>
+                                        </div>
+                                        <div id="multi-select-#{examCaseModule2.adapterMap[ind].fileItem.id}"  style="margin-left: 30px;height:220px;overflow: auto;">
+                                            <p:separator/>
+                                            <h:panelGrid columns="1" style="margin-left:10px;" columnClasses="w20,w70" border="0" styleClass="threadColumn" cellpadding="0" cellspacing="0">
+                                                <h:panelGroup id="fileAttacher">
+                                                    <h:outputText value="附件：" styleClass="choiceTitle"/>
+                                                    <div id="fwrapper-#{file.id}" style="display:inline;">
+                                                        <h:outputLink  target="_blank"  value="#{facesContext.externalContext.requestContextPath}/DownloadFileQuestionAttach?id=#{file.id}&amp;uid=#{clientSession.usr.id}&amp;eid=#{examCaseMB.examCase.examination.id}"  rendered="#{file.attached}">
+                                                            <h:outputText value="点击下载"/>
+                                                        </h:outputLink>
+                                                        <h:outputText value="无" rendered="#{!examCaseModule2.adapterMap[ind].fileItem.attached}"/>
+                                                    </div>
+                                                </h:panelGroup>
+                                                <h:panelGrid columns="2" >
+                                                    <p:commandButton value="上传附件" action="#{examCaseFileUploader.prepareToUpload(examCaseModule2.adapterMap[ind].fileItem.id, examCaseModule2.examCase.examination.id)}" oncomplete="PF('examFileUploader').show();" update="@none"/>
+                                                    <h:outputText value="仅.ZIP和.RAR文件有效"/>
+                                                </h:panelGrid>
+                                            </h:panelGrid>
+                                            <p:separator/>
+                                            <h:panelGrid style="margin-left:10px;" styleClass="threadColumn" columns="1">
+                                                <h:outputText value="操作步骤：" styleClass="choiceTitle2"/>
+                                                <h:inputTextarea value="#{examCaseModule2.adapterMap[ind].fileItem.userAnswer}" style="width:600px;height:80px;margin-left: 0px;" />
+                                            </h:panelGrid>
+                                        </div>
+                                    </div>
+                                    <div id="rightAnswer-#{ind}" style="display:none;"><h:outputText value="#{examCaseModule2.adapterMap[ind].question.answer}" escape="false"/></div>
+                                    <div id="rightStr-#{ind}" style="display:none;"><h:outputText value="#{examCaseModule2.adapterMap[ind].question.rightStr}" escape="false"/></div>
+
+                                    <p:outputPanel style="display:inline;" rendered="#{applicationBean.systemConfig.openCollection}">
+                                        <p:commandLink value="△收藏本题" action="#{questionCollectionMag.collect(examCaseModule2.adapterMap[ind].question.id, examCaseModule2.adapterMap[ind].qtype)}" rendered="#{applicationBean.systemConfig.openCollection}"  process="@this" global="false" update=":myForm:collectGrowl"  styleClass="explain" style="margin-left:30px;" />
+                                        
+                                    </p:outputPanel>
+                                </div>
+                            </p:outputPanel>
+
+                            <p:outputPanel rendered="#{examCaseModule2.adapterMap[ind].qtype=='case'}">
+                                <p:outputPanel rendered="#{examCaseModule2.adapterMap[ind].item.caseType=='choice'}">
+                                    <div id="question-wrapper-#{ind}" class="questionWrapper" style="display:none;height:450px;">
+                                        <div id="question-body-#{ind}">
+                                            <div style="height:35px;">
+                                                <h:outputText value="#{ind}、#{examCaseModule2.adapterMap[ind].moduleExam2Part.name}" style="" styleClass="choiceTitle" escape="false"/>
+                                                <h:outputText value="（#{examCaseModule2.adapterMap[ind].choiceItem.caseItem.question.name}）" style="" styleClass="choiceTitle" escape="false"/>
+                                                <hr/>
+                                            </div>
+                                            <div style="height:130px;overflow: auto;">
+                                                <h:outputText value="#{examCaseModule2.adapterMap[ind].choiceItem.caseItem.question.content}" style="" styleClass="choiceTitle" escape="false"/>
+                                                <hr/>
+                                            </div>
+                                            <div style="height:90px;overflow: auto;">
+                                                <h:outputText value="#{examCaseModule2.adapterMap[ind].choiceItem.question.name}" style="#{examCaseModule2.adapterMap[ind].choiceItem.marked?'color:red;':''}" styleClass="choiceTitle" escape="false"/>
+                                            </div>
+                                            <div style="margin-left: 30px;height:110px;overflow: auto;">
+                                                <h:selectOneRadio  value="#{examCaseModule2.adapterMap[ind].choiceItem.userAnswer}"   layout="pageDirection" class="threadColumn cell0 choiceTitle queSpanJSF"> 
+                                                    <f:selectItems value="#{examCaseModule2.adapterMap[ind].choiceItem.question.choices}" var="ch" itemLabel="#{ch.labelRendered}.&nbsp;#{ch.name}" itemValue="#{ch.label}" />
+                                                </h:selectOneRadio> 
+                                            </div>
+                                        </div>
+                                        <div id="rightAnswer-#{ind}" style="display:none;"><h:outputText value="#{examCaseModule2.adapterMap[ind].question.answer}" escape="false"/></div>
+                                        <div id="rightStr-#{ind}" style="display:none;"><h:outputText value="#{examCaseModule2.adapterMap[ind].question.rightStr}" escape="false"/></div>
+
+                                        <h:outputText value="正确答案：#{examCaseModule2.adapterMap[ind].question.answer}，" rendered="#{examCaseModule2.adapterMap[ind].item.done}" style="margin-left:30px;" styleClass="rightStrTip"/>
+                                        <h:outputText value="用户作答：#{examCaseModule2.adapterMap[ind].item.userAnswer}"  rendered="#{examCaseModule2.adapterMap[ind].item.done}" styleClass="rightStrTip"/>
+
+                                        <h:outputText value="#{examCaseModule2.adapterMap[ind].item.ifRight?'√':'×'}" rendered="#{examCaseModule2.adapterMap[ind].item.done}" style="color:#{examCaseModule2.adapterMap[ind].multiChoiceItem.ifRight?'green':'red'};" styleClass="rightStrM"/>
+                                        <p:outputPanel style="display:inline;" rendered="#{applicationBean.systemConfig.openCollection}">
+                                            <p:commandLink value="△收藏本题" action="#{questionCollectionMag.collect(examCaseModule2.adapterMap[ind].question.id, examCaseModule2.adapterMap[ind].qtype)}" rendered="#{applicationBean.systemConfig.openCollection}"  process="@this" global="false" update=":myForm:collectGrowl"  styleClass="explain" style="margin-left:30px;" />
+                                        
+                                        </p:outputPanel>
+                                    </div>
+                                </p:outputPanel>
+
+                                <p:outputPanel rendered="#{examCaseModule2.adapterMap[ind].item.caseType=='mchoice'}">
+                                    <div id="question-wrapper-#{ind}" class="questionWrapper" style="display:none;height:450px;">
+                                        <div id="question-body-#{ind}">
+                                            <div style="height:35px;">
+                                                <h:outputText value="#{ind}、#{examCaseModule2.adapterMap[ind].moduleExam2Part.name}" style="" styleClass="choiceTitle" escape="false"/>
+                                                <h:outputText value="（#{examCaseModule2.adapterMap[ind].multiChoiceItem.caseItem.question.name}）" style="" styleClass="choiceTitle" escape="false"/>
+                                                <hr/>
+                                            </div>
+                                            <div style="height:130px;overflow: auto;">
+                                                <h:outputText value="#{examCaseModule2.adapterMap[ind].multiChoiceItem.caseItem.question.content}" style="" styleClass="choiceTitle" escape="false"/>
+                                                <hr/>
+                                            </div>
+                                            <div style="height:90px;overflow: auto;">
+                                                <h:outputText value="（#{examCaseModule2.adapterMap[ind].multiChoiceItem.index}）#{examCaseModule2.adapterMap[ind].multiChoiceItem.question.name}" styleClass="choiceTitle" escape="false"/>
+                                            </div>
+                                            <div id="multi-select-#{examCaseModule2.adapterMap[ind].multiChoiceItem.id}" style="margin-left: 30px;overflow: auto;">
+                                                <h:selectManyCheckbox  value="#{examCaseModule2.adapterMap[ind].multiChoiceItem.selectedLabels}" layout="pageDirection"  styleClass="threadColumn cell0 choiceTitle queSpanJSF" > 
+                                                    <f:selectItems value="#{examCaseModule2.adapterMap[ind].multiChoiceItem.question.choices}" var="ch" 
+                                                                   itemLabel="#{ch.labelRendered}.&nbsp;#{ch.name}&lt;br&gt;" itemValue="#{ch.label}" />
+                                                </h:selectManyCheckbox> 
+                                            </div>
+                                        </div>
+                                        <div id="rightAnswer-#{ind}" style="display:none;"><h:outputText value="#{examCaseModule2.adapterMap[ind].question.answer}" escape="false"/></div>
+                                        <div id="rightStr-#{ind}" style="display:none;"><h:outputText value="#{examCaseModule2.adapterMap[ind].question.rightStr}" escape="false"/></div>
+
+                                        <h:outputText value="正确答案：#{examCaseModule2.adapterMap[ind].question.answer}，" rendered="#{examCaseModule2.adapterMap[ind].item.done}" style="margin-left:30px;" styleClass="rightStrTip"/>
+                                        <h:outputText value="用户作答：#{examCaseModule2.adapterMap[ind].item.userAnswer}"  rendered="#{examCaseModule2.adapterMap[ind].item.done}" styleClass="rightStrTip"/>
+
+                                        <h:outputText value="#{examCaseModule2.adapterMap[ind].item.ifRight?'√':'×'}" rendered="#{examCaseModule2.adapterMap[ind].item.done}" style="color:#{examCaseModule2.adapterMap[ind].multiChoiceItem.ifRight?'green':'red'};" styleClass="rightStrM"/>
+                                        <p:outputPanel style="display:inline;" rendered="#{applicationBean.systemConfig.openCollection}">
+                                            <p:commandLink value="△收藏本题" action="#{questionCollectionMag.collect(examCaseModule2.adapterMap[ind].question.id, examCaseModule2.adapterMap[ind].qtype)}" rendered="#{applicationBean.systemConfig.openCollection}"  process="@this" global="false" update=":myForm:collectGrowl"  styleClass="explain" style="margin-left:30px;" />
+                                        
+                                        </p:outputPanel>
+                                    </div>
+                                </p:outputPanel>
+                                <p:outputPanel rendered="#{examCaseModule2.adapterMap[ind].item.caseType=='fill'}">
+                                    <div id="question-wrapper-#{ind}" class="questionWrapper" style="display:none;height:450px;">
+                                        <div id="question-body-#{ind}">
+                                            <div style="height:35px;">
+                                                <h:outputText value="#{ind}、#{examCaseModule2.adapterMap[ind].moduleExam2Part.name}" style="" styleClass="choiceTitle" escape="false"/>
+                                                <h:outputText value="（#{examCaseModule2.adapterMap[ind].fillItem.caseItem.question.name}）" style="" styleClass="choiceTitle" escape="false"/>
+                                                <hr/>
+                                            </div>
+                                            <div style="height:130px;overflow: auto;">
+                                                <h:outputText value="#{examCaseModule2.adapterMap[ind].fillItem.caseItem.question.content}" style="" styleClass="choiceTitle" escape="false"/>
+                                                <hr/>
+                                            </div>
+                                            <div id="fill-#{examCaseModule2.adapterMap[ind].fillItem.id}" style="margin-left: 0px;height:90px;overflow: auto;">
+                                                <ui:repeat value="#{examCaseModule2.adapterMap[ind].fillItem.blocks}" var="b">
+                                                    <h:outputText value="#{b.preStr}" style="#{examCaseModule2.adapterMap[ind].fillItem.marked?'color:red;':''}" escape="false" styleClass="choiceTitle2"/>
+                                                    <h:inputText  value="#{b.userAnswer}" styleClass="fillBlank">
+                                                    </h:inputText>
+                                                </ui:repeat>
+                                                <h:outputText value="#{examCaseModule2.adapterMap[ind].fillItem.lastStr}" style="#{examCaseModule2.adapterMap[ind].fillItem.marked?'color:red;':''}" escape="false" styleClass="choiceTitle2"/> 
+                                            </div>
+                                        </div>
+                                        <div id="rightAnswer-#{ind}" style="display:none;"><h:outputText value="#{examCaseModule2.adapterMap[ind].question.answer}" escape="false"/></div>
+                                        <div id="rightStr-#{ind}" style="display:none;"><h:outputText value="#{examCaseModule2.adapterMap[ind].question.rightStr}" escape="false"/></div>
+
+                                        <h:outputText value="正确答案：#{examCaseModule2.adapterMap[ind].question.answer}，" rendered="#{examCaseModule2.adapterMap[ind].item.done}" style="margin-left:30px;" styleClass="rightStrTip"/>
+                                        <h:outputText value="用户作答：#{examCaseModule2.adapterMap[ind].item.userAnswer}"  rendered="#{examCaseModule2.adapterMap[ind].item.done}" styleClass="rightStrTip"/>
+
+                                        <h:outputText value="#{examCaseModule2.adapterMap[ind].item.ifRight?'√':'×'}" rendered="#{examCaseModule2.adapterMap[ind].item.done}" style="color:#{examCaseModule2.adapterMap[ind].multiChoiceItem.ifRight?'green':'red'};" styleClass="rightStrM"/>
+                                        <p:outputPanel style="display:inline;" rendered="#{applicationBean.systemConfig.openCollection}">
+                                            <p:commandLink value="△收藏本题" action="#{questionCollectionMag.collect(examCaseModule2.adapterMap[ind].question.id, examCaseModule2.adapterMap[ind].qtype)}" rendered="#{applicationBean.systemConfig.openCollection}"  process="@this" global="false" update=":myForm:collectGrowl"  styleClass="explain" style="margin-left:30px;" />
+                                        
+                                        </p:outputPanel>
+                                    </div>
+                                </p:outputPanel>
+                                <p:outputPanel rendered="#{examCaseModule2.adapterMap[ind].item.caseType=='judge'}">
+                                    <div id="question-wrapper-#{ind}" class="questionWrapper" style="display:none;height:450px;">
+                                        <div id="question-body-#{ind}">
+                                            <div style="height:35px;">
+                                                <h:outputText value="#{ind}、#{examCaseModule2.adapterMap[ind].moduleExam2Part.name}" style="" styleClass="choiceTitle" escape="false"/>
+                                                <h:outputText value="（#{examCaseModule2.adapterMap[ind].judgeItem.caseItem.question.name}）" style="" styleClass="choiceTitle" escape="false"/>
+                                                <hr/>
+                                            </div>
+                                            <div style="height:130px;overflow: auto;">
+                                                <h:outputText value="#{examCaseModule2.adapterMap[ind].judgeItem.caseItem.question.content}" style="" styleClass="choiceTitle" escape="false"/>
+                                                <hr/>
+                                            </div>
+                                            <div style="height:90px;overflow: auto;">
+                                                <h:outputText value="#{examCaseModule2.adapterMap[ind].judgeItem.question.name}" escape="false" styleClass="choiceTitle"/>
+                                            </div>
+                                            <h:selectOneRadio value="#{examCaseModule2.adapterMap[ind].judgeItem.userAnswer}" style="display:inline;" styleClass="threadColumn choiceTitle queSpanJSF">
+                                                <f:selectItem itemLabel="正确" itemValue="true"/>
+                                                <f:selectItem itemLabel="错误" itemValue="false"/>
+                                                <f:selectItem itemLabel="未填写" itemValue="null"/>
+                                            </h:selectOneRadio>
+                                        </div>
+                                        <div id="rightAnswer-#{ind}" style="display:none;"><h:outputText value="#{examCaseModule2.adapterMap[ind].question.answer}" escape="false"/></div>
+                                        <div id="rightStr-#{ind}" style="display:none;"><h:outputText value="#{examCaseModule2.adapterMap[ind].question.rightStr}" escape="false"/></div>
+
+                                        <h:outputText value="正确答案：#{examCaseModule2.adapterMap[ind].question.answer}，" rendered="#{examCaseModule2.adapterMap[ind].item.done}" style="margin-left:30px;" styleClass="rightStrTip"/>
+                                        <h:outputText value="用户作答：#{examCaseModule2.adapterMap[ind].item.userAnswer}"  rendered="#{examCaseModule2.adapterMap[ind].item.done}" styleClass="rightStrTip"/>
+
+                                        <h:outputText value="#{examCaseModule2.adapterMap[ind].item.ifRight?'√':'×'}" rendered="#{examCaseModule2.adapterMap[ind].item.done}" style="color:#{examCaseModule2.adapterMap[ind].multiChoiceItem.ifRight?'green':'red'};" styleClass="rightStrM"/>
+                                        <p:outputPanel style="display:inline;" rendered="#{applicationBean.systemConfig.openCollection}">
+                                            <p:commandLink value="△收藏本题" action="#{questionCollectionMag.collect(examCaseModule2.adapterMap[ind].question.id, examCaseModule2.adapterMap[ind].qtype)}" rendered="#{applicationBean.systemConfig.openCollection}"  process="@this" global="false" update=":myForm:collectGrowl"  styleClass="explain" style="margin-left:30px;" />
+                                        
+                                        </p:outputPanel>
+                                    </div>
+                                </p:outputPanel>
+                                <p:outputPanel rendered="#{examCaseModule2.adapterMap[ind].item.caseType=='essay'}">
+                                    <div id="question-wrapper-#{ind}" class="questionWrapper" style="display:none;height:450px;">
+                                        <div id="question-body-#{ind}">
+                                            <div style="height:35px;">
+                                                <h:outputText value="#{ind}、#{examCaseModule2.adapterMap[ind].moduleExam2Part.name}" style="" styleClass="choiceTitle" escape="false"/>
+                                                <h:outputText value="（#{examCaseModule2.adapterMap[ind].essayItem.caseItem.question.name}）" style="" styleClass="choiceTitle" escape="false"/>
+                                                <hr/>
+                                            </div>
+                                            <div style="height:110px;overflow: auto;">
+                                                <h:outputText value="#{examCaseModule2.adapterMap[ind].essayItem.caseItem.question.content}" style="" styleClass="choiceTitle" escape="false"/>
+                                                <hr/>
+                                            </div>
+                                            <div style="height:90px;overflow: auto;">
+                                                <h:outputText value="#{examCaseModule2.adapterMap[ind].essayItem.question.name}" style="#{examCaseModule2.adapterMap[ind].essayItem.marked?'color:red;':''}" styleClass="choiceTitle" escape="false"/><br/>
+                                            </div>
+                                            <h:inputTextarea  value="#{examCaseModule2.adapterMap[ind].essayItem.userAnswer}"  style="width:500px;height:90px;margin-left: 10px;"/><br/>
+                                        </div>
+                                        <div id="rightAnswer-#{ind}" style="display:none;"><h:outputText value="#{examCaseModule2.adapterMap[ind].question.answer}" escape="false"/></div>
+                                        <div id="rightStr-#{ind}" style="display:none;"><h:outputText value="#{examCaseModule2.adapterMap[ind].question.rightStr}" escape="false"/></div>
+
+                                        <p:outputPanel style="display:inline;" rendered="#{applicationBean.systemConfig.openCollection}">
+                                            <p:commandLink value="△收藏本题" action="#{questionCollectionMag.collect(examCaseModule2.adapterMap[ind].question.id, examCaseModule2.adapterMap[ind].qtype)}" rendered="#{applicationBean.systemConfig.openCollection}"  process="@this" global="false" update=":myForm:collectGrowl"  styleClass="explain" style="margin-left:30px;" />
+                                        
+                                        </p:outputPanel>
+                                    </div>
+                                </p:outputPanel>
+                            </p:outputPanel>
+                        </ui:repeat>
+                    </div>
+                    <div>
+
+                        <p:separator/>
+                        <p:outputPanel >
+                            <p:button id="previousButton" widgetVar="previousButton" value="上一题" onclick="switchPrevious();
+                                    return false;" style="margin-left:10px;" />
+                            <p:button id="nextButton" widgetVar="nextButton" value="下一题" onclick="switchNext();
+                                    return false;" style="margin-left:10px;"/>
+                            <p:button id="viewStr" widgetVar="viewStr" value="试题解析" onclick="viewRightStr(questionIndex);
+                                    return false;" style="margin-left:10px;" rendered="#{examCaseModule2.examCase.examination.ifShowAnswer}"/>
+                            <p:commandButton id="saveExam" value="保存练习" action="#{examCaseModule2.autoSaveExamCase()}" update="@form" style="margin-left:10px;"/>
+                            <p:commandButton  value="退出练习" action="#{examCaseModule2.logout()}"  process="@this"  ignoreAutoUpdate="true" global="false"/>
+                            <h:outputText value="（按ctrl+S键快捷保存练习，使用Q、E或方向键左、右切换试题，按R查看解析）" style="color:blue;"/>
+
+                        </p:outputPanel>
+
+                        <br/>
+                        <br/>
+                    </div>
+
+                </p:panel>
+            </div>
+            <p:growl id="growl"/>
+            <ui:include src="/AjaxStatus1.xhtml"/>
+        </h:form>
+        <script type="text/javascript" language="javascript">
+            //<![CDATA[
+            function pressLeft() {
+                if (questionIndex > 1) {
+                    jQuery('#myForm\\:previousButton').trigger('click');
+                }
+            }
+            function pressRight() {
+                if (questionIndex < #{examCaseModule2.total}) {
+                    jQuery('#myForm\\:nextButton').trigger('click');
+                }
+            }
+            function pressSave() {
+                jQuery('#myForm\\:saveExam').trigger('click');
+            }
+            function viewStr() {
+                jQuery('#myForm\\:viewStr').trigger('click');
+            }
+            function getOut() {
+                window.location.href = "Default.jspx";
+            }
+            //]]>
+        </script>
+        <p:hotkey bind="ctrl+s" handler="pressSave()" ignoreAutoUpdate="true"/>
+        <p:hotkey bind="left" handler="pressLeft()"  />
+        <p:hotkey bind="right" handler="pressRight()" />
+        <p:hotkey bind="q" handler="pressLeft()"  />
+        <p:hotkey bind="e" handler="pressRight()" />
+        <p:hotkey bind="r" handler="viewStr()"  rendered="#{examCaseModule2.examCase.examination.ifShowAnswer}"/>
+    </h:body>
+</html>
+

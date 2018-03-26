@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" type="text/css"
+              href="#{facesContext.externalContext.requestContextPath}/resources/bbs_back.css" />
+    </h:head>
+    <h:body>
+        <ui:composition>
+            <div style="">
+                <h:form id="formMenu">
+                    <ui:include src="/ManualPanel.xhtml"></ui:include>
+                    <div style="border:0px solid gray;">
+                        <p:sticky target="menu1"/>
+                        <p:accordionPanel id="menu1" activeIndex="#{adminSessionBean.activeIndex}" onTabChange="" dynamic="false" >
+
+                            <p:ajax event="tabChange" process="@this" listener="#{adminSessionBean.onChange}" />
+                            
+                            
+                            <p:tab id="tab2" title="试题管理" rendered="#{adminSessionBean.admin.grp=='user'}">
+                                <div class="menuWrapper">
+                                    <p:menu styleClass="menuTree">
+                                        <p:menuitem rendered="#{copyrightController.sysType=='1'}" url="/m/ListExamModule.jspx" value="题库模块" icon="ui-icon-extlink"/>
+                                        <p:menuitem rendered="#{copyrightController.sysType!='1'}" url="/m/ExamModuleMag2.jspx" value="题库模块" icon="ui-icon-extlink"/>
+                                        <p:menuitem url="/m/ModuleExamMag.jspx" value="习题集" icon="ui-icon-extlink"/>
+                                        <p:menuitem url="/m/ImportExport.jspx" value="试题导入导出" icon="ui-icon-extlink"/>
+                                        <p:menuitem url="/m/SearchQuestion.jspx" value="试题检索" icon="ui-icon-extlink"/>
+                                        <p:menuitem url="/m/ExamModuleStatistic.jspx" value="试题统计" icon="ui-icon-extlink"/>
+<!--                                         <p:menuitem url="/m/ListWrongQuestion.jspx" value="错题检测" icon="ui-icon-extlink"/>
+ -->                                        <p:menuitem url="/m/ListBuffetExamination.jspx" value="试题自助练习" icon="ui-icon-extlink"/>
+                                    </p:menu>
+                                    <!-- 
+                                    <p:separator/>
+                                    <c:if test="#{menuTree.root.childCount!=0}">
+                                        <p:tree value="#{menuTree.root}" var="node" dynamic="true" style="width:180px;border: 0px solid red;">
+                                            <p:treeNode icon="#{node.sons.size()==0?'ui-icon-document':'ui-icon-folder-collapsed'}">
+                                                <h:outputLink value="ListAllQuestion.jspx?module_id=#{node.id}" rendered="#{node.sons.size()==0}">
+                                                    <h:outputText value="#{node.name}"/>
+                                                </h:outputLink>
+                                                <h:outputText value="#{node.name}" rendered="#{node.sons.size()!=0}"/>
+                                            </p:treeNode>
+                                        </p:tree>
+                                    </c:if>
+                                    <c:if test="#{menuTree.root.childCount==0}">
+                                        <div style="margin-left: 15px;">
+                                            <ui:include src="/GeneralHelper.xhtml">
+                                                <ui:param name="name" value="找不到录题入口"></ui:param>
+                                                <ui:param name="id" value="204543505461399"></ui:param>
+                                            </ui:include>
+                                        </div>
+                                    </c:if>
+                                    <p:separator/>
+                                     -->
+                                     <!--
+                                    <p:menu styleClass="menuTree">
+                                        <p:menuitem  url="/m/SearchQuestion.jspx" value="试题检索" icon="ui-icon-extlink"/>
+                                        <p:menuitem  url="/m/ListWrongQuestion.jspx" value="错题检测" icon="ui-icon-extlink"/>
+                                        <p:menuitem  url="/m/ListQuestionComment.jspx" value="试题评论" icon="ui-icon-extlink"/> 
+                                    </p:menu>
+                                    -->
+                                </div>
+                            </p:tab>
+                            
+                            <p:tab id="tab39" title="试卷管理" rendered="#{adminSessionBean.admin.grp=='user'}">
+                                <div class="menuWrapper">
+                                    <p:menu styleClass="menuTree">
+                                        <p:menuitem url="/m/ListRandomPaper.jspx" value="简单随机试卷" icon="ui-icon-extlink" class="rereMenuItem"/>
+                                        <p:menuitem url="/m/ListManualPaper.jspx" value="人工试卷" icon="ui-icon-extlink" class="rereMenuItem"/>
+                                        <p:menuitem url="/m/ListRandom2Paper.jspx" value="随机试卷" icon="ui-icon-extlink" class="rereMenuItem"/>
+                                    </p:menu>
+                                    <!-- <p:separator/>
+                                    <div style="margin-left: 15px;">
+                                        <ui:include src="/GeneralHelper.xhtml">
+                                            <ui:param name="name" value="三种试卷的差别"></ui:param>
+                                            <ui:param name="id" value="97593753624832"></ui:param>
+                                        </ui:include>
+                                    </div> -->
+                                </div>
+                            </p:tab>
+                            
+                            <p:tab id="tab3" title="考试&amp;成绩管理" rendered="#{adminSessionBean.admin.grp=='user'}">
+                                <div class="menuWrapper">
+                                    <p:menu styleClass="menuTree">
+                                        <!-- <p:menuitem url="/m/ListExamLabelType.jspx" value="分类标签类别" icon="ui-icon-extlink"/>
+                                        <p:menuitem url="/m/ListExamLabel.jspx" value="分类标签" icon="ui-icon-extlink"/>
+                                        <p:menuitem url="/m/ListExamContest.jspx" value="竞赛管理" icon="ui-icon-extlink"/>
+                                        <p:menuitem url="/m/ListExamCaseLog.jspx" value="抽题记录" icon="ui-icon-extlink"/>
+                                        <p:menuitem url="/m/ListExamCheat.jspx" value="作弊记录" icon="ui-icon-extlink"/>
+                                        <p:menuitem url="/m/ListExamRoom.jspx" value="考场管理" icon="ui-icon-extlink"/> -->
+										<p:menuitem url="/m/ListExamination.jspx" value="综合考试设置" icon="ui-icon-extlink"/>
+										<p:menuitem url="/m/intensiveExam/ListIntensiveExam.jspx" value="集中考试管理" icon="ui-icon-extlink"/>
+										<p:menuitem url="/m/ListExamCaseReport.jspx" value="综合考试成绩" icon="ui-icon-extlink"/>
+										<p:menuitem url="/m/ListBuffetExamCase.jspx" value="自助练习成绩" icon="ui-icon-extlink"/>
+                                        <p:menuitem url="/m/ListModuleExamCase.jspx" value="章节练习成绩" icon="ui-icon-extlink"/>
+                                        <p:menuitem url="/m/ExamCaseRanker.jspx" value="手动生成排名" icon="ui-icon-extlink"/>
+                                    </p:menu>
+                                    <!-- <p:separator/>
+                                    <div style="margin-left: 15px;">
+                                        <ui:include src="/GeneralHelper.xhtml">
+                                            <ui:param name="name" value="各种考试的差别"></ui:param>
+                                            <ui:param name="id" value="201471388189792"></ui:param>
+                                        </ui:include>
+                                    </div> -->
+                                </div>
+                            </p:tab>
+
+                            <!-- <p:tab id="tab31" title="成绩管理" rendered="#{adminSessionBean.admin.grp!='company'}">
+                                <div class="menuWrapper">
+                                    <p:menu styleClass="menuTree">
+                                        <p:menuitem url="/m/ExamCaseAnalysis.jspx" value="成绩分析与统计" icon="ui-icon-extlink" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'analysis')}"/>
+                                        <p:menuitem url="/m/ExamCaseReverseAnalysis.jspx" value="缺考统计" icon="ui-icon-extlink" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'analysis')}"/>
+                                        <p:menuitem url="/m/ListExamStatistic.jspx" value="作答分析" icon="ui-icon-extlink" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'analysis')}"/>
+                                        <p:menuitem url="/m/ExamCaseComplexExport.jspx" value="自定义导出" icon="ui-icon-extlink" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'export')}"/>
+                                        <p:menuitem url="/m/ListContestCase.jspx" value="竞赛成绩" icon="ui-icon-extlink"/>
+                                    </p:menu>
+                                </div>
+                            </p:tab> -->
+
+                            <p:tab title="课程管理" rendered="#{copyrightController.sysType!='1' and copyrightController.sysType!='2' and adminSessionBean.admin.grp!='admin'}" >
+                                <div class="menuWrapper">
+                                    <p:menu styleClass="menuTree">
+                                    	<p:menuitem url="/m/CourseTypeList.jspx" value="课程分类" icon="ui-icon-extlink" />
+                                        <p:menuitem url="/m/ListLessonType.jspx" value="课程列表" icon="ui-icon-extlink" />
+                                        <p:menuitem url="/m/ListLesson.jspx" value="资料列表" icon="ui-icon-extlink"/>
+                                        <p:menuitem url="/m/ListStudyPlan.jspx" value="学习计划" icon="ui-icon-extlink"/>
+                                        <p:menuitem url="/m/ListUserComment.jspx" value="评论列表" icon="ui-icon-extlink" />
+                                    </p:menu>
+                                </div>
+                            </p:tab>
+
+							<p:tab title="订单管理"  rendered="#{adminSessionBean.admin.grp=='user'}" >
+                                <div class="menuWrapper">
+                                    <p:menu styleClass="menuTree">
+                                    	<p:menuitem url="/m/ListLessonLog.jspx" value="购买记录" icon="ui-icon-extlink" rendered="#{adminSessionBean.admin.grp!='company'}"/>
+                                        <p:menuitem url="/m/ListPurchaseLog.jspx" value="销售情况统计" icon="ui-icon-extlink" rendered="#{adminSessionBean.admin.grp!='company'}"/>
+                                    </p:menu>
+                                </div>
+                            </p:tab>
+
+							<p:tab title="学习统计"  rendered="#{adminSessionBean.admin.grp=='user'}" >
+                                <div class="menuWrapper">
+                                    <p:menu styleClass="menuTree">
+                                    	<p:menuitem url="/m/LessonTypeLogList.jspx" value="课程学习记录" icon="ui-icon-extlink" rendered="#{adminSessionBean.admin.grp!='company'}"/>
+                                    	<p:menuitem url="/m/LessonLogList.jspx" value="学习资料学习记录" icon="ui-icon-extlink" rendered="#{adminSessionBean.admin.grp!='company'}"/>
+<!--                                     	<p:menuitem url="/m/LessonTypeLogList1.jspx" value="课程学习记录1" icon="ui-icon-extlink" rendered="#{adminSessionBean.admin.grp!='company'}"/>
+ -->                                    </p:menu>
+                                </div>
+                            </p:tab>
+
+                            <!-- <p:tab id="tab22" title="知识点管理" rendered="#{copyrightController.sysType!='1' and copyrightController.sysType!='2'}">
+                                <div  class="menuWrapper">
+                                    <p:menu styleClass="menuTree">
+                                    <p:menuitem url="/m/ListKnowledgeLabelType.jspx" value="分类标签类别" icon="ui-icon-extlink"/>
+                                    <p:menuitem url="/m/ListKnowledgeLabel.jspx" value="分类标签" icon="ui-icon-extlink"/>
+                                    <p:menuitem url="/m/ListExamKnowledge.jspx" value="全部知识点" icon="ui-icon-extlink"/>
+                                    </p:menu>
+                                    <p:separator/>
+                                    <c:if test="#{menuTree.root.childCount!=0}">
+                                        <p:tree value="#{menuTree.root}" var="node" dynamic="true" style="width:180px;border: 0px solid red;">
+                                            <p:treeNode icon="#{node.sons.size()==0?'ui-icon-document':'ui-icon-folder-collapsed'}">
+                                                <h:outputLink value="ListExamKnowledge.jspx?module_id=#{node.id}" rendered="#{node.sons.size()==0}">
+                                                    <h:outputText value="#{node.name}"/>
+                                                </h:outputLink>
+                                                <h:outputText value="#{node.name}" rendered="#{node.sons.size()!=0}"/>
+                                            </p:treeNode>
+                                        </p:tree>
+                                    </c:if>
+                                </div>
+                            </p:tab> -->
+                            
+                            <p:tab id="tab5" title="#{applicationBean.departmentStr}&amp;用户" rendered="#{adminSessionBean.admin.grp!='admin'}">
+                                <div class="menuWrapper">
+                                    <p:menu styleClass="menuTree">
+                                        <p:menuitem url="/m/ListExamDepartment.jspx" value="#{applicationBean.departmentStr}管理" rendered="#{copyrightController.sysType=='1'}" icon="ui-icon-extlink"/>
+                                        <p:menuitem url="/m/DictionaryMag2.jspx" value="#{applicationBean.departmentStr}管理" rendered="#{copyrightController.sysType!='1'}" icon="ui-icon-extlink"/>
+                                        <p:menuitem url="/m/ListClientUser.jspx" value="用户管理" icon="ui-icon-extlink"/>
+                                        <p:menuitem url="/m/ListTeacher.jspx" value="讲师管理" icon="ui-icon-extlink"/>
+                                        <p:menuitem url="/m/UserImportExport.jspx" value="用户导入导出" icon="ui-icon-extlink"/>
+                                        <p:menuitem url="/m/ListUser.jspx" value="管理员设置" icon="ui-icon-extlink"/>
+<!--                                         <p:menuitem url="/m/AdminImportExport.jspx" value="管理员导入导出" icon="ui-icon-extlink"  rendered="#{adminSessionBean.ifSuper}"/>
+ -->                                        
+                                        <!-- <p:menuitem url="/m/ListScoreStatistic.jspx" value="积分统计" icon="ui-icon-extlink"/> -->
+                                    </p:menu>
+                                </div>
+                            </p:tab>
+
+
+                            <!-- <p:tab id="tab8" title="订单&amp;支付"  rendered="#{copyrightController.sysType!='1'}">
+                                <div class="menuWrapper">
+                                    <p:menu styleClass="menuTree">
+                                        <p:menuitem url="/m/ListSaleOrder.jspx" value="支付记录" icon="ui-icon-extlink"/>
+                                        <p:menuitem url="/m/ListFinanceLog.jspx" value="财务明细" icon="ui-icon-extlink"/>
+                                        <p:menuitem url="/m/AAOnlinePayConfig.jspx" value="在线支付配置" icon="ui-icon-extlink"/>
+                                    </p:menu>
+                                </div>
+                            </p:tab> -->
+                            <!-- <p:tab id="tab4" title="互动&amp;社会化&amp;文件">
+                                <div class="menuWrapper">
+                                    <p:menu styleClass="menuTree">
+                                        <p:menuitem url="/m/ListZone.jspx" value="版面设置" icon="ui-icon-extlink"/>
+                                        <p:separator />  
+                                        <p:menuitem url="/m/ListUserGrade.jspx" value="积分等级" icon="ui-icon-extlink"/>
+                                        <p:menuitem url="/m/ListBbsScoreRegular.jspx" value="积分规则" icon="ui-icon-extlink"/>
+                                        <p:separator rendered="#{copyrightController.sysType!='1'}"/>  
+                                        <p:menuitem rendered="#{copyrightController.sysType!='1'}" url="/m/ListAdminFile.jspx" value="用户文件" icon="ui-icon-extlink"/>
+                                        <p:menuitem rendered="#{copyrightController.sysType!='1'}" url="/m/SearchAdminFile.jspx" value="文件检索" icon="ui-icon-extlink"/>
+                                    </p:menu>
+                                </div>
+                            </p:tab> -->
+
+<!--                             <p:tab id="tab51" title="个性化&amp;附加" rendered="#{adminSessionBean.admin.grp!='company'}">
+                                <div class="menuWrapper">
+                                    <p:menu styleClass="menuTree">
+                                        <p:menuitem url="/m/StyleConfig.jspx" value="外观设置" icon="ui-icon-extlink"/>
+                                        <p:menuitem url="/m/FunctionConfig.jspx" value="功能设置" icon="ui-icon-extlink"/>
+                                        <p:menuitem rendered="#{copyrightController.sysType!='1'}" url="/m/AACustomerService.jspx" value="客服中心" icon="ui-icon-extlink"/>
+                                        <p:menuitem rendered="#{copyrightController.sysType!='1'}" url="/m/ListPartner.jspx" value="#{lang['exam.partner']}" icon="ui-icon-extlink"/>
+                                    </p:menu>
+                                </div>
+                            </p:tab> -->
+
+                            <!-- <p:tab id="tab30" title="安全&amp;监控">
+                                <div class="menuWrapper">
+                                    <p:menu styleClass="menuTree">
+
+                                        <p:menuitem url="/m/SessionState.jspx" value="在线状态" icon="ui-icon-extlink"/>
+
+                                        <p:separator/>
+                                        <p:menuitem url="/m/AAFireWall.jspx" value="防火墙设置" icon="ui-icon-extlink"/>
+                                        <p:menuitem url="/m/ListIpRule.jspx" value="IP过滤规则" icon="ui-icon-extlink"/>
+                                    </p:menu>
+                                </div>
+                            </p:tab> -->
+
+
+
+                            <p:tab id="tab6" title="系统设置" rendered="#{adminSessionBean.admin.grp=='user'}">
+                                <div class="menuWrapper">
+                                    <p:menu styleClass="menuTree">
+                                        <p:menuitem url="/m/ListOperationLogs.jspx" value="操作日志" icon="ui-icon-extlink"/>
+                                        <p:menuitem url="/m/FunctionConfig.jspx" value="功能设置" icon="ui-icon-extlink"/>
+                                        <!--  
+                                        <p:menuitem url="/m/SystemConfig.jspx" value="系统设置" icon="ui-icon-extlink"/>
+										-->
+                                        <p:menuitem url="/m/ListCasus.jspx" value="公告管理" icon="ui-icon-extlink"/>
+       
+                                        <p:menuitem url="/m/ListNotice.jspx" value="通知管理" icon="ui-icon-extlink"/>
+
+                                        <p:menuitem url="/m/ListAdv.jspx" value="LOGO设置" icon="ui-icon-extlink"/>
+                                        <p:menuitem url="/m/ListPicture.jspx" value="图片轮播" icon="ui-icon-extlink"/>
+                                        <!--  
+                                        <p:menuitem rendered="#{copyrightController.sysType!='1'}" url="/m/ListAdminFile.jspx" value="用户文件" icon="ui-icon-extlink"/>
+                                        -->
+                                        <p:menuitem url="/m/AASystemInfo.jspx" value="系统信息" icon="ui-icon-extlink"/>
+                                        <!-- 
+                                        <p:menuitem url="/m/HJExamTest.jspx" value="数据刷新" icon="ui-icon-extlink" rendered="#{adminSessionBean.ifSuper}"/>
+                                         -->
+                                    </p:menu>
+                                </div>
+                            </p:tab>
+                            
+                            <p:tab id="tab40" title="企业用户管理" rendered="#{adminSessionBean.admin.grp=='admin'}">
+                                <div class="menuWrapper">
+                                    <p:menu styleClass="menuTree">
+                                        <p:menuitem url="/m/ListBusinessUser.jspx" value="企业用户" icon="ui-icon-extlink"/>
+                                    </p:menu>
+                                </div>
+                            </p:tab>
+                            
+                            <p:tab id="tab41" title="数据迁移" rendered="#{adminSessionBean.admin.grp=='admin'}">
+                                <div class="menuWrapper">
+                                    <p:menu styleClass="menuTree">
+                                        <p:menuitem url="/m/DataTransfer.jspx" value="数据迁移" icon="ui-icon-extlink"/>
+                                    </p:menu>
+                                </div>
+                            </p:tab>
+                        </p:accordionPanel>
+                    </div>
+                </h:form>
+            </div>
+        </ui:composition>
+    </h:body>
+</html>

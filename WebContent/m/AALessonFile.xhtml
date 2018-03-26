@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:poue="http://primefaces.org/ui/extensions"
+      xmlns:p="http://primefaces.org/ui">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+						<h:form id="myForm">
+
+                    <ui:include src="/fm/NewFilePanel.xhtml"></ui:include>
+                    <ui:include src="/fm/NewFolderPanel.xhtml"></ui:include>
+                    <ui:include src="/fm/ChangeFileDir.xhtml"></ui:include>
+                    <div>
+                        <h:panelGrid columns="2" style="">
+                            <h:outputText id="outputText1" styleClass="tit"
+                                          value="－学习资料文件列表－" />
+                        </h:panelGrid>
+                    </div>
+                    <p:separator />
+
+                    <div style="border-top:0px;" >
+                        <p:commandButton id="flink" value="上传文件" action="#{newFile.newAdd}" style="margin:3px 5px 3px 2px;"  update="myForm:fName"  oncomplete="PF('newFile').show();">
+                            <f:param name="action" value="new"></f:param>
+                            <f:param name="scope" value="pers" ></f:param>
+                            <f:param name="lessonId" value="#{aALesson.exam.id}" ></f:param>
+                        </p:commandButton>
+                        <p:commandButton id="batDel" value="删除" style="margin:3px 5px 3px 2px;"
+                                         action="#{listFilesOfLesson.batDel}" update="dc"
+                                         onclick="if (!confirm('确认要删除选中的文件及目录（包括所有子目录及文件）吗？'))
+                                                     return false">
+                        </p:commandButton>
+                    </div>
+
+                    <h:panelGrid columns="3" width="60%">
+                    </h:panelGrid>
+                    <script type="text/javascript">
+			            function checkAll(whichTable) {
+			                var idds = '#myForm\\:' + whichTable + '\\:checkAll';
+			                var vv = $(idds).is(':checked');
+			                //alert(vv);
+			                $('input[type="checkbox"]').each(function (index, element) {
+			                    try {
+			                        var idd = $(element).attr('id');
+			                        if (idd.indexOf(whichTable) >= 0) {
+			                            $(element).prop('checked', vv);
+			                            //alert(idd);
+			                        }
+			                    } catch (e) {
+			                    }
+			                });
+			            }
+			        </script>
+                        <p:dataTable id="dc" value="#{listFilesOfLesson.pro1s}" var="pro" paginator="true" paginatorPosition="bottom" emptyMessage="#{lang['exam.empty_result']}"
+                                     rows="15" styleClass="list">
+                            <p:column style="width:30px;text-align: center;">
+                                <f:facet name="header">
+                                    <h:outputText value="选择"></h:outputText>
+                                    <h:selectBooleanCheckbox id="checkAll" onclick="checkAll('dc');">
+                                    </h:selectBooleanCheckbox>
+                                </f:facet>
+                                <h:selectBooleanCheckbox value="#{pro.selected}">
+                                    <p:ajax event="change"></p:ajax>
+                                </h:selectBooleanCheckbox>
+                            </p:column>
+                            <p:column style="" filterBy="#{pro.fileName}">
+                                <f:facet name="header">
+                                    <h:outputText value="文件名称"></h:outputText>
+                                </f:facet>
+
+                                <h:graphicImage rendered="#{pro.ifFolder}"
+                                                value="/resources/images/folder.gif" style="vertical-align: middle;"></h:graphicImage>
+                                <h:graphicImage rendered="#{!pro.ifFolder}"
+                                                value="/resources/images/file.gif" style="vertical-align: middle;"></h:graphicImage>
+                                <h:outputLink value="listFilesOfLesson.jspx?fid=#{pro.id}"  title="点击进入文件夹"
+                                              rendered="#{pro.ifFolder}">
+                                    <h:outputText value="#{fn:length(pro.fileName)>20?fn:substring(pro.fileName,0,20):pro.fileName}"></h:outputText>
+                                </h:outputLink>
+
+                                <h:outputLink title="点击下载文件" target="_blank" styleClass="common"
+                                              value="../servlet/DownloadFile?id=#{pro.id}"
+                                              rendered="#{(!pro.ifFolder)&amp;&amp;(!(((pro.fileExt=='.jpg'||pro.fileExt=='.gif')||(pro.fileExt=='.png'||(pro.fileExt=='.flv')||(pro.fileExt=='.mp3')))||(pro.fileExt=='.mp4')))}">
+                                    <h:outputText value="#{fn:length(pro.fileName)>20?(fn:substring(pro.fileName,0,20)):pro.fileName}#{pro.fileExt}"></h:outputText>
+                                </h:outputLink>
+                                <h:outputLink title="点击播放视频" target="_blank" styleClass="common" 
+                                              value="#{facesContext.externalContext.requestContextPath}/vp/RerePlayer.swf?xml=x.rplayer?fid=#{pro.id}"
+                                              rendered="#{(!pro.ifFolder)&amp;&amp;(pro.fileExt=='.flv'||pro.fileExt=='.mp4')}">
+                                    <h:outputText value="#{fn:length(pro.fileName)>20?(fn:substring(pro.fileName,0,20)):pro.fileName}#{pro.fileExt}"></h:outputText>
+                                </h:outputLink>
+                                <h:outputLink title="点击播放MP3" target="_blank" styleClass="common"
+                                              value="#{facesContext.externalContext.requestContextPath}/dewplayer/dewplayer-vol.swf?mp3=../#{applicationBean.relativePath}#{pro.id}.mp3&amp;autostart=0"
+                                              rendered="#{(!pro.ifFolder)&amp;&amp;(pro.fileExt=='.mp3')}">
+                                    <h:outputText value="#{fn:length(pro.fileName)>20?(fn:substring(pro.fileName,0,20)):pro.fileName}#{pro.fileExt}"></h:outputText>
+                                </h:outputLink>
+                                <h:outputLink title="点击查看图片" target="_blank" styleClass="common"
+                                              value="#{facesContext.externalContext.requestContextPath}/servlet/ShowImage?id=#{pro.id}"
+                                              rendered="#{(!pro.ifFolder)&amp;&amp;((pro.fileExt=='.jpg'||pro.fileExt=='.gif')||pro.fileExt=='.png')}">
+                                    <h:outputText value="#{fn:length(pro.fileName)>20?(fn:substring(pro.fileName,0,20)):pro.fileName}#{pro.fileExt}"></h:outputText>
+                                </h:outputLink>
+                                <h:outputText value="(#{pro.sonNum})" rendered="#{pro.ifFolder}"></h:outputText>
+                            </p:column>
+                            <p:column sortBy="#{pro.realLength}" style="width:60px;text-align: center;">
+                                <f:facet name="header">
+                                    <h:outputText value="大小"></h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{pro.fileSize}"></h:outputText>
+                            </p:column>
+                            <p:column sortBy="#{pro.uploadTime}" style="width:120px;text-align: center;">
+                                <f:facet name="header">
+                                    <h:outputText value="上传时间"></h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{pro.uploadTime}">
+                                    <f:convertDateTime timeZone="GMT+8" pattern="yyyy-MM-dd HH:mm" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column style="width:180px;text-align: center;">
+                                <f:facet name="header">
+                                    <h:outputText value="操作"></h:outputText>
+                                </f:facet>
+                                <h:outputLink title="点击直接下载文件" target="_blank" styleClass="common"
+                                              value="../servlet/DownloadFile?id=#{pro.id}"
+                                              rendered="#{(!pro.ifFolder)}">
+                                    <h:outputText value="下载"></h:outputText>
+                                </h:outputLink>
+
+                                <!-- <h:outputLink title="点右键复制链接" target="_blank" styleClass="common"
+                                              value="#{facesContext.externalContext.requestContextPath}/images/content/#{pro.id}.flv"
+                                              rendered="#{(!pro.ifFolder)&amp;&amp;(pro.fileExt=='.flv'||pro.fileExt=='.mp4')}">
+                                    <h:outputText value="&nbsp;视频源" escape="false"></h:outputText>
+                                </h:outputLink> -->
+                                <h:outputLink title="点右键复制链接" target="_blank" styleClass="common"
+                                              value="#{facesContext.externalContext.requestContextPath}/images/content/#{pro.id}.mp3"
+                                              rendered="#{(!pro.ifFolder)&amp;&amp;(pro.fileExt=='.mp3')}">
+                                    <h:outputText value="&nbsp;音频源" escape="false"></h:outputText>
+                                </h:outputLink>
+                                <h:outputLink title="点右键复制链接" target="_blank" styleClass="common"
+                                              value="#{facesContext.externalContext.requestContextPath}/images/content/#{pro.id}.jpg"
+                                              rendered="#{(!pro.ifFolder)&amp;&amp;(pro.fileExt=='.jpg'||pro.fileExt=='.gif'||pro.fileExt=='.png')}">
+                                    <h:outputText value="&nbsp;图片源" escape="false"></h:outputText>
+                                </h:outputLink>
+                                <h:outputLink title="点击播放视频" target="_blank" styleClass="common" 
+                                              value="#{facesContext.externalContext.requestContextPath}/vp/RerePlayer.swf?xml=x.rplayer?fid=#{pro.id}"
+                                              rendered="#{(!pro.ifFolder)&amp;&amp;(pro.fileExt=='.flv'||pro.fileExt=='.mp4')}">
+                                    <h:outputText value="&nbsp;播放视频" escape="false"></h:outputText>
+                                </h:outputLink>
+                                <h:outputLink title="点击播放MP3" target="_blank" styleClass="common"
+                                              value="#{facesContext.externalContext.requestContextPath}/dewplayer/dewplayer-vol.swf?mp3=../#{applicationBean.relativePath}#{pro.id}.mp3&amp;autostart=0"
+                                              rendered="#{(!pro.ifFolder)&amp;&amp;(pro.fileExt=='.mp3')}">
+                                    <h:outputText value="&nbsp;播放MP3" escape="false"></h:outputText>
+                                </h:outputLink>
+
+                            </p:column>
+                        </p:dataTable>
+                        <p:growl/>
+                        <p:separator/>
+                        <p:commandButton ajax="false" action="#{aALesson.done2}" value="保存"  styleClass="commonSubmit" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'lesson')}"/>
+                        <p:commandButton ajax="false" action="#{aALesson.back}" value="基本信息"  styleClass="commonSubmit" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'lesson')}"/>
+                        <p:commandButton ajax="false" action="#{aALesson.back2}" value="摘要内容"  styleClass="commonSubmit" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'lesson')}"/>
+	                    <ui:include src="/AjaxStatus2.xhtml"></ui:include>
+                    </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

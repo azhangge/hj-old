@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:p="http://primefaces.org/ui" lang="en">
+<head>
+<title>My Facelets Page</title>
+<meta http-equiv="keywords" content="enter,your,keywords,here" />
+<meta http-equiv="description"
+	content="A short description of this page." />
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+<!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+</head>
+<body>
+	<ui:composition template="BackGeneral.xhtml">
+		<ui:define name="content">
+			<h:form>
+				<script type="text/javascript">
+					function reset(obj) {
+						var type = obj.value;
+						var id = 'myForm:' + type;
+						var urlId = id + 'Url';
+						var obj1 = document.getElementById('myForm:urn');
+						var obj2 = document.getElementById('myForm:nickname');
+						var obj3 = document.getElementById('myForm:persona');
+						obj1.value = '';
+						obj2.value = '';
+						obj3.value = '';
+					}
+				</script>
+				<ui:include src="/AjaxStatus2.xhtml" />
+				<div style="text-align: left; margin: 10px 0px 0px 0px; width: 98%;">
+
+					<div>
+						<h:outputText id="outputText1" styleClass="tit" value="－管理员设置－" />
+						<p:separator/>
+		                <h:panelGroup>
+		                        <p:button href="/m/AAUser.jspx" value="添加管理员"
+							rendered="#{adminSessionBean.ifSuper}" />
+		                </h:panelGroup>
+		                <p:separator/>
+						
+						<!-- <p:button href="/m/AAUser2.jspx" value="添加单位管理员" rendered="#{adminSessionBean.admin.grp!='company'}"/> -->
+					</div>
+					<!-- <hr/>
+                        	<h:panelGrid columns="7">
+	                            <h:panelGroup>
+	                                <h:outputText value="用户名：" />
+	                                <h:inputText value="#{listUser.urn}" id="urn"/>
+	                            </h:panelGroup>
+	                            <h:panelGroup>
+	                                <h:outputText value="称呼：" />
+	                                <h:inputText value="#{listUser.nickname}" id="nickname"/>
+	                            </h:panelGroup>
+	                            <h:panelGroup>
+	                                <h:outputText value="角色名：" />
+	                                <h:inputText value="#{listUser.persona}" id="persona"/>
+	                            </h:panelGroup>
+	                            <h:outputText value="用户组:"></h:outputText>
+	                            <h:selectOneMenu value="#{listUser.grp}">
+	                                <f:selectItems value="#{listUser.grp}" />
+	                            </h:selectOneMenu>
+	                            <p:commandButton action="#{listUser.getUsersByQuery()}" value="检索" update="dataTable1"/>
+	                            <p:commandButton onclick="reset()" value="重置"/>
+	                        </h:panelGrid>
+                    	<hr/> -->
+					<p:outputPanel autoUpdate="true">
+						<h:messages></h:messages>
+					</p:outputPanel>
+					<div>
+						<p:dataTable paginator="true" paginatorPosition="bottom"
+							value="#{listUser.userList}" var="us" id="dataTable1"
+							emptyMessage="#{lang['exam.empty_result']}" styleClass="list"
+							rowIndexVar="row" style="width:100%" liveResize="true" resizableColumns="true">
+							<p:column id="num" style="width:40px;text-align: center;"  resizable="true" >
+								<h:outputText style="height: 5%" value="#{row+1}" />
+								<f:facet name="header">
+									<h:outputText id="outputTextnum" value="序号" />
+								</f:facet>
+							</p:column>
+							<p:column filterBy="#{us.urn}" filterMatchMode="contains"  sortBy="#{us.urn}"  resizable="true" >
+								<h:outputText value="#{us.urn}" />
+								<f:facet name="header">
+									<h:outputText value="用户名" />
+								</f:facet>
+							</p:column>
+							<p:column filterBy="#{us.nickname}" filterMatchMode="contains"  sortBy="#{us.nickname}"  resizable="true" >
+								<h:outputText value="#{us.nickname}" />
+								<f:facet name="header">
+									<h:outputText value="称呼" />
+								</f:facet>
+							</p:column>
+							<!-- <p:column style="text-align: center;width:150px;"  filterBy="#{us.persona}" filterMatchMode="contains">
+                                    <h:outputText value="#{us.persona}" />
+                                    <f:facet name="header">
+                                        <h:outputText value="角色名" />
+                                    </f:facet>
+                                </p:column> -->
+							<!-- <p:column style="text-align: center;width:60px;">
+                                    <h:outputLink value="#" title="#{us.authCnStr}">
+                                        <h:outputText value="查看" />
+                                    </h:outputLink>
+                                    <f:facet name="header">
+                                        <h:outputText value="权限" />
+                                    </f:facet>
+                                </p:column> -->
+							<p:column style="text-align: center;width:120px;"  sortBy="#{us.grp}"  resizable="true" >
+								<h:outputText value="超级管理员" rendered="#{us.grp=='admin'}" />
+								<h:outputText value="系统管理员" rendered="#{us.grp=='user'}" />
+								<h:outputText value="单位管理员" rendered="#{us.grp=='company'}" />
+								<f:facet name="header">
+									<h:outputText value="用户组" />
+								</f:facet>
+							</p:column>
+							<!-- <p:column style="text-align: center;width:60px;">
+                                    <h:outputText value="#{us.enabled?'是':'否'}" />
+                                    <f:facet name="header">
+                                        <h:outputText value="激活？" />
+                                    </f:facet>
+                                </p:column> -->
+							<p:column style="width:70px;text-align: center;"  sortBy="#{us.enabled}"  resizable="true" >
+								<h:outputText value="（已启用）" style="color:green"
+									rendered="#{us.enabled}" />
+								<h:outputText value="（已禁用）" style="color:red"
+									rendered="#{!us.enabled}" />
+								<br />
+								<p:commandLink
+									rendered="#{us.enabled and (us.grp=='user' || us.grp=='company')}"
+									disabled="#{!fn:contains(adminSessionBean.admin.authstr,'user')}"
+									actionListener="#{listUser.someAbleUser(us.id)}" update="@form"
+									value="禁用">
+								</p:commandLink>
+								<p:commandLink
+									rendered="#{!us.enabled and (us.grp=='user' || us.grp=='company')}"
+									disabled="#{!fn:contains(adminSessionBean.admin.authstr,'user')}"
+									actionListener="#{listUser.someAbleUser(us.id)}" update="@form"
+									value="启用">
+								</p:commandLink>
+								<f:facet name="header">
+									<h:outputText value="启用/禁用" />
+								</f:facet>
+							</p:column>
+
+							<p:column style="width:70px;text-align: center;" sortBy="#{us.checked}"  resizable="true" >
+								<h:outputText value="（已审核）" style="color:green"
+									rendered="#{us.checked}" />
+								<h:outputText value="（未审核）" style="color:red"
+									rendered="#{!us.checked}" />
+								<br />
+								<p:commandLink
+									rendered="#{us.checked and (us.grp=='user' || us.grp=='company')}"
+									disabled="#{!fn:contains(adminSessionBean.admin.authstr,'user')}"
+									actionListener="#{listUser.someCheckUser(us.id)}"
+									update="@form" value="取消审核">
+								</p:commandLink>
+								<p:commandLink
+									rendered="#{!us.checked and (us.grp=='user' || us.grp=='company')}"
+									disabled="#{!fn:contains(adminSessionBean.admin.authstr,'user')}"
+									actionListener="#{listUser.someCheckUser(us.id)}"
+									update="@form" value="审核">
+								</p:commandLink>
+								<f:facet name="header">
+									<h:outputText value="审核/取消" />
+								</f:facet>
+							</p:column>
+
+							<p:column style="text-align: center;width:110px;"  sortBy="#{us.ltime}"  resizable="true" >
+								<h:outputText value="#{us.ltime}">
+									<f:convertDateTime pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" />
+								</h:outputText>
+								<f:facet name="header">
+									<h:outputText value="上次登录时间" />
+								</f:facet>
+							</p:column>
+							<p:column style="text-align: center;width:60px;"  resizable="true" >
+								<h:outputLink value="AAUser.jspx?id=#{us.id}">
+									<h:outputText value="修改"
+										rendered="#{us.grp=='user' || us.grp=='company'}" />
+								</h:outputLink>
+								<f:facet name="header">
+									<h:outputText value="修改" />
+								</f:facet>
+							</p:column>
+							<p:column rendered="#{adminSessionBean.ifSuper}"
+								style="text-align: center;width:60px;"  resizable="true" >
+								<p:commandLink action="#{listUser.delete(us.id)}" update="@form"
+									onclick="if (!confirm('确认要删除此管理员吗？')) return false">
+									<h:outputText value="删除"
+										rendered="#{us.grp=='user' || us.grp=='company'}" />
+								</p:commandLink>
+								<f:facet name="header">
+									<h:outputText value="删除" />
+								</f:facet>
+							</p:column>
+						</p:dataTable>
+
+
+
+
+					</div>
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

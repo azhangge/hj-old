@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition>
+            <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jquery.Sonline.2.0/js/jquery.Sonline.js"></script>
+            <script type="text/javascript">
+                var open1=#{applicationBean.systemConfig.openCustomerService and copyrightController.sysType!='1'};
+                if (open1) {
+                    $(function() {
+                        $().Sonline({
+                            Position: "#{applicationBean.customerService.position1}", //left或right
+                            Top: #{applicationBean.customerService.top1}, //顶部距离，默认200px
+                            Width: #{applicationBean.customerService.width1}, //顶部距离，默认200px
+                            Style: 3, //图标的显示风格共6种风格，默认显示第一种：1
+                            Effect: #{applicationBean.customerService.effect1}, //滚动或者固定两种方式，布尔值：true或false
+                            DefaultsOpen: #{applicationBean.customerService.defaultOpen}, //默认展开：true,默认收缩：false
+                            Tel: "#{applicationBean.customerService.tel} ", //其它信息图片等
+                            Qqlist: "#{applicationBean.customerService.qqList}", //多个QQ用','隔开，QQ和客服名用'|'隔开
+                            Qunlist: "#{applicationBean.customerService.qunList}",
+                            Wwlist: "#{applicationBean.customerService.wwList}"
+                        });
+                    });
+                }
+            </script>
+        </ui:composition>
+    </h:body>
+</html>
+

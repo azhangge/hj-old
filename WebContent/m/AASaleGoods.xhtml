@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:poue="http://primefaces.org/ui/extensions"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui" lang="en"> 
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content"> 
+                <h:form>
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <div>
+                        <h:outputText  styleClass="headLine"
+                                       value="#{aASaleGoods.flag?'修改商品':'添加商品'}>>#{aASaleGoods.em.name}" />
+                        <p:separator/>
+                        <h:panelGrid columns="2" columnClasses="thdL,thdR">
+                            <h:outputText value="商品名称：" />
+                            <h:panelGroup>
+                                <p:inputText value="#{aASaleGoods.cq.name}" />
+                            </h:panelGroup>
+                            <h:outputText value="商品编码：" />
+                            <h:panelGroup>
+                                <p:inputText value="#{aASaleGoods.cq.gid}" />
+                            </h:panelGroup>
+                            <h:outputText value="条码：" />
+                            <h:panelGroup>
+                                <p:inputText value="#{aASaleGoods.cq.saleCode}" />
+                            </h:panelGroup>
+                            <h:outputText value="单位名称：" />
+                            <h:panelGroup>
+                                <p:inputText value="#{aASaleGoods.cq.unitName}" />
+                            </h:panelGroup>
+                            <h:outputText value="参考价格：" />
+                            <h:panelGroup>
+                                <p:inputText value="#{aASaleGoods.cq.price}" />
+                            </h:panelGroup>
+                            <h:outputText value="折扣：" />
+                            <h:panelGroup>
+                                <p:inputText value="#{aASaleGoods.cq.discount}" />
+                            </h:panelGroup>
+                            <h:outputText value="次序：" />
+                            <h:inputText  value="#{aASaleGoods.cq.ord}" style="width:40px;" />
+                        </h:panelGrid>
+                        <p:separator/>
+                        <p:commandButton action="#{aASaleGoods.done}" value="添加并返回" styleClass="" rendered="#{!aASaleGoods.flag}" ajax="false"/>
+                        <p:commandButton action="#{aASaleGoods.done}" value="修改完成" styleClass="" rendered="#{aASaleGoods.flag}" ajax="false" />
+                        <p:commandButton ajax="false"  action="#{aASaleGoods.addAndContinue()}" value="添加并继续" styleClass="" rendered="#{!aASaleGoods.flag}" update="@form" style="margin-left: 300px;"/>
+
+                    </div>
+                <br/><br/>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

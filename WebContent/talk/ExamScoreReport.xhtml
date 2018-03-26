@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="General.xhtml">
+            <ui:define name="title">
+                <h:outputText value="#{examScoreReport.examCase.examination.name}-成绩单-#{examScoreReport.examCase.user.name}" />
+            </ui:define>
+            <ui:define name="content">
+                <h:panelGrid columns="3">
+                    <h:outputLink styleClass="topNav1"
+                                  value="ExamCaseReportList.jspx">
+                        <h:outputText value="成绩查询" />
+                    </h:outputLink>
+                    <h:outputText value=">>" />
+                    <h:outputText value="成绩单"  styleClass="mark"/>
+                </h:panelGrid>
+                <p:separator/>
+                <p:commandButton value="打印成绩单" type="button">  
+                    <p:printer target="scoreReport" />  
+                </p:commandButton>  
+                <p:separator/>
+                <div style="border:1px solid black;">
+                    <p:panel id="scoreReport" style="padding: 20px 20px 20px 20px;border:0px solid black;text-align: center;">
+
+                        <br/><br/><br/>
+                        <h:panelGrid columns="1" style="width:90%;margin: 0px auto;text-align: center;font-size: 24px;font-weight: bold;line-height: 50px;">
+                            <h:panelGroup>
+                                <h:outputText value="#{applicationBean.info.siteName}成绩单"/>
+                                <br/><br/>
+                            </h:panelGroup>
+                        </h:panelGrid>
+                        
+                        <style>
+                            #scoreContent{
+                                width:90%;
+                                margin: 0px auto;
+                                border:0px solid red;
+                            }
+                            #scoreContent td{
+                                font-weight: bold;
+                                font-family: 宋体;
+                                font-size: 16px;
+                                height:100px;
+                                text-align: center;
+                                border-top:2px solid black;
+                                border-left:2px solid black;
+                            }
+                            .tdRightSide{
+                                border-right:2px solid black!important;
+                            }
+                            .tdBottomSide{
+                                border-bottom:2px solid black!important;
+                            }
+                            .tdInfo{
+                                width:20%;
+                            }
+                            .tdCon{
+                                width:30%;
+                            }
+                            
+                            </style>
+
+                        <table id="scoreContent" cellpadding="5" cellspacing="0">
+                            <tr>
+                                <td class="tdInfo"><h:outputText value="姓&nbsp;&nbsp;&nbsp;&nbsp;名" escape="false"/></td>
+                                <td class="tdCon"><h:outputText value="#{examScoreReport.examCase.user.name}"/></td>
+                                <td class="tdInfo"><h:outputText value="身份证号"/></td>
+                                <td class="tdRightSide tdCon"><h:outputText value="#{examScoreReport.examCase.user.pid}"/></td>
+                            </tr>
+                            <tr>
+                                <td class="tdInfo"><h:outputText value="考试类别" escape="false"/></td>
+                                <td class="tdCon"><h:outputText value="#{examScoreReport.examCase.examination.name}"/></td>
+                                <td class="tdInfo"><h:outputText value="考试类型"/></td>
+                                <td class="tdRightSide tdCon"><h:outputText value="#{examScoreReport.ifSuSupplementary?'补考':'初考'}"/></td>
+                            </tr>
+                            <tr>
+                                <td class="tdInfo"><h:outputText value="准考证号" escape="false"/></td>
+                                <td class="tdCon"><h:outputText value="#{examScoreReport.examCase.user.cid}"/></td>
+                                <td class="tdInfo"><h:outputText value="考试日期"/></td>
+                                <td class="tdRightSide tdCon">
+                                    <h:outputText value="#{examScoreReport.examCase.submitTime}">
+                                        <f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8"/>
+                                    </h:outputText>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdInfo"><h:outputText value="考试开始时间" escape="false"/></td>
+                                <td class="tdCon">
+                                    <h:outputText value="#{examCaseReport.examCase.genTime}">
+                                        <f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8"/>
+                                    </h:outputText><br/>
+                                    <h:outputText value="#{examCaseReport.examCase.genTime}">
+                                        <f:convertDateTime pattern="HH:mm:ss" timeZone="GMT+8"/>
+                                    </h:outputText>
+                                </td>
+                                <td class="tdInfo"><h:outputText value="考试结束时间"/></td>
+                                <td class="tdRightSide tdCon">
+                                    <h:outputText value="#{examCaseReport.examCase.submitTime}">
+                                        <f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8"/>
+                                    </h:outputText><br/>
+                                    <h:outputText value="#{examCaseReport.examCase.submitTime}">
+                                        <f:convertDateTime pattern="HH:mm:ss" timeZone="GMT+8"/>
+                                    </h:outputText>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tdInfo"><h:outputText value="考试成绩" escape="false"/></td>
+                                <td class="tdCon"><h:outputText value="#{examScoreReport.examCase.score}"/></td>
+                                <td class="tdInfo"><h:outputText value="是否合格"/></td>
+                                <td class="tdRightSide tdCon"><h:outputText value="#{examScoreReport.examCase.score/examScoreReport.examCase.totalFullScore>=0.6?'合格':'不合格'}"/></td>
+                            </tr>
+                            <tr >
+                                <td class="tdBottomSide tdInfo" style="height:160px;"><h:outputText value="考生签名" escape="false"/></td>
+                                <td  colspan="3" style="border:2px solid black;">&nbsp;</td>
+                            </tr>
+                        </table>
+
+
+                    </p:panel>
+                </div>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

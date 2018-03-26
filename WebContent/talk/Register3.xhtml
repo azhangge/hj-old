@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <head>
+        <title>#{i18nBean.lang('register2')}</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+    </head>
+    <body>
+        <ui:composition template="/HJ/HJGeneral.xhtml">
+            <ui:define name="title">#{i18nBean.lang('talk/Register','new_register')}</ui:define>
+            <ui:define name="content">
+                <p:outputPanel autoUpdate="true">
+                    <p:growl/>
+                </p:outputPanel>
+                <p:panel id="topNav8" styleClass="frontColumn topNav8Wrapper" style="margin-bottom: 10px!important;">
+                    <h:outputLink value="#{facesContext.externalContext.requestContextPath}" styleClass="nav8">
+                        <h:outputText value="#{i18nBean.lang('talk/Default','index')}"/>
+                    </h:outputLink>
+                    <h:outputText value="/" styleClass="navSeparator"/>
+                    <h:outputText value="#{i18nBean.lang('talk/Register','new_register')}" styleClass="nav8"/>
+                </p:panel>
+                <p:panel style="width:500px;margin: 0 auto;">
+                    <h:outputText value="#{i18nBean.lang('talk/Register','new_register')}" styleClass="headLine"></h:outputText>
+                    <p:separator/>
+                    
+                    <h:panelGrid columns="2" styleClass="generalInfo" style="vertical-align: middle!important;" columnClasses="rleft,rright">
+                    
+                    	<p:outputLabel for="type"  style="display:none;margin-bottom:10px; font-size:12px;font-family:Verdana,Arial,Microsoft YaHei,simhei,simsun!important;" value="账号类型：" />
+				        <p:selectOneRadio id="type" style="display:none;margin:8px 0 5px;" value="#{register2.type}" onclick="charge()" >
+				            <f:selectItem itemLabel="个人" itemValue="1" />
+				            <f:selectItem itemLabel="单位" itemValue="2" />
+				        </p:selectOneRadio>
+				        
+				        <h:outputLabel value="姓名：" />
+                        <h:panelGroup>
+                        	<p:inputText value="#{register2.user.username}"  style="width:340px;height:35px; margin-bottom:10px;-webkit-box-shadow:inset 0 2px 2px #ffffff;box-shadow:inset 0 2px 2px #ffffff;">
+                        		<p:ajax listener="#{register2.onChangeUserName}" update="usernameTip" process="@form"/>
+                        	</p:inputText>
+                        	<span style="color:red;margin-left:2px" >*</span>
+                        	<br/>
+                        	<h:outputText id="usernameTip"  value="#{register2.usernameTip}" style="color:#{register2.usernameOK?'green;':'red;'}" />
+                        </h:panelGroup>
+				        
+                        <h:outputLabel value="手机号：" />
+                        <h:panelGroup>
+                        	<p:inputText value="#{register2.user.tel}"  style="width:340px;height:35px; margin-bottom:10px;-webkit-box-shadow:inset 0 2px 2px #ffffff;box-shadow:inset 0 2px 2px #ffffff;">
+                        		<p:ajax listener="#{register2.onChangePhone}" update="phoneTip" process="@form"/>
+                        	</p:inputText>
+                        	<span style="color:red;margin-left:2px" >*</span>
+                        	<br/>
+                        	<h:outputText id="phoneTip"  value="#{register2.phoneTip}" style="color:#{register2.phoneOk?'green;':'red;'}" />
+                        </h:panelGroup>
+                        
+                        <h:outputLabel value="#{i18nBean.lang('talk/Register','register.password')}：" />
+                        <h:panelGroup>
+                        	<p:password value="#{register2.user.password}"  style="width:340px;height:35px;margin-bottom:10px;-webkit-box-shadow:inset 0 2px 2px #ffffff;box-shadow:inset 0 2px 2px #ffffff;"/>
+                        	<span style="color:red;margin-left:2px" >*</span>
+                        </h:panelGroup>
+                        
+                        <h:outputLabel value="#{i18nBean.lang('talk/Register','register.password_confirm')}：" />
+                        <h:panelGroup>
+                        	<p:password value="#{register2.pwd_re}"  style="width:340px;height:35px;margin-bottom:10px;-webkit-box-shadow:inset 0 2px 2px #ffffff;box-shadow:inset 0 2px 2px #ffffff;"/>
+                        	<span style="color:red;margin-left:2px" >*</span>
+                        </h:panelGroup>
+
+                        <h:outputLabel value="#{i18nBean.lang('talk/Register','register.identifying_code')}：" />
+                        <h:panelGroup>
+                            <p:inputText value="#{register2.authStr}" style="width:100px;height:35px;margin-bottom:10px;-webkit-box-shadow:inset 0 2px 2px #ffffff;box-shadow:inset 0 2px 2px #ffffff;"/>
+                            <p:commandLink update="auth" action="#{register2.refreshAuth}">
+                                <h:graphicImage id="auth" title="#{i18nBean.lang('talk/Register','register.change_code')}" style="border:black 0px solid;vertical-align:bottom;width:100px;height:22px;margin-bottom:13px;"
+                                                url="/servlet/AuthImage?id=#{register2.id_temp}" />
+                            </p:commandLink>
+                            <span style="color:red;margin-left:2px;">*</span>
+                        </h:panelGroup>
+                        
+                        <h:outputLabel value="短信验证码：" />
+                        <h:panelGroup>
+                        	<p:inputText value="#{register2.verifyCode}"  style="width:200px;height:35px;margin-bottom:10px;-webkit-box-shadow:inset 0 2px 2px #ffffff;box-shadow:inset 0 2px 2px #ffffff;"/>
+                        	<span style="color:red;margin-left:2px;margin-right:5px" >*</span>
+                        	<p:commandButton id="verifyCode" widgetVar="verifyCode"  value="免费获取验证码" update="phoneTip" actionListener="#{register2.sendCode}"/>
+						</h:panelGroup>
+                        
+                        <h:outputText/>
+                        <h:panelGroup>
+                           <h:selectBooleanCheckbox value="#{register2.accept}" style="vertical-align: bottom; margin:10px 0 6px;" >
+                                <f:ajax render="reg" execute="@form"/>
+                            </h:selectBooleanCheckbox>
+                            <h:outputText value="#{i18nBean.lang('talk/Register','register.read_and_accept')}" />
+                            <h:outputLink value="Agreement.jspx" target="_blank" styleClass="operation">
+                                <h:outputText value="《#{applicationBean.info.siteName}#{i18nBean.lang('register.user_agreement')}》" />
+                            </h:outputLink>
+                        </h:panelGroup>
+
+                    </h:panelGrid>
+                    <p:separator/>
+                    <p:commandButton id="reg" widgetVar="reg" style=" width:430px; height:35px; margin:20px 0;" value="#{i18nBean.lang('talk/Register','register')}" 
+                    disabled="#{!register2.accept}" onclick="reg.disable();" oncomplete="reg.enable();" action="#{register2.reg_ok}"></p:commandButton>
+                    <script type="text/javascript" language="javascript">
+                        function regDisabled() {
+
+                        }
+
+                        function charge(){
+                        	var selAdmin= myForm['myForm:type'][1].checked;
+                        	if(selAdmin) {
+                        		window.location.href= "Register5.jspx "; 
+                        	}
+                        }
+                    </script>
+                </p:panel>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

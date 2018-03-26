@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:p="http://primefaces.org/ui" lang="en">
+<head>
+<title>My Facelets Page</title>
+<meta http-equiv="keywords" content="enter,your,keywords,here" />
+<meta http-equiv="description" content="A short description of this page." />
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<ui:composition template="UserCenterGeneral3.xhtml">
+		<ui:define name="ucontent">
+			<!-- <script type="text/javascript" src="/js/jquery-ui.min.js"></script> -->
+			<script type="text/javascript" src="/js/jquery-1.8.0.min.js"></script>
+			<script type="text/javascript" src="/js/chips.js"></script>
+			<script type="text/javascript" src="/js/jquery.tagsinput.js"></script>
+			<link rel="stylesheet" type="text/css" href="/css/jquery.tagsinput.css" />
+			<link rel="stylesheet" type="text/css" href="/css/create_course.css" />
+			<div class="create_course_div">
+				<h:outputText styleClass="tit" value="讲师自建课程" />
+				<p:separator />
+				<br />
+				<h:panelGrid columns="3" cellpadding="0" columnClasses="thdL,thdR">
+					<h:outputText value="课程名称：" />
+					<p:inputText value="#{createCourse.course.name}" style="width:400px;" required="true" lable="课程名称">
+					</p:inputText>
+					<h:outputText value="（必填，不超过100个字符）" style="color:red;" />
+					<h:outputText value="课程简介：" />
+					<p:inputTextarea value="#{createCourse.course.introduction}" style="width:400px;" required="true" lable="课程名称">
+					</p:inputTextarea>
+					<h:outputText value="（必填，不超过2000个字符）" style="color:red;" />
+					<h:outputText value="开放时间：" />
+					<p:calendar value="#{createCourse.course.beginTime}" navigator="true" pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8"
+						locale="zh_CN" />
+					<h:outputText value="" style="color:red;" />
+					<h:outputText value="结束时间：" />
+					<p:calendar value="#{createCourse.course.endTime}" navigator="true" pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8"
+						locale="zh_CN" />
+					<!-- <h:outputText value="课程类型：" />
+					<h:outputText value="" style="color:red;" />
+					<h:selectOneMenu value="#{createCourse.course.courseType}">
+						<f:selectItem itemValue="0" itemLabel="课程" />
+						<f:selectItem itemValue="1" itemLabel="学习计划" />
+					</h:selectOneMenu> -->
+					<h:outputText value="" style="color:red;" />
+					<h:outputText value="上架：" />
+					<h:selectBooleanCheckbox id="checkbox1" value="#{createCourse.course.enabled}" />
+					<h:outputText value="" style="color:red;" />
+
+					<!-- 课程图片 -->
+					<h:outputText value="图像：" />
+					<p:graphicImage id="simg" url="/#{createCourse.course.picture}" style="width: 160px; height: 90px;" />
+					<h:outputText value="" style="color:red;" />
+					<h:outputLabel value="上传：" />
+					<p:fileUpload id="upl" fileUploadListener="#{createCourse.up_action}" update="simg" uploadLabel="上传" auto="true"
+						label="选择图片 " allowTypes="/(\.|\/)(gif|jpe?g|png)$/">
+					</p:fileUpload>
+					<h:outputText value="" style="color:red;" />
+					
+					<h:outputText value="课程分类：" />
+					<h:panelGroup>
+						<h:selectOneMenu  value="#{createCourse.course.firstTypeId}" styleClass="selectItem">
+							<f:selectItem itemValue="10" itemLabel="请选择"/>
+	                        <f:selectItems value="#{createCourse.firstClassifys}" var="module" itemLabel="#{module.name}" itemValue="#{module.id}"/>
+	                        <p:ajax process="@form" listener="#{createCourse.getSecondClassifys(createCourse.course.firstTypeId)}" update="module2"/>
+	                    </h:selectOneMenu>
+	                    <h:selectOneMenu  value="#{createCourse.course.secondTypeId}" id="module2" styleClass="selectItem">
+	                        <f:selectItem itemValue="10" itemLabel="请选择"/>
+	                        <f:selectItems value="#{createCourse.secondClassifys}" var="module" itemLabel="#{module.name}" itemValue="#{module.id}"/>
+	                    </h:selectOneMenu>
+					</h:panelGroup>
+					<h:outputText value="（必填）" style="color:red;" />
+				</h:panelGrid>
+				<p>
+					<label>
+						添加标签:
+						<label style="color: red;">(最多添加10个标签，每个标签不超过10个字符)</label>
+					</label>
+					<p:inputText id="tags_1" styleClass="tags" value="#{createCourse.course.courseTags}"></p:inputText>
+				</p>
+				<p:separator />
+
+				<!-- 章节录入 -->
+				<p:dialog width="600" height="350" widgetVar="chapterPanel" id="chapterPanel" header="章节" resizable="false">
+					<p:outputPanel id="typePanel" autoUpdate="false" style="height:300px;overflow: auto;">
+						<h:panelGrid columns="2">
+							<h:outputText value="名称"></h:outputText>
+							<p:inputText value="#{createCourse.chapter.name}" />
+							
+							<h:outputText value="章节序号" />
+							<p:inputText value="#{createCourse.chapter.orderNum}" />
+							
+							<h:outputText value="课时"></h:outputText>
+							<p:inputText value="#{createCourse.chapter.period}"  />
+							
+							<p:fileUpload fileUploadListener="#{createCourse.uploadChapterFile}" update="fileName" label="上传文件" auto="true">
+							</p:fileUpload>
+							<p:commandButton value="删除附件" style="margin:3px 5px 3px 2px;" action="#{createCourse.batchDelete(2)}" update="fileName chapterList"
+								onclick="if (!confirm('确认要删除附件吗？')) return false">
+							</p:commandButton>
+							
+							<h:outputText value="附件名称:"></h:outputText>
+							<h:outputText id="fileName" value="#{createCourse.chapter.file.fileName}"></h:outputText>
+						</h:panelGrid>
+					</p:outputPanel>
+					<p:separator />
+					<p:commandButton value="提交" action="#{createCourse.addOrEditChapter}" update="chapterList" oncomplete="PF('chapterPanel').hide();"/>
+				</p:dialog>
+				<p:commandButton id="add_top_type" action="#{createCourse.addChapter()}" value="添加章节" update="chapterPanel" icon="fa fa-fw fa-edit" oncomplete="PF('chapterPanel').show();">
+				</p:commandButton>
+				<p:commandButton value="删除章节" style="margin:3px 5px 3px 2px;" action="#{createCourse.batchDelete(1)}" update="chapterList"
+					onclick="if (!confirm('确认要删除选中的章节吗？')) return false">
+				</p:commandButton>
+				<p:dataTable id="chapterList" styleClass="chapterTable" value="#{createCourse.course.chapters}" var="pro" rowIndexVar="row" emptyMessage="暂无">
+					<p:column styleClass="column1">
+						<h:outputText value="#{row+1}" />
+						<f:facet name="header">
+							<h:outputText value="序号" />
+						</f:facet>
+					</p:column>
+					<p:column styleClass="column1">
+						<f:facet name="header">
+							<h:outputText value="选择"></h:outputText>
+							<h:selectBooleanCheckbox id="checkAll" onclick="checkAll('chapterList');">
+							</h:selectBooleanCheckbox>
+						</f:facet>
+						<h:selectBooleanCheckbox value="#{pro.selected}">
+							<p:ajax event="change"></p:ajax>
+						</h:selectBooleanCheckbox>
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="章节名称"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{pro.name}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="章节序号"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{pro.orderNum}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="章节课时"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{pro.period}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="章节附件名称"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{pro.file.fileName}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="操作"></h:outputText>
+						</f:facet>
+						<p:commandLink action="#{createCourse.editChapter(pro.id)}" update="chapterPanel" value="修改" oncomplete="PF('chapterPanel').show();">
+							<f:param name="id" value="#{pro.id}"></f:param>
+						</p:commandLink>
+					</p:column>
+				</p:dataTable>
+				
+				<!-- 课程附件上传 -->
+				<p:fileUpload fileUploadListener="#{createCourse.uploadFile}" update="dc" label="上传附件" auto="true">
+				</p:fileUpload>
+				<p:commandButton value="删除附件" style="margin:3px 5px 3px 2px;" action="#{createCourse.batchDelete(0)}" update="dc"
+					onclick="if (!confirm('确认要删除选中的附件吗？')) return false">
+				</p:commandButton>
+				<p:dataTable id="dc" value="#{createCourse.course.files}" styleClass="fileTable" var="pro" rowIndexVar="row" emptyMessage="暂无">
+					<p:column styleClass="column1">
+						<h:outputText value="#{row+1}"/>
+						<f:facet name="header">
+							<h:outputText value="序号" />
+						</f:facet>
+					</p:column>
+					<p:column styleClass="column2">
+						<f:facet name="header">
+							<h:outputText value="选择"></h:outputText>
+							<h:selectBooleanCheckbox id="checkAll" onclick="checkAll('dc');">
+							</h:selectBooleanCheckbox>
+						</f:facet>
+						<h:selectBooleanCheckbox value="#{pro.selected}">
+							<p:ajax event="change"></p:ajax>
+						</h:selectBooleanCheckbox>
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="文件名称"></h:outputText>
+						</f:facet>
+						<h:outputText value="#{pro.fileName}" />
+					</p:column>
+				</p:dataTable>
+
+				<p:commandButton ajax="false" action="#{createCourse.submit}" value="提交" styleClass="commonSubmit" />
+			</div>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

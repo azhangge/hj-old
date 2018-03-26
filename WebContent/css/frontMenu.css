@@ -1,0 +1,67 @@
+/* scrollDiv */
+.scrollDiv {
+	height: 25px;
+	line-height: 25px;
+	border-left: gray 0px solid;
+	border-right: gray 0px solid;
+	overflow: hidden;
+	text-align: left;
+	margin: 0 !important;
+	padding: 0;
+}
+
+.scrollDiv ul {
+	padding: 0;
+	margin: 0;
+}
+
+.scrollDiv li {
+	padding-left: 3px;
+	height: 25px;
+	border: 0px solid red;
+	list-style-type: none;
+	margin: 0 !important;
+}
+
+.scrollWrapper {
+	width: 400px;
+	z-index: 500;
+	left: 0px;
+	top: 10px;
+	margin-left: 10px !important;
+	background:
+		url(/resources/images/notice.png)
+		no-repeat;
+}
+
+#s_222, #s3 {
+	height: 25px;
+}
+
+.myTip {
+	font-weight: bold;
+}
+
+.ui-menubar, .ui-menu {
+	background: #004e8e !important;
+}
+.index-iconb{ background-image:url('../image/indexb.png');float:left;  display: inline-block; width:60px; height:30px; line-height:30px; text-align: right; color:#444; }
+.index-iconb:hover{ background-image:url('../image/indexc.png');color:#fff;}
+
+.index-registerb{ background-image:url('../image/registerb.png');float:left;  display: inline-block; width:60px; height:30px; line-height:30px; text-align: right; color:#444; }
+.index-registerb:hover{ background-image:url('../image/registerc.png');color:#fff;}
+
+.index-loginb{ background-image:url('../image/loginb.png');float:left;  display: inline-block; width:60px; height:30px; line-height:30px; text-align: right; color:#444;}
+.index-loginb:hover{ background-image:url('../image/loginc.png');color:#fff;}
+
+.index-phoneb{ background-image:url('../image/phoneb.png');float:left;  display: inline-block; width:70px; height:30px; line-height:30px; text-align: right; color:#444;}
+.index-phoneb:hover{ background-image:url('../image/phonec.png');color:#fff;}
+
+.index-backstageb{ background-image:url('../image/backstageb.png');float:left;  display: inline-block; width:80px; height:30px; line-height:30px; text-align: right; color:#444; }
+.index-backstageb:hover{ background-image:url('../image/backstagec.png');color:#fff;}
+
+.index-userCenterb{ background-image:url('../image/userCenterb.png');float:left;  display: inline-block; width:80px; height:30px; line-height:30px; text-align: right; color:#444; }
+.index-userCenterb:hover{ background-image:url('../image/userCenterc.png');color:#fff;}
+
+.index-exitb{ background-image:url('../image/exitb.png');float:left;  display: inline-block; width:60px; height:30px; line-height:30px; text-align: right; color:#444; }
+.index-exitb:hover{ background-image:url('../image/exitc.png');color:#fff;}

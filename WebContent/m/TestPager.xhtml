@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:f="http://java.sun.com/jsf/core" lang="en"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:head>
+	<title>Facelet Title</title>
+</h:head>
+<h:body>
+<link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.requestContextPath}/JT/css/bootstrap.min.css" />
+<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/JT/js/bootstrap.min.js" />
+
+	<nav aria-label="">						
+		<table class="table table-striped">
+		  <caption>条纹表格布局</caption>
+		  <thead>
+		    <tr>
+		      <th>名称</th>
+		      <th>城市</th>
+		      <th>邮编</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		  	<tr>
+		  	<!-- <c:forEach>
+		  	  <td>1</td>
+		      <td>2</td>
+		      <td>3</td>
+		  	</c:forEach> -->
+		    </tr>
+		  </tbody>
+		</table>
+	</nav>
+	<nav aria-label="Page navigation">
+	  <ul class="pagination">
+	    <li>
+	      <a href="#" aria-label="Previous">
+	        <span aria-hidden="true">|&laquo;</span>
+	      </a>
+	    </li>
+	    <li><a href="#">上一页</a></li>
+	    <li><a href="#">1</a></li>
+	    <li><a href="#">2</a></li>
+	    <li><a href="#">3</a></li>
+	    <li><a href="#">4</a></li>
+	    <li><a href="#">5</a></li>
+	    <li class="active"><a href="#">6 <span class="sr-only">(current)</span></a></li>
+	    <li><a href="#">下一页</a></li>
+	    <li>
+	      <a href="#" aria-label="Next">
+	        <span aria-hidden="true">&raquo;|</span>
+	      </a>
+	    </li>
+	  </ul>
+	</nav>
+</h:body>
+</html>
+

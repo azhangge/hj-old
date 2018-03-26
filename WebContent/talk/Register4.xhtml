@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <h:head>
+        <title>新用户注册</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" type="text/css"
+              href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs.css" />
+        <link rel="stylesheet" type="text/css"
+              href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs_a.css" />
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </h:head>
+    <body>
+        <h:form>
+            <p:outputPanel autoUpdate="true">
+                <p:growl/>
+            </p:outputPanel>
+            <p:panel style="width:500px;margin: 0 auto;margin-top: 80px;">
+                <h:outputText value="新用户注册" styleClass="headLine"></h:outputText>
+                <p:separator/>
+                <h:panelGrid columns="2" styleClass="generalInfo" style="vertical-align: middle!important;" columnClasses="columnLeft,columnRight">
+                    <h:outputLabel value="用户名" />
+                    <h:panelGroup>
+                        <p:inputText id="urn" value="#{register2.user.username}" style="width:200px;">
+                            <p:ajax listener="#{register2.onChangeUrn}" update="urnTip" process="@form"/>
+                            <p:watermark value="请输入手机号" for="urn"/>
+                        </p:inputText>
+                        <h:outputText id="urnTip" value="&nbsp;#{register2.urnTip}" style="color:#{register2.urnOk?'green;':'red;'}}" />
+                    </h:panelGroup>
+                    <h:outputLabel value="密码" />
+                    <p:password value="#{register2.user.password}"  style="width:200px;"/>
+                    <h:outputLabel value="密码确认" />
+                    <p:password value="#{register2.pwd_re}"  style="width:200px;"/>
+                    <h:outputLabel value="姓名" />
+                    <p:inputText value="#{register2.user.name}"  style="width:200px;"/>
+
+                    <h:outputLabel value="身份证：" rendered="#{applicationBean.systemConfig.usePid}"/>
+                    <h:panelGroup rendered="#{applicationBean.systemConfig.usePid}">
+                        <p:inputText value="#{register2.user.pid}" style="width:200px;">
+                        </p:inputText>
+                    </h:panelGroup>
+
+                    <h:outputLabel value="E-mail" />
+                    <h:panelGroup>
+                        <p:inputText value="#{register2.user.email}" style="width:200px;">
+                            <p:ajax listener="#{register2.onChangeEmail}" update="emailTip" process="@form"/>
+                        </p:inputText>
+                        <h:outputText id="emailTip" value="&nbsp;#{register2.emailTip}" style="color:#{register2.emailOk?'green;':'red;'}}" />
+                    </h:panelGroup>
+
+
+                    <h:outputText value="选择#{applicationBean.departmentStr}"/>
+                    <h:panelGrid columns="5" >
+                        <p:outputPanel id="module1">
+                            <h:selectOneMenu  value="#{register2.moduleId1}">
+                                <f:selectItem itemValue="10000000000000000" itemLabel="--请选择--"/>
+                                <f:selectItems value="#{register2.modules1}" var="module" itemLabel="#{module.name}" itemValue="#{module.id}"/>
+                                <p:ajax process="@form" listener="#{register2.changeModule(1)}" update="module2"/>
+                            </h:selectOneMenu>
+                        </p:outputPanel>
+                        <p:outputPanel id="module2">
+                            <h:selectOneMenu  value="#{register2.moduleId2}" rendered="#{register2.modules2.size()!=0}">
+                                <f:selectItem itemValue="10" itemLabel="--请选择--"/>
+                                <f:selectItems value="#{register2.modules2}" var="module" itemLabel="#{module.name}" itemValue="#{module.id}"/>
+                                <p:ajax listener="#{register2.changeModule(2)}" update="module3"/>
+                            </h:selectOneMenu>
+                        </p:outputPanel>
+                        <p:outputPanel id="module3">
+                            <h:selectOneMenu  value="#{register2.moduleId3}" rendered="#{register2.modules3.size()!=0}">
+                                <f:selectItem itemValue="100" itemLabel="--请选择--"/>
+                                <f:selectItems value="#{register2.modules3}" var="module" itemLabel="#{module.name}" itemValue="#{module.id}"/>
+                                <p:ajax listener="#{register2.changeModule(3)}" />
+                            </h:selectOneMenu>
+                        </p:outputPanel>
+                        <p:outputPanel autoUpdate="true">
+                            <h:outputText value="#{register2.ifOnlyOne?'✔':'请选择'}" style="color:#{register2.ifOnlyOne?'green':'red'};"/>
+                        </p:outputPanel>
+                    </h:panelGrid>
+
+
+
+                    <h:outputLabel value="职务" rendered="#{applicationBean.systemConfig.openPosition}"/>
+                    <h:panelGroup rendered="#{applicationBean.systemConfig.openPosition}">
+                        <p:selectOneMenu value="#{register2.user.position}">
+                            <f:selectItem itemLabel="--请选择--" itemValue=""/>
+                            <f:selectItems value="#{applicationBean.positions}" var="position" itemLabel="#{position.name}" itemValue="#{position.name}"/>
+                        </p:selectOneMenu>
+                    </h:panelGroup>
+
+                    <h:outputLabel value="验证码" />
+                    <h:panelGroup>
+                        <p:inputText value="#{register2.authStr}" style="width:100px"/>
+                        <p:commandLink update="auth"
+                                       action="#{register2.refreshAuth}">
+                            <h:graphicImage id="auth" title="点击换一个" style="border:black 0px solid;vertical-align:bottom;width:100px;height:22px;"
+                                            url="/servlet/AuthImage?id=#{register2.id_temp}" />
+                        </p:commandLink>
+                    </h:panelGroup>
+                </h:panelGrid>
+                <p:separator/>
+                <p:commandButton id="reg" widgetVar="reg" value="注册" disabled="#{!register2.accept}" onclick="reg.disable();" oncomplete="reg.enable();" action="#{register2.reg_ok}"></p:commandButton>
+                <script type="text/javascript" language="javascript">
+                    function regDisabled() {
+
+                    }
+                </script>
+            </p:panel>
+        </h:form>
+    </body>
+</html>

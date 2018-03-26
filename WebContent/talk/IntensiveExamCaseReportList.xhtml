@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <h:head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </h:head>
+    <h:body>
+        <ui:composition template="General3.xhtml">
+            <ui:define name="title">
+                <h:outputText value="#{i18nBean.lang('report.view_score')}" />
+            </ui:define>
+            <ui:define name="content">
+                <script type="text/javascript" language="javascript">
+                    function aabbcc(ind, url) {
+                        //jQuery('#myForm\\:examDc\\:'+ind+'\\:goonExam').attr("disabled", true);;
+                        PF(ind + ':goonExam').disable();
+                        //alert(jj);
+                        var scrWidth = screen.availWidth;
+                        var scrHeight = screen.availHeight;
+                        var self = window.open(url, '', "fullscreen=3,resizable=false,toolbar=no,menubar=no,scrollbars=yes,location=no,top=0,left=0,width=" + scrWidth + ",height=" + scrHeight);
+                        //self.resizeTo(scrWidth,scrHeight);
+                        self.moveTo(0, 0);
+                    }
+
+                </script>
+                <p:panel id="topNav8" styleClass="frontColumn topNav8Wrapper">
+                    <h:outputLink value="#{facesContext.externalContext.requestContextPath}" styleClass="nav8">
+                        <h:outputText value="#{i18nBean.lang('talk/Default','index')}" />
+                    </h:outputLink>
+                    <h:outputText value=">" styleClass="navSeparator"/>
+                    <h:outputLink value="#{facesContext.externalContext.requestContextPath}/talk/IntensiveExaminationNoticeList.xhtml" styleClass="nav8">
+	                    <h:outputText value="考试通知" styleClass="nav8"/>
+                    </h:outputLink>
+                    <h:outputText value=">" styleClass="navSeparator"/>
+                    <h:outputLink value="#{facesContext.externalContext.requestContextPath}/talk/IntensiveExaminationList.xhtml" styleClass="nav8">
+                    	<h:outputText value="考试入口" styleClass="nav8"/>
+                    </h:outputLink>
+                    <h:outputText value=">" styleClass="navSeparator"/>
+                    <h:outputText value="集中考试成绩" styleClass="nav8"/>
+                    
+                </p:panel>
+                <!--  
+                <p:chart id="chart" type="line" model="#{intensiveExamCaseReport.lineModel}" style="height:250px;"/>
+				-->
+                <p:dataTable id="examDc" value="#{intensiveExamCaseReport.cases}" var="exam" rowIndexVar="row" style="width:100%" styleClass="frontColumn" rows="10" paginator="true" paginatorPosition="bottom" emptyMessage="暂无数据">
+
+                    <f:facet name="header">
+                        <div>
+                            <h:outputText value="#{intensiveExamCaseReport.ifRecent?'以下仅显示刚才的考试成绩':'以下显示所有的考试成绩'}" style="text-align :center;"/>
+                            <!--  
+                            <p:commandButton value="加载历史记录" action="#{intensiveExamCaseReport.loadAllCases()}" update="myForm:examDc myForm:chart"/>
+                            -->
+                        </div>
+                    </f:facet>
+                    <p:column style="width:160px!important;text-align: left;">
+                        <f:facet name="header">
+                            <h:outputText value="#{i18nBean.lang('talk/ExaminationList','exam.name')}" />
+                        </f:facet>
+                        <h:outputText value="#{(exam.name=='' or exam.name==null)?exam.examination.name:exam.name}"></h:outputText>
+                    </p:column>
+                    <p:column style="width:140px!important;text-align: left;">
+                        <f:facet name="header">
+                            <h:outputText value="#{i18nBean.lang('talk/ExaminationList','exam.time')}" />
+                        </f:facet>
+                        <h:outputText value="#{exam.genTime}" styleClass="tip">
+                            <f:convertDateTime pattern="开考时间：yyyy-MM-dd HH:mm" timeZone="GMT+8"/>
+                        </h:outputText><br/>
+
+                        <h:panelGroup rendered="#{exam.stat eq 'saved'}">
+                            <h:outputText value="已考时长：" styleClass="tip" >
+                            </h:outputText>
+                            <h:outputText value="#{exam.timePassed/60}" styleClass="tip" rendered="#{exam.timePassed/60>0}">
+                                <f:convertNumber integerOnly="true" maxFractionDigits="0"/>
+                            </h:outputText>
+                            <h:outputText value="分" styleClass="tip" rendered="#{exam.timePassed/60>0}"></h:outputText>
+                            <h:outputText value="#{exam.timePassed%60}秒" styleClass="tip">
+                            </h:outputText>
+                        </h:panelGroup>
+
+                        <h:outputText value="#{exam.submitTime}" styleClass="tip" rendered="#{exam.stat!='saved'}">
+                            <f:convertDateTime pattern="交卷时间：yyyy-MM-dd HH:mm" timeZone="GMT+8"/>
+                        </h:outputText>
+                    </p:column>
+                    <!-- <p:column style="text-align: center;width:60px;">
+                        <f:facet name="header">
+                            <h:outputText value="#{i18nBean.lang('talk/ExaminationList','exam.score_type')}" />
+                        </f:facet>
+                        <h:outputText value="#{exam.examination.ifDirect?i18nBean.lang('talk/ExaminationList','exam.intelligence'):i18nBean.lang('talk/ExaminationList','exam.manual')}" styleClass="tip"/><br/>
+                    </p:column> -->
+                    <p:column style="text-align: center;width:60px;">
+                        <f:facet name="header">
+                            <h:outputText value="考试类型" />
+                        </f:facet>
+                        <h:outputText value="#{exam.ifSimulate?'模拟考试':'正式考试'}" styleClass="tip"/><br/>
+                    </p:column>
+                    <p:column style="width:60px!important;text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="#{i18nBean.lang('talk/ExaminationList','exam.length')}" />
+                        </f:facet>
+                        <h:outputText value="#{exam.examination.timeLen}#{i18nBean.lang('talk/ExaminationList','exam.minutes')}" styleClass="tip"/><br/>
+                    </p:column>
+                    <p:column style="width:70px!important;text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="#{i18nBean.lang('talk/ExamCaseReportList','report.score_full_score')}" />
+                        </f:facet>
+                        <h:outputText rendered="#{exam.ifPub and exam.stat!='saved'}"  value="#{exam.score}" style="font-weight: bold;color:#{exam.score>=60?'green':'red'};">
+                            <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/>
+                        </h:outputText>
+                        <h:outputText value="/" rendered="#{exam.ifPub and exam.examination.id!='7' and exam.stat!='saved'}"/>
+                        <h:outputText rendered="#{exam.ifPub and exam.examination.id!='7' and exam.stat!='saved'}"  value="#{exam.totalFullScore}" style="font-weight: bold;color:green;">
+                            <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/>
+                        </h:outputText>
+                        <h:outputText rendered="#{!exam.ifPub}"  value="#{i18nBean.lang('report.unpub')}" style="font-weight: bold;color:red;"/>
+                        <h:outputText rendered="#{exam.stat=='saved'}"  value="#{i18nBean.lang('report.saved')}" style="font-weight: bold;color:red;"/>
+                    </p:column>
+                    <p:column style="text-align: center;width:70px">
+                        <f:facet name="header">
+                            <h:outputText value="#{i18nBean.lang('talk/ExamCaseReportList','report.ranking')}" />
+                        </f:facet>
+                        <h:outputText value="#{exam.ranking==0?'1':exam.ranking}" rendered="#{exam.ifPub}"/>
+                        <h:outputText value="/#{exam.examination.examCaseNum}" rendered="#{exam.ifPub}"/>
+                    </p:column>
+                    <!-- <p:column style="text-align: center;width:80px!important" rendered="#{applicationBean.systemConfig.showScore and copyrightController.sysType!='1'}">
+                        <f:facet name="header">
+                            <h:outputText value="#{i18nBean.lang('talk/ExaminationList','exam.score')}" />
+                        </f:facet>
+                        <h:outputText id="scorePaid" value="#{i18nBean.lang('talk/ExaminationList','exam.score_cost')}：#{exam.examination.scorePaid}" styleClass="tip"/><br/>
+                        <h:outputText id="fullScore" value="#{i18nBean.lang('talk/ExaminationList','exam.score_full')}：#{exam.examination.bbsScore}" styleClass="tip"/><br/>
+                        <h:outputText  value="#{i18nBean.lang('report.real_score')}：#{exam.bbsScore}" rendered="#{exam.ifPub}" styleClass="tip"/>
+
+                    </p:column> -->
+                    <p:column style="text-align: center;width:40px;">
+                        <f:facet name="header">
+                            <h:outputText value="#{i18nBean.lang('talk/ExamCaseReportList','report.view')}" />
+                        </f:facet>
+                        <h:panelGroup rendered="#{exam.ifPub and exam.stat!='saved' }">
+                            <h:outputLink  value="#{facesContext.externalContext.requestContextPath}/talk/IntensiveExamCaseReportGeneral.jspx?case_id=#{exam.id}"  rendered="#{exam.examination.id!='7'}" styleClass="news">
+                                <h:outputText value="#{i18nBean.lang('talk/ExamCaseReportList','report.detail')}" />
+                            </h:outputLink>
+                            <h:outputLink  value="#{facesContext.externalContext.requestContextPath}/talk/ExamCaseReport.jspx?case_id=#{exam.id}" rendered="#{exam.examination.id=='7'}" styleClass="news">
+                                <h:outputText value="#{i18nBean.lang('talk/ExamCaseReportList','report.detail')}" />
+                            </h:outputLink>
+                            <br/>
+                            <h:outputLink  value="#{facesContext.externalContext.requestContextPath}/talk/ExamScoreReport2.jspx?case_id=#{exam.id}" rendered="#{exam.ifPassed and exam.examination.id!='7'}" target="_blank" styleClass="news">
+                                <h:outputText value="#{i18nBean.lang('talk/ExamCaseReportList','report.certificate')}" />
+                            </h:outputLink>
+
+                        </h:panelGroup>
+
+                        <p:button  widgetVar="#{row}:goonExam" rendered="#{exam.stat=='saved' and exam.examination.ifOpen}" value="#{i18nBean.lang('report.continue')}" onclick="aabbcc(#{row}, '#{facesContext.externalContext.requestContextPath}/servlet/pc/ExamCaseController?case_id=#{exam.id}');
+                                return false;"  styleClass="news"/>
+                    </p:column>
+                    <!--  
+                    <p:column style="text-align: center;width:40px">
+                        <f:facet name="header">
+                            <h:outputText value="#{i18nBean.lang('talk/ExamCaseReportList','report.delete')}" />
+                        </f:facet>
+                        <p:commandLink value="#{i18nBean.lang('talk/ExamCaseReportList','report.delete')}" rendered="#{exam.examination.allowUserDelScore}" action="#{examCaseReportList.deleteReport(exam.id)}" update="@form"  onclick="if (!confirm('#{i18nBean.lang('talk/Default','confirm_delete')}'))
+                                    return false" styleClass="news"/>
+                    </p:column>
+                    -->
+                </p:dataTable>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

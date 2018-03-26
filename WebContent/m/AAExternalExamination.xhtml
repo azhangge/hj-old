@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:poue="http://primefaces.org/ui/extensions"
+      xmlns:p="http://primefaces.org/ui"  lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+
+
+                <h:form id="myForm">
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <h:outputScript name="chinese_locale.js" library="js"/>
+                    <div>
+                        <h:outputText  styleClass="tit"
+                                       value="－#{aAExternalExamination.flag?'修改考试':'添加考试'}－" />
+                        <p:separator/>
+                        <h:panelGrid columns="2" cellpadding="0" columnClasses="thdL,thdR">
+                            <h:outputText value="考试名称：" />
+                            <p:inputText value="#{aAExternalExamination.exam.name}" style="width:600px;" />
+                            <h:outputText value="考试时长：" />
+                            <h:panelGroup>
+                                <p:spinner value="#{aAExternalExamination.exam.timeLen}"  min="0" size="5" stepFactor="10"/>
+                                <h:outputText value="分钟" />
+                            </h:panelGroup>
+                            <h:outputText value="倒计时：" />
+                            <h:panelGroup>
+                                <h:selectBooleanCheckbox value="#{aAExternalExamination.exam.ifCountDown}"/>
+                                <h:outputText value="（在考试界面中倒计时，时间到后自动提交试卷）。" />
+                            </h:panelGroup>
+                            <h:outputText value="考试页解析：" />
+                            <h:panelGroup>
+                                <h:selectBooleanCheckbox value="#{aAExternalExamination.exam.ifShowAnswer}"/>
+                                <h:outputText value="（在考试界面显示试题解析按钮，点击后显示试题答案及解析）。" />
+                            </h:panelGroup>
+                            <h:outputText value="详情页答案：" />
+                            <h:panelGroup>
+                                <h:selectBooleanCheckbox value="#{aAExternalExamination.exam.showAnswer}"/>
+                                <h:outputText value="考试完成后，是否在考试详情中显示试题的答案。" />
+                            </h:panelGroup>
+                            <h:outputText value="详情页解析：" />
+                            <h:panelGroup>
+                                <h:selectBooleanCheckbox value="#{aAExternalExamination.exam.showRightStr}"/>
+                                <h:outputText value="考试完成后，是否在考试详情中显示试题的详细解析。" />
+                            </h:panelGroup>
+                            <h:outputText value="作答统计：" />
+                            <h:panelGroup>
+                                <h:selectBooleanCheckbox value="#{aAExternalExamination.exam.showStatistic}"/>
+                                <h:outputText value="考试完成后，是否在考试详情中显示选择题的作答统计。" />
+                            </h:panelGroup>
+                            <h:outputText value="删除成绩？" />
+                            <h:panelGroup>
+                                <h:selectBooleanCheckbox value="#{aAExternalExamination.exam.allowUserDelScore}"/>
+                                <h:outputText value="（是否允许用户在前台将自己的考试成绩删除（重要考试不推荐））。" />
+                            </h:panelGroup>
+                            <h:outputText value="消耗积分："  rendered="#{copyrightController.sysType!='1'}"/>
+                            <h:panelGroup rendered="#{copyrightController.sysType!='1'}">
+                                <p:spinner value="#{aAExternalExamination.exam.scorePaid}"  min="0" size="5"/>
+                                <h:outputText value="（用户参加此次考试需要消耗的积分数）。" />
+                            </h:panelGroup>
+
+                            <h:outputText value="获得积分："  rendered="#{copyrightController.sysType!='1'}"/>
+                            <h:panelGroup rendered="#{copyrightController.sysType!='1'}">
+                                <p:spinner value="#{aAExternalExamination.exam.bbsScore}"  min="0" size="5"/>
+                                <h:outputText value="（用户参加考试获得的最大积分数，根据成绩/满分比获积分）。" />
+                            </h:panelGroup>
+
+
+                            <h:outputText value="综合题别称：" rendered="#{copyrightController.sysType!='1'}"/>
+                            <p:inputText value="#{aAExternalExamination.exam.caseAlias}" rendered="#{copyrightController.sysType!='1'}"/>
+                            <h:outputText value="开放时间：" />
+                            <p:calendar value="#{aAExternalExamination.exam.availableBegain}" pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" locale="zh_CN"/>
+                            <h:outputText value="结束时间：" />
+                            <p:calendar value="#{aAExternalExamination.exam.availableEnd}" pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" locale="zh_CN"/>
+
+                            <h:outputText value="随机试卷：" />
+                            <h:panelGroup >
+                                <p:selectOneMenu id="random2aa" value="#{aAExternalExamination.exam.random2Id}">
+                                    <f:selectItem itemValue="-1" itemLabel="请选择试卷"/>
+                                    <f:selectItems value="#{aAExternalExamination.random2Papers}" var="paper" itemValue="#{paper.id}" itemLabel="#{paper.name}"/>
+                                </p:selectOneMenu>
+                                <h:outputText value="" style="color:red;"/>
+                            </h:panelGroup>
+
+                            <h:outputText value="显示考试须知？" />
+                            <h:panelGroup>
+                                <h:selectBooleanCheckbox value="#{aAExternalExamination.exam.showInfo}"/>
+                                <h:outputText value="（进入考试后，首先显示考试须知）。" />
+                            </h:panelGroup>
+                            <h:outputText value="考试须知：" />
+                            <poue:ckEditor id="editor1" widgetVar="editor1" value="#{aAExternalExamination.exam.examInfo}" customConfig="#{facesContext.externalContext.requestContextPath}/resources/js/ckeditor_config2.js"  width="650" height="150">
+                            </poue:ckEditor>
+
+                            <h:outputText value="开放#{applicationBean.departmentStr}：" />
+
+                            <p:treeTable id="dc" value="#{aAExternalExamination.root}" var="dic" style="width:500px;">
+                                <p:column style="width:200px;">
+                                    <f:facet name="header">
+                                        <h:outputText value="部门名称"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{dic.name}" ></h:outputText>
+                                </p:column>
+                                <p:column style="width:100px;">
+                                    <f:facet name="header">
+                                        <h:outputText value="选择"></h:outputText>
+                                    </f:facet>
+                                    <h:selectBooleanCheckbox value="#{dic.selected}" >
+                                        <p:ajax process="@form" listener="#{aAExternalExamination.checkSons(dic.id,dic.selected)}" update="dc"/>
+                                    </h:selectBooleanCheckbox>
+                                </p:column>
+                            </p:treeTable>
+
+                            <h:outputText value="管理员：" />
+
+                            <p:dataTable value="#{aAExternalExamination.admins}" var="exam"  style="width:500px;" rendered="#{copyrightController.sysType!='1'}">
+                                <f:facet name="header">
+                                    <h:outputText value="请选择允许查看成绩的管理员" />
+                                </f:facet>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="管理员（用户名）"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{exam.nickname}（#{exam.urn}）" escape="false" />
+                                </p:column>
+                                <p:column style="width:100px;">
+                                    <f:facet name="header">
+                                        <h:outputText value="选择"></h:outputText>
+                                    </f:facet>
+                                    <h:selectBooleanCheckbox value="#{exam.selected}">
+                                    </h:selectBooleanCheckbox>
+                                </p:column>
+                            </p:dataTable>
+
+                        </h:panelGrid>
+                        <p:growl/>
+                        <p:separator/>
+                        <p:commandButton ajax="false" action="#{aAExternalExamination.done}" value="提交"  styleClass="commonSubmit" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'examination')}"/>
+
+                    </div></h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

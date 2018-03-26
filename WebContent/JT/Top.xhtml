@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core" lang="en">
+<h:head>
+	<title>Menu</title>
+	<meta http-equiv="keywords" content="enter,your,keywords,here" />
+	<meta http-equiv="description" content="A short description of this page." />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<f:loadBundle basename="com.huajie.exam.i18n.langs" var="lang" />
+</h:head>
+<h:body style="text-align: center">
+	<ui:composition>
+		<link type="text/css" rel="stylesheet" href="/JT/css/top.css" />
+		<!-- <ui:include src="/talk/LoginPopup.xhtml"></ui:include> -->
+		<div class="top">
+			<div class="logo">
+				<!-- <img src="/#{adv.advsMap.src}" alt="" /> -->
+				<a href="#{adv.advsMap.url}">
+					<img src="/#{adv.advsMap.src}" alt="" class="logo_img" />
+				</a>
+			</div>
+			<div class="slogan">
+				<img src="/image/slogan.png" alt="" class="slogan_img" />
+			</div>
+			<div class="top_right">
+				<c:if test="#{!clientSession.ifLogin}">
+					<div class="user">
+						<img src="/image/unlogin1.png" alt="" class="user_img" />
+					</div>
+				</c:if>
+				<c:if test="#{clientSession.ifLogin}">
+					<div class="head_logout_div">
+						<p:commandLink value="退出" action="#{clientSession.exit}" update="@form" styleClass="logout yahei bold" />
+					</div>
+					<div class="head_user_pic">
+						<a href="#{facesContext.externalContext.requestContextPath}/talk/UserCenter.jspx">
+							<img src="#{(empty clientSession.usr.picUrl)?('../HJ/image/notlogin.png'):clientSession.usr.picUrl}"
+								class="headPic" />
+						</a>
+					</div>
+					<div class="head_user_name">#{clientSession.usr.tel}</div>
+				</c:if>
+				<c:if test="#{!clientSession.ifLogin}">
+					<div class="login_register">
+						<a onclick="PF('login1').show();">
+							<!-- <div class="login">登录</div> -->
+							登录
+						</a>
+						<!-- <div class="login">/</div> -->
+						<c:if test="#{!(applicationBean.systemConfig.systemClosed==0)}">
+							<span class="">/</span>
+							<a href="/talk/Register3.xhtml">
+								<!-- <div class="register">注册</div> -->
+								注册
+							</a>
+						</c:if>
+					</div>
+				</c:if>
+				<div class="app">
+					<h:panelGroup id="mobile">
+						<img src="/image/app_download.png" alt="" class="app_img" />
+					</h:panelGroup>
+				</div>
+				<!-- 手机地址 -->
+				<p:overlayPanel id="qrPanel" for="mobile" showEffect="blind" hideEffect="explode" showEvent="mouseover"
+					dismissable="true" hideEvent="mousedown" style="background-color: none;">
+					<div style="width: 200px !important; border: 0px solid red; text-align: center;">
+						<h:outputText value="#{i18nBean.lang('talk/FrontMenu','cell_phone_scan')}" styleClass="topTip" />
+						<p:graphicImage value="/servlet/QRCodeServlet.png" style="width:200px;" />
+						<!-- <h:outputLink value="#{facesContext.externalContext.requestContextPath}/mobile/Default.jspx" title="#{i18nBean.lang('talk/FrontMenu','click_enter')}">
+                                    </h:outputLink> -->
+					</div>
+				</p:overlayPanel>
+
+
+			</div>
+		</div>
+	</ui:composition>
+</h:body>
+
+</html>

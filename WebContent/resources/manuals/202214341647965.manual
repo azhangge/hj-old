@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<manual>
+  <id>202214341647965</id>
+  <title>试题篮的概念与作用</title>
+  <content>&amp;ldquo;试题篮&amp;rdquo;是试题管理界面与人工试卷之间的一个试题中转站。原理与&amp;ldquo;购物车&amp;rdquo;相同，是试题的一个暂放平台。在试题管理界面把试题挑选后，可以放到试题篮。在人工试卷编辑界面，可以将这些试题篮中的试题再加入人工试卷。</content>
+  <gen_time>2014-10-30 22:23:02</gen_time>
+  <ord>6</ord>
+</manual>

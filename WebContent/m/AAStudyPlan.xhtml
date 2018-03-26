@@ -1,0 +1,161 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form id="myForm">
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <ui:include src="CourseTreePanel.xhtml"></ui:include>
+                    <h:outputScript name="chinese_locale.js" library="js"/>
+                    <div>
+                        <h:outputText  styleClass="tit" value="-建立学习计划-" />
+                    </div>
+                    <p:separator/>
+                    <h:panelGrid columns="2">
+                    
+                    <h:outputText value="学习计划名称：" />
+                    <h:panelGroup>
+	                    <h:inputText id="studyPlan_name" value="#{aAStudyPlan.studyPlan.name}" style="width:300px;" required="true" label="学习计划名称" >
+	                    	<p:ajax update="msgName" event="blur" />
+	                    	<f:validateLength maximum="50" ></f:validateLength>
+	                    </h:inputText>
+	                    <p:message for="studyPlan_name" showSummary="请填写名称" id="msgName" style="float:right;"/>
+                    </h:panelGroup>
+                    <h:outputText value="开放时间：" />
+                            <p:calendar value="#{aAStudyPlan.studyPlan.availableBegain}" navigator="true" pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" locale="zh_CN"/>
+                            <h:outputText value="结束时间：" />
+                            <p:calendar value="#{aAStudyPlan.studyPlan.availableEnd}" navigator="true" pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" locale="zh_CN"/>
+                    <h:outputText value="图像：" />
+                    <p:graphicImage  id="simg"
+                                     url="#{fn:replace(aAStudyPlan.studyPlan.picture,'showimage','showabstractimage')}"
+                                     style="width: 160px; height: 120px;" />
+                    <h:outputLabel value="图片源：" />
+                    <h:panelGrid columns="1">
+						<h:panelGroup>
+							<h:inputText id="title" value="#{aAStudyPlan.studyPlan.picture}" style="width:400px">
+								<f:ajax event="change" render="simg" />
+							</h:inputText>
+						</h:panelGroup>
+					</h:panelGrid>
+                    <h:outputLabel value="上传：" />
+                    <p:fileUpload id="upl" fileUploadListener="#{aAStudyPlan.up_action}" update="simg title" uploadLabel="上传" auto="true" label="选择图片" allowTypes="/(\.|\/)(gif|jpe?g|png)$/">
+                    </p:fileUpload>
+                    
+                    <h:outputText value="学习计划描述：" />
+                    <h:panelGroup>
+	                    <h:inputTextarea id="studyPlan_introduction" value="#{aAStudyPlan.studyPlan.introduction}" style="width:600px;height:50px;" label="学习计划描述">
+	                    	<f:validateLength maximum="150" ></f:validateLength>
+	                    	<p:ajax update="msgIntroduction" event="blur" />
+	                    </h:inputTextarea>
+	                    <p:message for="studyPlan_introduction" showSummary="请填写名称" id="msgIntroduction" style="float:right;"/>
+                    </h:panelGroup>
+                    
+                    <h:outputText value="学习计划完成学时数：" />
+                    <h:panelGroup id="numValidation">
+                    <h:inputText value="#{aAStudyPlan.studyPlan.finishPlanNum}" >
+                    	<p:ajax event="blur" listener="#{aAStudyPlan.onblur}" />
+                    </h:inputText>
+                    <h:outputText value="(请填入#{aAStudyPlan.studyPlan.minClassNum}到#{aAStudyPlan.studyPlan.planTotalNum})" style="color:red;"/>
+                    <h:outputText id="out" value="#{listenerView.text}" />
+                    </h:panelGroup>
+                    <h:outputText value="学习计划总学时：" />
+                    <h:inputText id="planTotalNum" value="#{aAStudyPlan.studyPlan.planTotalNum}" disabled="true"></h:inputText>
+                    <h:outputText value="学习计划完成条件：" />
+                    <h:panelGroup>
+                    <h:outputText value="学时数达标" />
+	                    <h:selectBooleanCheckbox id="checkbox1" value="#{aAStudyPlan.studyPlan.ifFinishNum}" />
+	                <h:outputText value="考试通过" />
+	                    <h:selectBooleanCheckbox id="checkbox2" disabled="true" value="#{aAStudyPlan.studyPlan.ifFinishExam}" />
+                    </h:panelGroup>
+                    </h:panelGrid>
+                    <p:separator/>
+                    
+                    <p:commandButton oncomplete="PF('CourseTreePanel').show();" value="选择课程">
+                    	<f:param name="id" value="#{aAStudyPlan.studyPlan.id}"></f:param>
+                    </p:commandButton>
+                    <h:outputText value="是否为参与学习计划的用户购买课程" />
+	                    <h:selectBooleanCheckbox id="checkbox3" value="#{aAStudyPlan.studyPlan.ifBuyCourses}" />
+                    <p:dataTable paginator="true" paginatorPosition="bottom"
+							value="#{aAStudyPlan.studyPlan.courses}" var="us" id="dataTable1"
+							emptyMessage="暂无数据" styleClass="list"
+							rowIndexVar="row" style="width:100%" rows="15" editable="true"
+							editMode="cell" liveResize="true" resizableColumns="true">
+							
+							<p:column sortBy="#{us.name}" style="text-align: center;width: 40px;" resizable="true" >
+								<f:facet name="header">
+									<h:outputText value="课程名称" />
+								</f:facet>
+								<h:outputText value="#{us.name}" />
+							</p:column>
+					
+							<p:column sortBy="#{us.totalClassNum}" style="text-align: center;width: 40px;" resizable="true" >
+								<p:tooltip for="modelOutput" value="点击编辑" />
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText id="modelOutput" value="#{us.totalClassNum}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText id="modelInput" value="#{us.totalClassNum}"
+											style="width:30px;">
+											<p:ajax event="change" update=":myForm:planTotalNum"
+												listener="#{aAStudyPlan.editNum(us.id)}" />
+										</p:inputText>
+									</f:facet>
+								</p:cellEditor>
+								<f:facet name="header">
+									<h:outputText value="学时" />
+								</f:facet>
+							</p:column>
+							
+							<p:column sortBy="#{us.ifRequired}" style="text-align: center;width: 40px;" resizable="true" >
+								<f:facet name="header">
+									<h:outputText value="是否必修" />
+								</f:facet>
+								<h:selectBooleanCheckbox value="#{us.ifRequired}" >
+									<p:ajax event="change" update=":myForm:numValidation" listener="#{aAStudyPlan.onTransfer}"></p:ajax>
+								</h:selectBooleanCheckbox>
+							</p:column>
+							<p:column style="text-align: center;width: 40px;" resizable="true" >
+								<f:facet name="header">
+									<h:outputText value="操作" />
+								</f:facet>
+								<p:commandLink action="#{aAStudyPlan.remove(us.id)}" value="删除" update=":myForm:numValidation :myForm:planTotalNum dataTable1 :myForm:CourseTreePanel"></p:commandLink>
+							</p:column>
+					</p:dataTable>
+                    
+                    <p:pickList id="examList" value="#{aAStudyPlan.exams}" var="course" itemLabel="#{course.name}" itemValue="#{course}"
+                    showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains"
+                    showSourceControls="true" showTargetControls="true" showCheckbox="true" converter="examinationConverter"
+                    effect="bounce" responsive="true" >
+                    <f:facet name="sourceCaption">待选考试</f:facet>
+        			<f:facet name="targetCaption">已选考试</f:facet>
+        			<p:ajax event="transfer" listener="#{aAStudyPlan.onTransfer2}" update="checkbox2" />
+                    </p:pickList>
+                    <p:separator/>
+                    <p:treeTable value="#{aAStudyPlan.root}" var="dic" selectionMode="checkbox" selection="#{aAStudyPlan.selectedNodes}" style="width:450px;" emptyMessage="暂无数据">
+                         <f:facet name="header">
+                             <h:outputText value="请选择学习计划参与人员"></h:outputText>
+                         </f:facet>
+                         <p:column style="width:200px;">
+                             <h:outputText value="#{dic.name}" ></h:outputText>
+                         </p:column>
+                    </p:treeTable>
+                    <p:separator/>
+                    <p:commandButton action="#{aAStudyPlan.done}" update="@form" ajax="true" validateClient="true" value="保存"  styleClass="commonSubmit" />
+                    <!-- <p:commandButton ajax="false" action="#{aAStudyPlan.done2}" value="扩展设置"  styleClass="commonSubmit" /> -->
+                    <p:growl autoUpdate="true"/>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

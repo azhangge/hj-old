@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core" lang="en">
+<h:head>
+	<title>Menu</title>
+	<meta http-equiv="keywords" content="enter,your,keywords,here" />
+	<meta http-equiv="description"
+		content="A short description of this page." />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<f:loadBundle basename="com.huajie.exam.i18n.langs" var="lang" />
+	
+</h:head>
+<h:body style="text-align: center">
+	<ui:composition>
+	<link type="text/css" rel="stylesheet" 
+		href="#{facesContext.externalContext.requestContextPath}/css/frontMenu.css" />
+	<link rel="stylesheet" type="text/css"
+		href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs.css" />
+	<link rel="stylesheet" type="text/css"
+		href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs_a.css" />
+<!-- <link ></link> -->
+		<div
+			style="height: 75px; padding: 0px 0px 0px 0px; z-index: 1000; width: 100%; position: fixed; top: 0; background-color: white; border-bottom:1px solid #ddd;
+			filter:alpha(opacity=90); /*IE滤镜，透明度90%*/ -moz-opacity:0.9; /*Firefox私有，透明度90%*/ opacity:0.9;/*其他，透明度90%*/">
+			<div
+				style="margin: 0 auto; width: 1200px; margin: 0px auto !important; background-color: white; border-radius: 3px; height: 75px;border-bottom:1px solid #ddd;">
+
+				<div
+					style="width: 45%; border: 0px solid green; height: 75px; float: left; overflow: hidden;">
+					<!-- LOGO图 -->
+					<h:outputLink value="#{adv.advsMap.url}" target="_blank">
+						<h:graphicImage id="adv2"
+							style="width:100%;margin: 0px 0px 0px 0px;"
+							value="#{adv.advsMap.src}" />
+					</h:outputLink>
+				</div>
+
+				<div style="border: 0px solid red; width: 55%; float: right;">
+					<div style="width: 100%; float: left;">
+						<p:outputPanel autoUpdate="true">
+							<h:panelGrid columns="2"
+								style="text-align: right;width: 100%;border:0px solid green;">
+								<h:panelGroup>
+									<h:outputText
+										value="#{i18nBean.lang('talk/FrontMenu','welcome')}"
+										rendered="#{!clientSession.ifLogin}" styleClass="topTip" />
+									<h:outputText
+										value="#{i18nBean.lang('talk/FrontMenu','welcome_you')}&nbsp;#{clientSession.usr.name}！"
+										rendered="#{clientSession.ifLogin}" styleClass="topTip" />
+								</h:panelGroup>
+								<p:menubar id="front_menu"
+									style="font-size:30px;width:500px;height:28px;background-color:white!important;text-align: right!important;border: 0;"
+									styleClass="front_menu">
+									<!-- 手机 -->
+									<p:menuitem id="mobile" styleClass="topNav">
+									         <div class="index-phoneb"><h:outputText
+											value=" #{i18nBean.lang('talk/FrontMenu','cell_phone')}" /></div>
+									</p:menuitem>
+									
+									<!-- 前往后台 -->
+									<p:menuitem url="/m/Welcome.jspx" styleClass="topNav"
+										rendered="#{clientSession.ifLogin and clientSession.usr.username=='admin'}">
+									         <div class="index-backstageb"><h:outputText value="前往后台" /></div>
+									</p:menuitem>
+									<c:if test="#{!clientSession.ifLogin}">
+										<!-- 登录 -->
+										<p:menuitem style="" onclick="PF('login1').show();"
+											global="false" styleClass="topNav">
+									         <div class="index-loginb"><h:outputText
+												value=" #{i18nBean.lang('talk/FrontMenu','login')}" /></div>	
+										</p:menuitem>
+										<!-- 注册 -->
+										<p:menuitem url="/talk/Register3.jspx"
+											rendered="#{!(applicationBean.systemConfig.systemClosed==0)}"
+											styleClass="topNav">
+											  <div class="index-registerb">
+									       <h:outputText
+												value=" #{i18nBean.lang('talk/FrontMenu','register')}#{general.co}" />
+									    </div>
+										</p:menuitem>
+									</c:if>
+
+									<!--                                         <c:if test="#{clientSession.ifLogin}">
+                                            <p:submenu  label="#{i18nBean.lang('talk/FrontMenu','score_lookup')}" styleClass="topNav newMenuNav" rendered="#{applicationBean.systemConfig.openScore}"  icon="ui-icon-image" >
+                                            	综合考试
+                                                <p:menuitem value="#{i18nBean.lang('talk/FrontMenu','score_examination')}" url="/talk/ExamCaseReportList.jspx" rendered="#{applicationBean.systemConfig.openScore}"/> <p:separator  rendered="#{applicationBean.systemConfig.openScore}"/>
+                                                每日竞赛
+                                                <p:menuitem value="#{i18nBean.lang('talk/FrontMenu','score_competition')}" url="/talk/ContestCaseReportList.jspx" rendered="#{applicationBean.systemConfig.openContest}"/><p:separator  rendered="#{applicationBean.systemConfig.openContest}"/>
+                                                自助练习
+                                                <p:menuitem value="#{i18nBean.lang('talk/FrontMenu','score_buffet')}" url="/talk/BuffetExamCaseReportList.jspx" rendered="#{applicationBean.systemConfig.openBuffet}"/> <p:separator  rendered="#{applicationBean.systemConfig.openBuffet}"/>
+                                            </p:submenu>
+                                        </c:if> -->
+
+									<c:if test="#{clientSession.ifLogin}">
+										<!--                                           <p:submenu  label="#{i18nBean.lang('talk/FrontMenu','personal_center')}" styleClass="topNav newMenuNav"  icon="ui-icon-person"  rendered="#{applicationBean.systemConfig.openUserCenter}">
+                                            	我的资料
+                                                <p:menuitem value="#{i18nBean.lang('talk/FrontMenu','profile')}" url="/talk/UserCenter.jspx"/><p:separator />
+                                                我的学习资料
+                                                <p:menuitem value="#{i18nBean.lang('talk/FrontMenu','my_lesson')}" url="/talk/BuyedLessonList.jspx" rendered="#{applicationBean.systemConfig.openLesson and clientSession.ifLogin and copyrightController.sysType=='3'}"/>
+                                                试题收藏
+                                                <p:menuitem value="#{i18nBean.lang('talk/FrontMenu','question_bookmark')}" url="/talk/QuestionCollectionList.jspx" rendered="#{applicationBean.systemConfig.openCollection}"/><p:separator />
+                                                我的错题
+                                                <p:menuitem value="#{i18nBean.lang('talk/FrontMenu','my_wrong_question')}" url="/talk/WrongQuestionList.jspx"  rendered="#{applicationBean.systemConfig.openWrong}"/> <p:separator  rendered="#{applicationBean.systemConfig.openWrong}"/>
+                                                我的难点
+                                                <p:menuitem value="#{i18nBean.lang('talk/FrontMenu','my_hard_point')}" url="/talk/WrongKnowledgeList.jspx"  rendered="#{applicationBean.systemConfig.openWrong2 and copyrightController.sysType=='3'}"/> <p:separator  rendered="#{applicationBean.systemConfig.openWrong2 and copyrightController.sysType=='3'}"/>
+                                                我的文件
+                                                <p:menuitem value="#{i18nBean.lang('talk/FrontMenu','my_file')}" url="/fm/ClientListFile.jspx" rendered="#{clientSession.usr!=null and applicationBean.systemConfig.openFile}" /> <p:separator  rendered="#{userCenter.user.id==clientSession.usr.id and applicationBean.systemConfig.openFile}"/>
+                                                我的收件箱
+                                                <p:menuitem value="#{i18nBean.lang('talk/FrontMenu','message_box')}" url="/talk/ClientListMsg.jspx"  rendered="#{clientSession.usr.unReadedMsgNum==0 and applicationBean.systemConfig.openMessage}"/>
+                                                <p:menuitem value="#{i18nBean.lang('talk/FrontMenu','message_box')}( #{clientSession.usr.unReadedMsgNum} )"  rendered="#{clientSession.usr.unReadedMsgNum>0 and applicationBean.systemConfig.openMessage}" url="/talk/ClientListMsg.jspx" />
+                                            </p:submenu> -->
+										<!-- 注销 -->
+										<p:menuitem action="#{clientSession.exit2()}"
+											rendered="#{applicationBean.systemConfig.openLogin2}"
+											styleClass="topNav">
+											<div class="index-exitb">
+											<h:outputText
+												value=" #{i18nBean.lang('talk/FrontMenu','exit')}" /></div>
+										</p:menuitem>
+										<p:menuitem action="#{clientSession.exit()}"
+											rendered="#{!applicationBean.systemConfig.openLogin2}"
+											styleClass="topNav">
+											<div class="index-exitb">
+											<h:outputText
+												value=" #{i18nBean.lang('talk/FrontMenu','exit')}" /></div>
+										</p:menuitem>
+									</c:if>
+
+									<!-- 试题检索 -->
+									<!--                                         <p:menuitem url="/talk/SearchQuestion.jspx" rendered="#{applicationBean.systemConfig.openSearch}" styleClass="topNav">
+                                            <i class="fa fa-search"></i>
+                                            <h:outputText value=" #{i18nBean.lang('talk/FrontMenu','question_search')}"/>
+                                        </p:menuitem> -->
+
+									
+									<!-- 用户中心 -->
+									<p:menuitem url="/talk/Default.jspx" styleClass="topNav"
+										rendered="#{clientSession.ifLogin}">
+										<div class="index-userCenterb">
+										<h:outputText value="用户中心" /></div>
+									</p:menuitem>
+									<!-- 首页 -->
+									<p:menuitem url="/" styleClass="topNav">
+									    <div class="index-iconb">
+									       <h:outputText value="首页" />
+									    </div>
+									</p:menuitem>
+
+								</p:menubar>
+							</h:panelGrid>
+
+							<!-- 手机地址 -->
+							<p:overlayPanel id="qrPanel" for="mobile" showEffect="blind"
+								hideEffect="explode" showEvent="mouseover" dismissable="true"
+								style="background-color: none;">
+								<div
+									style="width: 200px !important; border: 0px solid red; text-align: center;">
+									<h:outputText
+										value="#{i18nBean.lang('talk/FrontMenu','cell_phone_scan')}"
+										styleClass="topTip" />
+									<p:graphicImage value="/servlet/QRCodeServlet.png"
+										style="width:200px;" />
+									<!-- <h:outputLink value="#{facesContext.externalContext.requestContextPath}/mobile/Default.jspx" title="#{i18nBean.lang('talk/FrontMenu','click_enter')}">
+                                        </h:outputLink> -->
+								</div>
+							</p:overlayPanel>
+						</p:outputPanel>
+						<div style="clear: both;"></div>
+					</div>
+
+					<div style="width: 0%; float: left;">
+						<!-- <div
+							style="border: 0px solid red !important; float: right; text-align: right; padding-top: 20px; background-color: #fff !important;">
+							<p:clock mode="server" autoSync="false"
+								pattern="#{i18nBean.lang('talk/FrontMenu','system_time')}：yyyy-MM-dd HH:mm:ss" />
+						</div> -->
+						<!-- <div class="scrollWrapper">
+                                <div style="float:left;padding:10px 0 0 38px; font-size:12px!important; ">
+                                    <h:outputLink value="#{facesContext.externalContext.requestContextPath}/talk/CasusList.jspx" target="_blank" title="#{i18nBean.lang('talk/FrontMenu','see_all_publication')}">
+                                        <h:outputText value="#{i18nBean.lang('talk/FrontMenu','publication')}：" escape="false" style="line-height:25px;color:#3260a2;"/>
+                                    </h:outputLink>
+                                </div>
+                                <div id="s_222" class="scrollDiv" style="z-index: 500;left: 0px;top: 10px;padding-left:0px!important;margin-left: 35px;">
+                                    <ul>
+                                        <ui:repeat value="#{listCasus.casusList}" var="casus">
+                                            <li>
+                                                <p:commandLink styleClass="notice" action="#{listCasus.viewCasus(casus.id)}" oncomplete="PF('CasusPanel').show()">
+                                                    <h:outputText value="#{casus.title}" escape="false" style=""/>
+                                                </p:commandLink>
+                                                <h:outputText value="#{casus.inputdate}" escape="false" style="margin-left:15px;color:gray;line-height: 25px;">
+                                                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" locale="zh_CN"/>
+                                                </h:outputText>
+                                            </li>
+                                        </ui:repeat>
+                                    </ul>
+                                </div>
+                                <div style="clear:both;"/>
+                            </div> -->
+					</div>
+					<div style="clear: both;"></div>
+				</div>
+
+
+
+			</div>
+		</div>
+	</ui:composition>
+</h:body>
+</html>

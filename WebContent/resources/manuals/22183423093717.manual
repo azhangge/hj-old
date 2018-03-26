@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<manual>
+  <id>22183423093717</id>
+  <title>E-MAIL验证</title>
+  <content>&lt;p&gt; &amp;ldquo;EMAIL验证&amp;rdquo;的设置主要是针对用户注册时是否由本系统发送一份验证信，由于密码等需要通过邮箱找回，用户邮箱的正确性对用户管理来说非常重要，推荐开启用户注册时的邮箱验证功能。&lt;/p&gt;</content>
+  <gen_time>2014-02-07 18:07:30</gen_time>
+  <ord>14</ord>
+</manual>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" lang="en">
+	<head>
+		<title>My Facelets Page</title>
+		<meta http-equiv="keywords" content="enter,your,keywords,here" />
+		<meta http-equiv="description"
+			content="A short description of this page." />
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+		<!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+	</head>
+	<body>
+		<ui:composition template="BackGeneral.xhtml">
+			<ui:define name="content">
+                            <h:form>
+                            <div>
+				<h:outputText id="outputText1"
+					styleClass="tit"
+					value="－#{aAPartner.tit}－" />
+				<hr/>
+				<h:panelGrid columns="2">
+					<h:outputText value="名称：" />
+					<h:inputText value="#{aAPartner.partner.name}" style="width:400px"/>
+					<h:outputText value="URL：" />
+					<h:inputText value="#{aAPartner.partner.url}" style="width:400px"/>
+					<h:outputText value="类型：" />
+                                        <h:selectOneMenu value="#{aAPartner.partner.typeId}">
+                                            <f:selectItems value="#{aAPartner.ss}"/>
+                                        </h:selectOneMenu>
+                                        <h:outputText value="次序：" />
+                                        <h:inputText value="#{aAPartner.partner.ord}" style="width:400px"/>
+					<h:outputText value="描述：" />
+					<h:inputTextarea value="#{aAPartner.partner.description}" style="width:400px;height:200px"/>
+				</h:panelGrid>
+                                <p:separator/>
+                                <p:commandButton ajax="false" action="#{aAPartner.save_action}" value="提交" />
+                            </div>
+                            </h:form>
+
+			</ui:define>
+		</ui:composition>
+	</body>
+</html>

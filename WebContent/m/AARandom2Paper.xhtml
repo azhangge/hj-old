@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"  lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+
+
+                <h:form id="myForm">
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <div>
+                        <h:outputText  styleClass="tit"
+                                       value="－#{aARandom2Paper.flag?'修改随机试卷':'添加随机试卷'}－" />
+                        <p:separator/>
+                        <h:panelGrid columns="2" cellpadding="0"  columnClasses="thdL,thdR">
+                            <h:outputText value="随机试卷名称：" />
+                            <h:inputText value="#{aARandom2Paper.exam.name}" style="width:600px;">
+                                <f:validateRequired />
+                            </h:inputText>
+                        </h:panelGrid>
+                        <p:separator/>
+                        <p:panel header="试卷大题">
+                            <div style="margin-left: 0px;">
+                                            <ui:include src="/GeneralHelper.xhtml">
+                                                <ui:param name="name" value="什么是试卷大题"></ui:param>
+                                                <ui:param name="id" value="205589019335457"></ui:param>
+                                            </ui:include>
+                                        </div>
+                            <p:dataTable  value="#{aARandom2Paper.exam.parts}" var="part" id="dataTable99" emptyMessage="#{lang['exam.empty_result']}"
+                                          styleClass="list" rowIndexVar="row" style="width:100%" rows="30">
+
+                                <p:column>
+                                    <h:inputText value="#{part.name}"/>
+                                    <f:facet name="header">
+                                        <h:outputText value="大题名称" />
+                                    </f:facet>
+                                </p:column>
+                                
+                                <p:column  style="">
+                                    <p:spinner value="#{part.choiceScore}"  min="0" size="3" stepFactor="0.5"/>
+                                    <f:facet name="header">
+                                        <h:outputText value="单选分值" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column  style="">
+                                    <p:spinner value="#{part.multiChoiceScore}"  min="0" size="3" stepFactor="0.5"/>
+                                    <f:facet name="header">
+                                        <h:outputText value="多选分值" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column  style="">
+                                    <p:spinner value="#{part.fillScore}"  min="0" size="3" stepFactor="0.5"/>
+                                    <f:facet name="header">
+                                        <h:outputText value="填空分值" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column  style="">
+                                    <p:spinner value="#{part.judgeScore}"  min="0" size="3" stepFactor="0.5"/>
+                                    <f:facet name="header">
+                                        <h:outputText value="判断分值" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column  style="">
+                                    <p:spinner value="#{part.essayScore}"  min="0" size="3" stepFactor="0.5"/>
+                                    <f:facet name="header">
+                                        <h:outputText value="问答分值" />
+                                    </f:facet>
+                                </p:column>
+                                <!-- <p:column  style="">
+                                    <p:spinner value="#{part.fileScore}"  min="0" size="3" stepFactor="0.5"/>
+                                    <f:facet name="header">
+                                        <h:outputText value="文件分值" />
+                                    </f:facet>
+                                </p:column> -->
+                                
+                                
+                                
+                                <p:column  style="">
+                                    <h:inputText value="#{part.description}"/><f:facet name="header">
+                                        <h:outputText value="题目说明" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column  style="">
+                                    <h:inputText value="#{part.ord}"/>
+                                    <f:facet name="header">
+                                        <h:outputText value="题目次序" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column  style="">
+                                    <p:commandLink action="#{aARandom2Paper.deletePart(part.id)}" value="删除" update="@form"/>
+                                    <f:facet name="header">
+                                        <h:outputText value="删除" />
+                                    </f:facet>
+                                </p:column>
+                            </p:dataTable>
+                            <p:separator/>
+                            <h:panelGrid columns="2">
+                                <h:outputText value="大题名称" />
+                                <h:inputText value="#{aARandom2Paper.newPart.name}">
+                                    <f:validateRequired />
+                                </h:inputText>
+                                <h:outputText value="单选题分值：" />
+                                <p:spinner value="#{aARandom2Paper.newPart.choiceScore}"  min="0" size="5" stepFactor="0.5"/>
+                                <h:outputText value="多选题分值：" />
+                                <p:spinner value="#{aARandom2Paper.newPart.multiChoiceScore}"  min="0" size="5" stepFactor="0.5"/>
+                                <h:outputText value="填空题分值：" />
+                                <p:spinner value="#{aARandom2Paper.newPart.fillScore}"  min="0" size="5" stepFactor="0.5"/>
+                                <h:outputText value="判断题分值：" />
+                                <p:spinner value="#{aARandom2Paper.newPart.judgeScore}"  min="0" size="5" stepFactor="0.5"/>
+                                <h:outputText value="问答题分值：" />
+                                <p:spinner value="#{aARandom2Paper.newPart.essayScore}" min="0" size="5" stepFactor="0.5"/>
+                                <!-- <h:outputText value="文件题分值：" />
+                                <p:spinner value="#{aARandom2Paper.newPart.fileScore}" min="0" size="5" stepFactor="0.5"/> -->
+
+                                <h:outputText value="题目说明" />
+                                <h:inputText value="#{aARandom2Paper.newPart.description}"/>
+                                <h:outputText value="题目次序" />
+                                <h:inputText value="#{aARandom2Paper.newPart.ord}"/>
+                            </h:panelGrid>
+                            <p:commandButton action="#{aARandom2Paper.addNewPart()}" update="@form" value="添加新大题"/>
+                            <p:commandButton process="@form" update="@form" value="更新"/>
+                            <p:separator/>
+
+                        </p:panel>
+                        <p:separator/>
+                        <!-- <h:outputText value="注意：综合题分值的设置在综合题编辑页中，在此处设置无效！" style="color:red;font-weight: bold;"/> -->
+                        <p:separator/>
+                        <p:panel id="main_panel" header="随机试卷小题目">
+                            <div>
+                                <p:treeTable value="#{aARandom2Paper.root2}" var="me" >
+                                    <f:facet name="header">
+                                        <h:outputText value="请设置每个模块抽取的试题数量" />
+                                    </f:facet>
+                                    <p:column style="text-align: center;">
+                                        <h:outputText value="#{me.module.name}" />
+                                        <f:facet name="header">
+                                            <h:outputText value="模块名称" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column style="text-align: center;">
+                                        <h:panelGroup rendered="#{fn:length(me.module.sons)==0}">
+                                            
+                                            <h:selectOneMenu value="#{me.choicePartId}" styleClass="scoreSelect">
+                                                <f:selectItem itemLabel="-无-" itemValue="0"/>
+                                                <f:selectItems value="#{aARandom2Paper.exam.parts}" var="part" itemLabel="#{part.name}" itemValue="#{part.id}"/>
+                                            </h:selectOneMenu><br/>
+                                            <h:inputText value="#{me.choiceWeight}"   styleClass="scoreInput">
+                                            </h:inputText><br/>
+                                            <h:outputText value="共#{me.module.choiceNum}道"/>
+                                        </h:panelGroup>
+                                        <f:facet name="header">
+                                            <h:outputText value="单选题" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column style="text-align: center;">
+                                        <h:panelGroup rendered="#{fn:length(me.module.sons)==0}">
+                                            <h:selectOneMenu value="#{me.mchoicePartId}" styleClass="scoreSelect">
+                                                <f:selectItem itemLabel="-无-" itemValue="0"/>
+                                                <f:selectItems value="#{aARandom2Paper.exam.parts}" var="part" itemLabel="#{part.name}" itemValue="#{part.id}"/>
+                                            </h:selectOneMenu><br/>
+                                            <h:inputText value="#{me.multiChoiceWeight}"  style="" styleClass="scoreInput">
+                                            </h:inputText><br/>
+                                            <h:outputText value="共#{me.module.multiChoiceNum}道"/>
+                                        </h:panelGroup>
+                                        <f:facet name="header">
+                                            <h:outputText value="多选题" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column style="text-align: center;">
+                                        <h:panelGroup rendered="#{fn:length(me.module.sons)==0}">
+                                            <h:selectOneMenu value="#{me.fillPartId}" styleClass="scoreSelect">
+                                                <f:selectItem itemLabel="-无-" itemValue="0"/>
+                                                <f:selectItems value="#{aARandom2Paper.exam.parts}" var="part" itemLabel="#{part.name}" itemValue="#{part.id}"/>
+                                            </h:selectOneMenu><br/>
+                                            <h:inputText value="#{me.fillWeight}"  styleClass="scoreInput"/><br/>
+                                            <h:outputText value="共#{me.module.fillNum}道"/>
+                                        </h:panelGroup>
+                                        <f:facet name="header">
+                                            <h:outputText value="填空题" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column style="text-align: center;">
+                                        <h:panelGroup rendered="#{fn:length(me.module.sons)==0}">
+                                            <h:selectOneMenu value="#{me.judgePartId}" styleClass="scoreSelect">
+                                                <f:selectItem itemLabel="-无-" itemValue="0"/>
+                                                <f:selectItems value="#{aARandom2Paper.exam.parts}" var="part" itemLabel="#{part.name}" itemValue="#{part.id}"/>
+                                            </h:selectOneMenu><br/>
+                                            <h:inputText value="#{me.judgeWeight}"  styleClass="scoreInput"/><br/>
+                                            <h:outputText value="共#{me.module.judgeNum}道" />
+                                        </h:panelGroup>
+                                        <f:facet name="header">
+                                            <h:outputText value="判断题" />
+                                        </f:facet>
+                                    </p:column> 
+                                    <p:column style="text-align: center;">
+                                        <h:panelGroup rendered="#{fn:length(me.module.sons)==0}">
+                                            <h:selectOneMenu value="#{me.essayPartId}" styleClass="scoreSelect">
+                                                <f:selectItem itemLabel="-无-" itemValue="0"/>
+                                                <f:selectItems value="#{aARandom2Paper.exam.parts}" var="part" itemLabel="#{part.name}" itemValue="#{part.id}"/>
+                                            </h:selectOneMenu><br/>
+                                            <h:inputText value="#{me.essayWeight}"  styleClass="scoreInput"/><br/>
+                                            <h:outputText value="共#{me.module.essayNum}道" />
+                                        </h:panelGroup>
+                                        <f:facet name="header">
+                                            <h:outputText value="问答题" />
+                                        </f:facet>
+                                    </p:column>
+                                    <!-- <p:column style="text-align: center;">
+                                        <h:panelGroup rendered="#{fn:length(me.module.sons)==0}">
+                                            <h:selectOneMenu value="#{me.filePartId}" styleClass="scoreSelect">
+                                                <f:selectItem itemLabel="-无-" itemValue="0"/>
+                                                <f:selectItems value="#{aARandom2Paper.exam.parts}" var="part" itemLabel="#{part.name}" itemValue="#{part.id}"/>
+                                            </h:selectOneMenu><br/>
+                                            <h:inputText value="#{me.fileWeight}"  styleClass="scoreInput"/><br/>
+                                            <h:outputText value="共#{me.module.fileNum}道" />
+                                        </h:panelGroup>
+                                        <f:facet name="header">
+                                            <h:outputText value="文件题" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column style="text-align: center;">
+                                        <h:panelGroup rendered="#{fn:length(me.module.sons)==0}">
+                                            <h:selectOneMenu value="#{me.casePartId}" styleClass="scoreSelect">
+                                                <f:selectItem itemLabel="-无-" itemValue="0"/>
+                                                <f:selectItems value="#{aARandom2Paper.exam.parts}" var="part" itemLabel="#{part.name}" itemValue="#{part.id}"/>
+                                            </h:selectOneMenu><br/>
+                                            <h:inputText value="#{me.caseWeight}"  styleClass="scoreInput"/><br/>
+                                            <h:outputText value="共#{me.module.caseNum}道" />
+                                        </h:panelGroup>
+                                        <f:facet name="header">
+                                            <h:outputText value="综合题" />
+                                        </f:facet>
+                                    </p:column> -->
+                                </p:treeTable>
+
+
+                            </div>
+
+                        </p:panel>
+
+
+
+                        <p:growl/>
+                        <p:separator/>
+                        <p:commandButton ajax="false" action="#{aARandom2Paper.done}" value="提交"  styleClass="commonSubmit" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'examination')}"/>
+
+                    </div></h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

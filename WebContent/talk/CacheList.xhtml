@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core"  lang="en"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </h:head>
+    <h:body>
+        <ui:composition template="General3.xhtml"> 
+            <ui:define name="title">
+                <h:outputText value="缓存实例列表" />
+            </ui:define>
+            <ui:define name="content">
+
+                <p:dataTable id="examDc" value="#{cacheList.items}" var="item" style="width:100%" styleClass="frontColumn" emptyMessage="暂无条目" rows="10" paginator="true" paginatorPosition="bottom" >
+                    <p:column id="columnRefType" style="text-align: left;width:120px!important;" filterBy="#{instance.name}" filterMatchMode="contains" filterStyle="display:inline;margin-left:10px;">
+                        <f:facet name="header" >
+                            <h:outputText value="名称" />
+                        </f:facet>
+                        <h:outputText value="#{item.id}"></h:outputText>
+                    </p:column>
+                    <p:column style="width:80px!important;text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="生命时长" />
+                        </f:facet>
+                        <h:outputText value="#{cacheList.instance.lifeLen}"/>
+                    </p:column>
+                    <p:column style="width:80px!important;text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="生成时间" />
+                        </f:facet>
+                        <h:outputText value="#{item.genTime}" styleClass="tip">
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"
+                                               timeZone="GMT+8" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:80px!important;text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="最后访问时间" />
+                        </f:facet>
+                        <h:outputText value="#{item.visitTime}" styleClass="tip">
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"
+                                               timeZone="GMT+8" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="详情" />
+                        </f:facet>
+                        <h:outputText  value="#{item.object}" styleClass="tip"/>
+
+                    </p:column>
+                </p:dataTable>
+
+
+                <p:dataTable id="examDc2" value="#{cacheList.instance.indexes}" var="ind" style="width:100%" styleClass="frontColumn" emptyMessage="暂无条目" rows="10" paginator="true" paginatorPosition="bottom" >
+                    <p:column id="columnRefType" style="text-align: left;width:120px!important;" filterBy="#{ind.name}" filterMatchMode="contains" filterStyle="display:inline;margin-left:10px;">
+                        <f:facet name="header" >
+                            <h:outputText value="索引名称" />
+                        </f:facet>
+                        <h:outputText value="#{ind.name}"></h:outputText>
+                    </p:column>
+                    <p:column style="text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="索引详情" />
+                        </f:facet>
+                        <ui:repeat value="#{ind.indexItems}" var="indItem">
+                            <h:outputText value="#{indItem.keyWord}"/>：
+                            <h:outputText value="#{indItem.ids}"/><br/>
+                        </ui:repeat>
+
+                    </p:column>
+
+                </p:dataTable>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

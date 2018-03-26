@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <h:head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </h:head>
+    <f:view>
+        <body>
+            <ui:composition template="UserCenterGeneral.xhtml">
+                <ui:define name="ucontent">
+                    <script type="text/javascript" language="javascript">
+                        function gotoVideo(name) {
+                            var url1 = '#{facesContext.externalContext.requestContextPath}/vp/RerePlayer.swf?xml=player.jsp?fid=' + name;
+                            var url = unescape(url1);
+                            //alert(url);
+                            window.open(url, '_blank');
+                        }
+                    </script>
+                    <ui:include src="NewFilePanel.xhtml"></ui:include>
+                    <ui:include src="NewFolderPanel.xhtml"></ui:include>
+                    <ui:include src="ChangeFileDir.xhtml"></ui:include>
+                    <div >
+                        <h:panelGrid columns="2" style="width:100%">
+                            <h:outputText value="－个人文件－" styleClass="mark"></h:outputText>
+                            <h:panelGrid columns="3" style="border:0px solid red;display:inline;margin-left:20px;">
+                                <h:outputText value="容量："
+                                              styleClass="mark"></h:outputText>
+                                <p:progressBar  value="#{clientSession.usr.realLength/clientSession.usr.totalLength*100}"  style="width:130px;"/> 
+                                <h:panelGroup>
+                                    <h:outputText value="#{clientSession.usr.realLength}" styleClass="mark">
+                                        <f:convertNumber maxFractionDigits="1" minFractionDigits="0" groupingUsed="false"/>
+                                    </h:outputText>
+                                    <h:outputText value="MB/#{clientSession.usr.totalLength}MB"
+                                                  styleClass="mark"></h:outputText>
+                                </h:panelGroup></h:panelGrid>
+                        </h:panelGrid>
+
+                        <p:panel style="height: 30px" styleClass="ui-datatable-header mainTable">
+                            <h:panelGroup>
+                                <h:outputText value="路径："
+                                              styleClass="mark"></h:outputText>
+                                <c:forEach items="${clientListFile.familyTree}" var="path"
+                                           begin="0" step="1">
+                                    <a href="ClientListFile.jspx?fid=${path.id}">${path.fileName}</a>>>
+                                </c:forEach>
+                            </h:panelGroup>
+                        </p:panel>
+                        <div style="border-top:0px;" >
+
+                            <p:commandButton id="link" value="新建文件夹"  action="#{newFolder.newAdd}" update=":myForm:ffName" oncomplete="PF('newFolder').show();" rendered="#{clientSession.ifLogin}" style="margin:3px 5px 3px 2px;">
+                                <f:param name="scope" value="pers" ></f:param>
+                            </p:commandButton>
+
+                            <p:commandButton id="flink" value="上传文件" action="#{newFile.newAdd}" style="margin:3px 5px 3px 2px;"  update="myForm:fName" disabled="#{clientSession.usr.realLength&gt;clientSession.usr.totalLength}" rendered="#{clientSession.ifLogin}" oncomplete="PF('newFile').show();">
+                                <f:param name="action" value="new"></f:param>
+                                <f:param name="scope" value="pers" ></f:param>
+                            </p:commandButton>
+
+                            <p:commandButton id="batChangeDir" value="移动" style="margin:3px 5px 3px 2px;"  rendered="#{clientSession.ifLogin}"
+                                             action="#{clientListFile.batChangeDir}" update="dc" oncomplete="PF('changeFileDir').show();">
+                            </p:commandButton>
+
+                            <p:commandButton id="batDel" value="删除" style="margin:3px 5px 3px 2px;"
+                                             action="#{clientListFile.batDel}" update="dc"  rendered="#{clientSession.ifLogin}"
+                                             onclick="if (!confirm('确认要删除选中的文件及目录（包括所有子目录及文件）吗？'))
+                                                         return false">
+                            </p:commandButton>
+                        </div>
+                        <p:panel style="height: 30px" styleClass="ui-datatable-header mainTable"
+                                 rendered="#{clientListFile.fatherID!='0'}">
+
+                            <h:outputLink
+                                value="ClientListFile.jspx?fid=#{clientListFile.grapaID}"
+                                rendered="#{clientListFile.fatherID!='0'}" style="display:inline-block;">
+                                <h:panelGroup>
+                                    <h:graphicImage value="/resources/images/up.gif" style="border:0px;vertical-align: middle;"/>
+                                    <h:outputText value="返回上级" style=""></h:outputText>
+                                </h:panelGroup>
+                            </h:outputLink>
+
+                        </p:panel>
+
+                        <p:dataTable id="dc" value="#{clientListFile.pro2s}" paginator="true" paginatorPosition="bottom"  styleClass="mainTable"
+                                     var="pro" rows="8" style="text-align:center;" emptyMessage="无记录">
+                            <p:column style="width:30px;">
+                                <f:facet name="header">
+                                    <h:outputText value="选择"></h:outputText>
+                                </f:facet>
+                                <h:selectBooleanCheckbox value="#{pro.selected}">
+                                    <p:ajax event="change"></p:ajax>
+                                </h:selectBooleanCheckbox>
+                            </p:column>
+
+
+                            <p:column sortBy="#{pro.fileName}" style="text-align:left;width:180px;">
+                                <f:facet name="header">
+                                    <h:outputText value="文件名称"></h:outputText>
+                                </f:facet>
+                                <h:graphicImage rendered="#{pro.ifFolder}"
+                                                value="/resources/images/folder.gif" style="vertical-align: middle;"></h:graphicImage>
+                                <h:graphicImage rendered="#{!pro.ifFolder}"
+                                                value="/resources/images/file.gif" style="vertical-align: middle;"></h:graphicImage>
+                                <h:outputLink value="ClientListFile.jspx?fid=#{pro.id}"  title="点击进入文件夹"
+                                              rendered="#{pro.ifFolder}">
+                                    <h:outputText value="#{fn:length(pro.fileName)>20?fn:substring(pro.fileName,0,20):pro.fileName}"></h:outputText>
+                                </h:outputLink>
+
+                                <h:outputLink title="点击下载文件" target="_blank" styleClass="common"
+                                              value="../servlet/DownloadFile?id=#{pro.id}"
+                                              rendered="#{(!pro.ifFolder)&amp;&amp;(!(((pro.fileExt=='.jpg'||pro.fileExt=='.gif')||(pro.fileExt=='.png'||(pro.fileExt=='.flv')||(pro.fileExt=='.mp3')))||(pro.fileExt=='.mp4')))}">
+                                    <h:outputText value="#{fn:length(pro.fileName)>20?(fn:substring(pro.fileName,0,20)):pro.fileName}#{pro.fileExt}"></h:outputText>
+                                </h:outputLink>
+                                <h:outputLink title="点击播放视频" target="_blank" styleClass="common" 
+                                              value="#{facesContext.externalContext.requestContextPath}/vp/RerePlayer.swf?xml=x.rplayer?fid=#{pro.id}"
+                                              rendered="#{(!pro.ifFolder)&amp;&amp;(pro.fileExt=='.flv'||pro.fileExt=='.mp4')}">
+                                    <h:outputText value="#{fn:length(pro.fileName)>20?(fn:substring(pro.fileName,0,20)):pro.fileName}#{pro.fileExt}"></h:outputText>
+                                </h:outputLink>
+                                <h:outputLink title="点击播放MP3" target="_blank" styleClass="common"
+                                              value="#{facesContext.externalContext.requestContextPath}/dewplayer/dewplayer-vol.swf?mp3=../#{applicationBean.relativePath}#{pro.id}.mp3&amp;autostart=0"
+                                              rendered="#{(!pro.ifFolder)&amp;&amp;(pro.fileExt=='.mp3')}">
+                                    <h:outputText value="#{fn:length(pro.fileName)>20?(fn:substring(pro.fileName,0,20)):pro.fileName}#{pro.fileExt}"></h:outputText>
+                                </h:outputLink>
+                                <h:outputLink title="点击查看图片" target="_blank" styleClass="common"
+                                              value="#{facesContext.externalContext.requestContextPath}/servlet/ShowImage?id=#{pro.id}"
+                                              rendered="#{(!pro.ifFolder)&amp;&amp;((pro.fileExt=='.jpg'||pro.fileExt=='.gif')||pro.fileExt=='.png')}">
+                                    <h:outputText value="#{fn:length(pro.fileName)>20?(fn:substring(pro.fileName,0,20)):pro.fileName}#{pro.fileExt}"></h:outputText>
+                                </h:outputLink>
+
+
+
+
+                                <h:outputText value="(#{pro.sonNum})" rendered="#{pro.ifFolder}"></h:outputText>
+                            </p:column>
+                            <p:column sortBy="#{pro.realLength}" style="width:50px;">
+                                <f:facet name="header">
+                                    <h:outputText value="大小"></h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{pro.fileSize}"></h:outputText>
+                            </p:column>
+                            <p:column sortBy="#{pro.uploadTime}" style="width:100px;text-align:center;">
+                                <f:facet name="header">
+                                    <h:outputText value="上传时间"></h:outputText>
+                                </f:facet>
+
+                                <h:outputText value="#{pro.uploadTime}">
+                                    <f:convertDateTime timeZone="GMT+8"
+                                                       pattern="yyyy-MM-dd HH:mm" />
+                                </h:outputText>
+
+                            </p:column>
+                            <p:column style="width:30px;">
+                                <f:facet name="header">
+                                    <h:outputText value="操作"></h:outputText>
+                                </f:facet>
+                                <h:outputLink title="点击直接下载文件" target="_blank" styleClass="common"
+                                              value="../servlet/DownloadFile?id=#{pro.id}"
+                                              rendered="#{(!pro.ifFolder)}">
+                                    <h:outputText value="下载"></h:outputText>
+                                </h:outputLink>
+                                <!-- <h:outputLink title="点右键复制链接" target="_blank" styleClass="common"
+                                              value="#{facesContext.externalContext.requestContextPath}/images/content/#{pro.id}.flv"
+                                              rendered="#{(!pro.ifFolder)&amp;&amp;(pro.fileExt=='.flv'||pro.fileExt=='.mp4')}">
+                                    <h:outputText value="&lt;br&gt;视频源" escape="false"></h:outputText>
+                                </h:outputLink> -->
+                                <h:outputLink title="点右键复制链接" target="_blank" styleClass="common"
+                                              value="#{facesContext.externalContext.requestContextPath}/images/content/#{pro.id}.mp3"
+                                              rendered="#{(!pro.ifFolder)&amp;&amp;(pro.fileExt=='.mp3')}">
+                                    <h:outputText value="&lt;br&gt;音频源" escape="false"></h:outputText>
+                                </h:outputLink>
+                                <h:outputLink title="点右键复制链接" target="_blank" styleClass="common"
+                                              value="#{facesContext.externalContext.requestContextPath}/images/content/#{pro.id}.jpg"
+                                              rendered="#{(!pro.ifFolder)&amp;&amp;(pro.fileExt=='.jpg'||pro.fileExt=='.gif'||pro.fileExt=='.png')}">
+                                    <h:outputText value="&lt;br&gt;图片源" escape="false"></h:outputText>
+                                </h:outputLink>
+                            </p:column>
+                            <p:column style="width:30px;text-align: center;">
+                                <f:facet name="header">
+                                    <h:outputText value="修改"></h:outputText>
+                                </f:facet>
+
+                                <p:commandLink value="修改" action="#{newFolder.alter}" update=":myForm:ffName"
+                                               rendered="#{pro.ifFolder}" oncomplete="PF('newFolder').show();">
+                                    <f:param name="id" value="#{pro.id}"></f:param>
+                                    <f:param name="scope" value="#{pro.scope}" ></f:param>
+                                </p:commandLink>
+                                <p:commandLink value="修改" action="#{newFile.alter}" oncomplete="PF('newFile').show();" update=":myForm:fName"
+                                               rendered="#{(!pro.ifFolder)}">
+                                    <f:param name="id" value="#{pro.id}"></f:param>
+                                    <f:param name="scope" value="#{pro.scope}" ></f:param>
+                                </p:commandLink>
+
+                            </p:column>
+                            <!--
+                            <p:column style="width:55px;text-align: center;">
+                                <f:facet name="header">
+                                    <h:outputText value="修改"></h:outputText>
+                                </f:facet>
+
+                                <p:commandButton value="删除" action="#{clientListFile.delPro(pro.id)}" update="@form">
+                                </p:commandButton></p:column>
+                            -->
+                        </p:dataTable>
+                        <p:separator/>
+
+                    </div>
+                </ui:define>
+            </ui:composition>
+        </body>
+    </f:view>
+</html>

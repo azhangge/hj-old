@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="UserCenterGeneral.xhtml">
+            <ui:define name="ucontent">
+                <h:panelGrid columns="1">
+                    <h:outputText value="－用户发言－" styleClass="mark"></h:outputText>
+                </h:panelGrid>
+                <p:tabView>
+                    <p:tab title="主题">
+                        <p:dataTable id="dc" value="#{userTalkList.threads}" paginator="true" paginatorPosition="bottom"
+                                     var="thread" rowIndexVar="r" rows="10" style="width:100%" emptyMessage="无数据">
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="主题"></h:outputText>
+                                </f:facet>
+                                <h:outputLink value="ThreadDetail.jspx?id=#{thread.id}" styleClass="news"
+                                              target="_blank">
+                                    <h:outputText value="#{thread.title}"></h:outputText>
+                                </h:outputLink>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="版块"></h:outputText>
+                                </f:facet>
+                                <h:outputLink value="ThreadList.jspx?id=#{thread.zone.id}"  styleClass="more"
+                                              target="_blank">
+                                    <h:outputText value="#{thread.zone.name}"></h:outputText>
+                                </h:outputLink>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="回复/阅读"></h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{thread.replyCount}/#{thread.readCount}" styleClass="tip"></h:outputText>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="最新回复"></h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{thread.latestTalk.genTime}" styleClass="tip">
+                                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                       timeZone="GMT+8" />
+                                </h:outputText>
+                                <br />
+                                <h:outputLink value="UserCenter.jspx?id=#{thread.latestTalk.genBy.id}" styleClass="more"
+                                              target="_blank">
+                                    <h:outputText value="#{thread.latestTalk.genBy.username}"></h:outputText>
+                                </h:outputLink>
+                            </p:column>
+
+                        </p:dataTable>
+                    </p:tab>
+
+
+                    <p:tab title="回复">
+                        <p:dataTable id="dc2" value="#{userTalkList.talks}" var="talk" paginator="true" paginatorPosition="bottom"
+                                     rowIndexVar="r" rows="10" style="width:100%" emptyMessage="无数据">
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="帖子"></h:outputText>
+                                </f:facet>
+                                <h:outputLink value="ThreadDetail.jspx?id=#{talk.thread.id}" styleClass="news"
+                                              target="_blank">
+                                    <h:outputText value="#{talk.thread.title}"></h:outputText>
+                                </h:outputLink>
+                                <br/>
+                                <h:outputText value="#{fn:substring(talk.cleanContent,0,50)}" escape="true"  styleClass="tip"></h:outputText>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="版块"></h:outputText>
+                                </f:facet>
+                                <h:outputLink value="ThreadList.jspx?id=#{talk.thread.zone.id}"  styleClass="more"
+                                              target="_blank">
+                                    <h:outputText value="#{talk.thread.zone.name}"></h:outputText>
+                                </h:outputLink>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="回复/阅读"></h:outputText>
+                                </f:facet>
+                                <h:outputText
+                                    value="#{talk.thread.replyCount}/#{talk.thread.readCount}"  styleClass="tip"></h:outputText>
+                            </p:column>
+                            <p:column style="width:120px;">
+                                <f:facet name="header">
+                                    <h:outputText value="最新回复"></h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{talk.thread.latestTalk.genTime}" styleClass="tip">
+                                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                       timeZone="GMT+8" />
+                                </h:outputText>
+                                <br />
+                                <h:outputLink value="UserCenter.jspx?id=#{talk.thread.latestTalk.genBy.id}" styleClass="more"
+                                              target="_blank">
+                                    <h:outputText value="#{talk.thread.latestTalk.genBy.username}"></h:outputText>
+                                </h:outputLink>
+                            </p:column>
+
+                        </p:dataTable>
+                    </p:tab>
+                </p:tabView>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

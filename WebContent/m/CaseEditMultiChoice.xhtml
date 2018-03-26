@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:p="http://primefaces.org/ui">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head> 
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <script type="text/javascript" src="../resources/ckfinder/ckfinder.js"></script>
+                <script type="text/javascript" language="javascript" src="#{facesContext.externalContext.requestContextPath}/rere_wimg_up/js/wordimage_uploader1.1.js"></script>
+
+                <script type="text/javascript">
+                    //var editor1 = CKEDITOR.replace('myForm:editor1');
+                    function onLoadCallback(editor1) {
+                        var ed = PF(editor1).instance;
+                        CKFinder.setupCKEditor(ed, '../resources/ckfinder/');
+                    }
+                </script>
+                <h:outputScript target="body" rendered="#{applicationBean.systemConfig.autoUpload}">
+                    var sUrl = 'http://#{facesContext.externalContext.requestServerName}:#{facesContext.externalContext.requestServerPort}#{facesContext.externalContext.requestContextPath}/servlet/WordImageUploader';
+                    var appName = '#{facesContext.externalContext.requestContextPath}';
+                    var repStr1 = 'http://#{facesContext.externalContext.requestServerName}:#{facesContext.externalContext.requestServerPort}#{facesContext.externalContext.requestContextPath}';
+                    var repStr2 = '..';
+                    var uploader = new WordImageUploader(sUrl, appName,repStr1,repStr2);
+                </h:outputScript>
+                <h:form id="myForm">
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <div>
+                        <h:outputText  styleClass="tit"
+                                       value="#{caseEditMultiChoice.flag?'修改综合题-多选题':'添加综合题-多选题'}" />
+                        <p:separator/>
+                        <h:panelGrid columns="2">
+                            <h:outputText value="题目说明：" />
+                            <h:outputText value="#{caseEditMultiChoice.cq.name}" escape="false"/>
+                        </h:panelGrid>
+
+                        <p:separator/>
+                        <h:panelGrid columns="2">
+                            <h:outputText value="题目材料：" />
+                            <h:outputText value="#{caseEditMultiChoice.cq.content}" escape="false"/>
+                        </h:panelGrid>
+                        <p:separator/>
+                        <ui:include src="CaseMChoicePanel.xhtml"/>
+                            <p:dataTable paginator="true" paginatorPosition="bottom" value="#{caseEditMultiChoice.cq.multiChoices}" var="us" id="dataTable1" liveResize="true" emptyMessage="#{lang['exam.empty_result']}"
+                                         styleClass="list" rowIndexVar="row" style="" rows="30" editable="true" editMode="cell">
+                                <f:facet name="header">
+                                    <h:outputText value="多选题列表" style="margin-right: 50px;"/>
+                                    <p:commandButton action="#{caseEditMultiChoice.addNewChoice()}" value="添加多选题" oncomplete="PF('mchoiceDialog').show();" update=":myForm:mchoicePanel"/>
+                                </f:facet>
+                                <p:ajax event="cellEdit"  update="dataTable1" /> 
+                                <p:column>
+                                    <h:outputText value="#{row+1}"/>
+                                    <f:facet name="header">
+                                        <h:outputText value="序号" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column sortBy="#{us.cleanName}" style="width:280px!important;word-wrap:break-word!important;word-break:break-all!important;">
+                                    <h:outputText value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}" escape="false"/>
+                                    <f:facet name="header">
+                                        <h:outputText value="题目名称" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{us.answer}" />
+                                    <f:facet name="header">
+                                        <h:outputText value="答案" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column sortBy="#{us.ord}">
+                                    <p:tooltip for="modelOutput" value="点击编辑"/>
+                                    <p:cellEditor>  
+                                        <f:facet name="output">
+                                            <h:outputText id="modelOutput" value="#{us.ord}" />
+                                        </f:facet>  
+                                        <f:facet name="input">
+                                            <p:inputText id="modelInput" value="#{us.ord}" style="width:30px;">
+                                            </p:inputText>
+                                        </f:facet>  
+                                    </p:cellEditor> 
+                                    <f:facet name="header">
+                                        <h:outputText value="次序" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column sortBy="#{us.genTime}">
+                                    <h:outputText value="#{us.genTime}">
+                                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                           timeZone="GMT+8" />
+                                    </h:outputText>
+                                    <f:facet name="header">
+                                        <h:outputText value="添加时间" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column>
+                                    <p:commandLink action="#{caseEditMultiChoice.editChoice(us.id)}" value="修改" oncomplete="PF('mchoiceDialog').show();" process="@form" update=":myForm:mchoicePanel"/>
+                                    <f:facet name="header">
+                                        <h:outputText value="修改" />
+                                    </f:facet>
+                                </p:column>
+
+                                <p:column>
+                                    <p:commandLink action="#{caseEditMultiChoice.delChoice(us.id)}" value="删除"  process="@form"  update=":myForm:dataTable1"/>
+                                    <f:facet name="header">
+                                        <h:outputText value="删除" />
+                                    </f:facet>
+                                </p:column>
+                            </p:dataTable>
+                        <p:separator/>
+                        <p:commandButton action="#{caseEditMultiChoice.done}" value="保存修改并返回" styleClass="" style=""  ajax="false" />
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

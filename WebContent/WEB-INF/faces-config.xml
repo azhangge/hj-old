@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config version="2.0" xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xi="http://www.w3.org/2001/XInclude"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>RegFinished</from-outcome>
+            <to-view-id>/HJ/index.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+    </navigation-rule>
+    <factory>
+        <exception-handler-factory>
+            com.huajie.web.jsf.converter.CustomExceptionHandlerFactory
+        </exception-handler-factory>
+    </factory>
+    <application>
+        <locale-config>
+            <default-locale>zh</default-locale>
+            <supported-locale>en</supported-locale>
+        </locale-config>
+        <navigation-handler>
+            org.primefaces.mobile.application.MobileNavigationHandler
+        </navigation-handler>
+    </application>
+    <converter>
+        <converter-id>examinationConverter</converter-id>
+        <converter-class>com.huajie.web.jsf.converter.ExaminationConverter</converter-class>
+    </converter>
+    <converter>
+        <converter-id>courseConverter</converter-id>
+        <converter-class>com.huajie.web.jsf.converter.CourseConverter</converter-class>
+    </converter>
+    <converter>
+	    <converter-id>numberConvert</converter-id>
+	    <converter-class>com.huajie.util.NumberConvert</converter-class>
+  	</converter>
+    <converter>
+	    <converter-id>decimalConvert</converter-id>
+	    <converter-class>com.huajie.util.DecimalConvert</converter-class>
+  	</converter>  	
+</faces-config>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core"  lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form>
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <div style="text-align: left; margin: 10px 0px 0px 0px; width: 98%;">
+                        <!--h:outputText id="outputText1"
+                                      styleClass="tit"
+                                      value="－图片轮播－" />
+                        <h:outputLink value="AAPicture.jspx" styleClass="common">
+                            <h:outputText value="添加图片"></h:outputText>
+                        </h:outputLink>
+                        <hr/-->
+                        <h:outputText  styleClass="tit" value="图片轮播" />
+	                    <p:separator/>
+	                    <h:panelGroup>
+	                        <h:outputLink value="AAPicture.jspx" styleClass="common">
+                            	<h:outputText value="添加图片"></h:outputText>
+                        	</h:outputLink>
+	                    </h:panelGroup>
+                        
+                        
+                        <p:dataTable paginator="true" paginatorPosition="bottom" id="dataTable1" styleClass="list" style="width:100%" emptyMessage="暂无数据"
+                                     value="#{listPicture.pictureList}" var="picture" rowIndexVar="row" rows="4" liveResize="true" resizableColumns="true">
+                            <p:column style="text-align:center;width:30px;"  resizable="true" >
+                                <h:outputText value="#{row+1}" />
+                                <f:facet name="header">
+                                    <h:outputText value="序号" />
+                                </f:facet>
+                            </p:column>
+                            <p:column filterBy="#{picture.title}" filterMatchMode="contains" sortBy="#{picture.title}"  resizable="true" >
+                                <h:outputText value="#{picture.title}" />
+                                <f:facet name="header">
+                                    <h:outputText value="名称" />
+                                </f:facet>
+                            </p:column>
+                            <p:column style="text-align:center;width:50px;" sortBy="#{picture.ord}"  resizable="true" >
+                                <h:outputText value="#{picture.ord}" />
+                                <f:facet name="header">
+                                    <h:outputText value="次序" />
+                                </f:facet>
+                            </p:column>
+                            <p:column style="text-align:center;"  resizable="true" >
+                                <p:graphicImage url="#{fn:replace(picture.url,'showimage','showabstractimage')}" style="width: 160px; height: 120px;" >
+                                </p:graphicImage>
+                                <f:facet name="header">
+                                    <h:outputText value="图片" />
+                                </f:facet>
+                            </p:column>
+                            <p:column  sortBy="#{picture.genTime}"  resizable="true" >
+                                <h:outputText style="height: 5%" value="#{picture.genTime}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8" />
+                                </h:outputText>
+                                <f:facet name="header">
+                                    <h:outputText id="outputText5" value="添加时间" />
+                                </f:facet>
+                            </p:column>
+                            <p:column style="text-align:center;"  resizable="true" >
+                                <h:outputLink value="AAPicture.jspx?id=#{picture.id}" styleClass="common">
+                                    <h:outputText value="修改" />
+                                </h:outputLink>&nbsp;&nbsp;
+                                <p:commandLink actionListener="#{listPicture.delete}" styleClass="common" update="@form"  onclick="if (!confirm('确认要删除此图片吗？'))
+                                            return false">
+                                    <f:param name="id" value="#{picture.id}"></f:param>
+                                    <h:outputText value="删除" />
+                                </p:commandLink>
+                                <f:facet name="header">
+                                    <h:outputText value="操作" />
+                                </f:facet>
+                            </p:column>
+                        </p:dataTable>
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

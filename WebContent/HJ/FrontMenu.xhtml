@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core" lang="en">
+<h:head>
+	<title>Menu</title>
+	<meta http-equiv="keywords" content="enter,your,keywords,here" />
+	<meta http-equiv="description"
+		content="A short description of this page." />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<f:loadBundle basename="com.huajie.exam.i18n.langs" var="lang" />
+</h:head>
+<h:body style="text-align: center">
+	<ui:composition>
+	<link type="text/css"  rel="stylesheet"  href="#{facesContext.externalContext.requestContextPath}/HJ/css/head.css"/>
+	<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/HJ/js/head.js"></script>
+	<ui:include src="/talk/LoginPopup.xhtml"></ui:include>
+		<div class="head" onkeydown="keyLogin();" >
+			<div class="head_content">
+			<a href="#{adv.advsMap.url}">
+				<div class="logo" style="background:url(../#{adv.advsMap.src}) left no-repeat;"></div>
+			</a>
+				<div class="search">
+					<!-- <input class="search-input"  /> -->
+					<input type="text" class="search_box" value="#{lessonTypeList.searchName}" onclick="clearInput()" ondblclick="clearInput()" onblur="searchBOxOnBlur()" id="search-input" /> 
+					<a id="searchLesson" class="search_icon" onclick="findLessonsByName()"> 
+						<img src="#{facesContext.externalContext.requestContextPath}/HJ/image/search_icon.png" />
+					</a>
+				</div>
+				<h:panelGroup id="frontMenu">
+					<div class="personal_center" >
+						<ul>
+						<c:if test="#{clientSession.ifLogin}">
+							<li>
+							<!--  
+						<a href="#{facesContext.externalContext.requestContextPath}/talk/UserCenter.jspx">
+						-->
+						<a href="#{facesContext.externalContext.requestContextPath}/talk/UserDetail.jspx?id=#{userCenter.user.id}">
+								<img src="#{(empty clientSession.usr.picUrl)?('../HJ/image/notlogin.png'):
+	                                         clientSession.usr.picUrl}" style="width:32px;height: 32px" class="headPic"/>
+							</a>
+                            </li>
+							<li class="">
+							<p:commandLink value="退出" action="#{clientSession.exit}" update="@form" />
+							</li>
+						</c:if>
+						<c:if test="#{!clientSession.ifLogin}">
+							<li>
+								<a onclick="PF('login1').show();" style="cursor: pointer;">登录</a>
+							</li>
+						</c:if>
+							<li><a href="#{facesContext.externalContext.requestContextPath}/">首页</a></li>
+							<li><a href="#{facesContext.externalContext.requestContextPath}/talk/MyLessonTypeList.jspx">我的学习</a></li>
+							<li>
+							<h:panelGroup id="mobile">
+								<a href="#" >APP下载</a>
+							</h:panelGroup>
+							</li>
+							<!-- 手机地址 -->
+							<p:overlayPanel id="qrPanel" for="mobile" showEffect="blind"
+								hideEffect="explode" showEvent="mouseover" dismissable="true"
+								style="background-color: none;">
+								<div
+									style="width: 200px !important; border: 0px solid red; text-align: center;">
+									<h:outputText
+										value="#{i18nBean.lang('talk/FrontMenu','cell_phone_scan')}"
+										styleClass="topTip" />
+									<p:graphicImage value="/servlet/QRCodeServlet.png"
+										style="width:200px;" />
+									<!-- <h:outputLink value="#{facesContext.externalContext.requestContextPath}/mobile/Default.jspx" title="#{i18nBean.lang('talk/FrontMenu','click_enter')}">
+                                        </h:outputLink> -->
+								</div>
+							</p:overlayPanel>
+						</ul>
+					</div>
+				</h:panelGroup>
+			</div>
+		</div>
+	</ui:composition>
+</h:body>
+
+</html>

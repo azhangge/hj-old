@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions" lang="en">
+<head>
+<title>My Facelets Page</title>
+<meta http-equiv="keywords" content="enter,your,keywords,here" />
+<meta http-equiv="description"
+	content="A short description of this page." />
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+</head>
+<body>
+	<ui:composition template="BackGeneral.xhtml">
+		<ui:define name="content">
+			<h:form>
+				<ui:include src="/AjaxStatus2.xhtml" />
+				<div style="text-align: left; margin: 10px 0px 0px 0px; width: 98%;">
+					<div>
+						<h:outputText id="outputText1" styleClass="tit" value="-人工试卷管理-" />
+						<p:button href="/m/AAManualPaper2.jspx" value="添加新试卷"
+							rendered="#{fn:contains(adminSessionBean.admin.authstr,'examination')}" />
+					</div>
+					<p:separator />
+					<div>
+						<div class="introduction">
+							<h:outputText
+								value="*人工试卷的最大特点是可以手工挑选试题进行组卷，进行人工组卷前应该先在试题编辑界面将试题加入（拖入）试题篮。" />
+						</div>
+						<p:dataTable paginator="true" paginatorPosition="bottom"
+							value="#{listManualPaper.papers}" var="us" id="dataTable1"
+							emptyMessage="暂无试卷" styleClass="list" rowIndexVar="row"
+							style="width:100%" rows="20" editable="true" editMode="cell" liveResize="true" resizableColumns="true">
+							<p:column id="num" style="width:40px;text-align: center;" resizable="true" >
+								<h:outputText style="height: 5%" value="#{row+1}" />
+								<f:facet name="header">
+									<h:outputText id="outputTextnum" value="序号" />
+								</f:facet>
+							</p:column>
+
+							<p:column filterBy="#{us.name}" filterMatchMode="contains" filterStyle="width:400px"
+								sortBy="#{us.name}" resizable="true" >
+								<h:outputLink
+									value="PaperDemoGeneral.jspx?pid=#{us.id}&amp;ptype=manual"
+									target="_blank">
+									<h:outputText
+										value="#{fn:substring(us.name,0,20)}#{fn:length(us.name)>20?'..':''}"
+										escape="false" />
+								</h:outputLink>
+
+								<f:facet name="header">
+									<h:outputText value="试卷名称" />
+								</f:facet>
+							</p:column>
+							<p:column sortBy="#{us.ord}"
+								style="width:50px;text-align: center;"  resizable="true" >
+								<p:tooltip for="modelOutput" value="点击编辑" />
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText id="modelOutput" value="#{us.ord}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText id="modelInput" value="#{us.ord}"
+											style="width:30px;">
+											<p:ajax event="change" update="@none"
+												listener="#{listManualPaper.editOrd(us.id)}" />
+										</p:inputText>
+									</f:facet>
+								</p:cellEditor>
+								<f:facet name="header">
+									<h:outputText value="次序" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:110px;text-align: center;"
+								sortBy="#{us.genTime}" resizable="true" >
+								<h:outputText value="#{us.genTime}">
+									<f:convertDateTime pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" />
+								</h:outputText>
+								<f:facet name="header">
+									<h:outputText value="添加时间" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:30px;text-align: center;" resizable="true" >
+								<h:outputLink value="AAManualPaper2.jspx?id=#{us.id}">
+									<h:outputText value="修改" />
+								</h:outputLink>
+								<f:facet name="header">
+									<h:outputText value="修改" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:30px;text-align: center;" resizable="true" >
+								<p:commandLink action="#{listManualPaper.delete(us.id)}"
+									update="@form"
+									onclick="if (!confirm('确认要删除此试卷吗？')) return false"
+									disabled="#{!fn:contains(adminSessionBean.admin.authstr,'examination')}">
+									<h:outputText value="删除" />
+								</p:commandLink>
+								<f:facet name="header">
+									<h:outputText value="删除" />
+								</f:facet>
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <h:head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </h:head>
+    <h:body>
+        <ui:composition template="General3.xhtml">
+            <ui:define name="title">
+                <h:outputText value="自助练习设置" />
+            </ui:define>
+            <ui:define name="content">
+                <p:panel id="topNav8" styleClass="frontColumn topNav8Wrapper" style="">
+                    <h:outputLink value="#{facesContext.externalContext.requestContextPath}" styleClass="nav8">
+                        <h:outputText value="首页" />
+                    </h:outputLink>
+                    <h:outputText value="/" styleClass="navSeparator"/>
+                    <h:outputText value="考试" styleClass="nav8"/>
+                    <h:outputText value="/" styleClass="navSeparator"/>
+                    <h:outputLink value="BuffetExaminationList.jspx" styleClass="nav8">
+                        <h:outputText value="自助练习" />
+                    </h:outputLink>
+                    <h:outputText value="/" styleClass="navSeparator"/>
+                    <h:outputText value="自助练习设置" styleClass="nav8"/>
+                </p:panel>
+                <p:panel header="自助练习设置">
+                    <h:outputText value="自助练习名称："/>
+                    <h:outputText value="#{preBuffetExamCase.exam.name}"/>
+                    <p:separator/>
+                    
+                    <p:dataGrid value="#{preBuffetExamCase.exam.parts}" columns="1" var="part1">
+                    <h:panelGroup>
+                        <h:outputText value="#{part1.name}："/>
+                        <h:selectOneMenu value="#{part1.userNum}">
+                            <f:selectItem itemLabel="来5道" itemValue="5"/>
+                            <f:selectItem itemLabel="来10道" itemValue="10"/>
+                            <f:selectItem itemLabel="来15道" itemValue="15"/>
+                            <f:selectItem itemLabel="来20道" itemValue="20"/>
+                            <f:selectItem itemLabel="来30道" itemValue="30"/>
+                        </h:selectOneMenu>
+                        </h:panelGroup>
+                    </p:dataGrid>
+                    
+                    <p:separator/>
+                    <p:commandButton ajax="false" value="开始练习" action="#{preBuffetExamCase.begainTest()}"  rendered="#{clientSession.ifLogin and clientSession.usr.testIfIn(preBuffetExamCase.exam.groupStr) and preBuffetExamCase.exam.scorePaid le clientSession.usr.score}"/>
+                    <p:button value="请登录"  rendered="#{!clientSession.ifLogin}" onclick="PF('login1').show();return false;" />
+                    <h:outputText value="不对您的#{applicationBean.departmentStr}开放&lt;br/>" escape="false"  rendered="#{!clientSession.usr.testIfIn(preBuffetExamCase.exam.groupStr) and clientSession.ifLogin}"/>
+                    <h:outputText value="积分不够"  rendered="#{preBuffetExamCase.exam.scorePaid gt clientSession.usr.score}"/>
+                </p:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,472 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="General3.xhtml">
+            <ui:define name="title">
+                <h:outputText value="成绩查询 - 成绩详情" />
+            </ui:define>
+            <ui:define name="content">
+                <script type="text/javascript">
+                    document.oncontextmenu = new Function("event.returnValue=false;"); //禁止右键功能,单击右键将无任何反应
+                    document.onselectstart = new Function("event.returnValue=false;"); //禁止选择,也就是无法复制
+                    function aabbcc(url) {
+                        var scrWidth = screen.availWidth;
+                        var scrHeight = screen.availHeight;
+                        var self = window.open(url, '', "fullscreen=3,resizable=false,toolbar=no,menubar=no,scrollbars=yes,location=no,top=0,left=0,width=" + scrWidth + ",height=" + scrHeight);
+                        //self.resizeTo(scrWidth,scrHeight);
+                        self.moveTo(0, 0);
+                    }
+                </script>
+                <ui:include src="QuestionCommentDetail.xhtml"/>
+                <ui:include src="ChoiceStatisticDetail.xhtml"/>
+
+                <p:panel id="topNav8" styleClass="frontColumn topNav8Wrapper">
+                    <h:outputLink value="#{facesContext.externalContext.requestContextPath}" styleClass="nav8">
+                        <h:outputText value="首页" />
+                    </h:outputLink>
+                    <h:outputText value="/" styleClass="navSeparator"/>
+                    <h:outputText value="成绩查询" styleClass="nav8"/>
+                    <h:outputText value="/" styleClass="navSeparator"/>
+                    <h:outputLink value="ExamCaseReportList.jspx" styleClass="nav8">
+                        <h:outputText value="综合考试" />
+                    </h:outputLink>
+                    <h:outputText value="/" styleClass="navSeparator"/>
+                    <h:outputText value="成绩详情" styleClass="nav8"/>
+                </p:panel>
+                <p:separator/>
+                <h:panelGrid columns="3" style="width:90%;">
+                    <h:panelGroup>
+                        <h:outputText value="考试名称："/>
+                        <h:outputText value="#{examCaseReport.examCase.examination.name}"/>
+                    </h:panelGroup>
+                    <h:panelGroup>
+                        <h:outputText value="考试时长："/>
+                        <h:outputText value="#{examCaseReport.examCase.examination.timeLen}分钟"/>
+                    </h:panelGroup>
+                    <h:panelGroup>
+                        <h:outputText value="开考时间："/>
+                        <h:outputText value="#{examCaseReport.examCase.genTime}">
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8"/>
+                        </h:outputText>
+                    </h:panelGroup>
+                    <h:panelGroup>
+                        <h:outputText value="提交时间："/>
+                        <h:outputText value="#{examCaseReport.examCase.submitTime}">
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8"/>
+                        </h:outputText>
+                    </h:panelGroup>
+                    <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                        <h:outputText value="考试题型："/>
+                        <h:panelGroup>
+                            <h:outputText value="单选题：#{examCaseReport.examCase.examination.choiceTotal}，多选题：#{examCaseReport.examCase.examination.multiChoiceTotal}，填空题：#{examCaseReport.examCase.examination.fillTotal}"/><br/>
+                            <h:outputText value="判断题：#{examCaseReport.examCase.examination.judgeTotal}，问答题：#{examCaseReport.examCase.examination.essayTotal}，文件题：#{examCaseReport.examCase.examination.fileTotal}"/>
+                            <h:outputText value="，#{examCaseReport.examCase.examination.caseAlias}：#{examCaseReport.examCase.examination.caseTotal}" rendered="#{copyrightController.sysType!='1'}"/>
+                        </h:panelGroup>
+                    </h:panelGrid>
+                    <h:panelGroup>
+                        <h:outputText value="考试成绩："/>
+                        <h:outputText value="#{examCaseReport.examCase.score}" style="color:red;font-weight: bold;font-size: 36px;">
+                            <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/>
+                        </h:outputText>
+                        <h:outputText value="/#{examCaseReport.examCase.totalFullScore}" style="color:green;"/>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{applicationBean.systemConfig.showScore and copyrightController.sysType!='1'}">
+                        <h:outputText value="消耗/满分积分："/>
+                        <h:outputText value="#{examCaseReport.examCase.examination.scorePaid}" >
+                            <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/>
+                        </h:outputText>
+                        <h:outputText value="/" style="color:green;"/>
+                        <h:outputText value="#{examCaseReport.examCase.examination.bbsScore}" >
+                            <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/>
+                        </h:outputText>
+                    </h:panelGroup>
+
+
+                    <h:panelGroup rendered="#{applicationBean.systemConfig.showScore and copyrightController.sysType!='1'}">
+                        <h:outputText value="实得积分："/>
+                        <h:outputText value="#{examCaseReport.examCase.bbsScore}" >
+                            <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/>
+                        </h:outputText>
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        <h:outputText value="排名："/>
+                        <h:outputText value="#{examCaseReport.examCase.ranking==0?'无':examCaseReport.examCase.ranking}" style="">
+                        </h:outputText>
+                        <h:outputText value="/#{examCaseReport.examCase.examination.examCaseNum}" style="color:green;"/>
+                    </h:panelGroup>
+
+
+                    <h:panelGroup id="examDc">
+                        <p:commandButton value="再次考试" action="#{examinationList.paticipateExam(examCaseReport.examCase.examination.id)}" update="examDc" onclick="aabbcc('#{facesContext.externalContext.requestContextPath}/servlet/pc/ExamCaseController?exam_id=#{examCaseReport.examCase.examination.id}')" rendered="#{((((clientSession.ifLogin and examCaseReport.examCase.examination.ifOpen)and(!examCaseReport.examCase.examination.retry))and clientSession.usr.testIfIn(examCaseReport.examCase.examination.groupStr))and(!(exam.scoreExsits and (!examCaseReport.examCase.examination.allowUserRepeat)))) and clientSession.usr.score>=examCaseReport.examCase.examination.scorePaid and clientSession.usr.checked and examCaseReport.examCase.examination.checkParticipateTimes(clientSession.usr.id)&lt;examCaseReport.examCase.examination.maxNum}"/>
+                    </h:panelGroup>
+
+                </h:panelGrid>
+                <p:separator rendered="#{examCaseReport.examCase.examination.choiceRandom or examCaseReport.examCase.examination.multiChoiceRandom }"/>
+                <h:outputText rendered="#{examCaseReport.examCase.examination.choiceRandom or examCaseReport.examCase.examination.multiChoiceRandom }" style="color:red;font-size: 14px;font-weight: bold;" value="注：选择题显示的您填写的选项和您参加考试时实际填写的可能有出入，考试时选项顺序是随机的，以下显示的是您所选选项的真实标号。"/>
+                <p:separator/>
+                <h:panelGrid columns="2" style="width:100%;text-align: center;" rendered="#{examCaseReport.examCase.examination.id!='7'}">
+                    <p:chart type="pie" id="sample" model="#{examCaseReport.pieModel1}" style="width:400px;height:300px" />  
+                    <p:chart type="pie" id="custom" model="#{examCaseReport.pieModel2}" style="width:400px;height:300px" />  
+                </h:panelGrid>
+
+
+                <p:dataTable value="#{examCaseReport.choices}" var="choice" rowIndexVar="row" rendered="#{fn:length(examCaseReport.examCase.choiceItems)!=0}">
+                    <p:column style="text-align:left;">
+                        <f:facet name="header">
+                            <h:outputText value="※单选题，每题#{examCaseReport.examCase.examination.randomPaper.choiceScore}分，共#{fn:length(examCaseReport.examCase.choiceItems)}题，得分："/>
+                            <h:outputText value="#{examCaseReport.examCase.choiceScore}">
+                                <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}"/>
+                            </h:outputText>
+                        </f:facet>
+                        <h:outputText value="#{row+1}、#{choice.question.name}" escape="false" styleClass="choiceTitle"/>
+                        <div style="margin-left: 30px;">
+                            <ui:repeat value="#{choice.question.choices}" var="ch">
+                                <h:outputText value="#{ch.label}.&nbsp;#{ch.name}" styleClass="choiceTitle"/>
+                                <br/>
+
+                            </ui:repeat>
+                        </div>
+                        <div style="margin-left: 30px;">
+                            <h:outputText value="正确答案：" styleClass="answer" />
+                            <h:outputText value="#{examCaseReport.examCase.examination.showAnswer?choice.rightAnswer:'不显示'}" style="color:green;font-weight: bold;"/>&nbsp;
+                            <h:outputText value="，考生填写：" styleClass="answer"/>
+                            <h:outputText value="#{choice.userAnswer==null?'未填写':choice.userAnswer}"  style="color:green;font-weight: bold;"/>&nbsp;&nbsp;
+                            <h:outputText value="#{choice.ifRight?'√':'×'}" style="color:#{choice.ifRight?'green':'red'};font-weight:bolder;font-size:25px;font-family:宋体;"/>
+                            <br/>
+                            <h:outputText value="试题解析：" styleClass="answer"/>
+                            <h:outputText value="#{examCaseReport.examCase.examination.showRightStr?choice.question.rightStr:'不显示'}" escape="false"  style="color:green;"/>
+                            <br/>
+                            <p:commandLink action="#{questionCommentDetail.viewComment(choice.question.id)}" styleClass="comment" value="试题评论（#{choice.question.commentsNum}）" oncomplete="PF('questionCommentDig1').show();"/>
+                            &nbsp;&nbsp;
+                            <p:commandLink action="#{questionCommentDetail.begainComment(choice.question.id, 'choice')}" styleClass="comment" value="我要评论" oncomplete="PF('questionCommentDig2').show();"/>
+                            &nbsp;&nbsp;
+                            <p:commandLink action="#{questionStatisticDetail.viewStatistic1(choice.question.id, examCaseReport.examCase.examination.id)}" styleClass="comment" value="作答统计" rendered="#{examCaseReport.examCase.examination.showStatistic}" oncomplete="PF('statisticDig1').show();"/>
+                            &nbsp;&nbsp;
+                            <p:commandLink value="#{choice.question.ifCollected?'取消收藏':'收藏本题'}" action="#{questionCollectionMag.collectOrCancel(choice.question.id,'choice')}"  rendered="#{applicationBean.systemConfig.openCollection}" styleClass="comment" update="@this"/>
+
+                        </div>
+                    </p:column>
+                </p:dataTable>
+
+                <p:dataTable value="#{examCaseReport.mchoices}" var="choice" rowIndexVar="row" rendered="#{fn:length(examCaseReport.examCase.multiChoiceItems)!=0}">
+                    <p:column style="text-align:left;">
+                        <f:facet name="header">
+                            <h:outputText value="※多选题，每题#{examCaseReport.examCase.examination.randomPaper.multiChoiceScore}分，共#{fn:length(examCaseReport.examCase.multiChoiceItems)}题，得分："/>
+                            <h:outputText value="#{examCaseReport.examCase.multiChoiceScore}">
+                                <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}"/>
+                            </h:outputText>
+                        </f:facet>
+                        <h:outputText value="#{row+1}、#{choice.question.name}" escape="false" styleClass="choiceTitle"/>
+
+                        <div style="margin-left: 30px;">
+                            <ui:repeat value="#{choice.question.choices}" var="ch">
+                                <h:outputText value="#{ch.label}.&nbsp;#{ch.name}" styleClass="choiceTitle"/>
+                                <br/>
+                            </ui:repeat>
+                        </div>
+                        <div style="margin-left: 30px;">
+                            <h:outputText value="正确答案：" styleClass="answer"/>
+                            <h:outputText value="#{examCaseReport.examCase.examination.showAnswer?choice.rightAnswer:'不显示'}" style="color:green;font-weight: bold;"/>&nbsp;
+                            <h:outputText value="，考生填写：" styleClass="answer"/>
+                            <h:outputText value="#{choice.userAnswer==''?'未填写':choice.userAnswer}"  style="color:green;font-weight: bold;"/>&nbsp;&nbsp;
+                            <h:outputText value="#{choice.ifRight?'√':'×'}" style="color:#{choice.ifRight?'green':'red'};font-weight:bolder;font-size:25px;font-family:宋体;"/>
+                            <br/>
+                            <h:outputText value="试题解析：" styleClass="answer"/>
+                            <h:outputText value="#{examCaseReport.examCase.examination.showRightStr?choice.question.rightStr:'不显示'}" escape="false"  style="color:green;"/>
+                            <br/>
+                            <p:commandLink action="#{questionCommentDetail.viewComment(choice.question.id)}" styleClass="comment" value="试题评论（#{choice.question.commentsNum}）" oncomplete="PF('questionCommentDig1').show();"/>
+                            &nbsp;&nbsp;
+                            <p:commandLink action="#{questionCommentDetail.begainComment(choice.question.id, 'mchoice')}" styleClass="comment" value="我要评论" oncomplete="PF('questionCommentDig2').show();"/>
+                            &nbsp;&nbsp;
+                            <p:commandLink value="#{choice.question.ifCollected?'取消收藏':'收藏本题'}" action="#{questionCollectionMag.collectOrCancel(choice.question.id,'mchoice')}" rendered="#{applicationBean.systemConfig.openCollection}" styleClass="comment" update="@this"/>
+
+                        </div>
+                    </p:column>
+                </p:dataTable>
+
+                <p:dataTable  value="#{examCaseReport.fills}" var="fill" rowIndexVar="row" rendered="#{fn:length(examCaseReport.examCase.fillItems)!=0}">
+                    <p:column style="text-align:left;">
+                        <f:facet name="header">
+                            <h:outputText value="※填空题，每题#{examCaseReport.examCase.examination.randomPaper.fillScore}分，共#{fn:length(examCaseReport.examCase.fillItems)}题，得分："/>
+                            <h:outputText value="#{examCaseReport.examCase.fillScore}">
+                                <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}"/>
+                            </h:outputText>
+                        </f:facet>
+                        <h:outputText value="#{row+1}、" styleClass="choiceTitle"/>
+                        <ui:repeat value="#{fill.blocks}" var="b">
+                            <h:outputText value="#{b.preStr}" escape="false" styleClass="choiceTitle"/>
+                            <h:outputText value="________"/>
+                        </ui:repeat>
+                        <h:outputText value="#{fill.lastStr}" escape="false" styleClass="choiceTitle"/><br/>
+                        <div style="margin-left: 30px;">
+                            <h:outputText value="正确答案：" styleClass="answer"/>
+                            <h:outputText value="#{examCaseReport.examCase.examination.showAnswer?fill.rightAnswerStr:'不显示'}" style="color:green;font-weight: bold;"/>
+                            <h:outputText value="考生填写：" styleClass="answer"/>
+                            <h:outputText value="#{fill.userAnswerStr==''?'未填写':fill.userAnswerStr}" style="color:green;font-weight: bold;"/>&nbsp;
+                            <h:outputText value="正确数：" styleClass="answer"/>
+                            <h:outputText value="#{fill.rightNum}"  style="color:green;font-weight: bold;"/>
+                            <br/>
+                            <h:outputText value="试题解析："  styleClass="answer"/>
+                            <h:outputText value="#{examCaseReport.examCase.examination.showRightStr?fill.question.rightStr:'不显示'}"  escape="false" style="color:green;"/>
+                            <br/>
+                            <p:commandLink action="#{questionCommentDetail.viewComment(fill.question.id)}" styleClass="comment" value="试题评论（#{fill.question.commentsNum}）" oncomplete="PF('questionCommentDig1').show();"/>
+                            &nbsp;&nbsp;
+                            <p:commandLink action="#{questionCommentDetail.begainComment(fill.question.id, 'fill')}" styleClass="comment" value="我要评论" oncomplete="PF('questionCommentDig2').show();"/>
+                            &nbsp;&nbsp;
+                            <p:commandLink value="#{fill.question.ifCollected?'取消收藏':'收藏本题'}" action="#{questionCollectionMag.collectOrCancel(fill.question.id,'fill')}" rendered="#{applicationBean.systemConfig.openCollection}" styleClass="comment" update="@this"/>
+
+                        </div>
+                    </p:column>
+                </p:dataTable>
+
+                <p:dataTable  value="#{examCaseReport.judges}" var="judge" rowIndexVar="row"  rendered="#{fn:length(examCaseReport.examCase.judgeItems)!=0}">
+                    <p:column style="text-align:left;">
+                        <f:facet name="header" >
+                            <h:outputText value="※判断题，每题#{examCaseReport.examCase.examination.randomPaper.judgeScore}分，共#{fn:length(examCaseReport.examCase.judgeItems)}题，得分："/>
+                            <h:outputText value="#{examCaseReport.examCase.judgeScore}">
+                                <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}"/>
+                            </h:outputText>
+                        </f:facet>
+                        <h:outputText value="#{row+1}、#{judge.question.name}" styleClass="choiceTitle"/><br/>
+                        <div style="margin-left: 30px;">
+                            <h:outputText value="正确答案：" styleClass="answer"/>
+                            <h:outputText value="#{examCaseReport.examCase.examination.showAnswer?judge.rightAnswer:'不显示'}"  style="color:green;font-weight: bold;"/>
+                            <h:outputText value="，考生填写：" styleClass="answer"/>
+                            <h:outputText value="#{judge.userAnswer}"  style="color:green;font-weight: bold;"/>&nbsp;&nbsp;
+                            <h:outputText value="#{judge.ifRight?'√':'×'}" style="color:#{judge.ifRight?'green':'red'};font-weight:bolder;font-size:25px;font-family:宋体;"/>
+                            <br/>
+                            <h:outputText value="试题解析：" styleClass="answer"/>
+                            <h:outputText value="#{examCaseReport.examCase.examination.showRightStr?judge.question.rightStr:'不显示'}" escape="false"  style="color:green;"/>
+                            <br/>
+                            <p:commandLink action="#{questionCommentDetail.viewComment(judge.question.id)}" styleClass="comment" value="试题评论（#{judge.question.commentsNum}）" oncomplete="PF('questionCommentDig1').show();"/>
+                            &nbsp;&nbsp;
+                            <p:commandLink action="#{questionCommentDetail.begainComment(judge.question.id, 'judge')}" styleClass="comment" value="我要评论" oncomplete="PF('questionCommentDig2').show();"/>
+                            &nbsp;&nbsp;
+                            <p:commandLink value="#{judge.question.ifCollected?'取消收藏':'收藏本题'}" action="#{questionCollectionMag.collectOrCancel(judge.question.id,'judge')}" rendered="#{applicationBean.systemConfig.openCollection}" styleClass="comment" update="@this"/>
+
+                        </div>
+                    </p:column>
+                </p:dataTable>
+
+                <p:dataTable  value="#{examCaseReport.essaies}" var="essay" rowIndexVar="row"  rendered="#{fn:length(examCaseReport.examCase.essayItems)!=0}">
+                    <p:column style="text-align:left;">
+                        <f:facet name="header" >
+                            <h:outputText value="※问答题，每题#{examCaseReport.examCase.examination.randomPaper.essayScore}分，共#{fn:length(examCaseReport.examCase.essayItems)}题，得分："/>
+                            <h:outputText value="#{examCaseReport.examCase.essayScore}">
+                                <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}"/>
+                            </h:outputText>
+                        </f:facet>
+                        <h:outputText value="#{row+1}、#{essay.question.name}" styleClass="choiceTitle" escape="false"/><br/>
+                        <div style="margin-left: 30px;">
+                            <h:outputText value="正确答案：" styleClass="answer"/>
+                            <h:outputText value="#{examCaseReport.examCase.examination.showAnswer?essay.question.answer:'不显示'}" escape="false"  style="color:green;font-weight: bold;"/><br/>
+                            <h:outputText value="考生填写：" styleClass="answer"/>
+                            <h:outputText value="#{essay.userAnswer}"  escape="false" style="color:green;font-weight: bold;"/><br/>
+                            <h:outputText value="正确率："  styleClass="answer"/>
+                            <h:outputText value="#{essay.rightRatio}" style="color:red;font-weight:bold;">
+                                <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" type="percent"/>
+                            </h:outputText>
+                            <br/>
+                            <h:outputText value="试题解析：" styleClass="answer"/>
+                            <h:outputText value="#{examCaseReport.examCase.examination.showRightStr?essay.question.rightStr:'不显示'}" escape="false"  style="color:green;"/>
+                            <br/>
+                            <p:commandLink action="#{questionCommentDetail.viewComment(essay.question.id)}" styleClass="comment" value="试题评论（#{essay.question.commentsNum}）" oncomplete="PF('questionCommentDig1').show();"/>
+                            &nbsp;&nbsp;
+                            <p:commandLink action="#{questionCommentDetail.begainComment(essay.question.id, 'essay')}" styleClass="comment" value="我要评论" oncomplete="PF('questionCommentDig2').show();"/>
+                            &nbsp;&nbsp;
+                            <p:commandLink value="#{essay.question.ifCollected?'取消收藏':'收藏本题'}" action="#{questionCollectionMag.collectOrCancel(essay.question.id,'essay')}" rendered="#{applicationBean.systemConfig.openCollection}" styleClass="comment" update="@this"/>
+
+                        </div>
+                    </p:column>
+                </p:dataTable>
+
+                <p:dataTable  value="#{examCaseReport.files}" var="file" rowIndexVar="row"  rendered="#{fn:length(examCaseReport.examCase.fileItems)!=0}">
+                    <p:column style="text-align:left;">
+                        <f:facet name="header" >
+                            <h:outputText value="※文件题，每题#{examCaseReport.examCase.examination.randomPaper.fileScore}分，共#{fn:length(examCaseReport.examCase.fileItems)}题，得分："/>
+                            <h:outputText value="#{examCaseReport.examCase.fileScore}">
+                                <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}"/>
+                            </h:outputText>
+                        </f:facet>
+                        <h:outputText value="#{row+1}、#{file.question.name}" styleClass="choiceTitle" escape="false"/>
+                        <div style="margin-left: 30px;">
+                            <h:outputText value="操作步骤：" styleClass="answer" escape="false"/>
+                            <h:outputText value="#{file.question.answer}"  style="color:green;font-weight: bold;" escape="false"/><br/>
+                            <h:outputText value="考生操作步骤：" styleClass="answer" escape="false"/>
+                            <h:outputText value="#{file.userAnswer}"  style="color:green;font-weight: bold;" escape="false"/><br/>
+                            <h:outputText value="附件：" styleClass="answer" />
+                            <h:outputLink target="_blank" value="#{facesContext.externalContext.requestContextPath}/DownloadFileQuestionAttach?id=#{file.id}" rendered="#{file.attached}">
+                                <h:outputText value="#{file.id}.rar"/>
+                            </h:outputLink><br/>
+                            <h:outputText value="正确率："  styleClass="answer" />
+                            <h:outputText value="#{file.rightRatio}" style="color:red;font-weight:bold;">
+                                <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" type="percent"/>
+                            </h:outputText><br/>
+                            <h:outputText value="教师评语：" styleClass="answer"/>
+                            <h:outputText value="#{file.remark}"  escape="false" style="color:green;"/><br/>
+                            <h:outputText value="试题解析：" styleClass="answer"/>
+                            <h:outputText value="#{examCaseReport.examCase.examination.showRightStr?file.question.rightStr:'不显示'}" escape="false"  style="color:green;"/>
+                            <br/>
+                            <p:commandLink action="#{questionCommentDetail.viewComment(file.question.id)}" styleClass="comment" value="试题评论（#{file.question.commentsNum}）" oncomplete="PF('questionCommentDig1').show();"/>
+                            &nbsp;&nbsp;
+                            <p:commandLink action="#{questionCommentDetail.begainComment(file.question.id, 'file')}" styleClass="comment" value="我要评论" oncomplete="PF('questionCommentDig2').show();"/>
+                            &nbsp;&nbsp;
+                            <p:commandLink value="#{file.question.ifCollected?'取消收藏':'收藏本题'}" action="#{questionCollectionMag.collectOrCancel(file.question.id,'file')}" rendered="#{applicationBean.systemConfig.openCollection}" styleClass="comment" update="@this"/>
+
+                        </div>
+                    </p:column>
+                </p:dataTable>
+
+
+                <ui:repeat value="#{examCaseReport.examCase.caseItems}" var="case1">
+                    <p:panel style="width:100%;">
+                        <f:facet name="header">
+                            <h:outputText value="#{case1.question.nickName}" style="" styleClass="choiceTitle" escape="false"/>
+                            <h:outputText value="，得分："/>
+                            <h:outputText value="#{examCaseReport.examCase.caseScore}"/>
+                        </f:facet>
+                        <h:outputText value="#{case1.question.content}" styleClass="choiceTitle" escape="false" style="padding:5px 10px 5px 10px;"/>
+                        <br/>
+                        <p:commandLink action="#{questionCommentDetail.viewComment(case1.question.id)}" styleClass="comment" value="试题评论（#{case1.question.commentsNum}）" oncomplete="PF('questionCommentDig1').show();"/>
+                        &nbsp;&nbsp;
+                        <p:commandLink action="#{questionCommentDetail.begainComment(case1.question.id, 'case')}" styleClass="comment" value="我要评论" oncomplete="PF('questionCommentDig2').show();"/>
+
+                        <p:separator/>
+
+                        <ui:repeat  value="#{case1.choiceItems}" var="choice" varStatus="row" rendered="#{fn:length(case1.choiceItems)!=0}">
+                            <a id="archor-#{choice.id}" href="#"></a>
+                            <h:outputText value="（#{row.index+1}）#{choice.question.name}" style="#{choice.marked?'color:red;':''}" styleClass="choiceTitle" escape="false"/>
+                            <div style="margin-left: 30px;">
+                                <ui:repeat value="#{choice.question.choices}" var="ch">
+                                    <h:outputText value="#{ch.label}.&nbsp;#{ch.name}" styleClass="choiceTitle"/>
+                                    <br/>
+                                </ui:repeat>
+                            </div>
+                            <div style="margin-left: 30px;">
+                                <h:outputText value="正确答案：" styleClass="answer"/>
+                                <h:outputText value="#{examCaseReport.examCase.examination.showAnswer?choice.question.answer:'不显示'}" style="color:green;font-weight: bold;"/>&nbsp;
+                                <h:outputText value="，考生填写：" styleClass="answer"/>
+                                <h:outputText value="#{choice.userAnswer==null?'未填写':choice.userAnswer}"  style="color:green;font-weight: bold;"/>&nbsp;&nbsp;
+                                <h:outputText value="#{choice.ifRight?'√':'×'}" style="color:#{choice.ifRight?'green':'red'};font-weight:bolder;font-size:25px;font-family:宋体;"/>
+                                <br/>
+                                <h:outputText value="试题解析：" styleClass="answer"/>
+                                <h:outputText value="#{examCaseReport.examCase.examination.showRightStr?choice.question.rightStr:'不显示'}" escape="false"  style="color:green;"/>
+                            </div>
+                            &nbsp;&nbsp;
+                            <p:commandLink value="#{choice.question.ifCollected?'取消收藏':'收藏本题'}" action="#{questionCollectionMag.collectOrCancel(choice.question.id,'choice')}" rendered="#{applicationBean.systemConfig.openCollection}" styleClass="comment" update="@this"/>
+
+                            <hr/>
+                        </ui:repeat>
+
+                        <ui:repeat value="#{case1.multiChoiceItems}" var="choice" varStatus="row" rendered="#{fn:length(case1.multiChoiceItems)!=0}">
+                            <a id="archor-#{choice.id}" href="#"></a>
+                            <h:outputText value="（#{fn:length(case1.choiceItems)+row.index+1}）#{choice.question.name}" styleClass="choiceTitle" escape="false"/>
+
+                            <div style="margin-left: 30px;">
+                                <ui:repeat value="#{choice.question.choices}" var="ch">
+                                    <h:outputText value="#{ch.label}.&nbsp;#{ch.name}" styleClass="choiceTitle"/>
+                                    <br/>
+                                </ui:repeat>
+                            </div>
+                            <div style="margin-left: 30px;">
+                                <h:outputText value="正确答案：" styleClass="answer"/>
+                                <h:outputText value="#{examCaseReport.examCase.examination.showAnswer?choice.rightAnswer:'不显示'}" style="color:green;font-weight: bold;"/>&nbsp;
+                                <h:outputText value="，考生填写：" styleClass="answer"/>
+                                <h:outputText value="#{choice.userAnswer==''?'未填写':choice.userAnswer}"  style="color:green;font-weight: bold;"/>&nbsp;&nbsp;
+                                <h:outputText value="#{choice.ifRight?'√':'×'}" style="color:#{choice.ifRight?'green':'red'};font-weight:bolder;font-size:25px;font-family:宋体;"/>
+                                <br/>
+                                <h:outputText value="试题解析：" styleClass="answer"/>
+                                <h:outputText value="#{examCaseReport.examCase.examination.showRightStr?choice.question.rightStr:'不显示'}" escape="false"  style="color:green;"/>
+                            </div>
+                            &nbsp;&nbsp;
+                            <p:commandLink value="#{choice.question.ifCollected?'取消收藏':'收藏本题'}" action="#{questionCollectionMag.collectOrCancel(choice.question.id,'choice')}" rendered="#{applicationBean.systemConfig.openCollection}" styleClass="comment" update="@this"/>
+
+                            <hr/>
+                        </ui:repeat>
+                        <ui:repeat   value="#{case1.fillItems}" var="fill"  varStatus="row" rendered="#{fn:length(case1.fillItems)!=0}">
+                            <a id="archor-#{fill.id}" href="#"></a>
+                            <h:outputText value="（#{fn:length(case1.choiceItems)+fn:length(case1.multiChoiceItems)+row.index+1}）"  styleClass="choiceTitle"/>
+                            <ui:repeat value="#{fill.blocks}" var="b">
+                                <h:outputText value="#{b.preStr}" escape="false" styleClass="choiceTitle"/>
+                                <h:outputText value="________"/>
+                            </ui:repeat>
+                            <h:outputText value="#{fill.lastStr}" escape="false" styleClass="choiceTitle"/><br/>
+                            <div style="margin-left: 30px;">
+                                <h:outputText value="正确答案：" styleClass="answer"/>
+                                <h:outputText value="#{examCaseReport.examCase.examination.showAnswer?fill.rightAnswerStr:'不显示'}" style="color:green;font-weight: bold;"/>
+                                <h:outputText value="考生填写：" styleClass="answer"/>
+                                <h:outputText value="#{fill.userAnswerStr==''?'未填写':fill.userAnswerStr}" style="color:green;font-weight: bold;"/>&nbsp;
+                                <h:outputText value="正确数：" styleClass="answer"/>
+                                <h:outputText value="#{fill.rightNum}"  style="color:green;font-weight: bold;"/>
+                                <br/>
+                                <h:outputText value="试题解析："  styleClass="answer"/>
+                                <h:outputText value="#{examCaseReport.examCase.examination.showRightStr?fill.question.rightStr:'不显示'}"  escape="false" style="color:green;"/>
+                            </div>
+                            &nbsp;&nbsp;
+                            <p:commandLink value="#{fill.question.ifCollected?'取消收藏':'收藏本题'}" action="#{questionCollectionMag.collectOrCancel(fill.question.id,'fill')}" rendered="#{applicationBean.systemConfig.openCollection}" styleClass="comment" update="@this"/>
+
+                            <hr/>
+                        </ui:repeat>
+                        <ui:repeat  value="#{case1.judgeItems}" var="judge" varStatus="row"  rendered="#{fn:length(case1.judgeItems)!=0}">
+
+                            <a id="archor-#{judge.id}" href="#"></a>
+                            <h:outputText value="（#{fn:length(case1.choiceItems)+fn:length(case1.multiChoiceItems)+fn:length(case1.fillItems)+row.index+1}）#{judge.question.name}" escape="false" styleClass="choiceTitle"/>
+                            <div style="margin-left: 30px;">
+                                <h:outputText value="正确答案：" styleClass="answer"/>
+                                <h:outputText value="#{examCaseReport.examCase.examination.showAnswer?judge.rightAnswer:'不显示'}"  style="color:green;font-weight: bold;"/>
+                                <h:outputText value="，考生填写：" styleClass="answer"/>
+                                <h:outputText value="#{judge.userAnswer}"  style="color:green;font-weight: bold;"/>&nbsp;&nbsp;
+                                <h:outputText value="#{judge.ifRight?'√':'×'}" style="color:#{judge.ifRight?'green':'red'};font-weight:bolder;font-size:25px;font-family:宋体;"/>
+                                <br/>
+                                <h:outputText value="试题解析：" styleClass="answer"/>
+                                <h:outputText value="#{examCaseReport.examCase.examination.showRightStr?judge.question.rightStr:'不显示'}" escape="false"  style="color:green;"/>
+                            </div>
+                            &nbsp;&nbsp;
+                            <p:commandLink value="#{judge.question.ifCollected?'取消收藏':'收藏本题'}" action="#{questionCollectionMag.collectOrCancel(judge.question.id,'judge')}" rendered="#{applicationBean.systemConfig.openCollection}" styleClass="comment" update="@this"/>
+
+                            <hr/>
+                        </ui:repeat>
+                        <ui:repeat  value="#{case1.essayItems}" var="essay" varStatus="row"  rendered="#{fn:length(case1.essayItems)!=0}">
+                            <a id="archor-#{essay.id}" href="#"></a>
+                            <h:outputText value="（#{fn:length(case1.choiceItems)+fn:length(case1.multiChoiceItems)+fn:length(case1.fillItems)+fn:length(case1.judgeItems)+row.index+1}）#{essay.question.name}" style="#{essay.marked?'color:red;':''}" styleClass="choiceTitle" escape="false"/><br/>
+                            <div style="margin-left: 30px;">
+                                <h:outputText value="正确答案：" styleClass="answer"/>
+                                <h:outputText value="#{examCaseReport.examCase.examination.showAnswer?essay.question.answer:'不显示'}" escape="false"  style="color:green;font-weight: bold;"/><br/>
+                                <h:outputText value="考生填写：" styleClass="answer"/>
+                                <h:outputText value="#{essay.userAnswer}"  escape="false" style="color:green;font-weight: bold;"/><br/>
+                                <h:outputText value="正确率："  styleClass="answer"/>
+                                <h:outputText value="#{essay.rightRatio}" style="color:red;font-weight:bold;">
+                                    <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" type="percent"/>
+                                </h:outputText>
+                                <br/>
+                                <h:outputText value="试题解析：" styleClass="answer"/>
+                                <h:outputText value="#{examCaseReport.examCase.examination.showRightStr?essay.question.rightStr:'不显示'}" escape="false"  style="color:green;"/>
+                            </div>
+                            &nbsp;&nbsp;
+                            <p:commandLink value="#{essay.question.ifCollected?'取消收藏':'收藏本题'}" action="#{questionCollectionMag.collectOrCancel(essay.question.id,'essay')}" rendered="#{applicationBean.systemConfig.openCollection}" styleClass="comment" update="@this"/>
+
+                            <hr/>
+                        </ui:repeat>
+                    </p:panel>
+                </ui:repeat>
+
+
+
+
+                <p:separator/>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

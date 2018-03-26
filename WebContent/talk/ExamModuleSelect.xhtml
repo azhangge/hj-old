@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core"  lang="en">
+    <h:head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </h:head>
+    <h:body>
+        <ui:composition template="General3.xhtml">
+            <ui:define name="title">
+                <h:outputText value="章节练习" />
+            </ui:define>
+            <ui:define name="content">
+                <style>
+                    .tipAddOn{
+                        line-height: 25px;
+                    }
+                </style>
+                <p:panel id="topNav8" styleClass="frontColumn topNav8Wrapper">
+                    <h:outputLink value="#{facesContext.externalContext.requestContextPath}" styleClass="nav8">
+                        <h:outputText value="首页" />
+                    </h:outputLink>
+                    <h:outputText value="/" styleClass="navSeparator"/>
+                    <h:outputText value="考试" styleClass="nav8"/>
+                    <h:outputText value="/" styleClass="navSeparator"/>
+                    <h:outputText value="章节练习" styleClass="nav8"/>
+                </p:panel>
+                <p:panel>
+                    
+                    <h:panelGrid columns="2" style="width:100%;text-align: center;border:0px solid red;">
+                            <p:panel header="章节随机练习" style="text-align: center;width:235px;margin: 0px auto; ">
+                                <p:graphicImage value="/resources/images/icon/icon8.png"/>
+                                <br/>
+                                <div class="indexPanelContent">
+                                    <h:outputText value="按照章节自助抽取练习的题型与试题数量！"/> 
+                                </div>
+
+                                <br/>
+                                <p:button href="/talk/ExamModuleList.jspx" value="进入练习"/>
+                            </p:panel>
+                            <p:panel header="章节逐题练习" rendered="#{applicationBean.systemConfig.openModuleExam}" style="text-align: center;width:235px;margin: 0px auto; ">
+                                <p:graphicImage value="/resources/images/icon/icon5.png"/>
+                                <br/>
+                                <div class="indexPanelContent">
+                                    <h:outputText value="按照章节逐一练习章节中的试题。"/> 
+                                </div>
+                                <br/>
+                                <p:button href="/talk/ExamModule2List.jspx" rendered="#{clientSession.ifLogin}" value="进入练习"/>
+                                <p:button value="请登录" rendered="#{!clientSession.ifLogin}" onclick="PF('login1').show();return false;"/>
+                            </p:panel>
+
+
+                        </h:panelGrid>
+                    
+                    
+                </p:panel>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

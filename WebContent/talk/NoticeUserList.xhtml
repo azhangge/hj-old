@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"  lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="UserCenterGeneral.xhtml">
+            <ui:define name="ucontent">
+                
+                <p:dialog id="viewMMDialog" header="查看通知" widgetVar="viewMMDialog">  
+                    <p:outputPanel autoUpdate="true">
+                        <h:panelGrid columns="2" styleClass="generalInfo" style="width:300px;min-height: 100px;" columnClasses="w10,w40">
+                            <h:outputText value="标题：" />  
+                            <h:outputText value="#{unreadNoticeList.mm.title}" />  
+                            <h:outputText value="内容：" />  
+                            <h:outputText value="#{unreadNoticeList.mm.content}" escape="false"/> 
+                            <h:outputText value="时间：" />  
+                            <h:outputText value="#{unreadNoticeList.mm.createDate}">
+                                <f:convertDateTime pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" />
+                            </h:outputText>
+                        </h:panelGrid>
+                    </p:outputPanel>
+                    <p:separator/>
+                    <p:commandButton value="关闭" onclick="viewMMDialog.hide();" type="button"/>
+                </p:dialog> 
+                <div style="text-align: left; margin: 10px 0px 0px 0px; width: 98%;">
+                    <div>
+                        <h:panelGrid columns="2" style="width:100%">
+                            <h:outputText id="outputText1" styleClass="mark"
+                                          value="－通知管理－" />
+                        </h:panelGrid>
+
+                    </div>
+                    <p:separator ></p:separator>
+                    <div>
+
+                        <p:tabView>
+                            <p:tab title="未读通知">
+                                <p:dataTable id="dataTable1" styleClass="generalInfo" style="width:100%"
+                                             value="#{unreadNoticeList}" var="Case" rowIndexVar="r" emptyMessage="没有消息">
+                                    <p:column id="num">
+                                        <h:outputText style="height: 5%"
+                                                      value="#{r+1}" />
+                                        <f:facet name="header">
+                                            <h:outputText id="outputTextnum" value="序号" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column>
+                                        <h:outputText style="height: 5%" value="#{Case.title}" />
+                                        <f:facet name="header">
+                                            <h:outputText id="outputText3" value="标题" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column>
+                                        <h:outputText style="height: 5%" value="#{Case.createDate}">
+                                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" />
+                                        </h:outputText>
+                                        <f:facet name="header">
+                                            <h:outputText value="时间" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column>
+                                        <h:outputLink value="ClientViewMessage.jspx?mid=#{Case.id}&amp;id=#{clientSession.usr.id}" styleClass="operation">
+                                            <h:outputText value="查看"></h:outputText>
+                                        </h:outputLink>
+                                        <f:facet name="header">
+                                            <h:outputText style="height: 5%" value="查看" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column>
+                                        <p:commandLink action="#{noticeUserList.receiverMarkdel(Case.id)}" value="删除" styleClass="operation" update="dataTable1" onclick="if (!confirm('确认要删除本条目吗？')) return false">
+                                        </p:commandLink>
+                                        <f:facet name="header">
+                                            <h:outputText style="height: 5%" value="删除" />
+                                        </f:facet>
+                                    </p:column>
+                                </p:dataTable>
+
+                            </p:tab>
+                            <p:tab title="已读通知">
+                                <p:dataTable id="dataTable2" styleClass="generalInfo" style="width:100%" rowIndexVar="r"
+                                             value="#{unreadNoticeList}" var="Case" emptyMessage="没有消息">
+                                    <p:column>
+                                        <h:outputText style="height: 5%"
+                                                      value="#{r+1}" />
+                                        <f:facet name="header">
+                                            <h:outputText  value="序号" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column>
+                                        <h:outputText style="height: 5%" value="#{Case.title}" />
+                                        <f:facet name="header">
+                                            <h:outputText value="标题" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column>
+                                        <h:outputText style="height: 5%" value="#{Case.createDate}">
+                                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" />
+                                        </h:outputText>
+                                        <f:facet name="header">
+                                            <h:outputText value="时间" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column>
+                                        <p:commandButton value="查看" action="#{noticeUserList.viewMM(Case.id)}" onclick="viewMMDialog.show();"/>
+                                        <f:facet name="header">
+                                            <h:outputText style="height: 5%" value="查看" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column>
+                                        <p:commandLink action="#{noticeUserList.senderMarkdel(Case.id)}" update="dataTable2" styleClass="operation"
+                                                       value="删除"  onclick="if (!confirm('确认要删除本条目吗？')) return false"/>
+                                        <f:facet name="header">
+                                            <h:outputText style="height: 5%" value="删除" />
+                                        </f:facet>
+                                    </p:column>
+                                </p:dataTable>
+
+                            </p:tab>
+
+                        </p:tabView>
+
+                        <p:separator ></p:separator>
+                    </div>
+
+                </div>
+
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

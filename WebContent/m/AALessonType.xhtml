@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:poue="http://primefaces.org/ui/extensions"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+            	<script type="text/javascript" src="../resources/ckfinder/ckfinder.js"></script>
+                <script type="text/javascript" language="javascript" src="#{facesContext.externalContext.requestContextPath}/rere_wimg_up/js/wordimage_uploader1.1.js"></script>
+	            <script type="text/javascript">
+		            function onLoadCallback(editor1) {
+	                    var ed = PF(editor1).instance;
+	                    CKFinder.setupCKEditor(ed, '../resources/ckfinder/');
+	                }
+	            
+	                function checkAll(whichTable) {
+	                    var idds = '#myForm\\:' + whichTable + '\\:checkAll';
+	                    var vv = $(idds).is(':checked');
+	                    //alert(vv);
+	                    $('input[type="checkbox"]').each(function (index, element) {
+	                        try {
+	                            var idd = $(element).attr('id');
+	                            if (idd.indexOf(whichTable) >= 0) {
+	                                $(element).prop('checked', vv);
+	                                //alert(idd);
+	                            }
+	                        } catch (e) {
+	                        }
+	                    });
+	                }
+	            </script>
+	            <h:outputScript target="body" rendered="#{applicationBean.systemConfig.autoUpload}">
+                    var sUrl = 'http://#{facesContext.externalContext.requestServerName}:#{facesContext.externalContext.requestServerPort}#{facesContext.externalContext.requestContextPath}/servlet/WordImageUploader';
+                    var appName = '#{facesContext.externalContext.requestContextPath}';
+                    var repStr1 = 'http://#{facesContext.externalContext.requestServerName}:#{facesContext.externalContext.requestServerPort}#{facesContext.externalContext.requestContextPath}';
+                    var repStr2 = '..';
+                    var uploader = new WordImageUploader(sUrl, appName,repStr1,repStr2);
+                </h:outputScript>
+                <h:outputScript name="chinese_locale.js" library="js"/>
+                <h:form id="myForm"><div>
+                        <h:outputText  styleClass="tit"
+                                       value="－#{aALessonType.flag?'修改课程':'添加课程'}－" />
+                        <p:separator/>
+                        <h:panelGrid columns="2">
+                            <h:outputText value="课程名称：" />
+                            <h:inputText value="#{aALessonType.lessonType.name}" style="width:600px" />
+                            <h:outputText value="次序：" />
+                            <p:inputText value="#{aALessonType.lessonType.ord}" />
+                            
+                            <h:outputText value="上架：" />
+                       		<h:selectBooleanCheckbox id="checkbox1" value="#{aALessonType.lessonType.enabled}" />
+                       		
+                       		<!--  -->
+                       		<h:outputText value="专属课程：" />
+                       		<h:selectBooleanCheckbox id="checkbox2" value="#{aALessonType.lessonType.secreted}"/>
+                       		
+                       		<h:outputLabel value="专属课程部门：" />
+                       		<p:treeTable id="dc" value="#{aALessonType.root2}" var="dic2"  selectionMode="multiple" selection="#{aALessonType.selectedNodes2}" style="width:600px" >
+                       			<f:facet name="header">
+                                	<h:outputText value="请使用Ctrl、Shift键完成部门的多选"></h:outputText>
+                            	</f:facet>
+                       			<p:column>
+                                	<f:facet name="header">
+                                    	<h:outputText value="部门名称"></h:outputText>
+                                	</f:facet>
+                                	<h:outputText value="#{dic2.name}" ></h:outputText>
+                           	 </p:column>
+                       		</p:treeTable>
+                       		
+
+                       		<h:outputText value="课程积分：" />
+                            <h:panelGroup>
+                                <p:inputText value="#{aALessonType.lessonType.totalScorePaid}" />
+                                <h:outputText value="积分" />
+                            </h:panelGroup>
+                            
+                            <h:outputText value="课程类型：" />
+                            <h:selectOneMenu value="#{aALessonType.lessonType.classType}">
+                                <f:selectItem itemValue="0" itemLabel="非赠送课程"/>
+                                <f:selectItem itemValue="1" itemLabel="赠送课程"/>
+                            </h:selectOneMenu>
+                            
+                            <h:outputText value="讲师：" />
+                            <h:selectOneMenu value="#{aALessonType.teacherId}" immediate="true">
+                                <f:selectItem itemValue="0" itemLabel="-请选择讲师-"/>
+                                <f:selectItems value="#{aALessonType.teachers}" var="type1" itemLabel="#{type1.name}" itemValue="#{type1.id}"/>
+                            </h:selectOneMenu>
+                            <!-- <h:panelGroup>
+                                <p:inputText value="#{aALessonType.lessonType.teacher}" />
+                            </h:panelGroup> -->
+                            <h:outputText value="开放时间：" />
+                            <p:calendar value="#{aALessonType.lessonType.availableBegain}" navigator="true" pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" locale="zh_CN"/>
+                            <h:outputText value="结束时间：" />
+                            <p:calendar value="#{aALessonType.lessonType.availableEnd}" navigator="true" pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" locale="zh_CN"/>
+                            <!-- 课程图片 -->
+                            <h:outputText value="图像：" />
+	                        <p:graphicImage  id="simg"
+	                                         url="#{fn:replace(aALessonType.lessonType.picture,'showimage','showabstractimage')}"
+	                                         style="width: 160px; height: 90px;" />
+	                        <h:outputLabel style="" 
+	                                       value="图片源：" />
+	                        <h:panelGrid columns="1">
+	                            <h:panelGroup>
+	                                <h:inputText id="title" value="#{aALessonType.lessonType.picture}"
+	                                             style="width:400px" >
+	                                    <f:ajax event="change" render="simg" />
+	                                </h:inputText>
+	                            </h:panelGroup>
+	                        </h:panelGrid>
+	                        <h:outputLabel value="上传：" />
+	                        <p:fileUpload id="upl" fileUploadListener="#{aALessonType.up_action}" update="simg title" uploadLabel="上传" auto="true" label="选择图片 &nbsp;&nbsp;&nbsp;&nbsp;(推荐尺寸460*260)" allowTypes="/(\.|\/)(gif|jpe?g|png)$/">
+	                        </p:fileUpload>
+                            
+                            <h:outputText value="课程介绍：" />
+                            <poue:ckEditor id="editor1" widgetVar="editor1" value="#{aALessonType.lessonType.description1}" customConfig="#{facesContext.externalContext.requestContextPath}/resources/js/ckeditor_config1.js"  width="98%" height="250">
+                                <poue:javascript  event="initialize" execute="onLoadCallback('editor1')" />
+                                <poue:javascript rendered="#{applicationBean.systemConfig.autoUpload}" event="blur" execute="uploader.uploadWordImagesFromCKEditor(PF('editor1').instance,'#{aALessonType.lessonType.id}')" />
+                            </poue:ckEditor>
+                            
+                            <h:outputText value="开放考试完成学时数：" />
+                            <h:panelGroup>
+                                <p:inputText value="#{aALessonType.lessonType.openExamNum}" />
+                                <h:outputText value="（类目中的课时完成到此数目时开放考试）" />
+                            </h:panelGroup>
+                            <h:outputText value="关联考试：" />
+                            <p:dataTable value="#{aALessonType.exams}" var="exam"  style="width:600px;" id="dataTable1">
+                                <f:facet name="header">
+                                    <h:outputText value="请选择关联的考试" />
+                                </f:facet>
+                                <p:column filterBy="#{exam.name}">
+                                    <f:facet name="header">
+                                        <h:outputText value="考试名称"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{exam.name}" escape="false" />
+                                </p:column>
+                                <p:column style="width:30px;text-align: center;">
+                                    <h:selectBooleanCheckbox id="checkexam" value="#{exam.selected}">
+                                    </h:selectBooleanCheckbox>
+                                    <f:facet name="header">
+                                        <h:outputText value="选择"></h:outputText>
+                                        <h:selectBooleanCheckbox id="checkAll" onclick="checkAll('dataTable1');">
+                                                </h:selectBooleanCheckbox>
+                                    </f:facet>
+                                </p:column>
+                            </p:dataTable>
+                            <!-- <h:outputText value="管理员：" />
+                            <p:dataTable value="#{aALessonType.admins}" var="admin"  style="width:500px;">
+                                <f:facet name="header">
+                                    <h:outputText value="请选择允许查看成绩的管理员" />
+                                </f:facet>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="管理员（用户名）"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{admin.nickname}（#{admin.urn}）" escape="false" />
+                                </p:column>
+                                <p:column style="width:100px;">
+                                    <f:facet name="header">
+                                        <h:outputText value="选择"></h:outputText>
+                                    </f:facet>
+                                    <h:selectBooleanCheckbox value="#{admin.selected}">
+                                    </h:selectBooleanCheckbox>
+                                </p:column>
+                            </p:dataTable> -->
+                            <h:outputText value="分类标签：" />
+                            <p:treeTable value="#{aALessonType.root}" var="dic2"  selectionMode="multiple" selection="#{aALessonType.selectedNodes}" style="width:600px" >
+                            <f:facet name="header">
+                                <h:outputText value="请使用Ctrl、Shift键完成课程分类的多选"></h:outputText>
+                            </f:facet>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="课程分类名称"></h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{dic2.name}" ></h:outputText>
+                            </p:column>
+                        	</p:treeTable>
+                        </h:panelGrid>
+                        <p:separator/>
+                        <p:commandButton ajax="false" action="#{aALessonType.done}" value="提交" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'lesson')}" styleClass="commonSubmit"/>
+                    </div></h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <head>
+        <title>Footer</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    </head>
+    <body>
+        <ui:composition>
+        <link rel="stylesheet" type="text/css" href="/JT/css/foot.css"/>
+        <div class="foot_div">
+            <div class="foot" style="border-top-width: 0px;">
+           		<div class="left">
+	            	 <div class="footLogo">
+	            		<img src="/#{adv.logo.src}" alt=""  />
+	            	</div> 
+            		<div class="contact">
+            			<p>地址：#{adv.systemInfo.address}</p>
+            			<p>邮箱：#{adv.systemInfo.email}</p>
+            			<p>电话：#{adv.systemInfo.contact}</p>
+            		</div>
+            	</div>
+           		<div class="right">
+           			<div class="row1">
+            			<div class="app1"><img src="/image/android.png" alt="" /></div>
+            			<div class="app2"><img src="/image/apple.png" alt="" /></div>
+            			<div class="word3">移动APP:</div>
+            			<div class="word2">意见反馈</div>
+            			<div class="word1">联系我们</div>
+            			<div style="clear: both;"></div>
+           			</div>
+           			
+           			<div class="row2">#{adv.systemInfo.copyright}</div>
+           			<div class="row3">本系统建议使用Chrome或者360浏览器（极速模式）高性能浏览器！</div>
+           		</div>
+            </div>
+        </div>
+        </ui:composition>
+    </body>
+</html>

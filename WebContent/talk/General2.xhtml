@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <h:head>
+        <title>
+            <ui:insert name="title"></ui:insert>
+            - #{applicationBean.info.siteHeader}</title>
+        <meta http-equiv="keywords" content=" #{applicationBean.info.keyWords}" />
+        <meta http-equiv="description"
+              content=" #{applicationBean.info.description}" />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <link rel="stylesheet" type="text/css"
+              href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs.css" />
+        <link rel="stylesheet" type="text/css"
+              href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs_a.css" />
+    </h:head>
+    <h:body>
+        <h:form id="myForm">
+            <p:notificationBar position="top"  widgetVar="bar11" autoDisplay="true" effect="slide"   style="height: 30px;padding-top: 0px;" >  
+                <div style="margin: 0 auto;width:960px;border: 0px solid red;">
+                    <div style="float:left;">
+                        <p:outputPanel autoUpdate="true">
+                            <h:panelGroup rendered="#{!clientSession.ifLogin}" style="border:solid red 0px;">
+
+                                <p:button href="/talk/ExaminationList.jspx" value="参加考试#{general.co}" styleClass="navButton"/>
+
+                                <p:button href="/talk/ZoneList.jspx" value="学习交流#{general.co}" styleClass="navButton" rendered="#{applicationBean.systemConfig.openForum}"/>
+
+                                <p:commandButton value="登录"  styleClass="navButton"
+                                                 onclick="login1.show()" type="button"></p:commandButton>
+                                <p:button href="/talk/Register.jspx" value="注册#{general.co}" styleClass="navButton" rendered="#{!(applicationBean.systemConfig.systemClosed==0)}"/>
+                            </h:panelGroup>
+
+                            <h:panelGroup rendered="#{clientSession.ifLogin}" style="border:0px solid red;">
+                                <p:button href="/talk/ExaminationList.jspx" value="参加考试#{general.co}" styleClass="navButton"/>
+
+                                <p:button href="/talk/ZoneList.jspx" value="学习交流#{general.co}" styleClass="navButton" rendered="#{applicationBean.systemConfig.openForum}"/>
+
+                                <p:splitButton action="/talk/UserCenter?faces-redirect=true" value="个人中心" styleClass="navButton" >
+                                    <p:menuitem value="我的成绩" url="/talk/ExamCaseReportList.jspx" icon="ui-icon-extlink"/> <p:separator />
+                                    <p:menuitem value="我的错题" url="/talk/WrongQuestionList.jspx" icon="ui-icon-extlink" rendered="#{applicationBean.systemConfig.openWrong}"/> <p:separator  rendered="#{applicationBean.systemConfig.openWrong}"/>
+                                    <p:menuitem value="我的文件" url="/talk/ClientListFile.jspx" icon="ui-icon-extlink" rendered="#{userCenter.user.id==clientSession.usr.id and applicationBean.systemConfig.openFile}" /> <p:separator  rendered="#{clientSession.usr.unReadedMsgNum==0 and applicationBean.systemConfig.openMessage}"/>
+                                    <p:menuitem value="我的收件箱" url="/talk/ClientListMsg.jspx" icon="ui-icon-extlink"  rendered="#{clientSession.usr.unReadedMsgNum==0 and applicationBean.systemConfig.openMessage}"/>
+                                    <p:menuitem value="我的收件箱（#{clientSession.usr.unReadedMsgNum}）" icon="ui-icon-extlink" rendered="#{clientSession.usr.unReadedMsgNum>0 and applicationBean.systemConfig.openMessage}" url="/talk/ClientListMsg.jspx" />
+                                </p:splitButton>
+                                <p:commandButton value="退出" action="#{clientSession.exit}"  styleClass="navButton"></p:commandButton>
+
+                            </h:panelGroup>
+
+                        </p:outputPanel>
+
+                    </div>
+                    <div style="float:right;margin:8px 12px 0px 0px; border:0px solid red;">
+                        <p:clock mode="server" autoSync="false" pattern="服务器时间：yyyy-M-d HH:mm:ss" />
+                    </div>
+                </div>
+            </p:notificationBar>
+            <div style="width:960px;margin: 0px auto;">
+                <div style="height: 30px;"/>
+                <div style="border: green 0px solid; text-align: center;z-index: 1;margin-bottom:0px;padding-bottom: 0px;height:140px;overflow: hidden;">
+                    <h:graphicImage id="adv2" style="width:957px;height:140px;margin: 0px 0px 0px 0px;border:1px solid gray;" value="#{adv.advsMap[2].src}"/>
+                </div>
+                <p:panel id="mainPanel" style="width:957px;" styleClass="mainPanel">
+                    <ui:insert name="content"></ui:insert>
+                </p:panel>
+                <ui:include src="Links.xhtml"/>
+                <c:if test="#{copyrightController.copyrightInfo.email!='webmaster@huajie.com'}">
+                    <ui:include src="Footer1.xhtml"/>
+                </c:if>
+                <c:if test="#{copyrightController.copyrightInfo.email=='webmaster@huajie.com'}">
+                    <ui:include src="Footer.xhtml"/>
+                </c:if>
+
+            </div>
+            <ui:include src="/AjaxStatus2.xhtml"/>
+            <ui:include src="LoginPopup.xhtml"></ui:include>
+            <script type="text/javascript">
+                
+            </script>
+        </h:form>
+    </h:body>
+</html>

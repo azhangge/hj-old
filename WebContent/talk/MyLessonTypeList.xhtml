@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:f="http://java.sun.com/jsf/core" lang="en">
+<h:head>
+	<title>My Facelets Page</title>
+	<meta http-equiv="keywords" content="enter,your,keywords,here" />
+	<meta http-equiv="description"
+		content="A short description of this page." />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+	<!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+</h:head>
+<h:body>
+	<ui:composition template="General3.xhtml">
+		<ui:define name="title">
+			<h:outputText value="课程分类" />
+		</ui:define>
+		<ui:define name="content">
+			<!-- <script type="text/javascript">
+				function clearInput() {
+					var v = $("#search-input")[0].value;
+					if (v == "") {
+						$("#search-input")[0].value = "请输入课程、专家名称"
+					} else if (v == "请输入课程、专家名称") {
+						$("#search-input")[0].value = "";
+					}
+				}
+				function findLessonsByName() {
+					var name = $("#search-input")[0].value;
+					if (name == '请输入课程、专家名称') {
+						name='';
+					}
+					location.href="#{facesContext.externalContext.requestContextPath}/talk/LessonTypeList2.jspx?name="+name;
+				}
+				function keyLogin() {
+					//回车键的键值为13
+					if (event.keyCode == 13) {
+						if (document.getElementById('myForm:login1').style.display != 'block') {
+							document.getElementById("searchLesson").click(); //调用搜索按钮
+						}
+					}
+				}
+			</script> -->
+			<div style="float: left;">
+				<h:outputLink value="#{facesContext.externalContext.requestContextPath}" styleClass="nav8">
+					<h:outputText value="首页" />
+				</h:outputLink>
+				<h:outputText value="/" styleClass="navSeparator" />
+				<h:outputText value="课程" styleClass="nav8" />
+			</div>
+			<!-- <p:panel id="topNav8" styleClass="frontColumn topNav8Wrapper">
+				<div class="search" onkeydown="keyLogin();">
+					<input type="button" onclick="findLessonsByName()"
+						class="search-text" value="搜索" id="searchLesson"
+						style="font-size: 15px;" />
+						
+					<input class="search-input" onclick="clearInput()"
+						onblur="clearInput()" id="search-input" value="#{myLessonTypeList.searchName}" />
+				<h:outputText  value="&quot;&nbsp;&nbsp;相关课程" style="float:right;" rendered="#{myLessonTypeList.info!=''}"/>
+				<h:outputText  value="#{myLessonTypeList.searchName}" style="float:right;color:red;" rendered="#{myLessonTypeList.info!=''}"/>
+				<h:outputText  value="&nbsp;&nbsp;门&nbsp;&nbsp;&quot;" style="float:right;" rendered="#{myLessonTypeList.info!=''}"/>
+				<h:outputText  value="#{myLessonTypeList.info}" style="float:right;color:red;" rendered="#{myLessonTypeList.info!=''}"/>
+				<h:outputText  value="共找到&nbsp;&nbsp;" style="float:right;" rendered="#{myLessonTypeList.info!=''}"/>
+				</div>
+			</p:panel> -->
+			<style>
+				.searchImput {
+					width:200px;
+					border-width: 2px;
+				    border-style: inset;
+				    border-color: initial;
+				    border-image: initial;
+				}
+			</style>
+			<div class="class-category">
+				<ul>
+					<p:dataGrid value="#{myLessonTypeList.ltLogs}" var="car" columns="3" 
+				layout="grid" rows="12" paginator="true" id="cars" 
+				 emptyMessage="无课程,请购买">
+						<li class="course"><a
+							href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{car.lessonType.id}"
+							target="_blank" title="#{car.lessonType.name}" class="course-img-link">
+								<p:graphicImage id="simg"
+									url="#{fn:replace(car.lessonType.picture,'showimage','showabstractimage')}"
+									style="width: 212px; height: 124px;" />
+						</a>
+
+							<div class="course-status">
+								<span><h:outputText value="#{car.lessonType.description1}" /></span>
+							</div>
+
+							<div class="course-tt course-tt-link">#{car.lessonType.name}</div>
+
+							<div class="course-line course-line-bottom">
+								<span class="line-cell course-price xueshi">完成学时：#{car.finishedClassNum}/#{car.lessonType.totalClassNum}</span> <span
+									class="course-source">#{car.lessonType.teacher.name}</span>
+							</div></li>
+					</p:dataGrid>
+				</ul>
+			</div>
+		</ui:define>
+		
+	</ui:composition>
+</h:body>
+</html>

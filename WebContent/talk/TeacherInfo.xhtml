@@ -1,0 +1,339 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:head>
+	<title>Title</title>
+</h:head>
+<h:body>
+	<ui:composition template="UserCenterGeneral.xhtml">
+		<ui:define name="ucontent">
+			<link type="text/css" rel="stylesheet" href="../HJ/css/teacher-info.css" />
+			<style>
+					.ui-widget-header{
+						background-color:#FFFFFF!important;
+						background:none;
+						border:none;
+					}
+			</style>
+			<script type="text/javascript" src="../HJ/js/common.js"></script>
+			<p:panel id="teacherInfoPanle">
+				<div class="teacherInfo_div" style="width:100%;">
+					<div class="teacherInfo_title" style="width:100%;">
+						<div class="title_word">讲师信息</div>
+						<!--  
+						<p:commandLink rendered="#{!teacherInfo.flag}" action="#{teacherInfo.edit()}" update="myForm:teacherInfoPanle">
+						-->
+						<p:commandLink rendered="#{!teacherInfo.flag}" action="#{teacherInfo.edit()}" update="@form">
+							<div class="edit_div">编辑</div>
+						</p:commandLink>
+						<p:commandLink rendered="#{teacherInfo.flag}" action="#{teacherInfo.edit()}" update="@form">
+							<div class="edit_div">取消</div>
+						</p:commandLink>
+						<div style="clear: both;"></div>
+					</div>
+					<div class="separator" style="width:100%;"></div>
+					<div class="separator2" style="width:100%;">基本信息</div>
+					<div class="basic_info" style="width:100%;">
+						<div class="row_1">
+							<div class="required">*</div>
+							<div class="label">真实姓名：</div>
+							<p:inputText value="#{teacherInfo.teacher.name}" styleClass="input" disabled="#{!teacherInfo.flag}"></p:inputText>
+						</div>
+						<div class="row_1">
+							<div class="required">*</div>
+							<div class="label">身份证号：</div>
+							<p:inputText value="#{teacherInfo.teacher.idNum}" styleClass="id_num" disabled="#{!teacherInfo.flag}"></p:inputText>
+						</div>
+						<div class="row_1">
+							<div class="label2">从业年限：</div>
+							<p:inputText value="#{teacherInfo.teacher.workYears}" onkeypress="return validateNum(event)" styleClass="input2" disabled="#{!teacherInfo.flag}"></p:inputText>
+							<div class="label">年</div>
+						</div>
+						<div class="row_1">
+							<div class="label2">工作单位：</div>
+							<p:inputText value="#{teacherInfo.teacher.company}" styleClass="company" disabled="#{!teacherInfo.flag}"></p:inputText>
+						</div>
+						<div class="row_2">
+							<div class="required">*</div>
+							<div class="label2">身份证照片：</div>
+							<div class="idcard_info">
+								<c:if test="#{teacherInfo.flag}">
+									<div>
+										<div class="upload_div2">
+											<p:fileUpload update="myForm:pics1" auto="true" label="上传身份证（正面）" fileUploadListener="#{teacherInfo.up_action}"></p:fileUpload>
+											<!-- 
+											<p:fileUpload update="@form" auto="true" label="上传身份证（正面）" fileUploadListener="#{teacherInfo.up_action}"></p:fileUpload>
+											 -->
+										</div>
+										<div class="upload_div2">
+											<p:fileUpload update="myForm:pics2" auto="true" label="上传身份证（背面）" fileUploadListener="#{teacherInfo.up_action2}"></p:fileUpload>
+											<!-- 
+											<p:fileUpload update="@form" auto="true" label="上传身份证（背面）" fileUploadListener="#{teacherInfo.up_action2}"></p:fileUpload>
+											 -->
+										</div>
+										<div style="clear: both;"></div>
+									</div>
+									<div class="message">请上传身份证扫描正面，通过讲师认证将有效预防身份信息被冒用的风险</div>
+								</c:if>
+								
+								<div class="pic_div">
+									<p:graphicImage id="pics1" value="#{teacherInfo.teacher.frontPicture}" style="width:100px;height:100px;border:none;"/>
+									<!--  
+									<img src="#{teacherInfo.teacher.frontPicture}" alt="正面" class="pic" />
+									
+									<p:commandLink action="#{teacherInfo.deleteNewItem(5,teacherInfo.teacher.id)}"  rendered="#{teacherInfo.flag}" update="myForm:teacherInfoPanle">
+										<div class="img_div">
+											<img src="/image/delete.png" alt="" class="img2" />
+										</div>
+									</p:commandLink>
+									-->
+								</div>
+
+								<div class="pic_div">
+									<p:graphicImage id="pics2" value="#{teacherInfo.teacher.backPicture}" style="width:100px;height:100px;border:none;"/>
+									<!-- 
+									<img src="#{teacherInfo.teacher.backPicture}" alt="反面" class="pic" />
+									 
+									<p:commandLink action="#{teacherInfo.deleteNewItem(6,teacherInfo.teacher.id)}"  rendered="#{teacherInfo.flag}" update="myForm:teacherInfoPanle">
+										<div class="img_div">
+											<img src="/image/delete.png" alt="" class="img2" />
+										</div>
+									</p:commandLink>
+									-->
+								</div>
+										
+								<!--  
+								<c:if test="#{!(empty teacherInfo.teacher.frontPicture)}">
+									<div class="pic_div" style="display:none;">
+										<p:graphicImage id="pics1" value="#{teacherInfo.teacher.backPicture}" style="width:200px;height:200px;"/>
+										
+										<img src="#{teacherInfo.teacher.frontPicture}" alt="正面" class="pic" />
+										
+										<p:commandLink action="#{teacherInfo.deleteNewItem(5,teacherInfo.teacher.id)}"  rendered="#{teacherInfo.flag}" update="myForm:teacherInfoPanle">
+											<div class="img_div">
+												<img src="/image/delete.png" alt="" class="img2" />
+											</div>
+										</p:commandLink>
+									</div>
+								</c:if>
+								<c:if test="#{!(empty teacherInfo.teacher.backPicture)}">
+									<div class="pic_div">
+									<p:graphicImage id="pics2" value="#{teacherInfo.teacher.backPicture}" style="width:200px;height:200px;"/>
+									
+										
+										<img src="#{teacherInfo.teacher.backPicture}" alt="反面" class="pic" />
+										 
+										
+										<p:commandLink action="#{teacherInfo.deleteNewItem(6,teacherInfo.teacher.id)}"  rendered="#{teacherInfo.flag}" update="myForm:teacherInfoPanle">
+											<div class="img_div">
+												<img src="/image/delete.png" alt="" class="img2" />
+											</div>
+										</p:commandLink>
+									</div>
+								</c:if>
+								-->
+								<div style="clear: both;"></div>
+							</div>
+						</div>
+						<div style="clear: both;"></div>
+					</div>
+
+					<div class="separator2" style="width:100%;">职位证明</div>
+					<div class="panel" style="width:100%;">
+						<div class="top_div" style="width:100%;">
+							<div class="title">工作经历</div>
+							<p:commandLink action="#{teacherInfo.addNewItem(2)}" update="myForm:teacherInfoPanle"
+								rendered="#{teacherInfo.flag}">
+								<div class="add">添加</div>
+							</p:commandLink>
+						</div>
+						<p:dataTable styleClass="datatable" style="width:88%;" value="#{teacherInfo.teacher.workExperience}" var="workExperience"
+							emptyMessage="暂无">
+							<p:column styleClass="time_column">
+								<p:calendar value="#{workExperience.beginTime}" navigator="true" pattern="yyyy-MM" timeZone="GMT+8"
+									disabled="#{!teacherInfo.flag}" locale="zh_CN" />
+								<f:facet name="header">
+									<h:outputText value="起始时间" />
+								</f:facet>
+							</p:column>
+							<p:column styleClass="time_column">
+								<p:calendar value="#{workExperience.endTime}" navigator="true" pattern="yyyy-MM" timeZone="GMT+8"
+									disabled="#{!teacherInfo.flag}" locale="zh_CN" />
+								<f:facet name="header">
+									<h:outputText value="终止时间" />
+								</f:facet>
+							</p:column>
+							<p:column>
+								<p:inputText disabled="#{!teacherInfo.flag}" value="#{workExperience.name}" />
+								<f:facet name="header">
+									<h:outputText value="公司名称" />
+								</f:facet>
+							</p:column>
+							<p:column styleClass="duty_column">
+								<p:inputText disabled="#{!teacherInfo.flag}" value="#{workExperience.duty}" />
+								<f:facet name="header">
+									<h:outputText value="职务" />
+								</f:facet>
+							</p:column>
+							<p:column rendered="#{teacherInfo.flag}" styleClass="deletebutton">
+								<p:commandLink action="#{teacherInfo.deleteNewItem(2,workExperience.id)}"  rendered="#{teacherInfo.flag}" update="myForm:teacherInfoPanle">
+									<img src="/image/delete.png" alt="" class="img" />
+								</p:commandLink>
+								<f:facet name="header">
+									<h:outputText value="删除" />
+								</f:facet>
+							</p:column>
+						</p:dataTable>
+						<div class="top_div">
+							<div class="title">项目经历</div>
+							<p:commandLink action="#{teacherInfo.addNewItem(3)}" update="myForm:teacherInfoPanle"
+								rendered="#{teacherInfo.flag}">
+								<div class="add">添加</div>
+							</p:commandLink>
+						</div>
+						<p:dataTable value="#{teacherInfo.teacher.projectExperience}" style="width:88%;" var="projectExperience" emptyMessage="暂无">
+							<p:column styleClass="time_column">
+								<p:calendar value="#{projectExperience.beginTime}" navigator="true" pattern="yyyy-MM" timeZone="GMT+8"
+									disabled="#{!teacherInfo.flag}" locale="zh_CN" />
+								<f:facet name="header">
+									<h:outputText value="项目起始时间" />
+								</f:facet>
+							</p:column>
+							<p:column styleClass="time_column">
+								<p:calendar value="#{projectExperience.endTime}" navigator="true" pattern="yyyy-MM" timeZone="GMT+8"
+									disabled="#{!teacherInfo.flag}" locale="zh_CN" />
+								<f:facet name="header">
+									<h:outputText value="项目结束时间" />
+								</f:facet>
+							</p:column>
+							<p:column>
+								<p:inputText disabled="#{!teacherInfo.flag}" value="#{projectExperience.name}" />
+								<f:facet name="header">
+									<h:outputText value="项目名称" />
+								</f:facet>
+							</p:column>
+							<p:column rendered="#{teacherInfo.flag}" styleClass="deletebutton">
+								<p:commandLink action="#{teacherInfo.deleteNewItem(3,projectExperience.id)}"  rendered="#{teacherInfo.flag}" update="myForm:teacherInfoPanle">
+									<img src="/image/delete.png" alt="" class="img" />
+								</p:commandLink>
+								<f:facet name="header">
+									<h:outputText value="删除" />
+								</f:facet>
+							</p:column>
+						</p:dataTable>
+						<div style="height: 60px"></div>
+					</div>
+
+					<!--  
+					<div class="separator2">荣誉资质</div>
+					<div class="panel">
+						<div>
+							<div class="title2">所获职称：</div>
+							<div class="pic_div2">
+								<c:if test="#{teacherInfo.flag}">
+									<div class="upload_div">
+										<p:fileUpload update="@form" auto="true" label="上传图片" fileUploadListener="#{teacherInfo.up_action3}"
+											></p:fileUpload>
+									</div>
+									<div class="message2">请上传相关材料照片</div>
+								</c:if>
+								<c:if test="#{!empty teacherInfo.teacher.jobTitles and !empty teacherInfo.teacher.jobTitles.get(0).picture}">
+									<ui:repeat var="cf" value="#{teacherInfo.teacher.jobTitles}">
+										<div class="picture">
+											<img src="#{cf.picture}" alt="" class="pic" />
+											<p:commandLink action="#{teacherInfo.deleteNewItem(1,cf.id)}" rendered="#{teacherInfo.flag}"
+												update="myForm:teacherInfoPanle">
+												<div class="img_div">
+													<img src="/image/delete.png" alt="" class="img2" />
+												</div>
+											</p:commandLink>
+										</div>
+									</ui:repeat>
+								</c:if>
+							</div>
+							<div style="clear: both;"></div>
+						</div>
+						
+						<div>
+							<div class="title2">所获证书：</div>
+							<div class="pic_div2">
+								<c:if test="#{teacherInfo.flag}">
+									<div class="upload_div">
+										<p:fileUpload update="@form" auto="true" label="上传图片"
+											fileUploadListener="#{teacherInfo.up_action4}" ></p:fileUpload>
+									</div>
+									<div class="message2">请上传相关材料照片</div>
+								</c:if>
+								<ui:repeat var="cf" value="#{teacherInfo.teacher.certificate}">
+									<div class="picture">
+										<img src="#{cf.picture}" alt="" class="pic" />
+										<p:commandLink action="#{teacherInfo.deleteNewItem(4,cf.id)}" rendered="#{teacherInfo.flag}"  update="myForm:teacherInfoPanle">
+											<div class="img_div">
+												<img src="/image/delete.png" alt="" class="img2" />
+											</div>
+										</p:commandLink>
+									</div>
+								</ui:repeat>
+								<div style="clear: both;"></div>
+							</div>
+							<div style="clear: both;"></div>
+						</div>
+					</div>
+					-->
+					<div class="separator2" style="width:100%;">荣誉资质</div>
+					<div class="panel" style="width:100%;">
+						<div>
+							<div class="title2">所获职称：</div>
+							<div class="pic_div2">
+								<c:if test="#{teacherInfo.flag}">
+									<div class="upload_div">
+										<p:fileUpload update="myForm:pics3" auto="true" label="上传图片" fileUploadListener="#{teacherInfo.up_action3}"></p:fileUpload>
+									</div>
+									<div style="clear: both;"></div>
+									<div class="message2">请上传相关材料照片</div>
+								</c:if>
+									<p:panel id="pics3" style="width:100px;height:100px;border:none; ">
+										<ui:repeat var="jt" value="#{teacherInfo.teacher.jobTitles}">
+											<div class="picture" >
+												<p:graphicImage id="jt#{jt.id}" value="#{jt.picture}" style="width:100px;height:100px;"/>
+											</div>
+										</ui:repeat>
+									</p:panel>
+							</div>
+ 							<div style="clear: both;"></div>
+						</div>
+						
+						<div>
+							<div class="title2">所获证书：</div>
+							<div class="pic_div2">
+								<c:if test="#{teacherInfo.flag}">
+									<div class="upload_div" >
+										<p:fileUpload update="myForm:pics4" auto="true" label="上传图片" fileUploadListener="#{teacherInfo.up_action4}" ></p:fileUpload>
+									</div>
+									<div style="clear: both;"></div>
+									<div class="message2">请上传相关材料照片</div>
+								</c:if>
+								<p:panel id="pics4" style="width:100px;height:100px;border:none;">
+									<ui:repeat var="cf" value="#{teacherInfo.teacher.certificate}">
+										<div class="picture">
+											<p:graphicImage id="cf#{cf.id}" value="#{cf.picture}" style="width:100px;height:100px;"/>
+										</div>
+									</ui:repeat>
+								</p:panel>
+							</div>
+							<div style="clear: both;"></div> 
+						</div>
+					</div>
+					
+					<p:commandLink action="#{teacherInfo.submit()}" update="myForm:teacherInfoPanle" rendered="#{teacherInfo.flag}">
+						<div class="submit">提交审批</div>
+					</p:commandLink>
+				</div>
+			</p:panel>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>
+

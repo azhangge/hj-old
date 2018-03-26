@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"  lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <ui:composition template="BackGeneral.xhtml">
+        <ui:define name="content">
+            <h:form>
+                <ui:include src="/ManualPanel.xhtml"></ui:include>
+                <ui:include src="/AjaxStatus2.xhtml"/>
+                <p:outputPanel autoUpdate="true">
+                    <p:growl/>
+                </p:outputPanel>
+                <h:outputText id="outputText1" styleClass="tit"
+                              value="－外观设置－" />
+                <p:separator style="margin:5px 0px 10px 0px" />
+                
+
+                
+
+                <p:panel style="margin-top:20px;width:100%;">
+                    <f:facet name="header">
+                        <h:outputText value="修改网站风格" />
+                    </f:facet>
+                    <h:panelGrid columns="4">
+                        <h:outputText value="风格样式：" />
+                        <p:themeSwitcher widgetVar="themeSwitcher" value="#{theamController.theme}"  disabled="#{!fn:contains(adminSessionBean.admin.authstr,'sys')}" >
+                            <f:selectItem itemLabel="选择皮肤..." itemValue="#{theamController.theme}" />  
+                            <f:selectItems value="#{theamController.themes}" />
+                        </p:themeSwitcher>
+
+                        <p:commandButton value="保存修改" process="@form"  image="ui-icon-disk" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'sys')}"
+                                         action="#{theamController.changeTheme}" />
+                    </h:panelGrid>
+                </p:panel>
+
+
+                <p:panel style="margin-top:20px;width:100%;">
+                    <f:facet name="header">
+                        <h:outputText value="登录界面设置" />
+                    </f:facet>
+                    <h:panelGrid columns="10">
+                        <h:outputText value="使用封闭登录界面：" style="margin-left:20px"/>
+                        <h:selectBooleanCheckbox value="#{systemConfigMB.sc.openLogin2}"></h:selectBooleanCheckbox>
+
+                        <h:outputText value="身份证登录：" style="margin-left:20px"/>
+                        <h:selectBooleanCheckbox value="#{systemConfigMB.sc.openPid}"></h:selectBooleanCheckbox>
+
+                        <h:outputText value="#{applicationBean.cidStr}：" style="margin-left:20px"/>
+                        <h:selectBooleanCheckbox value="#{systemConfigMB.sc.openCid}"></h:selectBooleanCheckbox>
+
+                        <h:outputText value="用户名登录：" style="margin-left:20px"/>
+                        <h:selectBooleanCheckbox value="#{systemConfigMB.sc.openUrn}"></h:selectBooleanCheckbox>
+                        
+                        <h:outputText value="手机号登录：" style="margin-left:20px"/>
+                        <h:selectBooleanCheckbox value="#{systemConfigMB.sc.openPhone}"></h:selectBooleanCheckbox>
+                        
+                        <ui:include src="/GeneralHelper.xhtml">
+                            <ui:param name="id" value="22860051536997"></ui:param>
+                        </ui:include>
+                        
+                        <br/>
+                        <p:commandButton value="确定修改" style="margin-left:24px" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'sys')}"
+                                         action="#{systemConfigMB.updateTimesNum}" />
+                    </h:panelGrid>
+                </p:panel>
+
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

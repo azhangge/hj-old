@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions" lang="en">
+<head>
+<title>My Facelets Page</title>
+<meta http-equiv="keywords" content="enter,your,keywords,here" />
+<meta http-equiv="description"
+	content="A short description of this page." />
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<ui:composition template="BackGeneral.xhtml">
+		<ui:define name="content">
+			<h:form id="myForm">
+				<ui:include src="/AjaxStatus2.xhtml" />
+				<div style="text-align: left; margin: 0px 0px 0px 0px; width: 98%;">
+					<div>
+						<h:outputText id="outputText1" styleClass="tit" value="-综合考试成绩管理-" />
+						<p:growl id="growl" autoUpdate="true" />
+					</div>
+					<p:separator />
+					<p:sticky target="tool1" />
+					<p:toolbar id="tool1">
+						<f:facet name="left">
+							<p:commandButton value="删除" process="@form" update="@form"
+								image="ui-icon-trash"
+								action="#{listExamCaseReport.batchDelete()}"
+								disabled="#{!fn:contains(adminSessionBean.admin.authstr,'score')}"
+								onclick="if (!confirm('确认要删除选中的成绩吗？'))
+                                            return false" />
+							<p:commandButton value="清空" process="@form" update="@form"
+								image="fa fa-fw fa-send"
+								action="#{listExamCaseReport.deleteAll()}"
+								disabled="#{!fn:contains(adminSessionBean.admin.authstr,'score')}"
+								onclick="if (!confirm('确认要清空所有的成绩吗？'))
+                                            return false" />
+							<p:commandButton value="批量发布成绩" process="@form" update="@form"
+								image="fa fa-fw fa-leanpub"
+								action="#{listExamCaseReport.batchPub()}"
+								disabled="#{!fn:contains(adminSessionBean.admin.authstr,'score')}" />
+							<p:commandButton value="发布全部成绩" process="@form" update="@form"
+								image="fa fa-fw fa-sellsy"
+								action="#{listExamCaseReport.pubAll()}"
+								disabled="#{!fn:contains(adminSessionBean.admin.authstr,'score')}" />
+
+							<p:button href="/servlet/ExportExamCase" value="导出所有成绩"
+								image="fa fa-fw fa-cloud"
+								disabled="#{!fn:contains(adminSessionBean.admin.authstr,'score')}" />
+							<p:commandButton value="导出筛选的数据" ajax="false"
+								image="fa fa-fw fa-cloud-download"
+								disabled="#{!fn:contains(adminSessionBean.admin.authstr,'score')}">
+								<p:dataExporter type="xls" target="dc11" fileName="scores" />
+							</p:commandButton>
+						</f:facet>
+						<f:facet name="right">
+							<h:outputLink value="ExamCaseComplexExport.jspx">
+								<h:outputText value="[自定义导出]" />
+							</h:outputLink>
+						</f:facet>
+					</p:toolbar>
+
+					<div>
+						<script type="text/javascript">
+							$(function() {
+								$("#myForm\\:dc11\\:checkAll").click(
+										function() {
+											$('input[type="checkbox"]').prop(
+													"checked", this.checked);
+										});
+							});
+						</script>
+
+						<p:dataTable paginator="true" paginatorPosition="bottom"
+							value="#{listExamCaseReport.lcqs}" var="us" id="dc11"
+							emptyMessage="#{lang['exam.empty_result']}" styleClass="list"
+							rowIndexVar="row" style="width:100%" rows="50" lazy="true" liveResize="true" resizableColumns="true">
+							<p:column id="num" style="width:30px;text-align: center;" resizable="true" >
+								<h:outputText style="height: 5%" value="#{row+1}" />
+								<f:facet name="header">
+									<h:outputText id="outputTextnum" value="序号" />
+								</f:facet>
+							</p:column>
+							<p:column exportable="false" style="width:30px;" resizable="true" >
+								<h:selectBooleanCheckbox value="#{us.selected}" />
+								<f:facet name="header">
+									<h:outputText value="全选" />
+									<br />
+									<h:selectBooleanCheckbox id="checkAll">
+									</h:selectBooleanCheckbox>
+								</f:facet>
+							</p:column>
+							<p:column filterBy="#{us.examination.name}" filterMatchMode="contains" sortBy="#{us.examination.name}" style="width:140px" resizable="true" >
+								<h:outputText value="#{us.examination.name}" />
+								<f:facet name="header">
+									<h:outputText value="考试名称" />
+								</f:facet>
+							</p:column>
+							<p:column filterBy="#{us.user.name}" filterStyle="width:50px;"
+								style="text-align:center;" filterMatchMode="contains" sortBy="#{us.user.name}" resizable="true" >
+								<h:outputText value="#{us.user.name}" />
+								<f:facet name="header">
+									<h:outputText value="考生姓名" />
+								</f:facet>
+							</p:column>
+						
+							<p:column style="text-align:center;width:100px" filterStyle="width:80px" >
+								<h:outputText value="#{us.user.groupCnStr}" />
+								<f:facet name="header">
+									<h:outputText value="#{applicationBean.departmentStr}" />
+								</f:facet>
+							</p:column>
+ 							
+							<!-- <p:column style="width:50px;text-align: center;">
+								<h:outputLink id="showRoom22" value="#">
+									<h:outputText value="查看" />
+								</h:outputLink>
+								<p:tooltip for="showRoom22"
+									value="考场：#{us.room.name}，IP地址：#{us.ip}，#{us.ipAddr}" />
+								<f:facet name="header">
+									<h:outputText value="考场" />
+								</f:facet>
+							</p:column> -->
+							<p:column sortBy="#{us.ifSimulate}"
+								style="width:100px;text-align: center;" resizable="true" >
+								<h:outputText value="#{us.ifSimulate?'模拟考试':'正式考试'}">
+								</h:outputText>
+								<f:facet name="header">
+									<h:outputText value="考试类型" />
+								</f:facet>
+							</p:column>
+							<p:column sortBy="#{us.genTime}"
+								style="width:120px;text-align: center;" resizable="true" >
+								<h:outputText value="#{us.genTime}">
+									<f:convertDateTime pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" />
+								</h:outputText>
+								<f:facet name="header">
+									<h:outputText value="考试时间" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:100px;text-align: center;" sortBy="#{us.timePassed*1000}" resizable="true" >
+								<h:outputText
+									value="#{clientSession.wrapperTimeLen(us.timePassed*1000)}" />
+								<f:facet name="header">
+									<h:outputText value="耗时" />
+								</f:facet>
+							</p:column>
+							<p:column sortBy="#{us.score}"
+								style="width:60px;text-align: center;" resizable="true" >
+								<h:outputText value="#{us.score}"
+									rendered="#{us.stat=='submitted'}" style="font-weight:bold;">
+									<f:convertNumber
+										maxFractionDigits="#{applicationBean.maxFraction}"
+										minFractionDigits="1" />
+								</h:outputText>
+								<h:outputText value="未提交" style="color:blue;"
+									rendered="#{us.stat=='saved'}" />
+								<f:facet name="header">
+									<h:outputText value="成绩" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:50px;text-align: center;" sortBy="#{us.ranking}"  resizable="true" >
+								<f:facet name="header">
+									<h:outputText value="排名" />
+								</f:facet>
+								<h:outputText
+									value="#{us.ranking}/#{us.examination.examCaseNum}" />
+							</p:column>
+							<p:column exportable="false" sortBy="#{us.ifPub}"
+								style="width:50px;text-align: center;" resizable="true" >
+								<h:outputText value="#{us.ifPub?'已发布':'未发布'}"
+									style="color:#{us.ifPub?'green':'red'};"
+									rendered="#{us.stat=='submitted'}" />
+								<h:outputText value="未提交" style="color:blue;"
+									rendered="#{us.stat=='saved'}" />
+								<!--
+                                    <br/>
+                                    <h:outputLink rendered="#{us.ifPub}" value="#{facesContext.externalContext.requestContextPath}/talk/ExamScoreReport.jspx?case_id=#{us.id}" target="_blank" styleClass="news">
+                                        <h:outputText value="成绩单" />
+                                    </h:outputLink>
+                                    -->
+								<f:facet name="header">
+									<h:outputText value="状态" />
+								</f:facet>
+							</p:column>
+							<p:column exportable="false"
+								style="width:50px;text-align: center;font-weight: bold;" resizable="true" >
+								<h:outputLink
+									value="AAExamCaseReportGeneral.jspx?case_id=#{us.id}"
+									rendered="#{us.stat!='saved'}">
+									<h:outputText value="阅卷" />
+								</h:outputLink>
+								<f:facet name="header">
+									<h:outputText value="阅卷" />
+								</f:facet>
+							</p:column>
+						</p:dataTable>
+						<p:separator />
+
+						<p:outputPanel autoUpdate="true">
+
+							<h:outputText style="color:green;"
+								value="共有#{listExamCaseReport.lcqs.rowCount}条数据！" />
+
+							<h:outputText style="color:green;" value="注：此处仅列出了您有权限的考试下的考试成绩。"></h:outputText>
+
+						</p:outputPanel>
+
+
+					</div>
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

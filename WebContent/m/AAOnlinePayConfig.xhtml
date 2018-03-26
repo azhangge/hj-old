@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form><div>
+                        <h:outputText styleClass="tit"
+                                      value="－在线支付配置－" />
+                        <p:separator/>
+                        <p:outputPanel autoUpdate="true">
+                            <h:panelGrid columns="2">
+                                <h:outputText value="支付宝帐号：" />
+                                <p:inputText value="#{aAOnlinePayConfig.info.alipaySellerEmail}" style="width:400px" />
+                                <h:outputText value="支付宝合作者ID：" />
+                                <p:inputText value="#{aAOnlinePayConfig.info.alipay1Partner}" style="width:400px" />
+                                <h:outputText value="支付宝合作者校验码：" />
+                                <p:inputText value="#{aAOnlinePayConfig.info.alipay1Key}" style="width:400px" />
+                                <h:outputText value="1元兑换积分数：" />
+                                <p:inputText value="#{aAOnlinePayConfig.info.scorePerYuan}" style="width:100px" />
+                                <h:outputText value="支付方式：" />
+                                <h:selectOneMenu value="#{aAOnlinePayConfig.info.alipayType}">
+                                    <f:selectItem itemLabel="支付宝即时到帐" itemValue="create_direct_pay_by_user"/>
+                                    <f:selectItem itemLabel="支付宝担保交易" itemValue="create_partner_trade_by_buyer"/>
+                                </h:selectOneMenu>
+                                <h:outputText value="支付宝接口地址：" />
+                                <h:panelGroup>
+                                    <p:inputText value="#{aAOnlinePayConfig.info.alipay1Url}" style="width:400px" />
+                                    <br/>
+                                    <h:outputText value="*当前支付接口地址应该为：https://mapi.alipay.com/gateway.do" />
+                                </h:panelGroup>
+                            </h:panelGrid>
+                        </p:outputPanel>
+                        <p:separator/>
+                        <p:commandButton action="#{aAOnlinePayConfig.apply()}" value="应用" disabled="#{(!fn:contains(adminSessionBean.admin.authstr,'sys'))}" update="@form"/>
+
+                        <p:growl/>
+
+
+                    </div></h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

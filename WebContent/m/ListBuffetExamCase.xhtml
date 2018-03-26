@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions" lang="en">
+<head>
+<title>My Facelets Page</title>
+<meta http-equiv="keywords" content="enter,your,keywords,here" />
+<meta http-equiv="description"
+	content="A short description of this page." />
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+</head>
+<body>
+	<ui:composition template="BackGeneral.xhtml">
+		<ui:define name="content">
+			<h:form id="myForm">
+				<ui:include src="/AjaxStatus2.xhtml" />
+				<div style="text-align: left; margin: 10px 0px 0px 0px; width: 98%;">
+					<div>
+						<h:outputText id="outputText1" styleClass="tit" value="-自助练习成绩管理-" />
+					</div>
+					<p:separator />
+					<p:commandButton value="删除" process="@form" update="@form"
+						action="#{listBuffetExamCase.batchDelete()}"
+						disabled="#{!fn:contains(adminSessionBean.admin.authstr,'score')}"
+						onclick="if (!confirm('确认要删除选中的成绩吗？'))
+                                    return false" />
+					<p:commandButton value="清空" process="@form" update="@form"
+						action="#{listBuffetExamCase.deleteAll()}"
+						disabled="#{!fn:contains(adminSessionBean.admin.authstr,'score')}"
+						onclick="if (!confirm('确认要清空所有的成绩吗？'))
+                                    return false" />
+
+					<p:separator />
+					<div>
+						<script type="text/javascript">
+							$(function() {
+								$("#myForm\\:dc11\\:checkAll").click(
+										function() {
+											$('input[type="checkbox"]').prop(
+													"checked", this.checked);
+										});
+							});
+						</script>
+
+						<p:dataTable paginator="true" paginatorPosition="bottom"
+							value="#{listBuffetExamCase.cases}" var="us" id="dc11"
+							emptyMessage="#{lang['exam.empty_result']}" styleClass="list"
+							rowIndexVar="row" style="width:100%" rows="20" liveResize="true" resizableColumns="true">
+							<p:column id="num" style="width:40px;text-align: center;" resizable="true" >
+								<h:outputText style="height: 5%" value="#{row+1}" />
+								<f:facet name="header">
+									<h:outputText id="outputTextnum" value="序号" />
+								</f:facet>
+							</p:column>
+							<p:column exportable="false" style="width:30px;" resizable="true" >
+								<h:selectBooleanCheckbox value="#{us.selected}" />
+								<f:facet name="header">
+									<h:outputText value="全选" />
+									<br />
+									<h:selectBooleanCheckbox id="checkAll">
+									</h:selectBooleanCheckbox>
+								</f:facet>
+							</p:column>
+							<p:column filterBy="#{us.examination.name}" filterMatchMode="contains" sortBy="#{us.examination.name}" resizable="true" >
+								<h:outputText value="#{us.examination.name}" />
+								<f:facet name="header">
+									<h:outputText value="考试名称" />
+								</f:facet>
+							</p:column>
+							<p:column sortBy="#{us.user.name}" filterBy="#{us.user.name}" filterMatchMode="contains"
+								filterStyle="width:50px;" style="text-align:center;" resizable="true" >
+								<h:outputText value="#{us.user.name}" />
+								<f:facet name="header">
+									<h:outputText value="考生姓名" />
+								</f:facet>
+							</p:column>
+							<p:column sortBy="#{us.user.groupCnStr}"
+								filterBy="#{us.user.groupCnStr}" filterMatchMode="contains"
+								filterStyle="width:50px;" style="text-align:center;" resizable="true" >
+								<h:outputText value="#{us.user.groupCnStr}" />
+								<f:facet name="header">
+									<h:outputText value="#{applicationBean.departmentStr}" />
+								</f:facet>
+							</p:column>
+							<p:column sortBy="#{us.genTime}" resizable="true" >
+								<h:outputText value="#{us.genTime}">
+									<f:convertDateTime pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" />
+								</h:outputText>
+								<f:facet name="header">
+									<h:outputText value="考试时间" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:80px!important;text-align: center;" sortBy="#{us.score}" resizable="true" >
+								<f:facet name="header">
+									<h:outputText value="成绩/满分" />
+								</f:facet>
+								<h:outputText value="#{us.score}">
+									<f:convertNumber maxFractionDigits="2" minFractionDigits="1" />
+								</h:outputText>
+								<h:outputText value="/" />
+								<h:outputText value="#{us.totalFullScore}"
+									style="font-weight: bold;color:green;">
+									<f:convertNumber maxFractionDigits="2" minFractionDigits="1" />
+								</h:outputText>
+							</p:column>
+							<p:column style="text-align: center;" resizable="true" >
+								<f:facet name="header">
+									<h:outputText value="查看" />
+								</f:facet>
+								<h:panelGroup>
+									<h:outputLink
+										value="#{facesContext.externalContext.requestContextPath}/m/AABuffetExamCase.jspx?case_id=#{us.id}"
+										styleClass="news">
+										<h:outputText value="得分详情" />
+									</h:outputLink>
+								</h:panelGroup>
+							</p:column>
+						</p:dataTable>
+						<p:separator />
+						<p:outputPanel autoUpdate="true">
+							<h:outputText value="共有#{listBuffetExamCase.cases.size()}条数据！" />
+						</p:outputPanel>
+
+
+					</div>
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

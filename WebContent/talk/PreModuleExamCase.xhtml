@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <h:head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </h:head>
+    <h:body>
+        <ui:composition template="General3.xhtml">
+            <ui:define name="title">
+                <h:outputText value="章节练习设置" />
+            </ui:define>
+            <ui:define name="content">
+                <p:panel id="topNav8" styleClass="frontColumn topNav8Wrapper">
+                    <h:outputLink value="#{facesContext.externalContext.requestContextPath}" styleClass="nav8">
+                        <h:outputText value="首页" />
+                    </h:outputLink>
+                    <h:outputText value="/" styleClass="navSeparator"/>
+                    <h:outputText value="考试" styleClass="nav8"/>
+                    <h:outputText value="/" styleClass="navSeparator"/>
+                    <h:outputLink value="ExamModuleList.jspx" styleClass="nav8">
+                        <h:outputText value="章节练习" />
+                    </h:outputLink>
+                    <h:outputText value="/" styleClass="navSeparator"/>
+                    <h:outputText value="章节练习设置" styleClass="nav8"/>
+                </p:panel>
+                <p:panel header="章节练习设置">
+                    <h:outputText value="章节名称："/>
+                    <h:outputText value="#{preModuleExamCase.module.name}"/>
+                    <p:separator/>
+                    <h:panelGrid columns="4" style="width:500px;">
+                        <h:outputText value="单选题数量：" rendered="#{preModuleExamCase.module.choiceNum!=0}"/>
+                        <h:panelGroup rendered="#{preModuleExamCase.module.choiceNum!=0}">
+                            <h:selectOneMenu value="#{preModuleExamCase.choiceNum}">
+                                <f:selectItem itemLabel="不选择" itemValue="0"/>
+                                <f:selectItem itemLabel="来5道" itemValue="5"/>
+                                <f:selectItem itemLabel="来10道" itemValue="10"/>
+                                <f:selectItem itemLabel="来15道" itemValue="15"/>
+                                <f:selectItem itemLabel="来20道" itemValue="20"/>
+                                
+                            </h:selectOneMenu>
+                            <h:outputText value=" / #{preModuleExamCase.module.choiceNum}"/>
+                        </h:panelGroup>
+                        <h:outputText value="多选题数量：" rendered="#{preModuleExamCase.module.multiChoiceNum!=0}"/>
+                        <h:panelGroup rendered="#{preModuleExamCase.module.multiChoiceNum!=0}">
+                            <h:selectOneMenu value="#{preModuleExamCase.multiChoiceNum}">
+                                <f:selectItem itemLabel="不选择" itemValue="0"/>
+                                <f:selectItem itemLabel="来5道" itemValue="5"/>
+                                <f:selectItem itemLabel="来10道" itemValue="10"/>
+                                <f:selectItem itemLabel="来15道" itemValue="15"/>
+                                <f:selectItem itemLabel="来20道" itemValue="20"/>
+                            </h:selectOneMenu>
+                            <h:outputText value=" / #{preModuleExamCase.module.multiChoiceNum}"/>
+                        </h:panelGroup>
+                        <h:outputText value="填空题数量：" rendered="#{preModuleExamCase.module.fillNum!=0}"/>
+                        <h:panelGroup rendered="#{preModuleExamCase.module.fillNum!=0}">
+                            <h:selectOneMenu value="#{preModuleExamCase.fillNum}">
+                                <f:selectItem itemLabel="不选择" itemValue="0"/>
+                                <f:selectItem itemLabel="来5道" itemValue="5"/>
+                                <f:selectItem itemLabel="来10道" itemValue="10"/>
+                                <f:selectItem itemLabel="来15道" itemValue="15"/>
+                                <f:selectItem itemLabel="来20道" itemValue="20"/>
+                            </h:selectOneMenu>
+                            <h:outputText value=" / #{preModuleExamCase.module.fillNum}"/>
+                        </h:panelGroup>
+                        <h:outputText value="判断题数量：" rendered="#{preModuleExamCase.module.judgeNum!=0}"/>
+                        <h:panelGroup rendered="#{preModuleExamCase.module.judgeNum!=0}">
+                            <h:selectOneMenu value="#{preModuleExamCase.judgeNum}">
+                                <f:selectItem itemLabel="不选择" itemValue="0"/>
+                                <f:selectItem itemLabel="来5道" itemValue="5"/>
+                                <f:selectItem itemLabel="来10道" itemValue="10"/>
+                                <f:selectItem itemLabel="来15道" itemValue="15"/>
+                                <f:selectItem itemLabel="来20道" itemValue="20"/>
+                            </h:selectOneMenu>
+                            <h:outputText value=" / #{preModuleExamCase.module.judgeNum}"/>
+                        </h:panelGroup>
+                        <h:outputText value="问答题数量：" rendered="#{preModuleExamCase.module.essayNum!=0}"/>
+                        <h:panelGroup rendered="#{preModuleExamCase.module.essayNum!=0}">
+                            <h:selectOneMenu value="#{preModuleExamCase.essayNum}">
+                                <f:selectItem itemLabel="不选择" itemValue="0"/>
+                                <f:selectItem itemLabel="来5道" itemValue="5"/>
+                                <f:selectItem itemLabel="来10道" itemValue="10"/>
+                                <f:selectItem itemLabel="来15道" itemValue="15"/>
+                                <f:selectItem itemLabel="来20道" itemValue="20"/>
+                            </h:selectOneMenu>
+                            <h:outputText value=" / #{preModuleExamCase.module.essayNum}"/>
+                        </h:panelGroup>
+                        <h:outputText value="文件题数量：" rendered="#{preModuleExamCase.module.fileNum!=0}"/>
+                        <h:panelGroup rendered="#{preModuleExamCase.module.fileNum!=0}">
+                            <h:selectOneMenu value="#{preModuleExamCase.fileNum}">
+                                <f:selectItem itemLabel="不选择" itemValue="0"/>
+                                <f:selectItem itemLabel="来5道" itemValue="5"/>
+                                <f:selectItem itemLabel="来10道" itemValue="10"/>
+                                <f:selectItem itemLabel="来15道" itemValue="15"/>
+                                <f:selectItem itemLabel="来20道" itemValue="20"/>
+                            </h:selectOneMenu>
+                            <h:outputText value=" / #{preModuleExamCase.module.fileNum}"/>
+                        </h:panelGroup>
+                        <h:outputText value="综合题数量：" rendered="#{preModuleExamCase.module.caseNum!=0}"/>
+                        <h:panelGroup rendered="#{preModuleExamCase.module.caseNum!=0}">
+                            <h:selectOneMenu value="#{preModuleExamCase.caseNum}">
+                                <f:selectItem itemLabel="不选择" itemValue="0"/>
+                                <f:selectItem itemLabel="来5道" itemValue="5"/>
+                                <f:selectItem itemLabel="来10道" itemValue="10"/>
+                                <f:selectItem itemLabel="来15道" itemValue="15"/>
+                                <f:selectItem itemLabel="来20道" itemValue="20"/>
+                            </h:selectOneMenu>
+                            <h:outputText value=" / #{preModuleExamCase.module.caseNum}"/>
+                        </h:panelGroup>
+
+                    </h:panelGrid>
+                    <p:separator/>
+                    <p:commandButton ajax="false" value="开始练习" action="#{preModuleExamCase.begainTest()}"  rendered="#{clientSession.ifLogin and clientSession.usr.testIfIn(preModuleExamCase.module.groupStr)}"/>
+                    <p:button value="请登录"  rendered="#{!clientSession.ifLogin}" onclick="PF('login1').show();
+                            return false;" />
+                    <br/>
+                    <h:outputText value="不对您的#{applicationBean.departmentStr}开放&lt;br/>" style="font-weight: bold;color:green;" escape="false"  rendered="#{!clientSession.usr.testIfIn(preModuleExamCase.module.groupStr) and clientSession.ifLogin}"/>
+                    <br/>
+                </p:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

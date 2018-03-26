@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition>
+            <p:dialog id="questionCommentDig1" widgetVar="questionCommentDig1" width="600"  modal="true" closable="true" draggable="true" header="试题评论">
+                <p:outputPanel autoUpdate="true">
+                    <p:dataTable value="#{questionCommentDetail.comments}" var="comment1" rows="8" paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false" emptyMessage="无记录">
+                        <p:column>
+                            <h:outputText value="#{comment1.word1}" escape="false"/>
+                            <f:facet name="header">
+                                <h:outputText value="评论内容"/>
+                            </f:facet>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{comment1.commentType=='comment'?'评论':'报错'}" escape="false"/>
+                            <f:facet name="header">
+                                <h:outputText value="类型"/>
+                            </f:facet>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{comment1.user.name}"/>
+                            <f:facet name="header">
+                                <h:outputText value="评论人"/>
+                            </f:facet>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{comment1.genTime}">
+                                <f:convertDateTime timeZone="GMT+8" pattern="yyyy-MM-dd HH:mm:ss"/>
+                            </h:outputText>
+                            <f:facet name="header">
+                                <h:outputText value="时间"/>
+                            </f:facet>
+                        </p:column>
+                    </p:dataTable>
+                </p:outputPanel>
+            </p:dialog>
+
+
+            <p:dialog id="questionCommentDig2" widgetVar="questionCommentDig2" width="600"  modal="true" closable="true" draggable="true" header="试题评论">
+                <p:outputPanel autoUpdate="true">
+                    <h:panelGrid columns="2">
+                        <h:outputText value="评价类型"/>
+                        <h:selectOneRadio value="#{questionCommentDetail.newComment.commentType}">
+                            <f:selectItem itemLabel="试题评论" itemValue="comment"/>
+                            <f:selectItem itemLabel="试题报错" itemValue="wrong"/>
+                        </h:selectOneRadio>
+                        <h:outputText value="评价内容"/>
+                        <p:editor value="#{questionCommentDetail.newComment.word1}" height="150"/>
+                        <h:outputText value="评分"/>
+                        <p:rating value="#{questionCommentDetail.newComment.rate1}"/>
+                    </h:panelGrid>
+                    <p:separator/>
+                        <p:commandButton action="#{questionCommentDetail.submitComment()}" value="提交评论" update="@form" oncomplete="PF('questionCommentDig2').hide();"/>
+                </p:outputPanel>
+            </p:dialog>
+
+        </ui:composition>
+    </h:body>
+</html>
+

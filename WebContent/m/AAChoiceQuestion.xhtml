@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:poue="http://primefaces.org/ui/extensions"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <script type="text/javascript" src="../resources/ckfinder/ckfinder.js"></script>
+                <script type="text/javascript" language="javascript" src="#{facesContext.externalContext.requestContextPath}/rere_wimg_up/js/wordimage_uploader1.1.js"></script>
+
+                <script type="text/javascript">
+                    //var editor1 = CKEDITOR.replace('myForm:editor1');
+                    function onLoadCallback(editor1) {
+                        var ed = PF(editor1).instance;
+                        CKFinder.setupCKEditor(ed, '../resources/ckfinder/');
+                    }
+                    function clickChoice(com) {
+                        $('input[type="checkbox"]').prop("checked", false);
+                        $(com).prop("checked", true);
+                    }
+
+                </script>
+                <h:outputScript target="body" rendered="#{applicationBean.systemConfig.autoUpload}">
+                    var sUrl = 'http://#{facesContext.externalContext.requestServerName}:#{facesContext.externalContext.requestServerPort}#{facesContext.externalContext.requestContextPath}/servlet/WordImageUploader';
+                    var appName = '#{facesContext.externalContext.requestContextPath}';
+                    var repStr1 = 'http://#{facesContext.externalContext.requestServerName}:#{facesContext.externalContext.requestServerPort}#{facesContext.externalContext.requestContextPath}';
+                    var repStr2 = '..';
+                    var uploader = new WordImageUploader(sUrl, appName,repStr1,repStr2);
+                </h:outputScript>
+                <h:form id="myForm">
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <div>
+                        <h:outputText  styleClass="tit"
+                                       value="#{aAChoiceQuestion.flag?'修改单选题':'添加单选题'}>>#{aAChoiceQuestion.em.name}" />
+                        <p:separator/>
+                        <h:panelGrid columns="2" columnClasses="thdL,thdR" style="width:100%;">
+                            <h:outputText value="题目内容：" />
+
+                            <h:panelGroup>
+                                <poue:ckEditor id="editor1" widgetVar="editor1" value="#{aAChoiceQuestion.cq.name}" customConfig="#{facesContext.externalContext.requestContextPath}/resources/js/ckeditor_config1.js"  width="98%" height="150">
+                                    <poue:javascript  event="initialize" execute="onLoadCallback('editor1')" />
+                                    <poue:javascript rendered="#{applicationBean.systemConfig.autoUpload}" event="blur" execute="uploader.uploadWordImagesFromCKEditor(PF('editor1').instance,'#{aAChoiceQuestion.cq.id}')" />
+                                
+                                </poue:ckEditor>
+                            </h:panelGroup>
+                            <h:outputText value="试题解析：" />
+                            <h:panelGroup>
+                                <poue:ckEditor id="editor2" widgetVar="editor2" value="#{aAChoiceQuestion.cq.rightStr}" customConfig="#{facesContext.externalContext.requestContextPath}/resources/js/ckeditor_config1.js" width="98%" height="150">
+                                    <poue:javascript  event="initialize" execute="onLoadCallback('editor2')" />
+                                    <poue:javascript rendered="#{applicationBean.systemConfig.autoUpload}" event="blur" execute="uploader.uploadWordImagesFromCKEditor(PF('editor2').instance,'#{aAChoiceQuestion.cq.id}')" />
+                                </poue:ckEditor>
+                            </h:panelGroup>
+                            <h:outputText value="次序：" />
+                            <h:inputText  value="#{aAChoiceQuestion.cq.ord}" style="width:40px;" />
+                            <h:outputText value="允许选项随机：" escape="false"/>
+                            <h:panelGroup>
+                                <h:selectBooleanCheckbox value="#{aAChoiceQuestion.cq.allowChoiceRandom}"/>
+                                <h:outputText value="（选项之间有顺序关系或者将选项内容放入试题内容区域的试题不能允许选项随机）" style="color:green;"/>
+                            </h:panelGroup>
+
+
+                            <h:outputText value="题目选项：" />
+                            <h:panelGroup>
+                                <p:dataTable id="choices" value="#{aAChoiceQuestion.choices}" var="us" style="width:98%;;">
+                                    <p:column style="width:40px;text-align: center;">
+                                        <h:selectBooleanCheckbox  value="#{us.selected}" onclick="clickChoice(this);">
+                                        </h:selectBooleanCheckbox>
+                                        <f:facet name="header">
+                                            <h:outputText value="正确选项" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column style="width:40px;text-align: center;">
+                                        <h:inputText value="#{us.label}" style="width:30px;"/>
+                                        <f:facet name="header">
+                                            <h:outputText value="选项标号" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column>
+                                        <h:inputText value="#{us.name}"  style="width:95%;"/>
+                                        <f:facet name="header">
+                                            <h:outputText value="选项内容" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column  style="width:40px;text-align: center;">
+                                        <p:commandLink action="#{aAChoiceQuestion.deleteChoice(us.id)}" update=":myForm:choices" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}">                                       
+                                            <h:outputText value="删除" />
+                                        </p:commandLink>
+                                        <f:facet name="header">
+                                            <h:outputText value="删除" />
+                                        </f:facet>
+                                    </p:column>
+                                </p:dataTable>
+                                <p:outputPanel autoUpdate="true" style="width:98%;">
+                                    <h:panelGrid columns="5">
+                                        <h:outputText value="标号：" />
+                                        <h:inputText value="#{aAChoiceQuestion.newChoice.label}"  style="width:60px;"/>
+                                        <h:outputText value="内容：" />
+                                        <h:inputText value="#{aAChoiceQuestion.newChoice.name}"  style="width:360px;"/>
+                                        <p:commandButton value="添加新选项" action="#{aAChoiceQuestion.addNewChoice()}" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}" update=":myForm:choices"/>
+                                    </h:panelGrid>
+                                    <h:outputText value="*选项内容中有图片或者存在其它输入困难请将选项内容及标号直接放入“试题内容”区域，此处上方标号设置好，答案选择好，选项内容留空，取消上方的选择项“允许选项随机”。" style="color:green;"/>
+
+                                </p:outputPanel>
+                            </h:panelGroup>
+
+                        </h:panelGrid>
+
+                        <p:separator/>
+                        <p:commandButton action="#{aAChoiceQuestion.done}" value="添加并返回" styleClass="" rendered="#{!aAChoiceQuestion.flag}" ajax="false"/>
+                        <p:commandButton action="#{aAChoiceQuestion.done}" value="修改完成" styleClass="" rendered="#{aAChoiceQuestion.flag}" ajax="false" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"/>
+                        <p:commandButton action="#{aAChoiceQuestion.addAndContinue()}" value="添加并继续" styleClass="" rendered="#{!aAChoiceQuestion.flag}" ajax="false" style="margin-left: 300px;" />
+
+                    </div></h:form>
+                <br/><br/>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<h:outputText value="&lt;!--[if lte IE 7]&gt;" />
+	<script>
+		window.location.href = '#{facesContext.externalContext.requestContextPath}/update_browser.jsp';
+	</script>
+	<h:outputText value="&lt;![endif]--&gt;" />
+	<title><ui:insert name="title"></ui:insert> -
+		#{applicationBean.info.siteHeader}</title>
+	<meta http-equiv="keywords" content=" #{applicationBean.info.keyWords}" />
+	<meta http-equiv="description"
+		content=" #{applicationBean.info.description}" />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+
+	<f:loadBundle basename="com.huajie.exam.i18n.langs" var="lang" />
+		<script type="text/javascript"
+		src="#{facesContext.externalContext.requestContextPath}/js/superslide.2.1.2.js"></script>
+	<script type="text/javascript"
+		src="#{facesContext.externalContext.requestContextPath}/js/index.js"></script>
+</h:head>
+<h:body>
+	<!-- 公告滚动 -->
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#s_222").Scroll({
+				line : 1,
+				speed : 400,
+				timer : 5000
+			});
+		});
+	</script>
+
+	<h:form id="myForm">
+		<ui:include src="/CasusPanel.xhtml"></ui:include>
+		<ui:include src="/talk/LoginPopup.xhtml"></ui:include>
+		<ui:include src="/talk/FrontMenu.xhtml"></ui:include>
+		<div style="margin: 0px auto; background-color: white; width: 970">
+
+			<p:outputPanel id="mainPanel">
+				<ui:insert name="content"></ui:insert>
+			</p:outputPanel>
+			<p:panel styleClass="mainPanel"
+				style="width:100%;border:0px solid #e5e5e5;margin: 0px auto;">
+				<c:if
+					test="#{copyrightController.copyrightInfo.email!='webmaster@huajie.com'}">
+					<ui:include src="/talk/Footer1.xhtml" />
+				</c:if>
+				<c:if
+					test="#{copyrightController.copyrightInfo.email=='webmaster@huajie.com'}">
+					<ui:include src="/talk/Footer.xhtml" />
+				</c:if>
+			</p:panel>
+		</div>
+		<ui:include src="/AjaxStatus2.xhtml" />
+	</h:form>
+	<script type="text/javascript">
+		
+	</script>
+	<script
+		src="#{facesContext.externalContext.requestContextPath}/resources/js/upScroll.js"
+		type="text/javascript" language="javascript" />
+</h:body>
+</html>

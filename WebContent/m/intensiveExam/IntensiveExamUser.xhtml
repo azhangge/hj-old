@@ -1,0 +1,231 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:f="http://java.sun.com/jsf/core" lang="en">
+<h:head>
+	<title>Facelet Title</title>
+</h:head>
+<h:body>
+	<ui:composition template="/m/BackGeneral.xhtml">
+		<ui:define name="content">
+			<h:form id="myForm">
+				<ui:include src="/AjaxStatus2.xhtml" />
+				<div style="text-align: left; margin: 10px 0px 0px 0px; width: 98%;">
+					<div>
+						<h:outputText id="outputText1" styleClass="tit" value="－确认考生－" />
+						<h:outputText value="考试名称：#{intensiveExamUser.examName}" styleClass="tit"/>
+					</div>
+					<p:separator />
+					<p:commandButton value="批量开放" action="#{intensiveExamUser.batchOpen()}" update="@form" >
+                    </p:commandButton>
+                    <p:commandButton value="批量关闭" action="#{intensiveExamUser.batchClose()}" update="@form" >
+                    </p:commandButton>
+                    <p:separator />
+					<script type="text/javascript">
+						$(function() {
+							$("#myForm\\:dc11\\:checkAll").click(
+									function() {
+										$('input:enabled[type="checkbox"]')
+												.prop("checked", this.checked);
+									});
+						});
+					</script>
+					<div>
+						<!-- <h:outputText
+							value="*系统有一前台保留用户admin，为后台需要上传文件或向前台发送信息等前后台交互功能时，此用户作为后台的前台代理人。"
+							style="color:green;" /> -->
+						<p:dataTable id="dc11" paginator="true" paginatorPosition="bottom"
+							styleClass="list" stickyHeader="true" rows="50" rowIndexVar="row" 
+							style="width:100%" emptyMessage="#{lang['exam.empty_result']}"
+							value="#{intensiveExamUser.casusList}" var="Case" resizableColumns="true" liveResize="true">
+							<p:column id="num" style="width:40px;text-align: center;">
+								<h:outputText style="height: 5%" value="#{row+1}" />
+								<f:facet name="header">
+									<h:outputText id="outputTextnum" value="序号" />
+								</f:facet>
+							</p:column>
+							<p:column exportable="false"
+								style="width:30px;text-align: center;">
+								<h:selectBooleanCheckbox value="#{Case.selected}"
+									disabled="#{Case.username=='admin'}"
+									title="此用户为系统保留用户，为后台发送信息、上传文件等功能的前台代理人。" />
+								<f:facet name="header">
+									<h:outputText value="全选" />
+									<br />
+									<h:selectBooleanCheckbox id="checkAll">
+									</h:selectBooleanCheckbox>
+								</f:facet>
+							</p:column>
+							<p:column filterBy="#{Case.username}" sortBy="#{Case.username}" filterStyle="width:90%;" filterMatchMode="contains" style="widht:150px;">
+								<h:outputLink
+									value="#{facesContext.externalContext.requestContextPath}/m/ViewClientUser.jspx?id=#{Case.id}">
+									<h:outputText style="height: 5%" value="#{Case.username}" />
+								</h:outputLink>
+								<f:facet name="header">
+									<h:outputText value="用户名" />
+								</f:facet>
+							</p:column>
+
+							<p:column filterBy="#{Case.name}" sortBy="#{Case.name}" filterMatchMode="contains" filterStyle="width:90%;" style="widht:100px;">
+								<h:outputLink
+									value="#{facesContext.externalContext.requestContextPath}/m/ViewClientUser.jspx?id=#{Case.id}">
+									<h:outputText style="height: 5%" value="#{Case.name}" />
+								</h:outputLink>
+								<f:facet name="header">
+									<h:outputText value="姓名" />
+								</f:facet>
+							</p:column>
+
+							<p:column
+								filterBy="#{intensiveExamUser.getCompanyByPart(Case.groups).name}"
+								filterMatchMode="contains"
+								sortBy="#{intensiveExamUser.getCompanyByPart(Case.groups).name}">
+								<h:outputText style="height: 5%"
+									value="#{intensiveExamUser.getCompanyByPart(Case.groups).name}" />
+								<f:facet name="header">
+									<h:outputText value="单位" />
+								</f:facet>
+							</p:column>
+
+							<p:column sortBy="#{Case.groupCnStr}"
+								filterBy="#{Case.groupCnStr}" filterMatchMode="contains">
+								<h:outputText style="height: 5%" value="#{Case.groupCnStr}">
+								</h:outputText>
+								<f:facet name="header">
+									<h:outputText value="#{applicationBean.departmentStr}" />
+								</f:facet>
+							</p:column>
+
+							<p:column style="width:40px;text-align: center;"
+								filterStyle="width:30px;" sortBy="#{Case.position}"
+								rendered="#{applicationBean.systemConfig.openPosition}"
+								filterBy="#{Case.position}" filterMatchMode="contains">
+								<h:outputText style="" value="#{Case.position}">
+								</h:outputText>
+								<f:facet name="header">
+									<h:outputText value="职务" />
+								</f:facet>
+							</p:column>
+
+							<!-- <p:column sortBy="#{Case.regTime}"
+								style="width:110px;text-align: center;">
+								<h:outputText style="height: 5%" value="#{Case.regTime}">
+									<f:convertDateTime pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" />
+								</h:outputText>
+								<f:facet name="header">
+									<h:outputText value="注册时间" />
+								</f:facet>
+							</p:column> -->
+							
+							<p:column style="width:100px;text-align: center;"  sortBy="#{Case.ifFlow}">
+								<h:outputText value="（开放）" style="color:green"
+									rendered="#{Case.ifFlow}" />
+								<h:outputText value="（关闭）" style="color:red"
+									rendered="#{!Case.ifFlow}" />
+								<br />
+								<p:commandLink rendered="#{Case.ifFlow}"
+									disabled="#{!fn:contains(adminSessionBean.admin.authstr,'user')}"
+									actionListener="#{intensiveExamUser.someAbleUser2(Case.id)}"
+									update="@form" value="关闭">
+								</p:commandLink>
+								<p:commandLink rendered="#{!Case.ifFlow}"
+									disabled="#{!fn:contains(adminSessionBean.admin.authstr,'user')}"
+									actionListener="#{intensiveExamUser.someAbleUser2(Case.id)}"
+									update="@form" value="开放">
+								</p:commandLink>
+								<f:facet name="header">
+									<h:outputText value="是否开放考试" />
+								</f:facet>
+							</p:column>
+
+<!-- 
+							<p:column style="width:70px;text-align: center;"  sortBy="#{Case.enabled}">
+								<h:outputText value="（已启用）" style="color:green"
+									rendered="#{Case.enabled}" />
+								<h:outputText value="（已禁用）" style="color:red"
+									rendered="#{!Case.enabled}" />
+								<br />
+								<p:commandLink rendered="#{Case.enabled}"
+									disabled="#{!fn:contains(adminSessionBean.admin.authstr,'user')}"
+									actionListener="#{intensiveExamUser.someAbleUser2(Case.id)}"
+									update="@form" value="禁用">
+								</p:commandLink>
+								<p:commandLink rendered="#{!Case.enabled}"
+									disabled="#{!fn:contains(adminSessionBean.admin.authstr,'user')}"
+									actionListener="#{intensiveExamUser.someAbleUser2(Case.id)}"
+									update="@form" value="启用">
+								</p:commandLink>
+								<f:facet name="header">
+									<h:outputText value="启用/禁用" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:70px;text-align: center;" sortBy="#{Case.checked}">
+								<h:outputText value="（已审核）" style="color:green"
+									rendered="#{Case.checked}" />
+								<h:outputText value="（未审核）" style="color:red"
+									rendered="#{!Case.checked}" />
+								<br />
+								<p:commandLink rendered="#{Case.checked}"
+									disabled="#{!fn:contains(adminSessionBean.admin.authstr,'user')}"
+									actionListener="#{intensiveExamUser.someCheckUser(Case.id)}"
+									update="@form" value="取消审核">
+								</p:commandLink>
+								<p:commandLink rendered="#{!Case.checked}"
+									disabled="#{!fn:contains(adminSessionBean.admin.authstr,'user')}"
+									actionListener="#{intensiveExamUser.someCheckUser(Case.id)}"
+									update="@form" value="审核">
+								</p:commandLink>
+								<f:facet name="header">
+									<h:outputText value="审核/取消" />
+								</f:facet>
+							</p:column> -->
+
+							<!-- <p:column sortBy="#{Case.activated}"
+								style="width:60px;text-align: center;">
+								<h:outputText style="height: 5%" rendered="#{Case.activated}"
+									value="已激活" />
+								<p:commandLink
+									actionListener="#{intensiveExamUser.activateUser(Case.id)}"
+									rendered="#{!Case.activated}" update="@form" value="激活"
+									disabled="#{!fn:contains(adminSessionBean.admin.authstr,'user')}">
+								</p:commandLink>
+								<f:facet name="header">
+									<h:outputText value="激活?" />
+								</f:facet>
+							</p:column> 
+							<p:column style="width:40px;text-align: center;">
+								<h:outputLink
+									value="#{facesContext.externalContext.requestContextPath}/m/ViewClientUser.jspx?id=#{Case.id}">
+									<h:outputText style="height: 5%" value="修改" />
+								</h:outputLink>
+								<f:facet name="header">
+									<h:outputText value="修改" />
+								</f:facet>
+							</p:column>
+							-->
+
+						</p:dataTable>
+						<p:panel>
+							<h:outputText
+								value="当前系统共有 #{intensiveExamUser.casusList.size()} 位注册用户。"
+								styleClass="" />
+						</p:panel>
+						
+						<!--  
+						<p:separator></p:separator>
+						
+						<h:outputText style="color:green;"
+							value="注：前台用户和文件、日志等关联，为了系统安全与完整，请慎重考虑删除用户，用户有恶意行为时，可以禁用！用户启用后才能登录系统，用户审核后才能参加考试，在启用了EMAIL验证功能后只有通过验证才能被激活。"></h:outputText>
+						-->
+					</div>
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>
+

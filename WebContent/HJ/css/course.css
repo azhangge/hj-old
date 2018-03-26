@@ -1,0 +1,52 @@
+@charset "utf-8";
+/*head*/
+.course{
+    width: 252px;
+    height: 254px;
+    float: left;
+    margin: 20px 15px;
+    border: 1px solid #f3f3f3;
+}
+.course_pic{
+    height: 162px;
+}
+.course_info{
+    height: 92px;
+}
+.course_name{
+    font-size: 14px;
+    color: #333333;
+    margin: 16px 22px;
+    text-align: center;
+    /* text-overflow: ellipsis; */
+    /* width: 300px; */
+    overflow: hidden;
+    /* float: left; */
+    height: 25px;
+}
+.course_hour{
+    width: 50%;
+    float: left;
+}
+.course_hour_img{
+    margin-left: 22px;
+    float: left;
+}
+.course_hour_word{
+    margin-left: 10px;
+    float: left;
+}
+.course_learn_num{}
+.course_learn_num_img{
+    float: left;
+    margin-left: 30px;
+}
+.course_learn_num_word{
+    margin-left: 10px;
+    float: left;
+}
+.course-img{}
+
+.songti{
+	font-family:  SimSun;
+}

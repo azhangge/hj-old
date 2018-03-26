@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form><div>
+                        <h:outputText  styleClass="tit"
+                                       value="－修改#{applicationBean.departmentStr}－" rendered="#{aAExamDepartment.flag}"/>
+                        <h:outputText  styleClass="tit"
+                                       value="－添加#{applicationBean.departmentStr}－" rendered="#{!aAExamDepartment.flag}"/>
+                        <p:separator/>
+                        <h:panelGrid columns="2">
+                            <h:outputText value="#{applicationBean.departmentStr}名称：" />
+                            <h:inputText value="#{aAExamDepartment.dept.name}" style="width:600px" />
+                            <h:outputText value="#{applicationBean.departmentStr}介绍：" />
+                            <h:inputTextarea value="#{aAExamDepartment.dept.description}" style="width:600px;height:200px;" />
+                        </h:panelGrid>
+                        <p:separator/>
+                        <p:commandButton ajax="false" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'class')}" action="#{aAExamDepartment.done}" value="提交"  styleClass="commonSubmit"/>
+
+
+                    </div></h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

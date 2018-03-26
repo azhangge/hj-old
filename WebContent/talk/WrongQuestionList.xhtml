@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<title>My Facelets Page</title>
+	<meta http-equiv="keywords" content="enter,your,keywords,here" />
+	<meta http-equiv="description" content="A short description of this page." />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+	<!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+</h:head>
+<h:body>
+	<ui:composition template="../HJ/HJGeneral.xhtml">
+		<ui:define name="title">
+			<h:outputText value="错题中心" />
+		</ui:define>
+		<ui:define name="content">
+			<script type="text/javascript" language="javascript">
+				function aabbcc(url) {
+					//                        var scrWidth = screen.availWidth;
+					//                        var scrHeight = screen.availHeight;
+					//                        var self = window.open(url, '', "fullscreen,resizable=false,toolbar=no, menubar=no,   scrollbars=yes,location=yes, status=yes,top=0,left=0,width=" + scrWidth + ",height=" + scrHeight);
+					//                        //self.resizeTo(scrWidth,scrHeight);
+					//                        self.moveTo(0, 0);
+					window.location = url;
+				}
+			</script>
+
+			<ui:include src="ViewQuestionPopup.xhtml" />
+			<!-- <p:panel id="topNav8" styleClass="frontColumn topNav8Wrapper">
+				<h:outputLink value="#{facesContext.externalContext.requestContextPath}" styleClass="nav8">
+					<h:outputText value="首页" />
+				</h:outputLink>
+				<h:outputText value=">" styleClass="navSeparator" />
+				<h:outputText value="错题中心" styleClass="nav8" />
+			</p:panel> -->
+			<link type="text/css" rel="stylesheet" href="../HJ/css/navigation.css" />
+			<div class="navigation yahei bold">
+				<div class="navigation_div">
+					<a href="#{facesContext.externalContext.requestContextPath}/" class="navigation_link">首页</a>
+				</div>
+				<div class="navigation_separate">/</div>
+				<div class="navigation_div">错题练习</div>
+			</div>
+			<div class="div-content">
+				<div class="div-panel">
+					<p:panel header="错题练习">
+						<!-- <h:outputText value="错题练习消耗积分：" />
+				<h:outputText value="#{wrongQuestionList.exam.scorePaid}，" />
+				<h:outputText value="满分积分：" />
+				<h:outputText value="#{wrongQuestionList.exam.bbsScore}。" /> -->
+						<h:panelGrid columns="6" style="width:95%">
+							<h:outputText value="练习名称：" />
+							<h:inputText value="#{wrongQuestionList.wrongTestInfo.name}" />
+							<h:outputText value="练习时长：" />
+							<h:panelGroup>
+								<h:inputText value="#{wrongQuestionList.wrongTestInfo.testMinute}" style="width:100px;" />
+								<h:outputText value="分钟" />
+							</h:panelGroup>
+							<h:outputText value="&nbsp;" />
+							<p:commandButton value="开始练习" process="@form" action="#{wrongQuestionList.begainTest()}"
+								oncomplete="aabbcc('#{facesContext.externalContext.requestContextPath}/talk/WrongExamCase2.jspx');" />
+						</h:panelGrid>
+						<h:panelGrid columns="4" style="width:95%">
+							<h:panelGroup>
+								<h:outputText value="正确后删除错题？" />
+								<h:selectBooleanCheckbox value="#{wrongQuestionList.wrongTestInfo.ifDel}" />
+							</h:panelGroup>
+							<h:panelGroup>
+								<h:outputText value="试题顺序随机？" />
+								<h:selectBooleanCheckbox value="#{wrongQuestionList.wrongTestInfo.questionRandom}" />
+							</h:panelGroup>
+							<h:panelGroup>
+								<h:outputText value="单选题选项随机？" />
+								<h:selectBooleanCheckbox value="#{wrongQuestionList.wrongTestInfo.choiceRandom}" />
+							</h:panelGroup>
+							<h:panelGroup>
+								<h:outputText value="多选题选项随机？" />
+								<h:selectBooleanCheckbox value="#{wrongQuestionList.wrongTestInfo.multiChoiceRandom}" />
+							</h:panelGroup>
+						</h:panelGrid>
+						<h:panelGrid columns="6" style="width:95%">
+							<h:outputText value="单选题数量：" />
+							<h:inputText value="#{wrongQuestionList.wrongTestInfo.choiceNum}" style="width:100px;" />
+							<h:outputText value="多选题数量：" />
+							<h:inputText value="#{wrongQuestionList.wrongTestInfo.multiChoiceNum}" style="width:100px;" />
+							<h:outputText value="填空题数量：" />
+							<h:inputText value="#{wrongQuestionList.wrongTestInfo.fillNum}" style="width:100px;" />
+							<h:outputText value="判断题数量：" />
+							<h:inputText value="#{wrongQuestionList.wrongTestInfo.judgeNum}" style="width:100px;" />
+							<!-- <h:outputText value="问答题数量：" />
+					<h:inputText value="#{wrongQuestionList.wrongTestInfo.essayNum}"
+						style="width:100px;" />
+					<h:outputText value="文件题数量：" />
+					<h:inputText value="#{wrongQuestionList.wrongTestInfo.fileNum}"
+						style="width:100px;" /> -->
+						</h:panelGrid>
+					</p:panel>
+					<div style="height: 10px;" />
+
+					<p:tabView style="min-height: 500px;">
+						<p:tab title="单选类">
+							<p:dataTable value="#{wrongQuestionList.wqWrapper.choiceQuestions}" var="question" rowIndexVar="row"
+								styleClass="frontColumn" style="width:100%;" rows="10" paginator="true" paginatorPosition="bottom" lazy="true"
+								emptyMessage="暂无错题">
+								<f:facet name="header">
+									<h:outputText value="单选题" />
+									<p:commandButton action="#{wrongQuestionList.deleteAllByUserAndType(clientSession.usr.id, 'choice')}"
+										value="全部删除" update="@form"
+										onclick="if (!confirm('确认要删除本类型的所有错题吗？'))
+                                            return false" />
+								</f:facet>
+								<p:column style="text-align: center;width:60px">
+									<f:facet name="header">
+										<h:outputText value="序号" />
+									</f:facet>
+									<h:outputText value="#{row+1}"></h:outputText>
+								</p:column>
+								<p:column style="width:550px!important;" filterStyle="width:300px" filterMatchMode="contains"
+									sortBy="#{question.cleanName}">
+									<f:facet name="header">
+										<h:outputText value="题目" />
+									</f:facet>
+									<h:outputText value="#{fn:substring(question.cleanName,0,50)}#{fn:length(question.cleanName)>50?'...':''}"></h:outputText>
+								</p:column>
+								<p:column style="width:100px!important;text-align: center;" sortBy="#{question.wrongTimes}">
+									<f:facet name="header">
+										<h:outputText value="出错次数" />
+									</f:facet>
+									<h:outputText value="#{question.wrongTimes}" style="color:red;" styleClass="tip" />
+									<br />
+								</p:column>
+								<p:column style="text-align: center;">
+									<f:facet name="header">
+										<h:outputText value="查看" />
+									</f:facet>
+									<p:commandLink action="#{viewQuestionPopup.selectChoice(question.id)}" update=":myForm:displayChoice"
+										oncomplete="PF('choiceDialog').show()" styleClass="news" value="查看试题">
+									</p:commandLink>
+								</p:column>
+								<p:column style="text-align: center;">
+									<f:facet name="header">
+										<h:outputText value="删除" />
+									</f:facet>
+									<p:commandLink value="删除" action="#{wrongQuestionList.delQuestion(question.id)}" update="@form"
+										onclick="if (!confirm('确认要删除此错题吗？'))
+                                            return false"
+										styleClass="news" />
+								</p:column>
+							</p:dataTable>
+
+
+						</p:tab>
+						<p:tab title="多选类">
+							<p:dataTable rowIndexVar="row2" value="#{wrongQuestionList.wqWrapper.multiChoiceQuestions}" var="question2"
+								style="width:100%" styleClass="frontColumn" emptyMessage="暂无错题" rows="10" paginator="true"
+								paginatorPosition="bottom" lazy="true">
+								<f:facet name="header">
+									<h:outputText value="多选题" />
+									<p:commandButton action="#{wrongQuestionList.deleteAllByUserAndType(clientSession.usr.id, 'mchoice')}"
+										value="全部删除" update="@form"
+										onclick="if (!confirm('确认要删除本类型的所有错题吗？'))
+                                            return false" />
+								</f:facet>
+								<p:column style="text-align: center;">
+									<f:facet name="header">
+										<h:outputText value="序号" />
+									</f:facet>
+									<h:outputText value="#{row2+1}"></h:outputText>
+								</p:column>
+								<p:column style="width:550px!important;text-align: left;">
+									<f:facet name="header">
+										<h:outputText value="题目" />
+									</f:facet>
+									<h:outputText value="#{question2.cleanName}"></h:outputText>
+								</p:column>
+								<p:column style="width:80px!important;text-align: center;" sortBy="#{question2.wrongTimes}">
+									<f:facet name="header">
+										<h:outputText value="出错次数" />
+									</f:facet>
+									<h:outputText value="#{question2.wrongTimes}" style="color:red;" styleClass="tip" />
+									<br />
+								</p:column>
+								<p:column style="text-align: center;">
+									<f:facet name="header">
+										<h:outputText value="查看" />
+									</f:facet>
+									<p:commandLink action="#{viewQuestionPopup.selectMultiChoice(question2.id)}"
+										update=":myForm:displayMultiChoice" oncomplete="PF('multiChoiceDialog').show()" styleClass="news" value="查看试题">
+									</p:commandLink>
+								</p:column>
+								<p:column style="text-align: center;">
+									<f:facet name="header">
+										<h:outputText value="删除" />
+									</f:facet>
+									<p:commandLink value="删除" action="#{wrongQuestionList.delQuestion(question2.id)}" update="@form"
+										onclick="if (!confirm('确认要删除此错题吗？'))
+                                            return false"
+										styleClass="news" />
+								</p:column>
+							</p:dataTable>
+
+						</p:tab>
+						<p:tab title="填空类">
+							<p:dataTable rowIndexVar="row" value="#{wrongQuestionList.wqWrapper.fillQuestions}" emptyMessage="暂无错题"
+								var="question" style="width:100%" styleClass="frontColumn" rows="10" paginator="true" paginatorPosition="bottom"
+								lazy="true">
+								<f:facet name="header">
+									<h:outputText value="填空题" />
+									<p:commandButton action="#{wrongQuestionList.deleteAllByUserAndType(clientSession.usr.id, 'fill')}"
+										value="全部删除" update="@form"
+										onclick="if (!confirm('确认要删除本类型的所有错题吗？'))
+                                            return false" />
+								</f:facet>
+								<p:column style="text-align: center;">
+									<f:facet name="header">
+										<h:outputText value="序号" />
+									</f:facet>
+									<h:outputText value="#{row+1}"></h:outputText>
+								</p:column>
+								<p:column style="width:550px!important;text-align: left;">
+									<f:facet name="header">
+										<h:outputText value="题目" />
+									</f:facet>
+									<h:outputText value="#{question.cleanName}"></h:outputText>
+								</p:column>
+								<p:column style="width:80px!important;text-align: center;" sortBy="#{question.wrongTimes}">
+									<f:facet name="header">
+										<h:outputText value="出错次数" />
+									</f:facet>
+									<h:outputText value="#{question.wrongTimes}" style="color:red;" styleClass="tip" />
+									<br />
+								</p:column>
+								<p:column style="text-align: center;">
+									<f:facet name="header">
+										<h:outputText value="查看" />
+									</f:facet>
+									<p:commandLink action="#{viewQuestionPopup.selectFill(question.id)}" update=":myForm:displayFill"
+										oncomplete="PF('fillDialog').show()" styleClass="news" value="查看试题">
+									</p:commandLink>
+								</p:column>
+								<p:column style="text-align: center;">
+									<f:facet name="header">
+										<h:outputText value="删除" />
+									</f:facet>
+									<p:commandLink value="删除" action="#{wrongQuestionList.delQuestion(question.id)}" update="@form"
+										onclick="if (!confirm('确认要删除此错题吗？'))
+                                            return false;"
+										styleClass="news" />
+								</p:column>
+							</p:dataTable>
+
+						</p:tab>
+						<p:tab title="判断类">
+							<p:dataTable rowIndexVar="row" value="#{wrongQuestionList.wqWrapper.judgeQuestions}" emptyMessage="暂无错题"
+								var="question" style="width:100%" styleClass="frontColumn" rows="10" paginator="true" paginatorPosition="bottom"
+								lazy="true">
+								<f:facet name="header">
+									<h:outputText value="判断题" />
+									<p:commandButton action="#{wrongQuestionList.deleteAllByUserAndType(clientSession.usr.id, 'judge')}"
+										value="全部删除" update="@form"
+										onclick="if (!confirm('确认要删除本类型的所有错题吗？'))
+                                            return false" />
+								</f:facet>
+								<p:column style="text-align: center;">
+									<f:facet name="header">
+										<h:outputText value="序号" />
+									</f:facet>
+									<h:outputText value="#{row+1}"></h:outputText>
+								</p:column>
+								<p:column style="width:550px!important;text-align: left;">
+									<f:facet name="header">
+										<h:outputText value="题目" />
+									</f:facet>
+									<h:outputText value="#{question.cleanName}"></h:outputText>
+								</p:column>
+								<p:column style="width:80px!important;text-align: center;" sortBy="#{question.wrongTimes}">
+									<f:facet name="header">
+										<h:outputText value="出错次数" />
+									</f:facet>
+									<h:outputText value="#{question.wrongTimes}" style="color:red;" styleClass="tip" />
+									<br />
+								</p:column>
+								<p:column style="text-align: center;">
+									<f:facet name="header">
+										<h:outputText value="查看" />
+									</f:facet>
+									<p:commandLink action="#{viewQuestionPopup.selectJudge(question.id)}" update=":myForm:displayJudge"
+										oncomplete="PF('judgeDialog').show()" styleClass="news" value="查看试题">
+									</p:commandLink>
+								</p:column>
+								<p:column style="text-align: center;">
+									<f:facet name="header">
+										<h:outputText value="删除" />
+									</f:facet>
+									<p:commandLink value="删除" action="#{wrongQuestionList.delQuestion(question.id)}" update="@form"
+										onclick="if (!confirm('确认要删除此错题吗？'))
+                                            return false"
+										styleClass="news" />
+								</p:column>
+							</p:dataTable>
+
+						</p:tab>
+						<!-- <p:tab title="问答类">
+
+					<p:dataTable rowIndexVar="row"
+						value="#{wrongQuestionList.wqWrapper.essayQuestions}"
+						var="question" style="width:100%" styleClass="frontColumn"
+						rows="10" paginator="true" paginatorPosition="bottom" lazy="true">
+						<f:facet name="header">
+							<h:outputText value="问答题" />
+							<p:commandButton
+								action="#{wrongQuestionList.deleteAllByUserAndType(clientSession.usr.id, 'essay')}"
+								value="全部删除" update="@form"
+								onclick="if (!confirm('确认要删除本类型的所有错题吗？'))
+                                            return false" />
+						</f:facet>
+						<p:column style="text-align: center;">
+							<f:facet name="header">
+								<h:outputText value="序号" />
+							</f:facet>
+							<h:outputText value="#{row+1}"></h:outputText>
+						</p:column>
+						<p:column style="width:550px!important;text-align: left;">
+							<f:facet name="header">
+								<h:outputText value="题目" />
+							</f:facet>
+							<h:outputText value="#{question.cleanName}"></h:outputText>
+						</p:column>
+						<p:column style="width:80px!important;text-align: center;"
+							sortBy="#{question.wrongTimes}">
+							<f:facet name="header">
+								<h:outputText value="出错次数" />
+							</f:facet>
+							<h:outputText value="#{question.wrongTimes}" style="color:red;"
+								styleClass="tip" />
+							<br />
+						</p:column>
+						<p:column style="text-align: center;">
+							<f:facet name="header">
+								<h:outputText value="查看" />
+							</f:facet>
+							<p:commandLink
+								action="#{viewQuestionPopup.selectEssay(question.id)}"
+								update=":myForm:displayEssay"
+								oncomplete="PF('essayDialog').show()" styleClass="news"
+								value="查看试题">
+							</p:commandLink>
+						</p:column>
+						<p:column style="text-align: center;">
+							<f:facet name="header">
+								<h:outputText value="删除" />
+							</f:facet>
+							<p:commandLink value="删除"
+								action="#{wrongQuestionList.delQuestion(question.id)}"
+								update="@form"
+								onclick="if (!confirm('确认要删除此错题吗？'))
+                                            return false"
+								styleClass="news" />
+						</p:column>
+					</p:dataTable>
+				</p:tab>
+				<p:tab title="文件类">
+					<p:dataTable rowIndexVar="row"
+						value="#{wrongQuestionList.wqWrapper.fileQuestions}"
+						var="question" style="width:100%" styleClass="frontColumn"
+						rows="10" paginator="true" paginatorPosition="bottom" lazy="true">
+						<f:facet name="header">
+							<h:outputText value="文件题" />
+							<p:commandButton
+								action="#{wrongQuestionList.deleteAllByUserAndType(clientSession.usr.id, 'file')}"
+								value="全部删除" update="@form"
+								onclick="if (!confirm('确认要删除本类型的所有错题吗？'))
+                                            return false" />
+						</f:facet>
+						<p:column style="text-align: center;">
+							<f:facet name="header">
+								<h:outputText value="序号" />
+							</f:facet>
+							<h:outputText value="#{row+1}"></h:outputText>
+						</p:column>
+						<p:column style="width:550px!important;text-align: left;">
+							<f:facet name="header">
+								<h:outputText value="题目" />
+							</f:facet>
+							<h:outputText value="#{question.cleanName}"></h:outputText>
+						</p:column>
+						<p:column style="width:80px!important;text-align: center;"
+							sortBy="#{question.wrongTimes}">
+							<f:facet name="header">
+								<h:outputText value="出错次数" />
+							</f:facet>
+							<h:outputText value="#{question.wrongTimes}" style="color:red;"
+								styleClass="tip" />
+							<br />
+						</p:column>
+						<p:column style="text-align: center;">
+							<f:facet name="header">
+								<h:outputText value="查看" />
+							</f:facet>
+							<p:commandLink
+								action="#{viewQuestionPopup.selectFile(question.id)}"
+								update=":myForm:displayFile"
+								oncomplete="PF('fileDialog').show()" styleClass="news"
+								value="查看试题">
+							</p:commandLink>
+						</p:column>
+						<p:column style="text-align: center;">
+							<f:facet name="header">
+								<h:outputText value="删除" />
+							</f:facet>
+							<p:commandLink value="删除"
+								action="#{wrongQuestionList.delQuestion(question.id)}"
+								update="@form"
+								onclick="if (!confirm('确认要删除此错题吗？'))
+                                            return false"
+								styleClass="news" />
+						</p:column>
+					</p:dataTable>
+				</p:tab> -->
+					</p:tabView>
+				</div>
+			</div>
+
+
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

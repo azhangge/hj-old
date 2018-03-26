@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div style="-rave-layout: grid; width: 400px; height: 200px" xmlns:f="[url]http://java.sun.com/jsf/core"[/url] xmlns:h="[url]http://java.sun.com/jsf/html"[/url] xmlns:webuijsf="[url]http://www.sun.com/webui/webuijsf">[/url]
+    <f:subview id="FenyeComponent">
+        <h:panelGrid binding="#{FenyeComponent.feyetable}" border="0" columns="4" id="feyetable" rowClasses="Btn1Hov_sun4 Btn2_sun4"
+            style="height: 24px; left: 24px; top: 72px; position: absolute" width="550">
+            <webuijsf:panelGroup binding="#{FenyeComponent.jlzsgroup}" id="jlzsgroup">
+                <h:outputText binding="#{FenyeComponent.zgtext}" id="zgtext" value="总共"/>
+                <h:outputText binding="#{FenyeComponent.jlzsbing}" id="jlzsbing" style="color: red; font-style: normal; font-weight: bolder" value="#{sessionScope.jiluzongshu}"/>
+                <h:outputText binding="#{FenyeComponent.tjltext}" id="tjltext" value="条记录"/>
+            </webuijsf:panelGroup>
+            <webuijsf:panelGroup binding="#{FenyeComponent.curryegroup}" id="curryegroup">
+                <h:outputText binding="#{FenyeComponent.dqwdtext}" id="dqwdtext" value="当前为第"/>
+                <h:outputText binding="#{FenyeComponent.dqyhbing}" id="dqyhbing" style="color: red; font-style: normal; font-weight: bolder" value="#{sessionScope.dangqianyehao}"/>
+                <h:outputText binding="#{FenyeComponent.ygtext}" id="ygtext" value="页/共"/>
+                <h:outputText binding="#{FenyeComponent.zysbing}" id="zysbing" style="color: red; font-style: normal; font-weight: bolder" value="#{sessionScope.zongyeshu}"/>
+                <h:outputText binding="#{FenyeComponent.yetext}" id="yetext" value="页"/>
+            </webuijsf:panelGroup>
+            <webuijsf:panelGroup binding="#{FenyeComponent.anniugroup}" id="anniugroup">
+                <h:commandButton action="#{FenyeComponent.firstb_action}" binding="#{FenyeComponent.firstb}" id="firstb" value="首页"/>
+                <h:commandButton action="#{FenyeComponent.previousb_action}" binding="#{FenyeComponent.previousb}" id="previousb" value="上一页"/>
+                <h:commandButton action="#{FenyeComponent.nextb_action}" binding="#{FenyeComponent.nextb}" id="nextb" value="下一页"/>
+                <h:commandButton action="#{FenyeComponent.lastb_action}" binding="#{FenyeComponent.lastb}" id="lastb" value="末页"/>
+            </webuijsf:panelGroup>
+            <webuijsf:panelGroup binding="#{FenyeComponent.tiaozgroup}" id="tiaozgroup">
+                <h:outputText binding="#{FenyeComponent.tzddtext}" id="tzddtext" value="跳转到第"/>
+                <h:selectOneMenu binding="#{FenyeComponent.yedown}" id="yedown" onchange="form1.submit();" value="#{sessionScope.dangqianyehao}" valueChangeListener="#{FenyeComponent.yedown_processValueChange}">
+                    <f:selectItems binding="#{FenyeComponent.dropdown1SelectItems}" id="dropdown1SelectItems" value="#{FenyeComponent.dropdown1DefaultItems}"/>
+                </h:selectOneMenu>
+                <h:outputText binding="#{FenyeComponent.ytext}" id="ytext" value="页"/>
+            </webuijsf:panelGroup>
+        </h:panelGrid>
+    </f:subview>
+</div>

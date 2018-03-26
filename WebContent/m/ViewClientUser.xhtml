@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core"  lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form id="form1">
+                    <p:dialog id="moneyDialog" widgetVar="moneyDialog" width="400" resizable="false">
+                        <f:facet name="header">
+                            <h:outputText value="管理增减金额"/>
+                        </f:facet>
+                        <h:panelGrid columns="2">
+                            <h:outputText value="操作："/>
+                            <h:panelGroup>
+                                <h:selectOneRadio value="#{scoreOperation.moneyOperator}">
+                                    <f:selectItem itemLabel="加（+）" itemValue="plus"/>
+                                    <f:selectItem itemLabel="减（-）" itemValue="minus"/>
+                                </h:selectOneRadio>
+                            </h:panelGroup>
+                            <h:outputText value="金额：" />
+                            <h:panelGroup>
+                                <h:inputText id="operateMoney" value="#{scoreOperation.money}"/>
+                            </h:panelGroup>
+                        </h:panelGrid>
+                        <p:separator/>
+                        <p:commandButton value="确定" process="@form" update=":form1:userMoney operateMoney" action="#{scoreOperation.operateMoney()}" oncomplete="PF('moneyDialog').hide();"/>
+                    </p:dialog>
+                    <p:dialog id="scoreDialog" widgetVar="scoreDialog" width="400" resizable="false">
+                        <f:facet name="header">
+                            <h:outputText value="管理增减积分"/>
+                        </f:facet>
+                        <h:panelGrid columns="2">
+                            <h:outputText value="操作："/>
+                            <h:panelGroup>
+                            	<!-- 
+                            		<h:selectOneRadio value="#{scoreOperation.scoreOperator}">
+                            	 -->
+                                <h:selectOneRadio value="#{viewClientUser.scoreOperator}">
+                                    <f:selectItem itemLabel="加（+）" itemValue="plus"/>
+                                    <f:selectItem itemLabel="减（-）" itemValue="minus"/>
+                                </h:selectOneRadio>
+                            </h:panelGroup>
+                            <h:outputText value="积分："/>
+                            <h:panelGroup>
+                            	<!-- 
+                            	<h:inputText id="operateScore" value="#{scoreOperation.score}"/>
+                            	 -->
+                                <h:inputText id="operateScore" value="#{viewClientUser.score}"/>
+                            </h:panelGroup>
+                        </h:panelGrid>
+                        <p:separator/>
+                        <!-- 
+                        <p:commandButton value="确定" process="@form" update=":form1:userScore operateScore" action="#{scoreOperation.operateScore()}" oncomplete="PF('scoreDialog').hide();"/>
+                         -->
+                        <p:commandButton value="确定" process="@form" update=":form1:userScore operateScore" action="#{viewClientUser.operateScore()}" oncomplete="PF('scoreDialog').hide();"/>
+                    </p:dialog>
+
+                    <h:outputScript name="chinese_locale.js" library="js"/>
+                    <h:outputText id="outputText1" styleClass="tit"
+                                  value="－查看/修改用户－" />
+                    <p:growl id="msg"/>
+                    <p:separator style="margin:5px 0px 10px 0px" />
+                    <h:panelGrid columns="2" style="min-height:400px;" columnClasses="thdL,thdR">
+                    <!--  
+                        <h:outputLabel styleClass="text" value="用户名：" />
+                        <h:panelGroup>
+                        	<h:outputText value="#{viewClientUser.cu.username}"></h:outputText>
+                        </h:panelGroup>
+                    -->
+					  
+						<h:outputLabel styleClass="text" value="初始化密码：" />
+                        <h:panelGroup>
+                            <p:commandButton disabled="#{!fn:contains(adminSessionBean.admin.authstr,'user')}"  value="初始化" action="#{viewClientUser.initPwd}" update=":form1:msg"></p:commandButton>
+                            <h:outputLabel styleClass="text" value="初始化密码为：#{applicationBean.systemConfig.initPwd}" />
+                        </h:panelGroup>
+					
+
+						<h:outputLabel styleClass="text" value="手机号：" />
+                        <h:panelGroup>
+                           	<h:inputText value="#{viewClientUser.cu.tel}" disabled="true">
+                           		<p:ajax listener="#{viewClientUser.onChangeTel}" update="telTip" process="@form"/>
+                           	</h:inputText>
+                           	<h:outputText id="telTip"  value="&nbsp;#{viewClientUser.telTip}" style=";color:#{viewClientUser.telOk?'green;':'red;'}}" />
+                        	<h:outputText value="#{viewClientUser.cu.tel}"></h:outputText>
+                        </h:panelGroup>
+
+                        <h:outputLabel styleClass="text" value="姓名：" />
+                        <h:inputText value="#{viewClientUser.cu.name}"></h:inputText>
+                        <h:outputLabel styleClass="text" value="性别：" />
+                        <h:selectOneMenu value="#{viewClientUser.cu.gender}">
+                            <f:selectItem itemLabel="男" itemValue="男"/>
+                            <f:selectItem itemLabel="女" itemValue="女"/>
+                        </h:selectOneMenu>
+                        
+                        <!-- 用户头像 -->
+                        <!-- 
+                        <h:outputText value="头像：" />
+                        <p:graphicImage  id="simg"
+                                         url="#{(empty viewClientUser.cu.picUrl)?'/HJ/image/notlogin.png':
+                                         fn:replace(viewClientUser.cu.picUrl,'showimage','showabstractimage')}"
+                                         style="width: 160px; height: 120px;" />
+                        <h:outputLabel value="图片源：" />
+                        <h:panelGrid columns="1">
+                            <h:panelGroup>
+                                <h:inputText id="title" value="#{viewClientUser.cu.picUrl}"
+                                             style="width:400px" >
+                                    <f:ajax event="change" render="simg" />
+                                </h:inputText>
+                            </h:panelGroup>
+                        </h:panelGrid>
+                        <h:outputLabel value="上传：" />
+                        <p:fileUpload id="upl" fileUploadListener="#{viewClientUser.up_action}" update="simg title" uploadLabel="上传" auto="true" label="选择图片" allowTypes="/(\.|\/)(gif|jpe?g|png)$/">
+                        </p:fileUpload>
+                         -->
+                        
+                        <!-- 
+                        <h:outputLabel styleClass="text" value="#{applicationBean.cidStr}：" />
+                        <h:outputLabel styleClass="text" value="工号：" />
+                        <h:inputText id="ic" value="#{viewClientUser.cu.cid}"></h:inputText>
+                         -->
+                        
+                        
+                        <h:outputLabel styleClass="text" value="身份证号：" />
+                        <h:inputText value="#{viewClientUser.cu.pid}"></h:inputText>
+                        <h:outputText value="所在#{applicationBean.departmentStr}：" styleClass="text"></h:outputText>
+                        <p:treeTable value="#{viewClientUser.root}" var="dic"  selectionMode="multiple" selection="#{viewClientUser.selectedNodes}" style="" >
+                            <f:facet name="header">
+                                <h:outputText value="请使用Ctrl、Shift键完成#{applicationBean.departmentStr}的多选"></h:outputText>
+                            </f:facet>
+                            <p:column style="width:200px;">
+                                <f:facet name="header">
+                                    <h:outputText value="#{applicationBean.departmentStr}名称"></h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{dic.name}" ></h:outputText>
+                            </p:column>
+                        </p:treeTable>
+                        <h:outputLabel value="职务：" />
+                        <h:panelGroup >
+                            <h:inputText value="#{viewClientUser.cu.position}" style="width:100px;">
+                            </h:inputText>
+                        </h:panelGroup>
+<!-- 						<h:outputLabel styleClass="text" value="姓名：" />
+                        <h:inputText value="#{viewClientUser.cu.name}"></h:inputText> -->
+                        <h:outputLabel styleClass="text" value="岗位类别：" />
+                        <h:selectOneMenu value="#{viewClientUser.cu.postType}">
+                            <f:selectItem itemLabel="生产经营" itemValue="生产经营"/>
+                            <f:selectItem itemLabel="生产研发" itemValue="生产研发"/>
+                            <f:selectItem itemLabel="职能管理" itemValue="职能管理"/>
+                        </h:selectOneMenu>
+                        <!-- <h:outputLabel styleClass="text" value="按部门自适应有效期：" />
+                        <h:panelGroup>
+                            <h:selectBooleanCheckbox value="#{viewClientUser.testValidDate}"/>
+                            <h:outputLabel styleClass="text" value="（按部门中设置的用户默认有效天数自适应用户有效期，此项选中后下面设置的有效期将无效。）" />
+                        </h:panelGroup> -->
+
+                        <h:outputLabel styleClass="text" value="用户金额："  style="display:none"/>
+                        <h:panelGroup>
+                            <h:outputText id="userMoney" value="#{scoreOperation.cu.financeBalance}"  style="display:none"/>
+                            <h:outputLink value="javascript:PF('moneyDialog').show();" style="display:none">
+                                <h:outputText value="增/减" style='color:blue;'/>
+                            </h:outputLink>
+                        </h:panelGroup>
+
+                        <h:outputLabel styleClass="text" value="用户积分：" />
+                        <h:panelGroup>
+                        	<!--  
+                            <h:outputText id="userScore" value="#{scoreOperation.cu.score}" />
+                            -->
+                            <h:outputText id="userScore" value="#{viewClientUser.cu.score}" />
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <h:outputLink value="javascript:PF('scoreDialog').show();">
+                                <h:outputText value="增/减" style='color:blue;'/>
+                            </h:outputLink>
+                        </h:panelGroup>
+
+                        <h:outputLabel styleClass="text" value="空间分配：" />
+                        <h:panelGroup>
+                            <h:inputText value="#{viewClientUser.cu.totalLength}"></h:inputText>MB
+                        </h:panelGroup>
+						
+                        <h:outputLabel styleClass="text" value="E-MAIL：" />
+                        <h:inputText value="#{viewClientUser.cu.email}"></h:inputText>
+                        <h:outputLabel styleClass="text" value="现居地：" />
+                        <h:panelGroup>
+                            <h:inputText value="#{viewClientUser.cu.address}"></h:inputText>
+                        </h:panelGroup>
+                        <h:outputLabel styleClass="text" value="QQ：" />
+                        <h:panelGroup>
+                            <h:inputText value="#{viewClientUser.cu.qq}"></h:inputText>
+                        </h:panelGroup>
+                        <h:outputLabel  styleClass="text" value="有效期：" />
+                        <h:panelGroup>
+                            <p:calendar value="#{viewClientUser.cu.availableTime}" pattern="yyyy-MM-dd HH:mm" navigator="true"  timeZone="GMT+8" locale="zh_CN" yearRange="c:c+100"/>
+                            <h:outputText value=" -- " />
+                            <p:calendar value="#{viewClientUser.cu.expireTime}" pattern="yyyy-MM-dd HH:mm" navigator="true"  timeZone="GMT+8" locale="zh_CN" yearRange="c:c+100"/>
+                        </h:panelGroup>
+                        <h:outputLabel styleClass="text" value="#{applicationBean.custom1}：" />
+                        <h:panelGroup>
+                            <h:inputText value="#{viewClientUser.cu.custom1}"></h:inputText>
+                        </h:panelGroup>
+
+                        <h:outputLabel styleClass="text" value="#{applicationBean.custom2}：" />
+                        <h:panelGroup>
+                            <h:inputText value="#{viewClientUser.cu.custom2}"></h:inputText>
+                        </h:panelGroup>
+
+<!--                         <h:outputLabel styleClass="text" value="#{applicationBean.custom3}：" />
+                        <h:panelGroup>
+                            <h:inputText value="#{viewClientUser.cu.custom3}"></h:inputText>
+                        </h:panelGroup>
+
+                        <h:outputLabel styleClass="text" value="#{applicationBean.custom4}：" />
+                        <h:panelGroup>
+                            <h:inputText value="#{viewClientUser.cu.custom4}"></h:inputText>
+                        </h:panelGroup>
+
+                        <h:outputLabel styleClass="text" value="#{applicationBean.custom5}：" />
+                        <h:panelGroup>
+                            <h:inputText value="#{viewClientUser.cu.custom5}"></h:inputText>
+                        </h:panelGroup> -->
+
+                        <h:outputLabel styleClass="text" value="注册IP：" />
+                        <h:outputText value="#{viewClientUser.cu.regIp}"></h:outputText>
+                        <h:outputLabel styleClass="text" value="注册时间：" />
+                        <h:outputText value="#{viewClientUser.cu.regTime}">
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8" />
+                        </h:outputText>
+                        <h:outputLabel styleClass="text" value="上次登录IP：" />
+                        <h:outputText value="#{viewClientUser.cu.lastIp}"></h:outputText>
+                        <h:outputLabel styleClass="text" value="上次时间：" />
+                        <h:outputText value="#{viewClientUser.cu.lastTime}">
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8" />
+                        </h:outputText>
+
+                    </h:panelGrid>
+                    <p:separator/>
+                    <p:commandButton disabled="#{!fn:contains(adminSessionBean.admin.authstr,'user')}"  action="#{viewClientUser.finish}" ajax="false" value="提交" styleClass="commonSubmit"></p:commandButton>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

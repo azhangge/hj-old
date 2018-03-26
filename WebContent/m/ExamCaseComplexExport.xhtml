@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+
+                <h:form>
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <h:outputScript name="chinese_locale.js" library="js"/>
+                    <div>
+                        <h:outputText  styleClass="tit" value="-自定义导出-" />
+                    </div>
+                    <p:separator/>
+                    <p:panel header="筛选部门与考试">
+
+                        <h:panelGrid columns="2">
+                            <p:pickList id="pickList" value="#{examCaseComplexExport.examinations}" var="examination" 
+                                        itemLabel="#{examination.name}" itemValue="#{examination}" converter="examinationConverter">
+                            </p:pickList>  
+                            <p:treeTable value="#{examCaseComplexExport.root}" var="dic" selectionMode="multiple" selection="#{examCaseComplexExport.selectedNodes}" style="width:450px;">
+                                <f:facet name="header">
+                                    <h:outputText value="请使用Ctrl、Shift键完成#{applicationBean.departmentStr}的多选"></h:outputText>
+                                </f:facet>
+                                <p:column style="width:200px;">
+                                    <f:facet name="header">
+                                        <h:outputText value="#{applicationBean.departmentStr}名称"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{dic.name}" ></h:outputText>
+                                </p:column>
+                            </p:treeTable>
+                        </h:panelGrid>
+                    </p:panel>
+                    <p:separator/>
+                    <h:panelGrid columns="6">
+                        <h:outputText value="筛选时间："/>
+                        <p:calendar value="#{examCaseComplexExport.begainDate}" pattern="yyyy-MM-dd HH:mm" navigator="true" timeZone="GMT+8" locale="zh_CN"/>
+                        <h:outputText value="-"></h:outputText>
+                        <p:calendar value="#{examCaseComplexExport.endDate}" pattern="yyyy-MM-dd HH:mm" navigator="true" timeZone="GMT+8" locale="zh_CN"/>
+                        <p:commandButton ajax="false" action="#{examCaseComplexExport.exportComplex}" value="导出成绩"/>
+                    </h:panelGrid>
+                    <p:separator/>
+                    
+
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

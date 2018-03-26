@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="/talk/General3.xhtml">
+            <ui:define name="title">
+                <h:outputText value="学习资料 - #{lessonDetail.lesson.name}" />
+            </ui:define>
+            <ui:define name="content">
+
+                <h:panelGrid columns="5">
+                    <h:outputLink styleClass="topNav1" value="LessonTypeList.jspx">
+                        <h:outputText value="在线课程" />
+                    </h:outputLink>
+                    <h:outputText value=">>" />
+                    <h:outputLink styleClass="topNav1" value="LessonList.jspx?tid=#{lessonDetail.lesson.lessonType.id}">
+                        <h:outputText value="#{lessonDetail.lesson.lessonType.name}"  styleClass="mark"/>           
+                    </h:outputLink>
+                    <h:outputText value=">>" />
+                    <h:outputText value="#{lessonDetail.lesson.name}"  styleClass="mark"/>
+                </h:panelGrid>
+                <p:separator/>
+                <h:panelGrid style="width:99%;">
+                    <div style="text-align: center;">
+                        <p:outputPanel rendered="#{lessonDetail.lesson.playType=='outter'}">
+                            <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
+                                    codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=10.0" height="560" width="925">
+                                <param name="quality" value="high" />
+                                <param name="fullscreen" value="true" />
+                                <param name="movie" value="#{lessonDetail.lesson.videoUrl}" />
+                                <embed pluginspage="http://www.macromedia.com/go/getflashplayer" quality="high" allowFullScreen="true"
+                                       src="#{lessonDetail.lesson.videoUrl}"
+                                       type="application/x-shockwave-flash" width="925" height="560" >
+                                </embed>
+                            </object>
+                        </p:outputPanel>
+                        <p:outputPanel  rendered="#{lessonDetail.lesson.playType=='inner'}">
+                            <div id="a1"></div>
+                            <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/ckplayer/ckplayer.js" charset="utf-8"></script>
+                            <script type="text/javascript">
+                                var flashvars = {
+                                    f: '#{lessonDetail.lesson.sourceUrl}',
+                                    c: '0',
+                                    loaded: 'loadedHandler',
+                                    p: 1
+                                };
+                                var params = {bgcolor: '#FFF', allowFullScreen: true, allowScriptAccess: 'always', wmode: "transparent"};
+                                CKobject.embedSWF('#{facesContext.externalContext.requestContextPath}/ckplayer/ckplayer.swf', 'a1', 'ckplayer_a1', '925', '560', flashvars, params);
+                            </script>
+                        </p:outputPanel>
+                        <p:outputPanel  rendered="#{lessonDetail.lesson.playType=='inner'}" style="display:none;">
+                            <script language="JavaScript">
+
+
+                                var isLoaded = false;
+                                function loadedHandler() {
+                                    isLoaded = true;//说明播放器已加载
+                                    //goAndSeek();
+
+                                    //添加监听事件，当视频播放结束后，通知已经结束
+                                    if (CKobject.getObjectById('ckplayer_a1').getType()) {//说明使用HTML5播放器播放器
+                                        CKobject.getObjectById('ckplayer_a1').addListener('ended', reportFinished);
+                                        CKobject.getObjectById('ckplayer_a1').addListener('videoLoad', reportTotalTime);
+                                        CKobject.getObjectById('ckplayer_a1').addListener('loadedmetadata', goAndSeek);
+                                    }
+                                    else {
+                                        CKobject.getObjectById('ckplayer_a1').addListener('ended', 'reportFinished');
+                                        CKobject.getObjectById('ckplayer_a1').addListener('videoLoad', 'reportTotalTime');
+                                        CKobject.getObjectById('ckplayer_a1').addListener('loadedmetadata', 'goAndSeek');
+                                    }
+                                    //reportTotalTime();
+                                }
+
+                                function goAndSeek() {
+                                    //CKobject.getObjectById('ckplayer_a1').videoPlay();
+                                    CKobject.getObjectById('ckplayer_a1').videoSeek(#{lessonDetail.lessonLog.timeFinished});
+                                }
+
+                                //CKPLAYER播放时会不断调用该方法
+                                var _nn = 0;
+                                function ckplayer_status(str) {
+                                    _nn += 1;
+                                    if (_nn > 200) {
+                                        _nn = 0;
+                                        if (_nn % 10 == 0) {
+                                            reportTime();
+                                        }
+                                    }
+                                }
+
+                                function reportTime() {
+                                    var a = CKobject.getObjectById('ckplayer_a1').getStatus();
+                                    var tt = a['time'];
+                                    if (typeof (tt) != "undefined") {
+                                        var url = "#{facesContext.externalContext.requestContextPath}/servlet/LessonLogNotifier?lid=#{lessonDetail.lesson.id}&amp;action=time&amp;len=" + tt;
+                                        //alert(url);                                
+                                        jQuery.get(url);
+                                    }
+                                }
+                                
+                                function reportTimeByPage() {
+                                    var a = CKobject.getObjectById('ckplayer_a1').getStatus();
+                                    var tt = a['time'];
+                                    if (typeof (tt) != "undefined") {
+                                        var url = "#{facesContext.externalContext.requestContextPath}/servlet/LessonLogNotifier?lid=#{lessonDetail.lesson.id}&amp;action=time&amp;len=" + tt;
+                                        //alert(url);                                
+                                        jQuery.get(url);
+                                    }
+                                }
+
+                                function reportFinished() {
+                                    var url = "#{facesContext.externalContext.requestContextPath}/servlet/LessonLogNotifier?lid=#{lessonDetail.lesson.id}&amp;action=finished";
+                                    //alert(url);                                
+                                    jQuery.get(url);
+                                }
+
+                                function reportTotalTime() {
+                                    var a = CKobject.getObjectById('ckplayer_a1').getStatus();
+                                    var tt = a['totalTime'];
+                                    //alert(tt);
+                                    if (typeof (tt) != "undefined") {
+                                        var url = "#{facesContext.externalContext.requestContextPath}/servlet/LessonLogNotifier?action=total&amp;lid=#{lessonDetail.lesson.id}&amp;len=" + tt;
+                                        //alert(url);                                
+                                        jQuery.get(url);
+                                    }
+                                }
+
+                                function getstatus() {
+                                    var a = CKobject.getObjectById('ckplayer_a1').getStatus();
+                                    var ss = '';
+                                    for (var k in a) {
+                                        ss += k + ":" + a[k] + '\n';
+                                    }
+                                    ss + '关于各个参数的意思请到帮助手册查看';
+                                    alert(ss);
+                                }
+
+
+                            </script>
+                            <input onclick="CKobject.getObjectById('ckplayer_a1').videoPlay();" type="button" value="play" />
+                            <p:button id="goAndSeek2" onclick="goAndSeek();
+                                    return null;" value="seek" />
+
+                        </p:outputPanel>
+                    </div>
+                    <p:separator/>
+                    <h:panelGroup>
+                        <h:outputText value="开始时间：" />
+                        <h:outputText value="#{lessonDetail.lesson.availableBegain}" styleClass="tip">
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8"/>
+                        </h:outputText>
+                    </h:panelGroup>
+                    <h:panelGroup>
+                        <h:outputText value="结束时间：" />
+                        <h:outputText value="#{lessonDetail.lesson.availableEnd}" styleClass="tip">
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8"/>
+                        </h:outputText>
+                    </h:panelGroup>
+                    <p:panel header="课程详情" style="width:98%;">
+                        <h:outputText value="#{lessonDetail.lesson.description}" escape="false"/>
+                    </p:panel>
+                </h:panelGrid>
+
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

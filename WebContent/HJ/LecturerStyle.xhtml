@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>讲师风采</title>
+</head>
+
+<ui:composition template="/HJ/HJGeneral.xhtml">
+<ui:define name="title">
+    <h:outputText value="讲师风采" />
+</ui:define>
+<ui:define name="content">
+<link type="text/css"  rel="stylesheet"  href="css/lecturer_style.css"/>
+<link rel="stylesheet" type="text/css" href="/resources/rerebbs.css"></link>
+<link rel="stylesheet" type="text/css" href="/resources/rerebbs_a.css"></link>
+<style>
+.navSeparator{
+    font-size: 14px;
+    font-weight: bold;
+    color:#ccc;
+    margin: 0px 10px 0px 10px;
+}
+.nav8{
+    font-family: 姘撴埉搴愮尗闄嗙倝鑼呴垾琛★拷纬鈹炵儵锟斤拷!important;
+    font-size: 14px!important;
+}
+a.nav8:link {
+    text-decoration: none;
+    font-family: 姘撴埉搴愮尗闄嗙倝鑼呴垾琛★拷纬鈹炵儵锟斤拷!important;
+    font-size: 14px!important;
+}
+a.nav8:visited {
+    text-decoration:none;
+    font-family: 姘撴埉搴愮尗闄嗙倝鑼呴垾琛★拷纬鈹炵儵锟斤拷!important;
+    font-size: 14px!important;
+}
+a.nav8:hover {
+    color:#3260a2!important;
+    text-decoration: none!important;
+    font-family: 姘撴埉搴愮尗闄嗙倝鑼呴垾琛★拷纬鈹炵儵锟斤拷!important;
+    font-size: 14px!important;
+}
+a.nav8:active {
+    text-decoration: none;
+    font-family: 姘撴埉搴愮尗闄嗙倝鑼呴垾琛★拷纬鈹炵儵锟斤拷!important;
+    font-size: 14px!important;
+}
+</style>
+<body>
+<div style="  margin:0 auto; background: #f5f5f5; overflow: hidden;">
+<div style="height: 30px;"></div>
+<div style=" width:1024px; margin:0 auto; background: #fff; padding: 15px 12px 0; overflow: hidden;" >
+<p:panel id="topNav8" styleClass="frontColumn topNav8Wrapper">
+                    <h:outputLink value="#{facesContext.externalContext.requestContextPath}/" styleClass="nav8">
+                        <h:outputText value="#{i18nBean.lang('talk/Default','index')}" />
+                    </h:outputLink>
+                    <h:outputText value=">" styleClass="navSeparator"/>
+                    <h:outputLink value="#{facesContext.externalContext.requestContextPath}/HJ/OutLecturerList.xhtml" styleClass="nav8">
+                    	<h:outputText value="讲师列表" styleClass="nav8"/>
+                    </h:outputLink>
+                    <h:outputText value=">" styleClass="navSeparator"/>
+                    <h:outputText value="讲师风采" styleClass="nav8"/>
+                </p:panel>
+<div class="lecturer_content">
+<div class="lecturer">
+ <div class="lecturer_info">
+      <div class="lecturer_img">
+           <div class="lecturer_img_info"><img style="width:130px ;height:205px; " src="#{(empty lecturerStyle.teacher.picture)?facesContext.externalContext.requestContextPath.concat('/HJ/image/notlogin.png'):facesContext.externalContext.requestContextPath.concat('/').concat(lecturerStyle.teacher.picture)}" /></div>
+      </div>
+      <div class="lecturer_introduction">
+           <div class="lecturer_name">#{lecturerStyle.teacher.name}</div><span>#{lecturerStyle.teacher.company}</span>
+           <p>个人简介：#{lecturerStyle.teacher.introduction}</p>
+      </div>
+   
+ </div>
+ <div class="lecturer_info">
+      <div class="lecturer_course_title">所授课程</div>
+      <div class="lecturer_cours">
+           <ul>
+           <ui:repeat var="course" value="#{lecturerStyle.courses}">
+                    <li class="learncourse"> 
+                    	<a href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{course.id}" target="_blank" class="course-img-link"> 
+                    		<img src="../#{fn:replace(course.picture,'showimage','showabstractimage')}"  class="course-img" width="207px" height="203px"/> 
+                    	</a>
+                      <div class="course-tt">
+                      	<a href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{course.id}" target="_blank" class="course-tt-link">#{course.name}</a>
+                      </div>
+                      <div class="course-line course-line-bottom"> 
+                      	<span class="line-cell course-price hour">#{course.totalClassNum}</span> 
+                      	<span class="course-source"><img src="image/img_lecturer.png"  class="course-lecturer"/>
+                      		<a href="#{facesContext.externalContext.requestContextPath}/HJ/LecturerStyle.xhtml?name=#{course.teacher.name}">
+	                      		#{course.teacher.name}
+                      		</a>
+                      	</span> 
+                      </div>
+                    </li>
+           </ui:repeat>
+          </ul>
+      </div>
+ </div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</ui:define>
+</ui:composition>
+</html>

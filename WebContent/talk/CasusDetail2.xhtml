@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core"  lang="en"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description" content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="../HJ/HJGeneral.xhtml">
+            <ui:define name="title">#{casusDetail.casus.title} - #{applicationBean.systemConfig.siteName}</ui:define>
+            <ui:define name="content">
+            	<link type="text/css" rel="stylesheet" href="../HJ/css/navigation.css" />
+                <style>
+                    /* 登陆后公告区域 */
+                    .xxzx_news{
+                        padding:20px 0 15px 20px; color:#333;
+                    }
+                    .xxzx_news strong{
+                        font-size:18px; vertical-align:middle; display:inline-block;
+                    }
+                    .xxzx_news span{
+                        padding:10px; background:#FFFFCD; border:1px #797979 solid; margin-left:5px; vertical-align:middle; font-size:14px; display:inline-block;
+                    }
+                    .xxzx_news p{
+                        margin:5px 10px 0 100px;
+                    }
+                    .xxzx_news .p2{
+                        line-height: 20px;
+                        margin-top:10px;
+                    }
+                    .indexPanel2 div{
+                        padding: 0px 10px 0px 10px!important;
+                    }
+
+                    .detailTitle{
+                        line-height: 35px;
+                        text-align: center; 
+                        padding: 20px 20px 10px 20px;
+                        line-height: 35px;
+                    }
+
+                    .detailDate{
+                        text-align: center;
+                        border-bottom: 1px #b4b1aa solid;
+                        padding:0px 0px 10px 0px;
+                    }
+                    .casusContent{
+                        padding: 20px 20px 20px 20px!important;
+                    }
+                    .casusContent img{
+                        width: 550px!important;
+                    }
+
+                    .casusArticles{
+                        width:600px;margin:10px 0px 0px 20px;text-align: left;
+                        line-height: 25px!important;
+                    }
+                    
+                    .cdbody{
+                    	width: 1200px;
+						background-color: #f3f3f3;
+						margin: 5px auto 5px;
+                    }
+                </style>
+            <div class="navigation yahei bold">
+				<div class="navigation_div">
+					<a href="#{facesContext.externalContext.requestContextPath}/" class="navigation_link">首页</a>
+				</div>
+				<!-- 
+				<div class="navigation_separate">/</div>
+				<div class="navigation_div">
+					<a href="#{facesContext.externalContext.requestContextPath}/CasusPanel.jspx" class="navigation_link">公告</a>
+				</div>
+				 -->
+				<div class="navigation_separate">/</div>
+				<div class="navigation_div">#{casusDetail.casus.title}</div>
+			</div>
+			<div class="cdbody">
+
+                        <!--页面顶端导航结束-->
+                        <div id="title" class="detailTitle">
+                            <h1 >#{casusDetail.casus.title}</h1>
+                        </div>
+                        <div class="detailDate">
+                            <h:outputText value="#{casusDetail.casus.inputdate}">
+                                <f:convertDateTime pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" />
+                            </h:outputText>&nbsp;&nbsp;&nbsp;
+                            <h:outputText value="阅读："></h:outputText>
+                            <h:outputText value="#{casusDetail.casus.count}"></h:outputText>
+                            <h:outputText style="margin-left:3px" value="次"></h:outputText>
+                        </div>
+                        <div id="content" class="casusContent">
+                            <h:outputText styleClass="contentFont" escape="false" value="#{casusDetail.casus.content}" />
+                            <br/>
+                            <br/>
+                        </div>
+              </div>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

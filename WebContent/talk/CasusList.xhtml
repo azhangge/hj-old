@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core"  lang="en"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="General5.xhtml">
+            <ui:define name="title">#{casusList2.pageName}</ui:define>
+            <ui:define name="xcontent">
+                <style>
+                    .newsLine{
+                        color:black;font-size: 12px;font-family: 宋体;
+                    }
+                    .tdStyle{
+                        border-bottom: 1px gray dotted;height:30px;
+                    }
+                </style>
+                <p:tabView style="overflow:hidden;" styleClass="indexPanel2">
+                    <p:tab title="#{casusList2.pageName}">
+                        <br/>
+                        <div   style="" class="borderx" >
+                            
+                            
+                            <table style="width:98%;">
+                                <ui:repeat value="#{casusList2.subList}" var="casus">
+                                    <tr>
+
+                                        <td style="width:80%;" class="tdStyle">
+                                            <h:graphicImage value="/resources/images/list_11.gif" style="margin:3px 5px 0px 10px;"/> 
+
+                                            <h:outputLink value="#{facesContext.externalContext.requestContextPath}/talk/CasusDetail2.jspx?id=#{casus.id}" target="_blank" class="news"  title="#{casus.title}">
+                                                <h:outputText value="#{casus.title}">
+                                                </h:outputText>
+                                            </h:outputLink>
+                                        </td>
+                                        <td style="width:20%" class="tdStyle">
+                                            <h:outputText value="#{casus.inputdate}" >
+                                                <f:convertDateTime pattern="[yyyy-MM-dd]" />
+                                            </h:outputText>
+                                        </td>
+                                    </tr>
+
+                                </ui:repeat>
+                            </table>
+                        </div>
+                        <div class="news-list-box-page" style="text-align:center;">
+                            共有 #{casusList2.totalPage} 页，本页是第 #{casusList2.currentPage} 页
+                            &nbsp;&nbsp;
+                            <h:outputLink value="#{facesContext.externalContext.requestContextPath}/talk/CasusList.jspx?name=#{casusList2.pageEnglishName}&amp;page=1"  title="#{casus.title}"  class="news">
+                                <h:outputText value="首页&nbsp;"/>
+                            </h:outputLink>
+                            <h:outputLink value="#{facesContext.externalContext.requestContextPath}/talk/CasusList.jspx?name=#{casusList2.pageEnglishName}&amp;page=#{casusList2.currentPage-1}" rendered="#{casusList2.currentPage-1&gt;0}"  title="#{casus.title}"  class="news">
+                                <h:outputText value="&nbsp;上一页&nbsp;"/>
+                            </h:outputLink>
+                            <h:outputText value="&nbsp;上一页&nbsp;" rendered="#{casusList2.currentPage==1}" />
+                            <h:outputLink value="#{facesContext.externalContext.requestContextPath}/talk/CasusList.jspx?name=#{casusList2.pageEnglishName}&amp;page=#{casusList2.currentPage+1}" rendered="#{casusList2.currentPage&lt;casusList2.totalPage}" title="#{casus.title}"  class="news">
+                                <h:outputText value="&nbsp;下一页&nbsp;"/>
+                            </h:outputLink>
+                            <h:outputText value="&nbsp;下一页&nbsp;" rendered="#{casusList2.currentPage==casusList2.totalPage}" />
+                            <h:outputLink value="#{facesContext.externalContext.requestContextPath}/talk/CasusList.jspx?name=#{casusList2.pageEnglishName}&amp;page=#{casusList2.totalPage}"  title="#{casus.title}"  class="news">
+                                <h:outputText value="&nbsp;末页&nbsp;"/>
+                            </h:outputLink>
+                            <h:form style="display: inline;">
+                                跳转到<input type="text" value="#{casusList2.currentPage}" name="page" style="width:31px; border:#E2E3EA 1px solid;"/>页 <input type="submit" value=" Go " />
+                                <input type="hidden" value="#{casusList2.pageEnglishName}" name="name" />
+                            </h:form>
+                        </div>
+                        <br/><br/>
+                    </p:tab>
+                </p:tabView>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

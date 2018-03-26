@@ -1,0 +1,41 @@
+
+
+#
+
+
+index=Index
+exam=Examination
+exam.normal=Formal Examination
+exam.score=Points
+exam.list=Exam List
+exam.intelligence=Intelligence
+exam.manual=Manual
+exam.begain_time=Begain Time
+exam.end_time=End Time
+exam.score_type=Marking Type
+exam.length=Length
+exam.minutes=minutes
+exam.score_cost=Points cost：
+exam.score_full=Full points：
+exam.score_paid=Points cost to participate
+exam.score_str=Points=Your Score/Full Score*
+
+exam.question=Question
+exam.choice=Choice Question
+exam.multi_choice=Multi-Choice Question
+exam.fill=Fill Question
+exam.judge=Judge Question
+exam.essay=Essay Question
+exam.file=File Question
+
+exam.begain=Begain
+exam.please_login=Login in
+exam.not_check=Unchecked
+exam.not_open=Closed
+exam.not_repeat=No repeating
+exam.not_inteval=Inteval no less than
+exam.not_dept=Invalid to your  
+exam.open=
+exam.not_enough_score=Points not enough
+exam.too_much_times=Exceeding max times
+

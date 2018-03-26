@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="UserCenterGeneral.xhtml">
+            <ui:define name="ucontent">
+                <h:panelGrid columns="1">
+                    <h:outputText value="－积分记录－" styleClass="mark"></h:outputText>
+                    
+                </h:panelGrid>
+                
+                <p:separator/>
+                <p:commandButton action="#{userScoreLogList.deleteByUsr()}" value="全部清空" update="@form" onclick="if (!confirm('确认要全部清空积分记录吗？')) return false"/>
+                <p:separator/>
+                <h:outputText value="*您的当前总积分为：#{userScoreLogList.totalScore}" style="color:green;"></h:outputText>
+                <p:dataTable id="dc" value="#{userScoreLogList.logs}" paginator="true" paginatorPosition="bottom"
+                             var="log" rowIndexVar="r" rows="20" style="width:100%" emptyMessage="无数据">
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="内容"></h:outputText>
+                        </f:facet>
+                        <h:outputText value="#{log.description}"></h:outputText>
+                    </p:column>
+                    <p:column style="text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="时间"></h:outputText>
+                        </f:facet>
+                        <h:outputText value="#{log.genTime}">
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                               timeZone="GMT+8" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="获得积分"></h:outputText>
+                        </f:facet>
+                        <h:outputText value="+#{log.score}" rendered="#{log.score>=0}" style="color:green;"></h:outputText>
+                        <h:outputText value="-#{-1*log.score}" rendered="#{log.score&lt;0}" style="color:red;"></h:outputText>
+                    </p:column>
+                    <p:column style="text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="剩余积分"></h:outputText>
+                        </f:facet>
+                        <h:outputText value="#{log.scoreBalance}"></h:outputText>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="操作"></h:outputText>
+                        </f:facet>
+                        <p:commandLink action="#{userScoreLogList.delete(log.id)}" value="删除" update="@form" onclick="if (!confirm('确认要删除积分记录吗？')) return false"/>
+                    </p:column>
+                </p:dataTable>
+
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

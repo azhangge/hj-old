@@ -1,0 +1,304 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<head>
+<meta name="generator"
+	content="HTML Tidy for Java (vers. 2009-12-01), see jtidy.sourceforge.net" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>华杰云教育</title>
+<link
+	href="#{facesContext.externalContext.requestContextPath}/css/main.css"
+	type="text/css" rel="stylesheet" />
+<link
+	href="#{facesContext.externalContext.requestContextPath}/css/iconfont.css"
+	type="text/css" rel="stylesheet" />
+<link
+	href="#{facesContext.externalContext.requestContextPath}/css/public.css"
+	type="text/css" rel="stylesheet" />
+</head>
+
+<ui:composition template="/talk/GeneralW.xhtml">
+	<ui:define name="content">
+		<body onkeydown="keyLogin();">
+			<!--  顶部    start-->
+			<div style="width: 100%; margin: 0px auto;">
+				<div class="banner" style="height: 260px;margin-top:75px;">
+					<div class="fullSlide">
+						<div class="bd">
+							<ul>
+							<ui:repeat value="#{listPicture.pictureList}" var="pic">
+								<li _src="url(#{pic.url})" style="background:##{pic.backcolor} center 0 no-repeat/* ;background-size:100% 100%; */"><a href="#{pic.link}"></a></li>
+							</ui:repeat>
+							</ul>
+						</div>
+						<div class="hd">
+							<ul></ul>
+						</div>
+						<!-- <span class="prev"></span> <span class="next"></span> -->
+					</div>
+				</div>
+			</div>
+
+			<div class="popularClass">
+				<div class="class-content">
+					<div class="class-title">
+						<div class="class-title-text">
+							<p>
+								<span class="class-icon"></span>热门推荐
+							</p>
+						</div>
+						<div class="search">
+							<input type="button" onclick="findLessonsByName()"
+								class="search-text" value="搜索" id="searchLesson"
+								style="font-size: 15px; font-family: Verdana, Arial, Microsoft YaHei, simhei, simsun !important;cursor:pointer;" />
+							<input class="search-input" onclick="clearInput()" onblur="clearInput()" id="search-input" value="请输入课程、专家名称" />
+						</div>
+					</div>
+
+					<div class="class-category">
+						<div class="class-category-left">
+							<div class="pullDown">
+						<a href="#{facesContext.externalContext.requestContextPath}/talk/LessonTypeList2.jspx"><h2 class="pullDownTitle">全部课程</h2></a>
+						<ul class="pullDownList">
+							<ui:repeat  value="#{welcomePage.courseTypes}" var="labelType" >
+								<li class="menulihover">
+									<a href="" target="_blank" class="menuclass">#{labelType.name}</a> 
+									<span></span>
+								</li>
+							</ui:repeat>	
+						</ul>
+						<!-- 下拉详细列表具体分类 -->
+						<div class="yMenuListCon" style="display:none;">
+							<ui:repeat  value="#{welcomePage.courseTypes}" var="labelType">
+								<div class="yMenuListConin">
+									<div class="yMenuLCinList">
+										<ul>
+											<ui:repeat value="#{labelType.sons}" var="label">
+												<li><a href="#{facesContext.externalContext.requestContextPath}/talk/LessonTypeList2.jspx?lid=#{label.id}" class="ecolor610">#{label.name}</a></li>
+											</ui:repeat>
+										</ul>
+									</div>
+								</div>
+							</ui:repeat>
+						</div>
+					</div>
+						</div>
+
+						<div class="class-category-middle">
+							<div>
+								<ul>
+									<ui:repeat
+										value="#{welcomePage.getLessonTypesByNameAndNum('热门课程','0','3')}"
+										var="car">
+										<li class="course"><a
+											href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{car.id}"
+											target="_blank" title="#{car.name}" class="course-img-link">
+												<p:graphicImage id="simg"
+													url="#{fn:replace(car.picture,'showimage','showabstractimage')}"
+													style="width: 212px; height: 124px;" />
+										</a>
+
+											<!-- <div class="course-status">
+												<span><h:outputText value="#{car.description1}" /></span>-->
+											<a href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{car.id}"
+											target="_blank" title="#{car.name}" class="course-tt course-img-link">#{car.name}</a>
+
+											<div class="course-line course-line--bottom">
+												<h:panelGroup rendered="#{car.totalScorePaid==0}">
+												<span class="line-cell course-price free">免费</span>
+												</h:panelGroup>
+												<h:panelGroup rendered="#{car.totalScorePaid!=0}">
+													<span class="line-cell course-price jifen">#{car.totalScorePaid}积分</span> 
+												</h:panelGroup>
+												<span class="course-source">#{car.teacher.name}</span>
+											</div></li>
+									</ui:repeat>
+								</ul>
+								<ul>
+									<ui:repeat
+										value="#{welcomePage.getLessonTypesByNameAndNum('热门课程','3','6')}"
+										var="car">
+										<li class="course"><a
+											href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{car.id}"
+											target="_blank" title="#{car.name}" class="course-img-link">
+												<p:graphicImage id="simg"
+													url="#{fn:replace(car.picture,'showabstractimage','showimage')}"
+													style="width: 212px; height: 124px;" />
+										</a>
+								<a	href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{car.id}"
+									target="_blank" title="#{car.name}" class=" course-tt course-img-link">
+									#{car.name}</a>
+
+											<div class="course-line course-line--bottom">
+												<h:panelGroup rendered="#{car.totalScorePaid==0}">
+												<span class="line-cell course-price free">免费</span>
+												</h:panelGroup>
+												<h:panelGroup rendered="#{car.totalScorePaid!=0}">
+													<span class="line-cell course-price jifen">#{car.totalScorePaid}积分</span> 
+												</h:panelGroup>
+												<span class="course-source">#{car.teacher.name}</span>
+											</div></li>
+									</ui:repeat>
+								</ul>
+							</div>
+						</div>
+
+						<div class="class-category-right">
+							<div class="announcement">
+								<div class="announcement_tittle">
+									<!--<span>公告</span>-->
+									<!-- <span> <a href="#" class="announcement_more">更多&nbsp;></a></span> -->
+								</div>
+								<div class="announcement_text">
+									<div class="maquee">
+										<ul>
+											<ui:repeat value="#{listCasus.casusList}" var="casus">
+												<li><p:commandLink styleClass="announcement_text_link"
+														action="#{listCasus.viewCasus(casus.id)}"
+														oncomplete="PF('CasusPanel').show()">
+														<h:outputText value="#{casus.title}" escape="false"
+															style="" />
+													</p:commandLink> 
+                                                </li>
+											</ui:repeat>
+										</ul>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="classification"
+				style="font: normal 14px/24px Verdana, Arial, Microsoft YaHei, simhei, simsun !important">
+				<div class="class-content">
+					<div class="class-title">
+					
+					<div>
+						<p>
+							<span class="class-icon"></span>最新课程
+						</p>
+					</div>
+					<div>
+						<span> <a href="#{facesContext.externalContext.requestContextPath}/talk/LessonTypeList2.jspx" style="font-size: 16px!important;float: right;margin-top: -10px;margin-right: 20px;" >全部课程</a></span>
+					</div>
+					</div>
+
+					<div class="class-category">
+						<ul>
+							<ui:repeat value="#{welcomePage.lessonTypes2}" var="car">
+								<li class="course"><a
+									href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{car.id}"
+									target="_blank" title="#{car.name}" class="course-img-link">
+										<p:graphicImage id="simg"
+											url="#{fn:replace(car.picture,'showimage','showabstractimage')}"
+											style="width: 212px; height: 124px;" />
+								</a>
+
+									<!-- <div class="course-status">
+										<span><h:outputText value="#{car.description1}" /></span>-->
+									<a
+									href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{car.id}"
+									target="_blank" title="#{car.name}" class=" course-tt course-img-link">
+									#{car.name}
+									</a>
+
+									<div class="course-line course-line--bottom">
+										<h:panelGroup rendered="#{car.totalScorePaid==0}">
+										<span class="line-cell course-price free">免费</span>
+										</h:panelGroup>
+										<h:panelGroup rendered="#{car.totalScorePaid!=0}">
+											<span class="line-cell course-price jifen">#{car.totalScorePaid}积分</span> 
+										</h:panelGroup>
+										<span class="course-source">#{car.teacher.name}</span>
+									</div></li>
+							</ui:repeat>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<script src="js/upScroll.js" type="text/javascript"
+				language="javascript">
+			</script>
+
+			<script type="text/javascript">
+				$(".fullSlide").hover(
+						function() {
+							$(this).find(".prev,.next").stop(true, true)
+									.fadeTo("show", 0.5)
+						}, function() {
+							$(this).find(".prev,.next").fadeOut()
+						});
+				$(".fullSlide").slide(
+						{
+							titCell : ".hd ul",
+							mainCell : ".bd ul",
+							effect : "fold",
+							autoPlay : true,
+							autoPage : true,
+							trigger : "click",
+							startFun : function(i) {
+								var curLi = jQuery(".fullSlide .bd li").eq(i);
+								if (!!curLi.attr("_src")) {
+									curLi.css("background-image",
+											curLi.attr("_src")).removeAttr(
+											"_src")
+								}
+							}
+						});
+			</script>
+			<script type="text/javascript">
+				function autoScroll(obj) {
+					$(obj).find("ul").animate({
+						marginTop : "-30px"
+					}, 500, function() {
+						$(this).css({
+							marginTop : "0px"
+						}).find("li:first").appendTo(this);
+					})
+				}
+				$(function() {
+					setInterval('autoScroll(".maquee")', 3000);
+
+				})
+				
+				function clearInput(){
+					var v = $("#search-input")[0].value;
+					if(v==""){
+						$("#search-input")[0].value = "请输入课程、专家名称"
+					}else if(v=="请输入课程、专家名称"){
+						$("#search-input")[0].value = "";
+					}
+				}
+				function findLessonsByName(){
+					var name = $("#search-input")[0].value;
+					if (name == '请输入课程、专家名称') {
+						name='';
+					}
+					location.href="#{facesContext.externalContext.requestContextPath}/talk/LessonTypeList2.jspx?name="+name;
+				}
+				
+				function keyLogin() {
+					//回车键的键值为13
+					if (event.keyCode == 13){
+						if(document.getElementById('myForm:login1').style.display!='block'){
+							document.getElementById("searchLesson").click(); //调用搜索按钮
+						}
+					}
+				}
+			</script>
+		</body>
+	</ui:define>
+</ui:composition>
+
+</html>

@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<style type="text/css">
+<!--
+banner部分button的样式-->#onebyone_slider .oneByOne_course span.ob1_button .default_button
+	{
+	margin: 0;
+	padding: 10px 25px;
+	border: 1px solid #0b7bb0;
+	font-size: 13px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	-o-border-radius: 3px;
+	border-radius: 3px
+}
+
+.default_button {
+	font: 11px Helvetica, Arial, sans-serif;
+	font-weight: 400;
+	text-decoration: none;
+	text-transform: uppercase;
+	padding: 8px 18px;
+	margin: 2px 3px;
+	vertical-align: middle;
+	display: inline-block;
+	border: solid 1px #39cafb;
+	color: #fff;
+	background: #4fcfff;
+	cursor: pointer;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	-o-border-radius: 2px;
+	border-radius: 2px;
+	-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, .8), inset 0 -1px
+		0 rgba(255, 255, 255, .1);
+	-moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, .2), inset 0 -1px 0
+		rgba(255, 255, 255, .1);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, .2), inset 0 -1px 0
+		rgba(255, 255, 255, .1);
+	-moz-transition: all .5s;
+	-webkit-transition: all .5s;
+	-o-transition: all .5s;
+	transition: all .5s;
+	zoom: 1;
+	*display: inline
+}
+
+.default_button:hover {
+	color: #fff;
+	background: #0aa3dc;
+	border-color: #0aa3dc
+}
+
+.default_button:active {
+	color: #fff;
+	background: #26a1ce;
+	border-color: #333;
+	box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.50), 0px 0 1px
+		rgba(255, 255, 255, 0.50);
+	-moz-box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.50), 0px 0 1px
+		rgba(255, 255, 255, 0.50);
+	-webkit-box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.50), 0px 0 1px
+		rgba(255, 255, 255, 0.50)
+}
+
+#onebyone_slider .oneByOne_course span.ob1_button {
+	clear: left;
+	position: relative;
+	float: left;
+	margin: 40px 12px 0 330px;
+	padding: 5px;
+	border: 1px solid #27b8ee;
+	background: #fff;
+	background: rgba(255, 255, 255, .1);
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	-o-border-radius: 3px;
+	border-radius: 3px;
+	z-index: 50
+}
+
+.fullSlide {
+	width: 100%;
+	position: relative;
+	height: 260px;
+	background: #000;
+}
+
+.fullSlide .bd {
+	margin: 0 auto;
+	position: relative;
+	z-index: 0;
+	overflow: hidden;
+}
+
+.fullSlide .bd ul {
+	width: 100% !important;
+}
+
+.fullSlide .bd li {
+	width: 100% !important;
+	height: 260px;
+	overflow: hidden;
+	text-align: center;
+}
+
+.fullSlide .bd li a {
+	display: block;
+	height: 260px;
+}
+
+.fullSlide .hd {
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	height: 30px;
+	line-height: 30px;
+}
+
+.fullSlide .hd ul {
+	text-align: center;
+}
+
+.fullSlide .hd ul li {
+	cursor: pointer;
+	display: inline-block;
+	*display: inline;
+	zoom: 1;
+	width: 42px;
+	height: 11px;
+	margin: 1px;
+	overflow: hidden;
+	background: #000;
+	filter: alpha(opacity = 50);
+	opacity: 0.5;
+	line-height: 999px;
+}
+
+.fullSlide .hd ul .on {
+	background: #f00;
+}
+
+.fullSlide .prev, .fullSlide .next {
+	display: block;
+	position: absolute;
+	z-index: 1;
+	top: 50%;
+	margin-top: -30px;
+	left: 30%;
+	z-index: 1;
+	width: 40px;
+	height: 60px;
+	background: url(image/slider-arrow.png) -126px -137px #000 no-repeat;
+	cursor: pointer;
+	filter: alpha(opacity = 50);
+	opacity: 0.5;
+	display: none;
+}
+
+.fullSlide .next {
+	left: auto;
+	right: 30%;
+	background-position: -6px -137px;
+}
+
+.class-category-right {
+	width: 220px;
+	float: right;
+	overflow: hidden;
+	padding-top: 8px;
+}
+
+.announcement {
+	width: 212px;
+	height: 390px;
+	background: #f5f5f5;
+	z-index: 1000;
+	right: 325px;
+	display: block;
+	font-family: Verdana, Arial, Microsoft YaHei, simhei, simsun !important;
+}
+
+.popularClass {
+	width: 100%;
+	background-color: #fff;
+	padding-top: 30px;
+	font: normal 14px/24px Verdana, Arial, Microsoft YaHei, simhei,
+		simsun !important;
+}
+
+.announcement_tittle {
+	width: 212px;
+	height: 80px;
+	color: #fff;
+	background: url(image/announcement_Bg.png) center no-repeat;
+	font-size: 14px;
+	padding: 55px 10px 0 10px;
+}
+
+.announcement_text {
+	width: 90%;
+	height: 280px;
+	padding: 10px;
+	margin: 0 auto;
+	overflow: hidden;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	position: relative;
+	font-size: 13px;
+}
+
+.maquee {
+	height: 285px;
+}
+
+.announcement_more {
+	float: right;
+	color: #fff;
+}
+
+.announcement_text_link {
+	width: 200px;
+	height: 30px;
+	line-height: 30px;
+	border-bottom: 1px dashed #ccc;
+	text-align: left;
+	word-wrap: break-word;
+	white-space: nowrap;
+	color: #333;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: block;
+}
+
+.announcement_text_link:hover {
+	color: #ccc;
+}
+</style>
+	<h:outputText value="&lt;!--[if lte IE 7]&gt;" />
+	<script>
+		window.location.href = '#{facesContext.externalContext.requestContextPath}/update_browser.jsp';
+	</script>
+	<h:outputText value="&lt;![endif]--&gt;" />
+	<title><ui:insert name="title"></ui:insert> -
+		#{applicationBean.info.siteHeader}</title>
+	<meta http-equiv="keywords" content=" #{applicationBean.info.keyWords}" />
+	<meta http-equiv="description"
+		content=" #{applicationBean.info.description}" />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+
+	<link rel="stylesheet" type="text/css"
+		href="#{facesContext.externalContext.requestContextPath}/resources/jquery.Sonline.2.0/style/gray.css" />
+	<link rel="stylesheet" type="text/css"
+		href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs.css" />
+	<link rel="stylesheet" type="text/css"
+		href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs_a.css" />
+	<link rel="stylesheet" type="text/css"
+		href="#{facesContext.externalContext.requestContextPath}/resources/mainpic.css" />
+	<link rel="stylesheet" type="text/css"
+		href="#{facesContext.externalContext.requestContextPath}/css/index.css" />
+
+
+	<f:loadBundle basename="com.huajie.exam.i18n.langs" var="lang" />
+
+	<!-- <script type="text/javascript"  src="js/jquery2.js"></script>
+		<script type="text/javascript" src="js/jquery-plugins.js"></script>
+		<script type="text/javascript" src="js/iview.js"></script>
+		<script type="text/javascript" src="js/jquery.plugins-min.js"></script>
+		<script type="text/javascript" src="js/scripts-bottom-min.js"></script>
+		<script type="text/javascript">if(window.PrimeFaces){PrimeFaces.settings.locale='zh';}</script>
+		<script type="text/javascript" src="js/jquery.js"></script> -->
+<!-- 	<script type="text/javascript"
+		src="#{facesContext.externalContext.requestContextPath}/js/superslide.2.1.js"></script> -->
+		<script type="text/javascript"
+		src="#{facesContext.externalContext.requestContextPath}/js/superslide.2.1.2.js"></script>
+	<script type="text/javascript"
+		src="#{facesContext.externalContext.requestContextPath}/js/index.js"></script>
+</h:head>
+<h:body>
+	<!-- 公告滚动 -->
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("#s_222").Scroll({
+				line : 1,
+				speed : 400,
+				timer : 5000
+			});
+		});
+	</script>
+
+	<h:form id="myForm">
+		<ui:include src="/CasusPanel.xhtml"></ui:include>
+		<ui:include src="/talk/LoginPopup.xhtml"></ui:include>
+		<ui:include src="/talk/FrontMenu.xhtml"></ui:include>
+		<div style="margin: 0px auto; background-color: white; width: 970">
+
+			<p:outputPanel id="mainPanel">
+				<ui:insert name="content"></ui:insert>
+			</p:outputPanel>
+			<p:panel styleClass="mainPanel"
+				style="width:100%;border:0px solid #e5e5e5;margin: 0px auto;">
+				<c:if
+					test="#{copyrightController.copyrightInfo.email!='webmaster@huajie.com'}">
+					<ui:include src="Footer1.xhtml" />
+				</c:if>
+				<c:if
+					test="#{copyrightController.copyrightInfo.email=='webmaster@huajie.com'}">
+					<ui:include src="Footer.xhtml" />
+				</c:if>
+			</p:panel>
+		</div>
+		<ui:include src="/AjaxStatus2.xhtml" />
+	</h:form>
+	<script type="text/javascript">
+		
+	</script>
+	<script
+		src="#{facesContext.externalContext.requestContextPath}/resources/js/upScroll.js"
+		type="text/javascript" language="javascript" />
+</h:body>
+</html>

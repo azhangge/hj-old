@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core"  lang="en"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title>Facelet Title</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description" content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    </h:head>
+    <h:body>
+        <ui:composition template="HJ/HJGeneral.xhtml">
+        	 <ui:define name="title">#{casusDetail.casus.title}</ui:define>
+            <ui:define name="content">
+            	<link type="text/css" rel="stylesheet" href="HJ/css/navigation.css" />
+            	<style>
+            		.cdbody{
+                    	width: 1200px;
+						background-color: #f3f3f3;
+						margin: 5px auto 5px;
+                    }
+            	</style>
+            	<div class="navigation yahei bold">
+					<div class="navigation_div">
+						<a href="#{facesContext.externalContext.requestContextPath}/" class="navigation_link">首页</a>
+					</div>
+					<div class="navigation_separate">/</div>
+					<div class="navigation_div">公告</div>
+				</div>
+            	<div class="cdbody">
+            		<div class="cdbody_head">
+						<table>
+							<thead>
+								<tr>
+									<th class="th1">序号</th>
+									<th class="th2">标题</th>
+									<th class="th3">发布日期</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+					<div class="m-block-content">
+						<table class="lesson_table">
+							<tbody>
+								<ui:repeat var="zone" value="#{listCasus}" varStatus="row">
+									<tr>
+										<td class="td1">#{row.index+1}</td>
+										<td class="td2" title="#{zone.title}">#{zone.title}</td>
+										<td class="td3">#{zone.inputdate}</td>
+									</tr>
+								</ui:repeat>
+							</tbody>
+						</table>
+	        		</div>
+            	</div>
+            	
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>   
+<ehcache>
+	<diskStore path="C://ehcache2"/>
+    <cache name="verifyCode"
+           maxElementsInMemory="1000"
+           maxElementsOnDisk="1000"
+           overflowToDisk="true"
+           diskSpoolBufferSizeMB="200"
+           timeToIdleSeconds="300"
+           timeToLiveSeconds="300"
+           memoryStoreEvictionPolicy="LFU"
+    />
+</ehcache>

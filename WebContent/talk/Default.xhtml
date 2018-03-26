@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core"  lang="en"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </h:head>
+    <h:body>
+        <ui:composition template="General.xhtml">
+            <ui:define name="title">
+                <h:outputText value="#{i18nBean.lang('index')}" />
+            </ui:define>
+            <ui:define name="content">
+                 <!-- <div class="ui-grid-row"> -->
+                 
+                 	<div class="classificationa">
+      					<div class="class-content">
+			            <div class="class-title">
+			                 <p><span class="class-icona"></span>分类 </p>
+			            </div>
+			            <div class="class-category">  
+			                 <ul>
+			                 	<c:choose>
+			                 		<c:when test="#{clientSession.usr!=null}">
+			                 			<a href="#{facesContext.externalContext.requestContextPath}/talk/UserCenter.jspx">
+			                 				<li class="index">
+			                              		<ul>
+			                                 		<li class="box-personal">
+			                                 			<img src="#{facesContext.externalContext.requestContextPath}/images/gerenziliao.png" /></li>
+			                                 		<li style="color:#9999ff">个人资料</li>
+			                                 		<li style="color:#999;font-size:14px;">管理自己的信息。</li>
+			                              		</ul>
+			                     			</li>
+			                 			</a>
+			                 		</c:when> 
+            						<c:otherwise>
+										<a href="javascript:void(0)" onclick="javascript:PF('login1').show();">
+											<li class="index">
+			                              		<ul>
+			                                 		<li class="box-personal">
+			                                 			<img src="#{facesContext.externalContext.requestContextPath}/images/gerenziliao.png" /></li>
+			                                 		<li style="color:#9999ff">个人资料</li>
+			                                 		<li style="color:#999;font-size:14px;">管理自己的信息。</li>
+			                              		</ul>
+			                     			</li>
+										</a>
+									</c:otherwise> 
+			                 	</c:choose>
+				                     
+			                   <c:choose>
+			                 		<c:when test="#{clientSession.usr!=null}">  
+					                     <a href="#{facesContext.externalContext.requestContextPath}/talk/MyLessonTypeList.jspx">
+						                     <li class="index">
+					                              <ul>
+					                                 <li class="box-course"><img src="#{facesContext.externalContext.requestContextPath}/images/kecheng.png" /></li>
+					                                 <li style="color:#229fe2">我的课程</li>
+					                                 <li style="color:#999; font-size:14px;">课程任你学，边学边考。</li>
+					                              </ul>
+					                     	</li>
+					                     </a>
+					                  </c:when>
+					                  <c:otherwise>
+					                  	<a href="javascript:void(0)"  onclick="javascript:PF('login1').show();">
+						                     <li class="index">
+					                              <ul>
+					                                 <li class="box-course"><img src="#{facesContext.externalContext.requestContextPath}/images/kecheng.png" /></li>
+					                                 <li style="color:#229fe2">我的课程</li>
+					                                 <li style="color:#999; font-size:14px;">课程任你学，边学边考。</li>
+					                              </ul>
+					                     	</li>
+					                     </a>
+					                  </c:otherwise>
+					             </c:choose>
+			                     
+			                     <c:choose>
+			                 		<c:when test="#{clientSession.usr!=null}">
+					                     <a href="#{facesContext.externalContext.requestContextPath}/talk/BuffetExaminationList.jspx">
+						                     <li class="index">
+					                              <ul>
+					                                 <li class="box-SelfPractice"><img src="#{facesContext.externalContext.requestContextPath}/images/zzlianxi.png" /></li>
+					                                 <li style="color:#eb3f00">自助练习</li>
+					                                 <li style="color:#999;font-size:14px;">题目数量自主设置，我的练习我做主。</li>
+					                              </ul>
+					                    	 </li>
+					                   	 </a>
+					                   </c:when>
+					             		<c:otherwise>
+					             			<a href="javascript:void(0)"  onclick="javascript:PF('login1').show();">
+							                     <li class="index">
+						                              <ul>
+						                                 <li class="box-SelfPractice"><img src="#{facesContext.externalContext.requestContextPath}/images/zzlianxi.png" /></li>
+						                                 <li style="color:#eb3f00">自助练习</li>
+						                                 <li style="color:#999;font-size:14px;">题目数量自主设置，我的练习我做主。</li>
+						                              </ul>
+						                    	 </li>
+						                   	 </a>
+					             		</c:otherwise>      
+					             </c:choose>
+			                   	 
+			                   	 <c:choose>
+			                   	 	<c:when test="#{clientSession.usr!=null}">
+					                     <a href="#{facesContext.externalContext.requestContextPath}/talk/ExamModule2List.jspx">
+						                     <li class="index">
+					                              <ul>
+					                                 <li class="box-ChapterPractice"><img src="#{facesContext.externalContext.requestContextPath}/images/zjlianxi.png" /></li>
+					                                 <li style="color:#ff9804">知识点练习</li>
+					                                 <li style="color:#999;font-size:14px;">按知识点练习，有针对性地重点突破。</li>
+					                              </ul>
+						                     </li>
+						                 </a>
+						             </c:when>
+						             <c:otherwise>
+						             	<a href="javascript:void(0)"  onclick="javascript:PF('login1').show();">
+						             		<li class="index">
+					                              <ul>
+					                                 <li class="box-ChapterPractice"><img src="#{facesContext.externalContext.requestContextPath}/images/zjlianxi.png" /></li>
+					                                 <li style="color:#ff9804">知识点练习</li>
+					                                 <li style="color:#999;font-size:14px;">按知识点练习，有针对性地重点突破。</li>
+					                              </ul>
+						                     </li>
+						             	</a>
+						             </c:otherwise>
+				                 </c:choose>
+				               
+				               
+				               <c:choose>
+			                   	 	<c:when test="#{clientSession.usr!=null}">  
+					                     <a href="#{facesContext.externalContext.requestContextPath}/talk/MyExaminationList.jspx">
+						                     <li class="index">
+					                              <ul>
+					                                 <li class="box-test"><img src="#{facesContext.externalContext.requestContextPath}/images/kaoshi.png" /></li>
+					                                 <li style="color:#556eea">我的考试</li>
+					                                 <li style="color:#999;font-size:14px;">学完了，来检阅下自己的学习成果吧！</li>
+					                              </ul>
+						                     </li>
+						                 </a>
+						             </c:when>
+						             <c:otherwise>
+						             	<a href="javascript:void(0)"  onclick="javascript:PF('login1').show();">
+						             		<li class="index">
+					                              <ul>
+					                                 <li class="box-test"><img src="#{facesContext.externalContext.requestContextPath}/images/kaoshi.png" /></li>
+					                                 <li style="color:#556eea">我的考试</li>
+					                                 <li style="color:#999;font-size:14px;">学完了，来检阅下自己的学习成果吧！</li>
+					                              </ul>
+						                     </li>
+						             	</a>
+						             </c:otherwise>
+						     </c:choose>
+				                 
+				                 <c:choose>
+			                 		<c:when test="#{clientSession.usr!=null}">
+					                     <a href="#{facesContext.externalContext.requestContextPath}/talk/WrongQuestionList.jspx">
+						                      <li class="index">
+					                              <ul>
+					                                 <li class="box-wrong"><img src="#{facesContext.externalContext.requestContextPath}/images/cuoti.png" /></li>
+					                                 <li style="color:#00cc99">我的错题</li>
+					                                 <li style="color:#999;font-size:14px;">错题自动收集，方便查看。</li>
+					                              </ul>
+						                     </li>
+						                 </a>
+						           	</c:when>
+						           	<c:otherwise>
+										<a href="javascript:void(0)" onclick="javascript:PF('login1').show();">
+											<li class="index">
+					                              <ul>
+					                                 <li class="box-wrong"><img src="#{facesContext.externalContext.requestContextPath}/images/cuoti.png" /></li>
+					                                 <li style="color:#00cc99">我的错题</li>
+					                                 <li style="color:#999;font-size:14px;">错题自动收集，方便查看。</li>
+					                              </ul>
+						                     </li>
+										</a>
+									</c:otherwise>
+						          </c:choose>
+						                 
+						       <c:choose>
+						       		<c:when test="#{clientSession.usr!=null}">
+					                     <a href="#{facesContext.externalContext.requestContextPath}/talk/ExamCaseReportList.jspx" >
+											<li class="index">
+					                              <ul>
+					                                 <li class="box-test-results"><img src="#{facesContext.externalContext.requestContextPath}/images/zhksjieguo.png" /></li>
+					                                 <li style="color:#ff6699">综合考试结果</li>
+					                                 <li style="color:#999;font-size:14px;">考试结果综合查询。</li>
+					                              </ul>
+					                     	</li>
+					                      </a>
+			                      		</c:when>
+			                      		<c:otherwise>
+			                      			<a href="javascript:void(0)" onclick="javascript:PF('login1').show();">
+											<li class="index">
+					                              <ul>
+					                                 <li class="box-test-results"><img src="#{facesContext.externalContext.requestContextPath}/images/zhksjieguo.png" /></li>
+					                                 <li style="color:#ff6699">综合考试结果</li>
+					                                 <li style="color:#999;font-size:14px;">考试结果综合查询。</li>
+					                              </ul>
+					                     	</li>
+					                      </a>
+			                      		</c:otherwise>
+			                    </c:choose>
+			                      
+			                  <c:choose>
+			                      <c:when test="#{clientSession.usr!=null}">
+				                      <a href="#{facesContext.externalContext.requestContextPath}/talk/BuffetExamCaseReportList.jspx">
+				                      	<li class="index">
+				                              <ul>
+				                                 <li class="box-practice"><img src="#{facesContext.externalContext.requestContextPath}/images/lxkaoshi.png" /></li>
+				                                 <li style="color:#0edfe1">练习考试结果</li>
+				                                 <li style="color:#999;font-size:14px;">随时查看每次练习结果。</li>
+				                              </ul>
+				                     	</li>
+				                     </a>
+				                 </c:when>
+				                 <c:otherwise>
+			                      			<a href="javascript:void(0)" onclick="javascript:PF('login1').show();">
+			                      				<li class="index">
+					                              <ul>
+					                                 <li class="box-practice"><img src="#{facesContext.externalContext.requestContextPath}/images/lxkaoshi.png" /></li>
+				                                 	<li style="color:#0edfe1">练习考试结果</li>
+				                                 	<li style="color:#999;font-size:14px;">随时查看每次练习结果。</li>
+					                              </ul>
+					                     	</li>
+			                      			</a>
+			                      </c:otherwise>
+			                 </c:choose>
+			                     
+			                 </ul>
+			            </div>
+			      </div>
+			</div>
+		<!-- </div> -->
+ <!--                   <div class="ui-grid-col-4" style="border:0px solid green;">
+                        <h:panelGrid columns="1" style="width:100%;border:0px solid red;">  -->
+                        	
+<!-- 							<p:panel header="#{i18nBean.lang('person_profile')}" styleClass="indexPanel">
+								<p:graphicImage value="/images/gerenziliao.png"/>
+								<br/>
+								<div class="indexPanelContent">
+								    <h:outputText value="#{i18nBean.lang('person.info')}"/> 
+								</div>
+								
+								<br/>
+								<p:button href="/talk/UserCenter.jspx" value="#{i18nBean.lang('login.exam')}"/>
+							</p:panel> -->
+                        	
+                        	<!-- 考试分类 -->
+<!--                         	<p:panel header="#{i18nBean.lang('exam.category')}" style="">
+                                <ui:repeat value="#{listExamLabelType.labelTypes}" var="labelType" >
+                                    <h:outputText value="#{labelType.name}" style="font-weight: bold;"/>
+                                    <p:separator/>
+                                    <p:dataGrid value="#{labelType.examLabels}" var="label" columns="2" styleClass="threadColumn3" emptyMessage="">
+                                        <h:outputLink value="#{facesContext.externalContext.requestContextPath}/talk/ExaminationList.jspx?lid=#{label.id}" style="margin-left: -10px;">
+                                            <h:outputText value="#{label.name}" style="margin:0px 10px 0px 10px;"/>  
+                                        </h:outputLink>
+                                    </p:dataGrid>
+                                    <p:spacer height="10" style="display:block;"/>
+                                </ui:repeat>
+                            </p:panel> -->
+
+							<!-- 课程分类 -->
+<!--                             <p:panel header="#{i18nBean.lang('lesson.category')}" rendered="#{copyrightController.sysType!='1' and copyrightController.sysType!='2' and applicationBean.systemConfig.openLesson}" style="">
+                                <h:panelGrid columns="1" style="width:100%;">
+                                    <c:forEach items="#{lessonTypeList.lessonTypes}" var="zone">
+                                        <h:outputLink value="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{zone.id}">
+                                            <h:outputText value="#{zone.name}"></h:outputText>
+                                        </h:outputLink>
+                                    </c:forEach>
+                                </h:panelGrid>
+                            </p:panel> -->
+                            
+                            <!-- 在线课程 -->
+ <!--                            <p:panel header="#{i18nBean.lang('online_course')}" rendered="#{copyrightController.sysType!='1' and copyrightController.sysType!='2' and applicationBean.systemConfig.openLesson}" styleClass="indexPanel">
+                                <p:graphicImage value="/resources/images/icon/icon7.png"/>
+                                <br/>
+                                <div class="indexPanelContent">
+                                    <h:outputText value="#{i18nBean.lang('online_course.info')}"/> 
+                                </div>
+                                <br/>
+                                <p:button href="/talk/LessonTypeList.jspx" value="#{i18nBean.lang('online_course.login')}"/>
+                            </p:panel>
+
+                        </h:panelGrid>
+                    </div>
+
+                    <div class="ui-grid-col-9" style="border:0px solid blue;">
+                        <style>
+                            .indexPanel{
+                                text-align: center;
+                            }
+                        </style>
+                        <h:panelGrid columns="3">
+                        
+                        	正式考试
+                            <p:panel header="#{i18nBean.lang('normal_examination')}" styleClass="indexPanel">
+                                <p:graphicImage value="/resources/images/icon/icon8.png"/>
+                                <br/>
+                                <div class="indexPanelContent">
+                                    <h:outputText value="#{i18nBean.lang('examination.info')}"/> 
+                                </div>
+
+                                <br/>
+                                <p:button href="/talk/ExaminationList.jspx" value="#{i18nBean.lang('login.exam')}"/>
+                            </p:panel> -->
+                            
+                            <!-- 每日竞赛 -->
+<!--                             <p:panel header="#{i18nBean.lang('everyday_competition')}" rendered="#{applicationBean.systemConfig.openContest}"  styleClass="indexPanel">
+                                <p:graphicImage value="/resources/images/icon/icon2.png"/>
+                                <br/>
+                                <div class="indexPanelContent">
+                                    <h:outputText value="#{i18nBean.lang('competition.info')}。"/> 
+                                </div>
+                                <br/>
+                                <p:button href="/talk/ExamContestList.jspx" value="#{i18nBean.lang('competition.login')}"/>
+                            </p:panel> -->
+                            
+                            <!-- 自助练习 -->
+ <!--                            <p:panel header="#{i18nBean.lang('buffet_exam')}" rendered="#{applicationBean.systemConfig.openBuffet}" styleClass="indexPanel">
+                                <p:graphicImage value="/resources/images/icon/icon1.png"/>
+                                <br/>
+                                <div class="indexPanelContent">
+                                    <h:outputText value="#{i18nBean.lang('buffet.info')}"/> 
+                                </div>
+                                <br/>
+                                <p:button href="/talk/BuffetExaminationList.jspx" value="#{i18nBean.lang('buffet.login')}"/>
+                            </p:panel>
+
+							章节训练
+                            <p:panel header="#{i18nBean.lang('module_train')}" rendered="#{applicationBean.systemConfig.openModuleExam}" styleClass="indexPanel">
+                                <p:graphicImage value="/resources/images/icon/icon4.png"/>
+                                <br/>
+                                <div class="indexPanelContent">
+                                    <h:outputText value="#{i18nBean.lang('module_train.info')}"/> 
+                                </div>
+                                <br/>
+                                <p:button href="/talk/ExamModule2List.jspx" rendered="#{clientSession.ifLogin}" value="知识点练习"/>
+                                <p:button value="请登录" rendered="#{!clientSession.ifLogin}" onclick="PF('login1').show();return false;"/>
+                           </p:panel> -->
+							
+							<!-- 我的错题 -->
+<!--                             <p:panel header="#{i18nBean.lang('wrong_center')}" rendered="#{(copyrightController.sysType=='1' or copyrightController.sysType=='2') and applicationBean.systemConfig.openWrong}"  styleClass="indexPanel">
+                                <p:graphicImage value="/resources/images/icon/icon6.png"/>
+                                <br/>
+                                <div class="indexPanelContent">
+                                    <h:outputText value="#{i18nBean.lang('wrong_center.info')}"/> 
+                                </div>
+                                <br/>
+                                <p:button href="/talk/WrongQuestionList.jspx" rendered="#{clientSession.ifLogin}" value="#{i18nBean.lang('wrong_center.login')}"/>
+                                <p:button value="#{i18nBean.lang('please_login')}" rendered="#{!clientSession.ifLogin}" onclick="PF('login1').show();
+                                        return false;"/>
+                            </p:panel> -->
+
+							<!-- 交流讨论 -->
+<!--                             <p:panel header="#{i18nBean.lang('bbs_talk')}" rendered="#{applicationBean.systemConfig.openForum}" styleClass="indexPanel">
+                                <p:graphicImage value="/resources/images/icon/icon9.png"/>
+                                <br/>
+                                <div class="indexPanelContent">
+                                    <h:outputText value="#{i18nBean.lang('bbs_talk.info')}"/> 
+                                </div>
+                                <br/>
+                                <p:button href="/talk/ZoneList.jspx" value="#{i18nBean.lang('bbs_talk.login')}"/>
+                            </p:panel> -->
+
+<!--                         </h:panelGrid>
+                    </div>
+					<div style="clear: both;"></div> -->
+					
+<!-- 					<div class="classification">
+						<div class="class-content">
+						      <div class="class-title">
+						           <p><span class="class-icon"></span>分类</p>
+						      </div>
+						      <div class="class-category">  
+						           <ul>
+						           <li class="index">
+						                    <a href="login.html">
+						                        <ul>
+						                           <li class="box-personal"><img src="#{facesContext.externalContext.requestContextPath}/images/gerenziliao.png" /></li>
+						                           <li style="color:#9999ff">个人资料</li>
+						                           <li style="color:#999;font-size:14px;">管理自己的信息。</li>
+						                        </ul>
+						                   </a>
+						               </li>
+						               <li class="index">
+						                    <a href="login.html">
+						                        <ul>
+						                           <li class="box-course"><img src="#{facesContext.externalContext.requestContextPath}/images/kecheng.png" /></li>
+						                           <li style="color:#229fe2">在线课程</li>
+						                           <li style="color:#999; font-size:14px;">大量在线课程任你学，边学边考。</li>
+						                        </ul></a>
+						               </li>
+						             <li class="index">
+						                    <a href="login.html">
+						                        <ul>
+						                           <li class="box-SelfPractice"><img src="#{facesContext.externalContext.requestContextPath}/images/zzlianxi.png" /></li>
+						                           <li style="color:#eb3f00">自主练习</li>
+						                           <li style="color:#999;font-size:14px;">题目数量自主设置，我的练习我做主。</li>
+						                        </ul>
+						                   </a>
+						               </li>
+						               <li class="index">
+						                    <a href="login.html">
+						                        <ul>
+						                           <li class="box-ChapterPractice"><img src="#{facesContext.externalContext.requestContextPath}/images/zjlianxi.png" /></li>
+						                           <li style="color:#ff9804">章节练习</li>
+						                           <li style="color:#999;font-size:14px;">按章节练习，有针对性地重点突破。</li>
+						                        </ul>
+						                   </a>
+						               </li>
+						               <li class="index">
+						                    <a href="login.html">
+						                        <ul>
+						                           <li class="box-test"><img src="#{facesContext.externalContext.requestContextPath}/images/kaoshi.png" /></li>
+						                           <li style="color:#556eea">正式考试</li>
+						                           <li style="color:#999;font-size:14px;">学完了，来检阅下自己的学习成果吧！</li>
+						                        </ul>
+						                   </a>
+						               </li>
+						                <li class="index">
+						                    <a href="login.html">
+						                        <ul>
+						                           <li class="box-wrong"><img src="#{facesContext.externalContext.requestContextPath}/images/cuoti.png" /></li>
+						                           <li style="color:#00cc99">我的错题</li>
+						                           <li style="color:#999;font-size:14px;">错题自动收集，方便查看。</li>
+						                        </ul>
+						                   </a>
+						               </li>
+						                <li class="index">
+						                    <a href="login.html">
+						                        <ul>
+						                           <li class="box-test-results"><img src="#{facesContext.externalContext.requestContextPath}/images/zhksjieguo.png" /></li>
+						                           <li style="color:#ff6699">综合考试结果</li>
+						                           <li style="color:#999;font-size:14px;">考试结果综合查询。</li>
+						                        </ul>
+						                   </a>
+						               </li>
+						                <li class="index">
+						                    <a href="login.html">
+						                        <ul>
+						                           <li class="box-practice"><img src="#{facesContext.externalContext.requestContextPath}/images/lxkaoshi.png" /></li>
+						                           <li style="color:#0edfe1">练习考试结果</li>
+						                           <li style="color:#999;font-size:14px;">随时查看每次练习结果。</li>
+						                              </ul>
+						                         </a>
+						                     </li>
+						                      
+						                 </ul>
+						            </div>
+						      </div>
+						</div> 
+                </div>-->
+                
+                
+
+                
+                <script type="text/javascript">
+                </script>
+                
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

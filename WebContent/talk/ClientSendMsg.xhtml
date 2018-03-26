@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+	<head>
+		<title>My Facelets Page</title>
+		<meta http-equiv="keywords" content="enter,your,keywords,here" />
+		<meta http-equiv="description"
+			content="A short description of this page." />
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+		<!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+	</head>
+	<body>
+		<ui:composition template="GeneralAdd.xhtml">
+
+			<ui:define name="content">
+				<div>
+					<h:panelGrid columns="2" style="width:100%">
+						<h:outputText id="outputText1" styleClass="headLine"
+							value="－－－发送消息－－－" />
+					</h:panelGrid>
+				</div>
+				<p:separator></p:separator>
+				<h:panelGrid columns="2">
+					<h:outputText value="收件人："></h:outputText>
+					<h:outputText value="#{clientSendMsg.mm.receiver.urn}"></h:outputText>
+					<h:outputText value="发件人："></h:outputText>
+					<h:outputText value="#{clientSendMsg.mm.sender.urn}"></h:outputText>
+					<h:outputText value="标题："></h:outputText>
+					<h:inputText value="#{clientSendMsg.mm.title}" style="width:500px"></h:inputText>
+					<h:outputText value="内容："></h:outputText>
+					<p:editor width="500" height="350" value="#{ClientSendMsg.mm.content}"></p:editor>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<h:commandButton value="发送" action="#{clientSendMsg.send}"
+						style="width:50px"></h:commandButton>
+				</h:panelGrid>
+
+
+			</ui:define>
+		</ui:composition>
+	</body>
+</html>

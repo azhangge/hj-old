@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition>
+            <p:dialog id="ManualPanel" widgetVar="ManualPanel" width="700" minHeight="200" resizable="true" header="系统帮助">
+                <p:outputPanel autoUpdate="true">
+                    <div style="text-align: left!important;max-height: 430px;overflow-y: auto;">
+                        <h:outputText value="主题：" style="font-weight: bold;"/>
+                    <h:outputText value="#{listManual.manual.title}" style="font-weight: bold;"/>
+                    <p:separator/>
+                    <h:outputText value="#{listManual.manual.content}" escape="false"/>
+                    </div>
+                </p:outputPanel>
+            </p:dialog>
+        </ui:composition>
+    </h:body>
+</html>
+

@@ -1,0 +1,33 @@
+div.create_course_div {
+	width: 900px;
+}
+.fileTable{
+	text-align: center;
+}
+.teacher_pic {
+	width: 100px;
+	height: 50px;
+}
+
+.column1 {
+	width: 60px;
+}
+
+.column2 {
+	width: 60px;
+}
+
+.chapterTable{
+	text-align: center;
+}
+
+div.ui-fileupload{
+	float: left;
+}
+div.ui-fileupload div.ui-fileupload-content{
+	display: none;
+}
+div.ui-fileupload div.ui-fileupload-buttonbar{
+	border: none;
+	background: none;
+}

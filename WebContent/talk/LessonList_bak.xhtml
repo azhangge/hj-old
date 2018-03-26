@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <h:head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </h:head>
+    <h:body>
+        <ui:composition template="General3.xhtml">
+            <ui:define name="title">
+                <h:outputText value="课程学习 - 课程列表" />
+            </ui:define>
+            <ui:define name="content">
+                <script type="text/javascript" language="javascript">
+                    function aabbcc(url) {
+                        var scrWidth = screen.availWidth;
+                        var scrHeight = screen.availHeight;
+                        var self = window.open(url, '', "fullscreen=3,resizable=false,toolbar=no,menubar=no,scrollbars=yes,location=no,top=0,left=0,width=" + scrWidth + ",height=" + scrHeight);
+                        //self.resizeTo(scrWidth,scrHeight);
+                        self.moveTo(0, 0);
+                    }
+
+                </script>
+                <p:panel id="topNav8" styleClass="frontColumn topNav8Wrapper">
+                    <h:outputLink value="#{facesContext.externalContext.requestContextPath}" styleClass="nav8">
+                        <h:outputText value="首页" />
+                    </h:outputLink>
+                    <h:outputText value="/" styleClass="navSeparator"/>
+                    <h:outputLink value="LessonTypeList.jspx" styleClass="nav8">
+                        <h:outputText value="在线课程" />
+                    </h:outputLink>
+                    <h:outputText value="/" styleClass="navSeparator" rendered="#{lessonList.lessonType!=null}"/>
+                    <h:outputText value="#{lessonList.lessonType.name}"  styleClass="nav8"/>
+                </p:panel>
+                
+                
+ <!--                <p:outputPanel style="text-align: right;" rendered="#{clientSession.ifLogin}">
+                    <p:button href="BuyedLessonList.jspx" value="查看我的学习资料"  style="margin: 0px 30px 10px 0px;"/>
+                </p:outputPanel> -->
+
+				<p:dataTable id="lessonTypeDc" rendered="#{lessonList.lessonType!=null}" value="#{lessonList.lessonType}" var="kechen" 
+				style="width:100%" styleClass="frontColumn" emptyMessage="暂无课程" >
+					<p:column id="columnRefType"  resizable="true" style="width:300px!important;text-align: left;" >
+                        <f:facet name="header">
+                            <h:outputText value="课程" />
+                        </f:facet>
+                        <h:outputText value="#{kechen.name}">
+                        </h:outputText>
+                    </p:column>
+                    
+                    <p:column style="width:100px;text-align: center;"  resizable="true" rendered="#{applicationBean.systemConfig.showScore and copyrightController.sysType!='1'}">
+                        <f:facet name="header">
+                            <h:outputText value="消耗积分" />
+                        </f:facet>
+                        <h:outputText id="totalScorePaid" value="#{kechen.totalScorePaid}" styleClass="tip"/><br/>
+                    </p:column>
+                    
+					<p:column style="text-align: center;"  resizable="true">
+                        <f:facet name="header">
+                            <h:outputText value="课时数" />
+                        </f:facet>
+                        <h:outputText  value="#{kechen.totalClassNum}" styleClass="tip"/><br/>
+                    </p:column>
+                    
+                     <p:column style="text-align: center;"  resizable="true" id="ifBuy">
+                        <f:facet name="header">
+                            <h:outputText value="操作" />
+                        </f:facet>
+                    	<h:panelGroup rendered="#{!clientSession.usr.lessonTypeStr.contains(kechen.id)}">
+                    		<script type="text/javascript" language="javascript">
+								function ConfirmBuy() {
+									if(#{kechen.totalScorePaid}==0){
+										return confirm("该课程免费，是否立即参加该课程？");
+									}else{
+										return confirm("您还有#{clientSession.usr.score}积分，购买本课程将会消耗#{kechen.totalScorePaid}积分,  确认购买课程吗？");
+									}
+								}
+							</script>
+                            <p:commandLink value="请登录"  rendered="#{!clientSession.ifLogin}" onclick="PF('login1').show()" />
+                            <p:commandButton value="购买" update="@form"  action="#{lessonTypeDetail.buy()}"  onclick="return ConfirmBuy()" rendered="#{clientSession.ifLogin and clientSession.usr.score>=kechen.totalScorePaid and kechen.totalScorePaid!=0}">
+                            	<f:param name="tid" value="#{kechen.id}" ></f:param>
+                            </p:commandButton>
+                            <p:commandButton value="参加该课程" update="@form"  action="#{lessonTypeDetail.buy()}"  onclick="return ConfirmBuy()" rendered="#{clientSession.ifLogin and clientSession.usr.score>=kechen.totalScorePaid and kechen.totalScorePaid==0}">
+                            	<f:param name="tid" value="#{kechen.id}" ></f:param>
+                            </p:commandButton>
+                            <h:outputText value="积分不够，我的积分#{clientSession.usr.score}"  rendered="#{clientSession.ifLogin and kechen.totalScorePaid>clientSession.usr.score}"/>
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{clientSession.ifLogin and clientSession.usr.lessonTypeStr.contains(kechen.id)}">
+                            <h:outputText value="已购买"  />
+                        </h:panelGroup>
+                     </p:column>
+				</p:dataTable>
+
+				<p:separator/>
+					<style>
+                    	.ui-datatable tbody td {
+						    border-color: inherit;
+						    background-color: #fff;
+						}
+                    </style>
+                <p:dataTable id="lessonDc" resizableColumns="true" value="#{(applicationBean.systemConfig.onlyDeptLesson and clientSession.ifLogin)?lessonList.accessibleLessons:lessonList.lessons}"
+                 var="zone" rows="10" paginator="true" paginatorPosition="bottom"  style="width:100%" styleClass="list" emptyMessage="暂无课程资料">
+                    <p:column id="columnRefType"  resizable="true" style="width:300px!important;text-align: left;" filterBy="#{zone.name}" filterMatchMode="contains" filterStyle="width:60%;display:inline;margin-left:10px;">
+                        <f:facet name="header">
+                            <h:outputText value="学习资料" />
+                        </f:facet>
+
+                        <h:outputText value="#{zone.name}"></h:outputText>
+                    </p:column>
+                    <p:column style="width:100px;text-align: center;"  resizable="true" >
+                        <f:facet name="header">
+                            <h:outputText value="消耗积分" />
+                        </f:facet>
+                        <h:outputText id="scorePaid" value="#{zone.scorePaid}" styleClass="tip"/><br/>
+
+                    </p:column>
+                    <p:column style="text-align: center;"  resizable="true">
+                        <f:facet name="header">
+                            <h:outputText value="课时数" />
+                        </f:facet>
+                        <h:outputText  value="#{zone.classNum}" styleClass="tip"/><br/>
+
+                    </p:column>
+                    <p:column style="width:200px;" sortBy="#{zone.availableBegain}" resizable="true">
+                        <f:facet name="header">
+                            <h:outputText value="开放时间" />
+                        </f:facet>
+                        <h:outputText value="开始时间：" />
+                        <h:outputText value="#{zone.availableBegain}" styleClass="tip">
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8"/>
+                        </h:outputText>
+                        <br/>
+                        <h:outputText value="结束时间：" />
+                        <h:outputText value="#{zone.availableEnd}" styleClass="tip">
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="text-align: center;"  resizable="true" rendered="#{clientSession.ifLogin and clientSession.usr.lessonTypeStr.contains(lessonList.lessonType.id)}">
+                        <f:facet name="header">
+                            <h:outputText value="操作" />
+                        </f:facet>
+                        <h:panelGroup>
+                            <h:outputText value="未开放&lt;br/>" escape="false"   rendered="#{!zone.ifOpen}"/>
+                            <p:button value="学习"   href="LessonDetail2.jspx?id=#{zone.id}" rendered="#{zone.ifOpen}"/>
+                            <p:button value="随堂练习" rendered="#{zone.moduleExaminations.size()>0}" href="/servlet/pc/ExamCaseModule2Controller?type=3&amp;exam_id=#{zone.moduleExaminations.get(0).id}" />
+                        </h:panelGroup>
+                    </p:column>
+                </p:dataTable>
+
+                <p:separator/>
+
+                <p:dataTable id="examDc" rendered="#{lessonList.lessonType.exams.size()!=0}" value="#{lessonList.lessonType.exams}" var="exam" style="width:100%" styleClass="frontColumn" emptyMessage="暂无考试" rows="10" paginator="true" paginatorPosition="bottom" >
+                    <f:facet name="header" >
+                        <h:outputText value="关联的综合考试（开放考试要求完成的最低课时数：#{lessonList.lessonType.openExamNum}，我已经完成的数量：#{lessonList.lessonTypeLog.finishedClassNum}）" />
+                    </f:facet>
+                    <p:column id="columnRefType" style="width:250px!important;text-align: left;">
+                        <f:facet name="header" >
+                            <h:outputText value="考试" />
+                        </f:facet>
+                        <h:outputText value="#{exam.name}"></h:outputText><br/>
+                        <h:outputText value="#{exam.availableBegain}" styleClass="tip">
+                            <f:convertDateTime pattern="开放时间：yyyy-MM-dd HH:mm" timeZone="GMT+8"/>
+                        </h:outputText><br/>
+                        <h:outputText value="#{exam.availableEnd}" styleClass="tip">
+                            <f:convertDateTime pattern="结束时间：yyyy-MM-dd HH:mm" timeZone="GMT+8"/>
+                        </h:outputText>
+                    </p:column>
+                    <!-- <p:column style="text-align: center;width:100px">
+                        <f:facet name="header">
+                            <h:outputText value="评分类型" />
+                        </f:facet>
+                        <h:outputText value="#{exam.ifDirect?'智能评分':'手工评分'}" styleClass="tip"/><br/>
+                    </p:column> -->
+
+                    <p:column style="width:100px!important;text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="考试时长" />
+                        </f:facet>
+                        <h:outputText value="#{exam.timeLen}分钟" styleClass="tip"/><br/>
+                    </p:column>
+
+                    <!-- <p:column style="text-align: center;" rendered="#{applicationBean.systemConfig.showScore and copyrightController.sysType!='1'}">
+                        <f:facet name="header">
+                            <h:outputText value="积分" />
+                        </f:facet>
+                        <h:outputText id="scorePaid" value="积分消耗：#{exam.scorePaid}" styleClass="tip"/><br/>
+                        <h:outputText id="fullScore" value="满分积分：#{exam.bbsScore}" styleClass="tip"/>
+                        <p:tooltip for="scorePaid" value="参加考试时消耗积分#{exam.scorePaid}"/>
+                        <p:tooltip for="fullScore" value="实际获得积分=实际成绩/满分*#{exam.bbsScore}"/>
+
+                    </p:column> -->
+                    <p:column style="width:180px!important;text-align: center;"> 
+                        <f:facet name="header">
+                            <h:outputText value="题目" />
+                        </f:facet>
+                        <h:panelGrid rendered="#{exam.paperType=='manual'}" columns="1" cellpadding="0" cellspacing="0">
+                            <ui:repeat value="#{exam.manualPaper.parts}" rendered="#{exam.ifManualPaper}" var="part1" >
+                                <h:outputText value="#{part1.name}：#{part1.itemNum}" styleClass="tip"/>
+                                <br />
+                                <h:outputText value="，" rendered="#{!row.last}" styleClass="tip"/>
+                            </ui:repeat>
+                        </h:panelGrid>
+                        <h:panelGrid rendered="#{exam.paperType=='random2'}" columns="1" styleClass="threadColumn special1 special2" style="text-align: center;" cellpadding="0" cellspacing="0">
+                            <ui:repeat value="#{exam.random2Paper.parts}" rendered="#{exam.ifRandom2Paper}"  var="part1" varStatus="row">
+                                <h:outputText value="#{part1.name}：#{part1.itemNum}" styleClass="tip"/>
+                                <br />
+                                <h:outputText value="，" rendered="#{!row.last}" styleClass="tip"/>
+                            </ui:repeat>
+                        </h:panelGrid>
+                        <h:panelGrid rendered="#{exam.paperType=='random'}" columns="2" styleClass="threadColumn special1 special2" style="text-align: center;" cellpadding="0" cellspacing="0">
+                            <h:outputText value="单选题：#{exam.choiceTotal}" styleClass="tip" rendered="#{exam.choiceTotal!=0}"/>
+                            <h:outputText value="多选题：#{exam.multiChoiceTotal}" styleClass="tip" rendered="#{exam.multiChoiceTotal!=0}"/>
+                            <h:outputText value="填空题：#{exam.fillTotal}" styleClass="tip" rendered="#{exam.fillTotal!=0}"/>
+                            <h:outputText value="判断题：#{exam.judgeTotal}" styleClass="tip" rendered="#{exam.judgeTotal!=0}"/>
+                            <h:outputText value="问答题：#{exam.essayTotal}" styleClass="tip" rendered="#{exam.essayTotal!=0}"/>
+                            <h:outputText value="文件题：#{exam.fileTotal}" styleClass="tip" rendered="#{exam.fileTotal!=0}"/>
+                            <h:outputText value="#{exam.caseAlias}：#{exam.caseTotal}" styleClass="tip" rendered="#{exam.caseTotal!=0}"/>
+                        </h:panelGrid>
+
+                    </p:column>
+
+                    <p:column style="width:150px!important;text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="最高分"  escape="false"/>
+                        </f:facet>
+                        <h:outputText value="#{exam.topExamCase.score}" styleClass="tip"/>
+                    </p:column>
+
+
+                    <p:column style="text-align: center;width:150px;" rendered="#{clientSession.ifLogin}">
+                        <f:facet name="header">
+                            <h:outputText value="考试" />
+                        </f:facet>
+                        <p:commandButton value="正式考试"
+						action="#{examinationList.paticipateExam(exam.id)}"
+						update="examDc"
+						onclick="aabbcc('#{facesContext.externalContext.requestContextPath}/servlet/pc/ExamCaseController?exam_id=#{exam.id}')"
+						rendered="#{exam.ifOpen and exam.checkParticipateTimes(clientSession.usr.id) lt exam.maxNum and lessonList.lessonTypeLog.finishedClassNum ge lessonList.lessonType.openExamNum}" />
+                        <br></br>
+                        <h:outputText value="考试次数用完" rendered="#{exam.checkParticipateTimes(clientSession.usr.id) ge exam.maxNum}"/>
+                        <h:outputText value="课程未完成" rendered="#{lessonList.lessonTypeLog.finishedClassNum lt lessonList.lessonType.openExamNum}"/>
+                        <h:outputText value="未开放&lt;br/>" escape="false"   rendered="#{!exam.ifOpen}"/>
+                        <h:outputText value="不允许重复参加"  rendered="#{exam.scoreExsits and (!exam.allowUserRepeat)}"/>
+                        <br></br>
+                        <p:commandButton value="模拟考试" action="#{examinationList.paticipateExam(exam.id)}" update="examDc"
+						onclick="aabbcc('#{facesContext.externalContext.requestContextPath}/servlet/pc/ExamCaseController?exam_id=#{exam.id}&amp;exam_type=1')"
+						rendered="#{exam.ifOpen and lessonList.lessonTypeLog.finishedClassNum ge lessonList.lessonType.openExamNum}" />
+                    </p:column>
+                </p:dataTable>
+
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

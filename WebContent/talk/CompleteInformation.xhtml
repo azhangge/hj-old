@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title></title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <link rel="stylesheet" type="text/css"
+              href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs.css" />
+        <link rel="stylesheet" type="text/css"
+              href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs_a.css" />
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+        <style >
+        	.ui-icon-seek-first ,.ui-icon-seek-prev ,.ui-icon-seek-next ,.ui-icon-seek-end{
+				height: 20px!important;
+			}
+        </style>
+    </h:head>
+    <h:body>
+    	<ui:composition template="General3.xhtml">
+    	<ui:define name="title">
+			<h:outputText value="补全考试信息" />
+		</ui:define>
+    	<ui:define name="content">
+    		<p:panel id="topNav8" styleClass="frontColumn topNav8Wrapper"
+				style="margin-bottom: 10px!important;">
+				<h:outputLink value="#{facesContext.externalContext.requestContextPath}" styleClass="nav8">
+					<h:outputText value="首页" />
+				</h:outputLink>
+				<h:outputText value=">" styleClass="navSeparator" />
+				<h:outputLink value="#{facesContext.externalContext.requestContextPath}/talk/IntensiveExaminationNoticeList.xhtml" styleClass="nav8">
+					<h:outputText value="考试通知" styleClass="nav8" />
+				</h:outputLink>
+					<h:outputText value=">" styleClass="navSeparator" />
+				<h:outputLink value="#{facesContext.externalContext.requestContextPath}/servlet/pc/RegIntensiveExamController?id=#{completeInfo.exam.id}" styleClass="nav8">	
+					<h:outputText value="考试通知详情" styleClass="nav8" />
+				</h:outputLink>
+						<h:outputText value=">" styleClass="navSeparator" />
+				<h:outputText value="补全信息"
+					styleClass="nav8" />
+				
+				<h:outputLink value="#{facesContext.externalContext.requestContextPath}/talk/ExamCaseReportList.jspx" styleClass="nav8" style="float:right;">
+					<h:outputText value="集中考试成绩" styleClass="nav8" />
+				</h:outputLink>
+			</p:panel>
+			
+			<p:panel style="width:500px;margin: 0 auto;">
+				<h:panelGrid columns="2" styleClass="generalInfo" style="vertical-align: middle!important;" columnClasses="rleft,rright">
+					<h:outputLabel value="真实姓名:" />
+                   	<h:panelGroup>
+                       	<p:inputText id="name" value="#{completeInfo.usr.name}"  style="width:340px;height:35px; margin:10px 0px;-webkit-box-shadow:inset 0 2px 2px #ffffff;
+                       	box-shadow:inset 0 2px 2px #ffffff;" >
+                       	</p:inputText>
+                       	<span style="color:red;margin-left:2px" >*</span>
+                   	</h:panelGroup>
+                   	
+                   	<h:outputLabel value="身份证号:" />
+                   	<h:panelGroup>
+                       	<p:inputText id="pid" value="#{completeInfo.usr.pid}"  style="width:340px;height:35px; margin:10px 0px;-webkit-box-shadow:inset 0 2px 2px #ffffff;
+                       	box-shadow:inset 0 2px 2px #ffffff;" >
+                       	</p:inputText>
+                       	<span style="color:red;margin-left:2px" >*</span>
+                   	</h:panelGroup>
+                   	
+                   	<h:outputLabel value="所属单位:" />
+                   	<h:panelGroup>
+                       	<p:inputText id="company" value="#{completeInfo.usr.company}"  style="width:340px;height:35px; margin:10px 0px;-webkit-box-shadow:inset 0 2px 2px #ffffff;
+                       	box-shadow:inset 0 2px 2px #ffffff;" >
+                       	</p:inputText>
+                       	<span style="color:red;margin-left:2px" >*</span>
+                   	</h:panelGroup>
+                   	
+               	</h:panelGrid>
+               	
+               	<p:commandButton id="submit" widgetVar="ajax" style=" width:430px; height:35px; margin:20px 0;" value="提交信息" disabled="false" 
+               	 action="#{completeInfo.finish}"/>
+						    
+				<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+			</p:panel>
+		
+    	</ui:define>
+        </ui:composition>
+    </h:body>
+</html>

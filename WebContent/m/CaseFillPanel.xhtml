@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:p="http://primefaces.org/ui">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head> 
+    <body>
+        <ui:composition>
+            <p:dialog id="fillDialog" widgetVar="fillDialog" resizable="false" closable="true" width="680">  
+                <f:facet name="header">  
+                    <h:outputText value="查看填空题" /> 
+                </f:facet>  
+                <h:panelGroup id="fillPanel">
+                    <h:panelGrid columns="2" columnClasses="thdL,thdR">
+                        <h:outputText value="题目内容：" />
+                        <h:panelGroup>
+                            <pe:ckEditor id="newFill" widgetVar="newFill" value="#{caseEditFill.fillAgent.cq.name}"  customConfig="#{facesContext.externalContext.requestContextPath}/resources/js/ckeditor_config2.js" width="560" height="80">
+                                <pe:javascript  event="initialize" execute="onLoadCallback('newFill')" />
+                                <pe:javascript  rendered="#{applicationBean.systemConfig.autoUpload}" event="blur" execute="uploader.uploadWordImagesFromCKEditor(PF('newFill').instance,'#{caseEditFill.cq.id}')" />
+                            </pe:ckEditor>
+                            <h:outputText value="注：请将需要的填空内容写在[]中，例如“[JAVA]是面向对象程序设计语言”，表示“JAVA”将在题目中变为一个填空。" />
+                        </h:panelGroup>
+                        <h:outputText value="次序：" />
+                        <h:inputText  value="#{caseEditFill.fillAgent.cq.ord}" style="width: 50px;"/>
+                        <h:outputText value="试题解析：" />
+                        <h:panelGroup>
+                            <pe:ckEditor id="newFill3" widgetVar="newFill3" value="#{caseEditFill.fillAgent.cq.rightStr}"  customConfig="#{facesContext.externalContext.requestContextPath}/resources/js/ckeditor_config2.js" width="560" height="80">
+                                <pe:javascript  event="initialize" execute="onLoadCallback('newFill3')" />
+                                <pe:javascript  rendered="#{applicationBean.systemConfig.autoUpload}" event="blur" execute="uploader.uploadWordImagesFromCKEditor(PF('newFill3').instance,'#{caseEditFill.cq.id}')" />
+                            </pe:ckEditor>
+                        </h:panelGroup>
+                    </h:panelGrid>
+                </h:panelGroup>  
+                <p:separator/>
+                <p:commandButton action="#{caseEditFill.fillAgent.caseMBDone()}" process="@form" value="完成" oncomplete="PF('fillDialog').hide();" update=":myForm:dataTable2"/>
+            </p:dialog>
+        </ui:composition>
+    </body>
+</html>

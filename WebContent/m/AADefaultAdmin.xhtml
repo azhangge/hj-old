@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"  lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form id="myForm">
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                   
+                    <div>
+                        <h:outputText styleClass="tit"
+                                      value="－#{aADefaultAdmin.flag?'修改管理员':'添加管理员'}－" />
+                        <h:outputLink value="ListBusinessUser.jspx" styleClass="common">
+                            <h:outputText value="返回"></h:outputText>
+                        </h:outputLink>
+                        <p:separator/>
+                        <h:panelGrid columns="3">
+                            <h:outputText value="用户名：" />
+                            <h:inputText value="#{aADefaultAdmin.admin.urn}" style="width:400px">
+                                <p:ajax listener="#{aADefaultAdmin.onChangeUrn}" update="urnTip" process="@form"/>
+                            </h:inputText>
+                            <h:outputText id="urnTip" value="&nbsp;#{aADefaultAdmin.urnTip}" style="color:#{aADefaultAdmin.urnOk?'green;':'red;'}}" />
+							
+                            <h:outputText value="密码：" />
+                            <h:inputText value="#{aADefaultAdmin.admin.pwd}" style="width:400px" />
+                            <h:outputText/>
+                            
+                            <!-- <h:outputText value="密码：" />
+                            <h:inputSecret value="#{aADefaultAdmin.admin.pwd}" style="width:400px" />
+                            <h:outputText/> -->
+
+<!--                             <h:outputText value="角色名：" />
+                            <h:inputText value="#{aADefaultAdmin.admin.persona}" disabled="#{!adminSessionBean.ifSuper}" style="width:400px" /> -->
+
+                            <h:outputText value="称呼：" />
+                            <h:inputText value="#{aADefaultAdmin.admin.nickname}" style="width:400px" />
+							<h:outputText/>
+							
+							<h:outputText value="E-mail：" />
+                            <h:inputText value="#{aADefaultAdmin.admin.email}" style="width:400px" >
+                            	<p:ajax listener="#{aADefaultAdmin.onChangeEmail}" update="emailTip" process="@form"/>
+                            </h:inputText>
+                            <h:outputText id="emailTip" value="&nbsp;#{aADefaultAdmin.emailTip}" style="color:#{aADefaultAdmin.emailOk?'green;':'red;'}}" />
+                           
+                            <h:outputText value="手机号：" />
+                            <h:inputText value="#{aADefaultAdmin.admin.tel}" style="width:400px">
+                            	<p:ajax listener="#{aADefaultAdmin.onChangePhone}" update="phoneTip" process="@form"/>
+                            </h:inputText>
+							<h:outputText id="phoneTip" value="&nbsp;#{aADefaultAdmin.phoneTip}" style="color:#{aADefaultAdmin.phoneOk?'green;':'red;'}}" />
+							
+                            <h:outputLabel  styleClass="text" value="有效期：" disabled="#{!adminSessionBean.ifSuper}" />
+                            <h:panelGroup disabled="#{aADefaultAdmin.admin.grp!='company'}">
+                                <p:calendar value="#{aADefaultAdmin.admin.availableTime}"  disabled="#{!adminSessionBean.ifSuper}" pattern="yyyy-MM-dd HH:mm" navigator="true"  timeZone="GMT+8" locale="zh_CN" yearRange="c:c+100"/>
+                                <h:outputText value=" -- " />
+                                <p:calendar value="#{aADefaultAdmin.admin.expireTime}"  disabled="#{!adminSessionBean.ifSuper}" pattern="yyyy-MM-dd HH:mm" navigator="true" timeZone="GMT+8" locale="zh_CN"  yearRange="c:c+100"/>
+                            </h:panelGroup>
+							<h:outputText/>
+							
+                            <h:outputText value="启用：" rendered="#{adminSessionBean.ifSuper and aADefaultAdmin.admin.grp!='admin'}" />
+                            <h:selectBooleanCheckbox id="checkbox1" rendered="#{adminSessionBean.ifSuper and aADefaultAdmin.admin.grp!='admin'}"
+                             value="#{aADefaultAdmin.admin.enabled}" />
+                            <h:outputText rendered="#{adminSessionBean.ifSuper and aADefaultAdmin.admin.grp!='admin'}" />
+                            
+  
+                        </h:panelGrid>
+
+
+                        <p:separator/>
+
+                        <p:commandButton action="#{aADefaultAdmin.submit_action}" ajax="false" value="提交" />
+                        <p:growl autoUpdate="true"/>
+
+                    </div></h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"  lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+
+
+                <h:form id="myForm">
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <div>
+                        <h:outputText  styleClass="tit"
+                                       value="－设置章节练习－" />
+                        <p:separator/>
+                        <h:panelGrid columns="2" cellpadding="0" >
+                            <h:outputText value="章节名称：" />
+                            <h:outputText value="#{aAModuleExam22.exam.module.name}" style="width:600px;"/>
+                            <!-- 
+                            <h:outputText value="积分消耗："  rendered="#{copyrightController.sysType!='1'}"/>
+                            <h:inputText value="#{aAModuleExam22.exam.scorePaid}" style="width:40px;" rendered="#{copyrightController.sysType!='1'}"/>
+                             -->
+                            <h:outputText value="显示解析：" />
+                            <h:selectBooleanCheckbox value="#{aAModuleExam22.exam.ifShowAnswer}" style=""/>
+                            <h:outputText value="是否开放：" />
+                            <h:selectBooleanCheckbox value="#{aAModuleExam22.exam.ifOpen}" style=""/>
+                            <h:outputText value="加载模式：" />
+                            <h:panelGroup>
+                                <p:selectOneMenu  value="#{aAModuleExam22.exam.displayMode}">
+                                    <f:selectItem itemLabel="批量加载" itemValue="multiple"/>
+                                    <f:selectItem itemLabel="单题加载" itemValue="single"/>
+                                </p:selectOneMenu> 
+                                <h:outputText value="（批量加载时会一次性加载本节所有题目，可以减少请求服务器次数，但章节题目过多时请用单题加载模式）。"  style="display: inline;"/>
+                            </h:panelGroup>
+                        </h:panelGrid>
+                        <p:separator/>
+                        <p:panel header="试卷大题">
+                            <p:dataTable  value="#{aAModuleExam22.exam.parts}" var="part" id="dataTable99" emptyMessage="#{lang['exam.empty_result']}"
+                                          styleClass="list" rowIndexVar="row" style="width:100%" rows="30">
+                                <p:column>
+                                    <h:inputText value="#{part.name}"/>
+                                    <f:facet name="header">
+                                        <h:outputText value="大题名称" />
+                                    </f:facet>
+                                </p:column>
+
+
+
+
+                                <p:column  style="">
+                                    <h:inputText value="#{part.description}"/><f:facet name="header">
+                                        <h:outputText value="题目说明" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column  style="">
+                                    <h:inputText value="#{part.ord}"/>
+                                    <f:facet name="header">
+                                        <h:outputText value="题目次序" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column  style="">
+                                    <p:commandLink action="#{aAModuleExam22.deletePart(part.id)}" value="删除" update="@form"/>
+                                    <f:facet name="header">
+                                        <h:outputText value="删除" />
+                                    </f:facet>
+                                </p:column>
+                            </p:dataTable>
+                            <p:separator/>
+                            <h:panelGrid columns="2">
+                                <h:outputText value="大题名称" />
+                                <h:inputText value="#{aAModuleExam22.newPart.name}">
+                                    <f:validateRequired />
+                                </h:inputText>
+                                <h:outputText value="题目说明" />
+                                <h:inputText value="#{aAModuleExam22.newPart.description}"/>
+                                <h:outputText value="题目次序" />
+                                <h:inputText value="#{aAModuleExam22.newPart.ord}"/>
+                            </h:panelGrid>
+                            <p:commandButton action="#{aAModuleExam22.addNewPart()}" update="@form" value="添加新大题"/>
+                            <p:commandButton process="@form" update="@form" value="更新"/>
+                            <p:separator/>
+
+                        </p:panel>
+                        <p:separator/>
+                        <p:panel id="main_panel" header="章节小题目分布">
+                            <div>
+                                <p:treeTable value="#{aAModuleExam22.root2}" var="me" >
+                                    <f:facet name="header">
+                                        <h:outputText value="请设置每个模块题型所属的大题" />
+                                    </f:facet>
+                                    <p:column style="text-align: center;">
+                                        <h:outputText value="#{me.module.name}" />
+                                        <f:facet name="header">
+                                            <h:outputText value="模块名称" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column>
+                                        <h:panelGroup rendered="#{fn:length(me.module.sons)==0}">
+                                            <h:selectOneMenu value="#{me.choicePartId}">
+                                                <f:selectItem itemLabel="-无-" itemValue="0"/>
+                                                <f:selectItems value="#{aAModuleExam22.exam.parts}" var="part" itemLabel="#{part.name}" itemValue="#{part.id}"/>
+                                            </h:selectOneMenu><br/>
+                                            <h:outputText value="共#{me.module.choiceNum}道"/>
+                                        </h:panelGroup>
+                                        <f:facet name="header">
+                                            <h:outputText value="单选题" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column>
+                                        <h:panelGroup rendered="#{fn:length(me.module.sons)==0}">
+                                            <h:selectOneMenu value="#{me.mchoicePartId}">
+                                                <f:selectItem itemLabel="-无-" itemValue="0"/>
+                                                <f:selectItems value="#{aAModuleExam22.exam.parts}" var="part" itemLabel="#{part.name}" itemValue="#{part.id}"/>
+                                            </h:selectOneMenu><br/>
+                                            <h:outputText value="共#{me.module.multiChoiceNum}道"/>
+                                        </h:panelGroup>
+                                        <f:facet name="header">
+                                            <h:outputText value="多选题" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column>
+                                        <h:panelGroup rendered="#{fn:length(me.module.sons)==0}">
+                                            <h:selectOneMenu value="#{me.fillPartId}">
+                                                <f:selectItem itemLabel="-无-" itemValue="0"/>
+                                                <f:selectItems value="#{aAModuleExam22.exam.parts}" var="part" itemLabel="#{part.name}" itemValue="#{part.id}"/>
+                                            </h:selectOneMenu><br/>
+                                            <h:outputText value="共#{me.module.fillNum}道"/>
+                                        </h:panelGroup>
+                                        <f:facet name="header">
+                                            <h:outputText value="填空题" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column>
+                                        <h:panelGroup rendered="#{fn:length(me.module.sons)==0}">
+                                            <h:selectOneMenu value="#{me.judgePartId}">
+                                                <f:selectItem itemLabel="-无-" itemValue="0"/>
+                                                <f:selectItems value="#{aAModuleExam22.exam.parts}" var="part" itemLabel="#{part.name}" itemValue="#{part.id}"/>
+                                            </h:selectOneMenu><br/>
+                                            <h:outputText value="共#{me.module.judgeNum}道" />
+                                        </h:panelGroup>
+                                        <f:facet name="header">
+                                            <h:outputText value="判断题" />
+                                        </f:facet>
+                                    </p:column> 
+                                    <p:column>
+                                        <h:panelGroup rendered="#{fn:length(me.module.sons)==0}">
+                                            <h:selectOneMenu value="#{me.essayPartId}">
+                                                <f:selectItem itemLabel="-无-" itemValue="0"/>
+                                                <f:selectItems value="#{aAModuleExam22.exam.parts}" var="part" itemLabel="#{part.name}" itemValue="#{part.id}"/>
+                                            </h:selectOneMenu><br/>
+                                            <h:outputText value="共#{me.module.essayNum}道" />
+                                        </h:panelGroup>
+                                        <f:facet name="header">
+                                            <h:outputText value="问答题" />
+                                        </f:facet>
+                                    </p:column>
+                                    <!-- <p:column>
+                                        <h:panelGroup rendered="#{fn:length(me.module.sons)==0}">
+                                            <h:selectOneMenu value="#{me.filePartId}">
+                                                <f:selectItem itemLabel="-无-" itemValue="0"/>
+                                                <f:selectItems value="#{aAModuleExam22.exam.parts}" var="part" itemLabel="#{part.name}" itemValue="#{part.id}"/>
+                                            </h:selectOneMenu><br/>
+                                            <h:outputText value="共#{me.module.fileNum}道" />
+                                        </h:panelGroup>
+                                        <f:facet name="header">
+                                            <h:outputText value="文件题" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column>
+                                        <h:panelGroup rendered="#{fn:length(me.module.sons)==0}">
+                                            <h:selectOneMenu value="#{me.casePartId}">
+                                                <f:selectItem itemLabel="-无-" itemValue="0"/>
+                                                <f:selectItems value="#{aAModuleExam22.exam.parts}" var="part" itemLabel="#{part.name}" itemValue="#{part.id}"/>
+                                            </h:selectOneMenu><br/>
+                                            <h:outputText value="共#{me.module.caseNum}道" />
+                                        </h:panelGroup>
+                                        <f:facet name="header">
+                                            <h:outputText value="综合题" />
+                                        </f:facet>
+                                    </p:column> -->
+                                </p:treeTable>
+
+
+                            </div>
+                            <p:separator/>
+
+                            <h:panelGrid columns="2">
+
+                                <h:outputText value="开放#{applicationBean.departmentStr}" />
+                                <p:treeTable id="dcpcs" value="#{aAModuleExam22.root3}" var="dic3" style="width:500px;" >
+                                    <p:column style="width:200px;">
+                                        <f:facet name="header">
+                                            <h:outputText value="部门名称"></h:outputText>
+                                        </f:facet>
+                                        <h:outputText value="#{dic3.name}" ></h:outputText>
+                                    </p:column>
+                                    <p:column style="width:100px;">
+                                        <f:facet name="header">
+                                            <h:outputText value="选择"></h:outputText>
+                                        </f:facet>
+                                        <h:selectBooleanCheckbox value="#{dic3.selected}" >
+                                            <p:ajax process="@form" listener="#{aAModuleExam22.checkSons(dic3.id,dic3.selected)}" update="dcpcs"/>
+                                        </h:selectBooleanCheckbox>
+                                    </p:column>
+                                </p:treeTable>
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:growl/>
+                        <p:separator/>
+                        <p:commandButton ajax="false" action="#{aAModuleExam22.done}" value="提交"  styleClass="commonSubmit" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'examination')}"/>
+
+                    </div></h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

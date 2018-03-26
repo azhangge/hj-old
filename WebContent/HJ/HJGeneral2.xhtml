@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<h:outputText value="&lt;!--[if lte IE 7]&gt;" />
+	<script>
+		window.location.href = '#{facesContext.externalContext.requestContextPath}/update_browser.jsp';
+	</script>
+	<h:outputText value="&lt;![endif]--&gt;" />
+	<title>
+		<ui:insert name="title"></ui:insert> - #{applicationBean.info.siteHeader}
+	</title>
+	<meta http-equiv="keywords" content=" #{applicationBean.info.keyWords}" />
+	<meta http-equiv="description" content=" #{applicationBean.info.description}" />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+	<f:loadBundle basename="com.huajie.exam.i18n.langs" var="lang" />
+	<!-- 
+	 -->
+	<link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs.css" />
+	<link rel="stylesheet" type="text/css"
+		href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs_a.css" />
+	<link href="#{facesContext.externalContext.requestContextPath}/HJ/css/general.css" type="text/css" rel="stylesheet" />
+	<link href="#{facesContext.externalContext.requestContextPath}/css/main.css" type="text/css" rel="stylesheet" />
+	<link href="#{facesContext.externalContext.requestContextPath}/css/iconfont.css" type="text/css" rel="stylesheet" />
+	<link href="#{facesContext.externalContext.requestContextPath}/css/public.css" type="text/css" rel="stylesheet" />
+	<link href="#{facesContext.externalContext.requestContextPath}/css/jquery.lightbox.css" type="text/css" rel="stylesheet" />
+	<link href="#{facesContext.externalContext.requestContextPath}/resources/jquery.Sonline.2.0/style/gray.css" rel="stylesheet" type="text/css" />
+	<script src="#{facesContext.externalContext.requestContextPath}/resources/js/upScroll.js" type="text/javascript" language="javascript" />
+		
+</h:head>
+<h:body>
+	<h:form id="myForm" class="my_from" prependId="false">
+		<!-- <ui:include src="/HJ/FrontMenu2.xhtml"></ui:include> -->
+		<ui:include src="/JT/Top2.xhtml"></ui:include>
+		<div style="height: 60px;"></div>
+		<p:panel id="mainPanel" styleClass="g_mainPanel" >
+			<ui:insert name="content"></ui:insert>
+		</p:panel>
+		<ui:include src="/JT/Footer.xhtml" />
+		<ui:include src="/AjaxStatus2.xhtml" />
+	</h:form>
+</h:body>
+</html>

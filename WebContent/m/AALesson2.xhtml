@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:poue="http://primefaces.org/ui/extensions"
+      xmlns:p="http://primefaces.org/ui">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+
+                <h:form id="myForm">
+                    <script type="text/javascript" src="../resources/ckfinder/ckfinder.js"></script>
+                    <script type="text/javascript" language="javascript" src="#{facesContext.externalContext.requestContextPath}/rere_wimg_up/js/wordimage_uploader1.1.js"></script>
+
+                    <script type="text/javascript">
+                        //var editor1 = CKEDITOR.replace('myForm:editor1');
+                        function onLoadCallback(editor1) {
+                            var ed = PF(editor1).instance;
+                            CKFinder.setupCKEditor(ed, '../resources/ckfinder/');
+                        }
+                        
+                        function changeStatus(obj){
+                        	var type = obj.value;
+                        	var id = 'myForm:'+type;
+                        	var urlId = id+'Url';
+                        	var obj1 = document.getElementById('myForm:inner');
+                        	var obj2 = document.getElementById('myForm:innerUrl');
+                        	var obj3 = document.getElementById('myForm:outter');
+                        	var obj4 = document.getElementById('myForm:outterUrl');
+                        	if(type == 'inner'){
+                        		obj1.style.display='inline';
+                        		obj2.style.display='inline';
+                        		obj3.style.display='none';
+                        		obj4.style.display='none';
+                        	}else if(type == 'outter'){
+                        		obj1.style.display='none';
+                        		obj2.style.display='none';
+                        		obj3.style.display='inline';
+                        		obj4.style.display='inline';
+                        	}else{
+                        		obj1.style.display='none';
+                        		obj2.style.display='none';
+                        		obj3.style.display='none';
+                        		obj4.style.display='none';
+                        	}
+                        }
+
+                    </script>
+                    <h:outputScript target="body" rendered="#{applicationBean.systemConfig.autoUpload}">
+                        var sUrl = 'http://#{facesContext.externalContext.requestServerName}:#{facesContext.externalContext.requestServerPort}#{facesContext.externalContext.requestContextPath}/servlet/WordImageUploader';
+                        var appName = '#{facesContext.externalContext.requestContextPath}';
+                        var repStr1 = 'http://#{facesContext.externalContext.requestServerName}:#{facesContext.externalContext.requestServerPort}#{facesContext.externalContext.requestContextPath}';
+                        var repStr2 = '..';
+                        var uploader = new WordImageUploader(sUrl, appName,repStr1,repStr2);
+                    </h:outputScript>
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <h:outputScript name="chinese_locale.js" library="js"/>
+                    <h:panelGrid columns="2" cellpadding="0"  columnClasses="thdL,thdR">
+                            
+                            <h:outputText value="资料摘要：" />
+                            <poue:ckEditor id="editor2" widgetVar="editor2" value="#{aALesson.exam.description}" customConfig="#{facesContext.externalContext.requestContextPath}/resources/js/ckeditor_config2.js" >
+                            </poue:ckEditor>
+                            <h:outputText value="资料内容：" />
+                            <poue:ckEditor id="editor1" widgetVar="editor1" value="#{aALesson.exam.lessonInfo}" customConfig="#{facesContext.externalContext.requestContextPath}/resources/js/ckeditor_config1.js" >
+                                <poue:javascript  event="initialize" execute="onLoadCallback('editor1')" />
+                                <!-- <poue:javascript rendered="#{applicationBean.systemConfig.autoUpload}" event="blur" execute="uploader.uploadWordImagesFromCKEditor(PF('editor1').instance,'#{aALesson.exam.id}')" /> -->
+                            </poue:ckEditor>
+                        </h:panelGrid>    
+                        <p:growl/>
+                        <p:separator/>
+                        <p:commandButton ajax="false" action="#{aALesson.done}" value="保存"  styleClass="commonSubmit" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'lesson')}"/>
+                        <p:commandButton ajax="false" action="#{aALesson.back}" value="基本信息"  styleClass="commonSubmit" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'lesson')}"/>
+                        <p:commandButton ajax="false" action="#{aALesson.next2}" value="上传文件"  styleClass="commonSubmit" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'lesson')}"/>
+
+                    </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

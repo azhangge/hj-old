@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions" lang="en">
+<head>
+<title>My Facelets Page</title>
+<meta http-equiv="keywords" content="enter,your,keywords,here" />
+<meta http-equiv="description"
+	content="A short description of this page." />
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+<!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+</head>
+<body>
+	<ui:composition template="BackGeneral.xhtml">
+		<ui:define name="content">
+			<h:form>
+				<ui:include src="/AjaxStatus2.xhtml" />
+				<div style="text-align: left; margin: 10px 0px 0px 0px; width: 98%;">
+					<div>
+						<h:outputText styleClass="tit" value="－试题检索－" />
+					</div>
+					<p:separator />
+
+					<h:panelGrid columns="3">
+
+						<h:panelGroup>
+							<h:outputText value="关键词：" />
+							<h:inputText value="#{searchQuestion.str}" />
+						</h:panelGroup>
+
+						<h:panelGroup>
+							<h:outputText value="类型：" />
+							<h:selectOneMenu value="#{searchQuestion.qtype}">
+								<f:selectItem itemLabel="单选题" itemValue="choice" />
+								<f:selectItem itemLabel="多选题" itemValue="mchoice" />
+								<f:selectItem itemLabel="填空题" itemValue="fill" />
+								<f:selectItem itemLabel="判断题" itemValue="judge" />
+								<f:selectItem itemLabel="问答题" itemValue="essay" />
+								<!-- <f:selectItem itemLabel="文件题" itemValue="file" />
+								<f:selectItem itemLabel="综合题" itemValue="case" /> -->
+							</h:selectOneMenu>
+						</h:panelGroup>
+
+						<p:commandButton action="#{searchQuestion.search()}" value="检索"
+							update="@form" />
+					</h:panelGrid>
+
+					<p:separator />
+					<p:outputPanel autoUpdate="true">
+						<p:growl />
+					</p:outputPanel>
+					<!--
+                        <p:commandButton value="加入试题篮" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}" action="#{searchQuestion.addToBasket()}" update="@form"/>
+                        <p:separator/>
+                        -->
+					<div>
+						<p:dataTable paginator="true" paginatorPosition="bottom"
+							paginatorAlwaysVisible="false"
+							rendered="#{searchQuestion.qtype=='choice'}"
+							value="#{searchQuestion.choices}" var="us" emptyMessage="无记录"
+							styleClass="list" rows="20" rowIndexVar="row" liveResize="true" resizableColumns="true">
+							<p:column id="num" style="width:40px;text-align: center;" resizable="true" >
+								<h:outputText style="height: 5%" value="#{row+1}" />
+								<f:facet name="header">
+									<h:outputText id="outputTextnum" value="序号" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:50px" resizable="true" >
+								<h:selectBooleanCheckbox value="#{us.selected}" />
+								<f:facet name="header">
+									<h:outputText value="选择" />
+								</f:facet>
+							</p:column>
+							<p:column filterBy="#{us.cleanName}" filterMatchMode="contains" filterStyle="width:400px"
+								sortBy="#{us.cleanName}" resizable="true" >
+								<h:outputLink value="AAChoiceQuestion.jspx?id=#{us.id}"
+									target="_blank" rendered="#{us.caseQuestion==null}">
+									<h:outputText value="#{us.cleanName}" escape="false" />
+								</h:outputLink>
+								<h:outputLink
+									value="AACaseQuestion.jspx?id=#{us.caseQuestion.id}"
+									target="_blank" rendered="#{us.caseQuestion!=null}">
+									<h:outputText value="#{us.cleanName}" escape="false" />
+								</h:outputLink>
+								<f:facet name="header">
+									<h:outputText value="试题内容" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:120px;" filterBy="#{us.module.name}"
+								filterMatchMode="contains" sortBy="#{us.module.name}">
+								<h:outputText value="#{us.module.name}"  resizable="true" />
+								<f:facet name="header">
+									<h:outputText value="模块" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:80px;" sortBy="#{us.genTime}">
+								<h:outputText value="#{us.genTime}">
+									<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"
+										timeZone="GMT+8"  resizable="true" />
+								</h:outputText>
+								<f:facet name="header">
+									<h:outputText value="添加时间" />
+								</f:facet>
+							</p:column>
+						</p:dataTable>
+
+
+						<p:dataTable paginator="true" paginatorPosition="bottom"
+							paginatorAlwaysVisible="false"
+							rendered="#{searchQuestion.qtype=='mchoice'}"
+							value="#{searchQuestion.mchoices}" var="us" emptyMessage="无记录"
+							styleClass="list" rows="20">
+							<p:column>
+								<h:selectBooleanCheckbox value="#{us.selected}" />
+								<f:facet name="header">
+									<h:outputText value="选择" />
+								</f:facet>
+							</p:column>
+							<p:column>
+								<h:outputLink value="AAMultiChoiceQuestion.jspx?id=#{us.id}"
+									target="_blank" rendered="#{us.caseQuestion==null}">
+									<h:outputText value="#{us.cleanName}" escape="false" />
+								</h:outputLink>
+								<h:outputLink
+									value="AACaseQuestion.jspx?id=#{us.caseQuestion.id}"
+									target="_blank" rendered="#{us.caseQuestion!=null}">
+									<h:outputText value="#{us.cleanName}" escape="false" />
+								</h:outputLink>
+								<f:facet name="header">
+									<h:outputText value="试题内容" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:120px;">
+								<h:outputText value="#{us.module.name}" />
+								<f:facet name="header">
+									<h:outputText value="模块" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:80px;" sortBy="#{us.genTime}">
+								<h:outputText value="#{us.genTime}">
+									<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"
+										timeZone="GMT+8" />
+								</h:outputText>
+								<f:facet name="header">
+									<h:outputText value="添加时间" />
+								</f:facet>
+							</p:column>
+						</p:dataTable>
+
+						<p:dataTable paginator="true" paginatorPosition="bottom"
+							paginatorAlwaysVisible="false"
+							rendered="#{searchQuestion.qtype=='fill'}"
+							value="#{searchQuestion.fills}" var="us" emptyMessage="无记录"
+							styleClass="list" rows="20">
+							<p:column>
+								<h:selectBooleanCheckbox value="#{us.selected}" />
+								<f:facet name="header">
+									<h:outputText value="选择" />
+								</f:facet>
+							</p:column>
+							<p:column>
+								<h:outputLink value="AAFillQuestion.jspx?id=#{us.id}"
+									target="_blank" rendered="#{us.caseQuestion==null}">
+									<h:outputText value="#{us.cleanName}" escape="false" />
+								</h:outputLink>
+								<h:outputLink
+									value="AACaseQuestion.jspx?id=#{us.caseQuestion.id}"
+									target="_blank" rendered="#{us.caseQuestion!=null}">
+									<h:outputText value="#{us.cleanName}" escape="false" />
+								</h:outputLink>
+								<f:facet name="header">
+									<h:outputText value="试题内容" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:120px;">
+								<h:outputText value="#{us.module.name}" />
+								<f:facet name="header">
+									<h:outputText value="模块" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:80px;" sortBy="#{us.genTime}">
+								<h:outputText value="#{us.genTime}">
+									<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"
+										timeZone="GMT+8" />
+								</h:outputText>
+								<f:facet name="header">
+									<h:outputText value="添加时间" />
+								</f:facet>
+							</p:column>
+						</p:dataTable>
+
+						<p:dataTable paginator="true" paginatorPosition="bottom"
+							paginatorAlwaysVisible="false"
+							rendered="#{searchQuestion.qtype=='judge'}"
+							value="#{searchQuestion.judges}" var="us" emptyMessage="无记录"
+							styleClass="list" rows="20">
+							<p:column>
+								<h:selectBooleanCheckbox value="#{us.selected}" />
+								<f:facet name="header">
+									<h:outputText value="选择" />
+								</f:facet>
+							</p:column>
+							<p:column>
+								<h:outputLink value="AAJudgeQuestion.jspx?id=#{us.id}"
+									target="_blank" rendered="#{us.caseQuestion==null}">
+									<h:outputText value="#{us.cleanName}" escape="false" />
+								</h:outputLink>
+								<h:outputLink
+									value="AACaseQuestion.jspx?id=#{us.caseQuestion.id}"
+									target="_blank" rendered="#{us.caseQuestion!=null}">
+									<h:outputText value="#{us.cleanName}" escape="false" />
+								</h:outputLink>
+								<f:facet name="header">
+									<h:outputText value="试题内容" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:120px;">
+								<h:outputText value="#{us.module.name}" />
+								<f:facet name="header">
+									<h:outputText value="模块" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:80px;" sortBy="#{us.genTime}">
+								<h:outputText value="#{us.genTime}">
+									<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"
+										timeZone="GMT+8" />
+								</h:outputText>
+								<f:facet name="header">
+									<h:outputText value="添加时间" />
+								</f:facet>
+							</p:column>
+						</p:dataTable>
+
+						<p:dataTable paginator="true" paginatorPosition="bottom"
+							paginatorAlwaysVisible="false"
+							rendered="#{searchQuestion.qtype=='essay'}"
+							value="#{searchQuestion.essaies}" var="us" emptyMessage="无记录"
+							styleClass="list" rows="20">
+							<p:column>
+								<h:selectBooleanCheckbox value="#{us.selected}" />
+								<f:facet name="header">
+									<h:outputText value="选择" />
+								</f:facet>
+							</p:column>
+							<p:column>
+								<h:outputLink value="AAEssayQuestion.jspx?id=#{us.id}"
+									target="_blank" rendered="#{us.caseQuestion==null}">
+									<h:outputText value="#{us.cleanName}" escape="false" />
+								</h:outputLink>
+								<h:outputLink
+									value="AACaseQuestion.jspx?id=#{us.caseQuestion.id}"
+									target="_blank" rendered="#{us.caseQuestion!=null}">
+									<h:outputText value="#{us.cleanName}" escape="false" />
+								</h:outputLink>
+								<f:facet name="header">
+									<h:outputText value="试题内容" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:120px;">
+								<h:outputText value="#{us.module.name}" />
+								<f:facet name="header">
+									<h:outputText value="模块" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:80px;" sortBy="#{us.genTime}">
+								<h:outputText value="#{us.genTime}">
+									<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"
+										timeZone="GMT+8" />
+								</h:outputText>
+								<f:facet name="header">
+									<h:outputText value="添加时间" />
+								</f:facet>
+							</p:column>
+						</p:dataTable>
+
+						<p:dataTable paginator="true" paginatorPosition="bottom"
+							paginatorAlwaysVisible="false"
+							rendered="#{searchQuestion.qtype=='file'}"
+							value="#{searchQuestion.files}" var="us" emptyMessage="无记录"
+							styleClass="list" rows="20">
+							<p:column>
+								<h:selectBooleanCheckbox value="#{us.selected}" />
+								<f:facet name="header">
+									<h:outputText value="选择" />
+								</f:facet>
+							</p:column>
+							<p:column>
+								<h:outputLink value="AAFileQuestion.jspx?id=#{us.id}"
+									target="_blank">
+									<h:outputText value="#{us.cleanName}" escape="false" />
+								</h:outputLink>
+								<f:facet name="header">
+									<h:outputText value="试题内容" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:120px;">
+								<h:outputText value="#{us.module.name}" />
+								<f:facet name="header">
+									<h:outputText value="模块" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:80px;" sortBy="#{us.genTime}">
+								<h:outputText value="#{us.genTime}">
+									<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"
+										timeZone="GMT+8" />
+								</h:outputText>
+								<f:facet name="header">
+									<h:outputText value="添加时间" />
+								</f:facet>
+							</p:column>
+						</p:dataTable>
+
+						<p:dataTable paginator="true" paginatorPosition="bottom"
+							paginatorAlwaysVisible="false"
+							rendered="#{searchQuestion.qtype=='case'}"
+							value="#{searchQuestion.cases}" var="us" emptyMessage="无记录"
+							styleClass="list" rows="20">
+							<p:column>
+								<h:selectBooleanCheckbox value="#{us.selected}" />
+								<f:facet name="header">
+									<h:outputText value="选择" />
+								</f:facet>
+							</p:column>
+							<p:column>
+								<h:outputLink value="AACaseQuestion.jspx?id=#{us.id}"
+									target="_blank">
+									<h:outputText value="#{us.cleanName}" escape="false" />
+								</h:outputLink>
+								<f:facet name="header">
+									<h:outputText value="试题内容" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:120px;">
+								<h:outputText value="#{us.module.name}" />
+								<f:facet name="header">
+									<h:outputText value="模块" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:80px;" sortBy="#{us.genTime}">
+								<h:outputText value="#{us.genTime}">
+									<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"
+										timeZone="GMT+8" />
+								</h:outputText>
+								<f:facet name="header">
+									<h:outputText value="添加时间" />
+								</f:facet>
+							</p:column>
+						</p:dataTable>
+						<h:outputText value="共有#{searchQuestion.num}条结果。" />
+
+					</div>
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

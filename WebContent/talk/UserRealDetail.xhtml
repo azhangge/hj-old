@@ -1,0 +1,267 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title>Facelet Title</title>
+
+    </h:head>
+    <h:body>
+        <ui:composition template="UserCenterGeneral.xhtml">
+            <ui:define name="ucontent">
+            	<style>
+            		.ui-radiobutton{
+            			margin-right:10px;
+            		}
+					.ui-selectoneradio label{
+						margin-right:60px;
+					}
+					.ui-button{
+						margin-left:250px;
+					}
+					.ui-button-icon-left{
+						display:none;
+					}
+					.ui-fileupload-content{
+						display:none;
+					}
+					.ui-widget-header{
+						background:none;
+						border:none;
+					}
+				    .ui-button-text-icon-left .ui-button-text{
+						padding:3px 10px 3px 10px;
+						color:#666666;
+						font-family:微软雅黑;
+						font-size:14px;
+					}
+        		</style>
+                <h:outputScript name="chinese_locale.js" library="js"/>
+                <div style="width:902px;height:625px;">
+					<div style="background-color:#FFFFFF; width:800px;height:610px;margin-right:16px;float:left;">
+						<div id="real_info_header" style="width:800px;height:60px;background-color:#3596E6;float:left;">
+							<span style="font-size:18px;font-weight:bold;font-family:微软雅黑;color:#ffffff;display:inline-block;margin:18px 0px 18px 24px;">实名信息</span>
+							<div style="background:url(../image/real_edit.png) no-repeat 0px 0px;width:56px;height:22px;margin:18px 10px 18px 0px;padding:0px 0px 0px 10px;float:right;font-size:14px;font-family:微软雅黑;color:#666666;">
+								编 辑
+							</div>
+						</div>
+						<div id="real_info_body" style="width:800px;height:416px;float:left;">
+							<div style="width:800px;height:65px;float:left;">
+								<span style="font-size:14px;font-family:微软雅黑;color:#999999;display:inline-block;margin:26px 0px 12px 84px;width:88px;text-align: right;">
+									<h:outputText value="真实姓名："></h:outputText>
+								</span>
+								<span style="font-size:14px;font-family:微软雅黑;color:#666666;display:inline-block;margin:21px 0px 12px 0px;">
+                            		<p:inputText value="#{userDetail.usr.name}"></p:inputText>
+                            	</span>
+							</div>
+							<div style="width:800px;height:51px;float:left;">
+								<span style="font-size:14px;font-family:微软雅黑;color:#999999;display:inline-block;margin:12px 0px 12px 84px;width:88px;text-align: right;">
+									<h:outputText value="出生日期："></h:outputText>
+								</span>
+								<span style="font-size:14px;font-family:微软雅黑;color:#666666;display:inline-block;margin:12px 0px 12px 0px;">
+                            		<p:calendar value="#{userDetail.usr.birthDay}" locale="zh" navigator="true" pattern="yyyy/MM/dd" yearRange="c-100:c+0"/>
+                            	</span>
+							</div>
+							<div style="width:800px;height:51px;float:left;">
+								<span style="font-size:14px;font-family:微软雅黑;color:#999999;display:inline-block;margin:12px 0px 12px 84px;width:88px;text-align: right;">
+									<h:outputText value="身份证号："></h:outputText>
+								</span>
+ 								<span style="font-size:14px;font-family:微软雅黑;color:#666666;display:inline-block;margin:12px 0px 12px 0px;">
+                            		<p:inputText value="#{userDetail.usr.pid}"></p:inputText>
+                            	</span>
+							</div>
+							<div style="width:800px;height:51px;float:left;">
+								<span style="font-size:14px;font-family:微软雅黑;color:#999999;display:inline-block;margin:12px 0px 12px 84px;width:88px;text-align: right;">
+									<h:outputText value="联系地址："></h:outputText>
+								</span>
+								<span style="font-size:14px;font-family:微软雅黑;color:#666666;display:inline-block;margin:12px 0px 12px 0px;">
+                            		<p:inputText value="#{userDetail.usr.address}"></p:inputText>
+                            	</span>
+							</div>
+							<div style="width:800px;height:51px;float:left;">
+								<span style="font-size:14px;font-family:微软雅黑;color:#999999;display:inline-block;margin:12px 0px 12px 84px;width:88px;text-align: right;">
+									<h:outputText value="工作单位："></h:outputText>
+								</span>
+								<span style="font-size:14px;font-family:微软雅黑;color:#666666;display:inline-block;margin:12px 0px 12px 0px;">
+                            		<p:inputText value="#{userDetail.usr.company}"></p:inputText>
+                            	</span>
+							</div>
+							<div style="width:800px;height:51px;float:left;">
+								<span style="font-size:14px;font-family:微软雅黑;color:#999999;display:inline-block;margin:12px 0px 12px 114px;width:56px;text-align: right;">
+									<h:outputText value="邮箱："></h:outputText>
+								</span>
+								<span style="font-size:14px;font-family:微软雅黑;color:#666666;display:inline-block;margin:12px 0px 12px 0px;">
+                            		<p:inputText value="#{userDetail.usr.email}"></p:inputText>
+                            	</span>
+							</div>
+							<div style="width:800px;height:51px;float:left;">
+								<span style="font-size:14px;font-family:微软雅黑;color:#999999;display:inline-block;margin:12px 0px 12px 114px;width:56px;text-align: right;">
+									<h:outputText value="手机："></h:outputText>
+								</span>
+								<span style="font-size:14px;font-family:微软雅黑;color:#666666;display:inline-block;margin:12px 0px 12px 0px;">
+                            		#{userDetail.usr.tel}
+                            	</span>
+							</div>
+								
+							<div style="width:800px;height:70px;float:left;">
+								<div style="background:url(../image/save.png) no-repeat 0px;width:100px;height:30px;margin:12px 20px 12px 260px;float:left;">
+									<p:commandButton action="#{userDetail.saveUserChange}" value="保  存" update="@form" style="background:url(../image/save.png) no-repeat 0px;width:100px;height:30px;margin:0px 0px 0px 0px;float:left;font-family:微软雅黑;font-size:14px;color:#FFFFFF;border:0px solid #ffffff;"></p:commandButton>
+								</div>
+							</div>
+							
+							<h:panelGrid columns="2" styleClass="generalInfo" style="display:none;">
+                                    <h:outputText value="原密码："></h:outputText>
+                                    <p:password value="#{userDetail.pwd_temp}"></p:password>
+
+                                    <h:outputText value="新密码："></h:outputText>
+                                    <p:password value="#{userDetail.pwd_n1}"></p:password>
+
+                                    <h:outputText value="新密码确认："></h:outputText>
+                                    <p:password value="#{userDetail.pwd_n2}"></p:password>
+
+                                     <p:commandButton action="#{userDetail.saveUserChange}" value="提交修改"></p:commandButton> 
+                                </h:panelGrid>
+						</div>
+					</div>
+					
+					<!--  div id="date_info" style="width:228px;height:106px;float:left;background-color:#FFFFFF;">
+						<div id="date_info_left" style="width:80px;height:80px;float:left;background:url(../image/calendar_board.png) no-repeat 0px;margin:12px 0px 0px 22px;">
+							<span style="font-family:微软雅黑;font-size:36px;font-weight:bold;color:#FFFFFF;display:inline-block;margin:37px 0px 0px 17px;">
+								#{userDetail.day}
+							</span>
+						</div>
+						<div id="date_info_right" style="width:120px;height:80px;float:left;margin:12px 0px 0px 0px;">
+							<span style="font-family:微软雅黑;font-size:12px;color:#404040;display:inline-block;margin:10px 0px 0px 12px;">
+								#{userDetail.year}年#{userDetail.month}月#{userDetail.day}日
+							</span>
+							<span style="font-family:微软雅黑;font-size:24px;font-weight:bold;color:#fe7545;display:inline-block;margin:10px 0px 0px 20px;">
+								第#{userDetail.week}周
+							</span>
+						</div>
+					</div-->
+					
+					
+
+			       
+				</div>
+			    <p:outputPanel autoUpdate="true">
+                    <p:growl/>
+                </p:outputPanel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+<!--                                 <h:panelGrid columns="2" styleClass="generalInfo">
+                                    <h:outputText value="姓名："></h:outputText>
+                                    <p:inputText value="#{userDetail.usr.name}"></p:inputText>
+                                    
+                                    <h:outputText value="性别："></h:outputText>
+                                    <h:selectOneMenu value="#{userDetail.usr.gender}">
+                                        <f:selectItem itemLabel="男" itemValue="男"/>
+                                        <f:selectItem itemLabel="女" itemValue="女"/>
+                                    </h:selectOneMenu>
+                                    
+                                    <h:outputLabel styleClass="text" value="身份证号：" />
+                                    <p:inputText value="#{userDetail.usr.pid}" disabled="#{applicationBean.systemConfig.openPid}"></p:inputText>
+                                    
+                                    <h:outputLabel styleClass="text" value="#{applicationBean.cidStr}：" />
+                                    <p:inputText value="#{userDetail.usr.cid}" disabled="#{applicationBean.systemConfig.openCid}"></p:inputText> -->
+
+                                    <!-- <h:outputText value="现居地："></h:outputText>
+                                    <h:panelGroup>
+                                        <h:selectOneMenu value="#{userDetail.province}">
+                                            <p:ajax process="@all" event="change"
+                                                    listener="#{userDetail.loadCities()}" update="city"></p:ajax>
+                                            <f:selectItems value="#{userDetail.provs}" />
+                                        </h:selectOneMenu>
+                                        <h:selectOneMenu id="city" value="#{userDetail.city}">
+                                            <f:selectItems value="#{userDetail.citys}" />
+                                        </h:selectOneMenu>
+                                    </h:panelGroup> -->
+                                    <!-- <h:outputText value="生日："></h:outputText>
+                                    <p:calendar value="#{userDetail.usr.birthDay}" pattern="yyyy-MM-dd" locale="zh_CN" showButtonPanel="true" navigator="true" timeZone="GMT+8" yearRange="c-100:c"/> -->
+
+<!--                                     <h:outputText value="所在#{applicationBean.departmentStr}："></h:outputText>
+                                    <h:outputText value="#{userDetail.usr.groupCnStr}" rendered="#{!applicationBean.systemConfig.allowChgDept}"></h:outputText>
+                                    <p:treeTable value="#{userDetail.root}" var="dic"  selectionMode="multiple" selection="#{userDetail.selectedNodes}" rendered="#{applicationBean.systemConfig.allowChgDept}">
+                                        <f:facet name="header">
+                                            <h:outputText value="请使用Ctrl、Shift键完成#{applicationBean.departmentStr}的多选"></h:outputText>
+                                        </f:facet>
+                                        <p:column style="width:200px;">
+                                            <f:facet name="header">
+                                                <h:outputText value="#{applicationBean.departmentStr}名称"></h:outputText>
+                                            </f:facet>
+                                            <h:outputText value="#{dic.name}" ></h:outputText>
+                                        </p:column>
+                                    </p:treeTable>
+
+                                    <h:outputLabel value="职务：" rendered="#{applicationBean.systemConfig.openPosition}"/>
+                                    <h:panelGroup rendered="#{applicationBean.systemConfig.openPosition}">
+                                        <p:inputText value="#{userDetail.usr.position}" style="width:100px;">
+                                        </p:inputText>
+                                    </h:panelGroup>
+                                </h:panelGrid> -->
+                     
+							<!--  
+                            <p:panel style="border:1px solid #cccccc;">
+                                <h:panelGrid columns="3" style="" styleClass="generalInfo">
+                                    <h:outputText value="个人头像："></h:outputText>
+                                    <p:graphicImage id="picss" value="#{userDetail.usr.picUrl==''?'/resources/images/user_model.gif':userDetail.usr.picUrl}" style="width:120px;height:120px;"/>
+
+                                    <p:fileUpload id="upl" fileUploadListener="#{userDetail.up_action2}" update="picss" uploadLabel="上传" auto="true" label="选择头像图片" allowTypes="/(\.|\/)(gif|jpe?g|png)$/">
+                                    </p:fileUpload>
+									<p:commandButton action="#{userDetail.saveUserChange}"
+                                                     value="提交修改"></p:commandButton>
+                                </h:panelGrid>
+                            </p:panel>
+							-->
+         <!--  
+                            <p:panel style="border:1px solid #cccccc;">
+                                <h:panelGrid columns="2" style="" styleClass="generalInfo">
+                                    <h:outputText value="电话："></h:outputText>
+                                    <h:outputText value="#{userDetail.usr.tel}"></h:outputText>
+                                    <h:outputText value="E-Mail："></h:outputText>
+                                    <p:inputText value="#{userDetail.usr.email}" ></p:inputText>
+                                    <h:outputText value="QQ："></h:outputText>
+                                    <p:inputText value="#{userDetail.usr.qq}"></p:inputText>
+                                    <h:outputText value="详细地址："></h:outputText>
+                                    <p:inputText value="#{userDetail.usr.address}"></p:inputText>
+									<p:commandButton action="#{userDetail.saveUserChange}"
+                                                     value="提交修改"></p:commandButton>
+                                </h:panelGrid>
+                            </p:panel>
+     -->
+
+
+<!-- 
+                            <p:panel style="border:1px solid #cccccc;">
+                                <h:outputText value="不修改密码请留空！" style="color:red;font-size: 12px;"/>
+                                <h:panelGrid columns="2" style="" styleClass="generalInfo">
+                                    <h:outputText value="原密码："></h:outputText>
+                                    <p:password value="#{userDetail.pwd_temp}"></p:password>
+
+                                    <h:outputText value="新密码："></h:outputText>
+                                    <p:password value="#{userDetail.pwd_n1}"></p:password>
+
+                                    <h:outputText value="新密码确认："></h:outputText>
+                                    <p:password value="#{userDetail.pwd_n2}"></p:password>
+
+                                     <p:commandButton action="#{userDetail.saveUserChange}"
+                                                     value="提交修改"></p:commandButton> 
+                                </h:panelGrid>
+                            </p:panel>
+ -->
+
+
+                    <!-- </p:wizard> -->
+
+					
+                
+
+
+

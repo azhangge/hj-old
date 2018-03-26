@@ -1,0 +1,183 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<title>Facelet Title</title>
+</h:head>
+<h:body>
+	<ui:composition template="UserCenterGeneral.xhtml" style="width:800px;">
+		<ui:define name="ucontent" style="width:800px;">
+			<link type="text/css" rel="stylesheet" href="../HJ/css/account_security.css" />
+			<!-- <link type="text/css" rel="stylesheet" href="../bootstrap/css/bootstrap.css" />
+			<link type="text/css" rel="stylesheet" href="../bootstrap/bootstrap-step/css/bs-is-fun.css" /> -->
+			<script type="text/javascript" src="../HJ/js/account_security.js"></script>
+			<!-- <script type="text/javascript" src="../bootstrap/js/bootstrap.js"></script>
+			<script type="text/javascript" src="../bootstrap/bootstrap-step/js/brush.js"></script> -->
+			<!-- <p:outputPanel autoUpdate="true">
+						<p:growl />
+					</p:outputPanel> -->
+			<p:panel id="accountsecurity" >
+				<div class="accountsecurity" >
+					<div class="as_title">
+						<div class="title_1">账号安全</div>
+						<a>
+							<div class="title_2 onclick">密码修改</div>
+						</a>
+						<a>
+							<div class="title_3">密码重置</div>
+						</a>
+						<!-- <a>
+							<div class="title_3">测试</div>
+						</a> -->
+					</div>
+					<div class="as_content" id="changPassword">
+						<table class="as_table">
+							<tr class="as_tr">
+								<td class="as_td1">旧密码：</td>
+								<td class="as_td2">
+									<h:inputSecret styleClass="as_input" value="#{accountSecurity.oldPassword}"></h:inputSecret>
+								</td>
+							</tr>
+							<tr class="as_tr">
+								<td class="as_td1">新密码：</td>
+								<td class="as_td2">
+									<h:panelGroup>
+										<h:inputSecret styleClass="as_input" value="#{accountSecurity.newPassword}" id="newPassword">
+											<!-- <p:ajax update="msgName" event="keyup" />
+											<f:validateLength minimum="6" maximum="16"></f:validateLength> -->
+										</h:inputSecret>
+										<!-- <p:message for="newPassword" showSummary="请填写6到16位新密码" id="msgName" display="default" style="float:right;" /> -->
+									</h:panelGroup>
+								</td>
+							</tr>
+							<tr class="as_tr">
+								<td class="as_td1">确认新密码：</td>
+								<td class="as_td2">
+									<h:inputSecret styleClass="as_input" value="#{accountSecurity.affirmPassword}"></h:inputSecret>
+								</td>
+							</tr>
+						</table>
+						<p:commandLink action="#{accountSecurity.savePassword()}" styleClass="as_save_link">
+							<div class="as_save">保&nbsp;&nbsp;&nbsp;&nbsp;存</div>
+						</p:commandLink>
+					</div>
+					<h:panelGroup id="resetPassword" >
+					<h:panelGroup rendered="#{!accountSecurity.ifPass2}">
+					<div class="as_content" id="resetPassword">
+						<div class="schedule_message">
+							<span class="schedule_span1">
+								输入验证码
+							</span>
+							<span class="schedule_span2">
+								修改密码
+							</span>
+							<span class="schedule_span3">
+								修改完成
+							</span>
+						</div>
+						<div class="schedule"></div>
+						<h:panelGroup id="ifPass1">
+							<h:panelGroup rendered="#{accountSecurity.ifPass1}">
+								<div class="as_message">已验证手机：#{clientSession.usr.tel}，将向该手机发送验证码</div>
+							</h:panelGroup>
+						</h:panelGroup>
+						<table class="as_table">
+							<tr class="as_tr">
+								<td class="as_td1">验证码：</td>
+								<td class="as_td4">
+									<p:inputText styleClass="as_input2" value="#{accountSecurity.checkCode}"></p:inputText>
+								</td>
+								<td class="as_td3">
+									<h:panelGroup>
+										<p:commandLink action="#{adminLogin.refresh}" update="auimg">
+											<h:graphicImage alt="看不清?点击刷新" id="auimg" title="看不清?点击刷新"
+												style="border:black 0px solid;vertical-align:bottom;width:100px;height:22px;"
+												url="/servlet/AuthImage?sTime=#{adminLogin.STime}" />
+										</p:commandLink>
+									</h:panelGroup>
+								</td>
+							</tr>
+							<tr class="as_tr">
+								<td class="as_td1">请填写手机校验码：</td>
+								<td class="as_td4">
+									<p:inputText styleClass="as_input2" value="#{accountSecurity.messageCode}"></p:inputText>
+								</td>
+								<td class="as_td3">
+									<div class="as_td3_div">
+										<p:commandLink action="#{accountSecurity.sendCode()}" update="ifPass1">
+											<div class="as_td3_link">获取短信验证码</div>
+										</p:commandLink>
+									</div>
+								</td>
+							</tr>
+						</table>
+						<p:commandLink  action="#{accountSecurity.submit1()}" styleClass="as_save_link" update="resetPassword2 resetPassword">
+							<div class="as_submit">提&nbsp;&nbsp;&nbsp;&nbsp;交</div>
+						</p:commandLink>
+					</div>
+					</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup id="resetPassword2">
+					<h:panelGroup rendered="#{accountSecurity.ifPass1 and accountSecurity.ifPass2}">
+					<div class="as_content" id="resetPassword2">
+						<div class="schedule_message">
+							<span class="schedule_span1">
+								输入验证码
+							</span>
+							<span class="schedule_span2">
+								修改密码
+							</span>
+							<span class="schedule_span3">
+								修改完成
+							</span>
+						</div>
+						<div class="schedule2"></div>
+						<table class="as_table">
+							<tr class="as_tr">
+								<td class="as_td1">新密码：</td>
+								<td class="as_td2">
+									<h:panelGroup>
+										<h:inputSecret styleClass="as_input"  value="#{accountSecurity.newPassword2}" id="newPassword2">
+											<!-- <p:ajax update="msgName2" event="keyup" />
+											<f:validateLength minimum="6" maximum="16"></f:validateLength> -->
+										</h:inputSecret>
+										<!-- <p:message for="newPassword2" showSummary="请填写6到16位新密码" id="msgName2" display="default" style="float:right;"/> -->
+									</h:panelGroup>
+								</td>
+							</tr>
+							<tr class="as_tr">
+								<td class="as_td1">确认密码：</td>
+								<td class="as_td2">
+									<h:inputSecret styleClass="as_input" value="#{accountSecurity.affirmPassword2}"></h:inputSecret>
+								</td>
+							</tr>
+						</table>
+						<p:commandLink action="#{accountSecurity.submit2()}" styleClass="as_save_link">
+							<div class="as_submit">提&nbsp;&nbsp;&nbsp;&nbsp;交</div>
+						</p:commandLink>
+					</div>
+					</h:panelGroup>
+					</h:panelGroup>
+					<!-- <div class="as_content">
+						<div>
+							<ul class="nav nav-pills nav-justified step step-round">
+								<li class="active">
+									<a>step1</a>
+								</li>
+								<li class="active">
+									<a>step2</a>
+								</li>
+								<li class="active">
+									<a>step3</a>
+								</li>
+							</ul>
+						</div>
+					</div> -->
+				</div>
+			</p:panel>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>
+

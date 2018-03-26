@@ -1,0 +1,43 @@
+
+#
+
+#public
+
+please_login=Please login
+index=Homepage
+exam.category=Exam Catalog
+lesson.category=Lesson Catalog
+normal_examination=Examination
+everyday_competition=Daily Competition
+buffet_exam=Self Practice
+module_train=Chapter Training
+wrong_center=Wrong Answered
+online_course=Online Courses
+bbs_talk=Communication
+
+confirm_delete=Are you sure to delete this record?
+
+#private
+
+examination.info=Formal exams, waiting for you.
+login.exam=Enter
+
+competition.info=Update everyday, rank by scores.
+competition.login=Enter
+
+buffet.info=Set the quantity and type of questions by yourself.
+buffet.login=Enter
+
+module_train.info=Practice by chapters and improve yourself.
+module_train.login=Enter
+
+wrong_center.info=Retest the mistakes and reinforce.
+wrong_center.login=Enter
+
+online_course.info=Plenty of lessons, study along with practice.
+online_course.login=Enter
+
+bbs_talk.info=Share your experiences and study together.
+bbs_talk.login=Enter
+
+

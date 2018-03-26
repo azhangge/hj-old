@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="UserCenterGeneral.xhtml">
+            <ui:define name="ucontent">
+                <div style="text-align: left; margin: 0px 0px 0px 0px; width: 98%;">
+                    <div>
+                        <h:panelGrid columns="2" style="width:100%">
+                            <h:outputText id="outputText1" styleClass="mark"
+                                          value="－我的财务记录－" />
+                        </h:panelGrid>
+                    </div>
+                    <p:separator/>
+                    <div>
+                        <p:dataTable paginator="true" paginatorPosition="bottom" emptyMessage="暂无记录"  rows="8"  styleClass="tabTable"
+                                     value="#{clientListFinanceLog.logs}" var="finance" rowIndexVar="row">
+
+                            <p:column style="">
+                                <h:outputText  value="#{finance.transactionAmount}" />
+                                <f:facet name="header">
+                                    <h:outputText  value="发生金额" />
+                                </f:facet>
+                            </p:column>
+                            
+                            <p:column>
+                                <h:outputText style="" value="#{finance.income}" />
+                                <f:facet name="header">
+                                    <h:outputText  value="入帐" />
+                                </f:facet>
+                            </p:column>
+                            
+                            <p:column>
+                                <h:outputText style="" value="#{finance.expense}" />
+                                <f:facet name="header">
+                                    <h:outputText  value="支出" />
+                                </f:facet>
+                            </p:column>
+                            
+                            
+                            <p:column style="text-align: center;width:150px;">
+                                <h:outputText style="height: 5%" value="#{finance.genTime}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" />
+                                </h:outputText>
+                                <f:facet name="header">
+                                    <h:outputText  value="时间" />
+                                </f:facet>
+                            </p:column>
+                            
+                            <p:column>
+                                <h:outputText style="" value="#{finance.description1}" />
+                                <f:facet name="header">
+                                    <h:outputText  value="款项类型" />
+                                </f:facet>
+                            </p:column>
+                            
+                            <p:column>
+                                <h:outputText style="" value="#{finance.balance}" />
+                                <f:facet name="header">
+                                    <h:outputText  value="余额" />
+                                </f:facet>
+                            </p:column>
+                            
+                        </p:dataTable>
+                        <p:separator style="margin:10px 0px 5px 0px"></p:separator>
+                    </div>
+
+                </div>
+
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

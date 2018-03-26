@@ -1,0 +1,423 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <h:head>
+        <title>
+            <ui:insert name="title"></ui:insert>
+            #{randomPaperDemo.examCase.examination.name}</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <link rel="stylesheet" type="text/css"
+              href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs.css" />
+        <link rel="stylesheet" type="text/css"
+              href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs_a.css" />
+    </h:head>
+    <h:body style="padding:0;margin:0;">
+
+        <h:form id="myForm" style="padding: 0px 0px 0px 0px;margin: 0px 0px 0px 0px;">
+            <div style="width:957px;margin: 0px auto;">
+                <p:commandButton value="打印试题" type="button">  
+                    <p:printer target="exam_demo" />  
+                </p:commandButton>
+                <p:commandButton value="打印答案及解析" type="button">  
+                    <p:printer target="paper_demo2" />  
+                </p:commandButton> 
+            </div>
+
+            <p:panel id="exam_demo" style="width:957px;margin: 0px auto;">
+
+                <div>
+                    <h:panelGrid columns="3" style="width:90%;font-size: 16px;font-weight: bold;height: 50px;" cellpadding="0" cellspacing="0">
+                        <h:panelGroup>
+                            <h:outputText value="试卷名称："/>
+                            <h:outputText value="#{randomPaperDemo.examCase.examination.name}"/>
+                        </h:panelGroup>
+                    </h:panelGrid>
+                </div>
+                <h3>
+                    <h:outputText styleClass="choiceTitle"  value="※ 单选题（从下列各题的备选答案中选出一个正确答案。答案选错或未选者，该题不得分。每小题#{randomPaperDemo.examCase.examination.randomPaper.choiceScore}分。）"/><br/>
+                </h3>
+                <ui:repeat  value="#{randomPaperDemo.examCase.choiceItems}" var="choice" varStatus="row" rendered="#{fn:length(randomPaperDemo.examCase.choiceItems)!=0}">
+                    <h:outputText value="#{row.index+1}、#{choice.question.name}" style="#{choice.marked?'color:red;':''}" styleClass="choiceTitle" escape="false"/>
+
+                    <div style="margin-left: 30px;">
+                        <ui:repeat value="#{choice.question.choices}" var="ch">
+                            <h:outputText value="#{ch.labelRendered}.&nbsp;#{ch.name}" styleClass="choiceTitle"/>
+                            <br/>
+                        </ui:repeat>
+                    </div>
+                </ui:repeat>
+                <h3>
+                    <h:outputText value="※ 多选题（从下列各题的备选答案中选出正确答案。答案选错或未选者，该题不得分。每小题#{randomPaperDemo.examCase.examination.randomPaper.multiChoiceScore}分。）"/>
+                </h3>
+                <ui:repeat  value="#{randomPaperDemo.examCase.multiChoiceItems}" var="choice" varStatus="row" rendered="#{fn:length(randomPaperDemo.examCase.multiChoiceItems)!=0}">
+                    <h:outputText value="#{row.index+1}、#{choice.question.name}" style="#{choice.marked?'color:red;':''}" styleClass="choiceTitle" escape="false"/>
+                    
+                    <div style="margin-left: 30px;">
+                        <ui:repeat value="#{choice.question.choices}" var="ch">
+                            <h:outputText value="#{ch.labelRendered}.&nbsp;#{ch.name}" styleClass="choiceTitle"/>
+                            <br/>
+                        </ui:repeat>
+                    </div>
+                </ui:repeat>
+                <h3>
+                    <h:outputText value="※ 填空题（每小题#{randomPaperDemo.examCase.examination.randomPaper.fillScore}分。）"/>
+                </h3>
+                <ui:repeat   value="#{randomPaperDemo.examCase.fillItems}" var="fill"  varStatus="row" rendered="#{fn:length(randomPaperDemo.examCase.fillItems)!=0}">
+
+
+                    <h:outputText value="#{row.index+1}、" style="#{fill.marked?'color:red;':''}" styleClass="choiceTitle"/>
+                    <ui:repeat value="#{fill.blocks}" var="b">
+                        <h:outputText value="#{b.preStr}" style="#{fill.marked?'color:red;':''}" escape="false" styleClass="choiceTitle"/>
+                        <h:outputText value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" style="border-bottom: 1px solid black;" />
+                    </ui:repeat>
+                    <h:outputText value="#{fill.lastStr}" style="#{fill.marked?'color:red;':''}" escape="false" styleClass="choiceTitle"/> 
+
+                </ui:repeat>
+                <h3>
+                    <h:outputText value="※ 判断题（每小题#{randomPaperDemo.examCase.examination.randomPaper.judgeScore}分。）"/>
+                </h3>
+                <ui:repeat  value="#{randomPaperDemo.examCase.judgeItems}" var="judge" varStatus="row"  rendered="#{fn:length(randomPaperDemo.examCase.judgeItems)!=0}">
+
+
+                    <h:outputText value="#{row.index+1}、#{judge.question.name}" style="#{judge.marked?'color:red;':''}" escape="false" styleClass="choiceTitle"/>
+
+                </ui:repeat>
+                <h3>
+                    <h:outputText value="※ 问答题（每小题#{randomPaperDemo.examCase.examination.randomPaper.essayScore}分。）"/>
+                </h3>
+                
+                <ui:repeat  value="#{randomPaperDemo.examCase.essayItems}" var="essay" varStatus="row"  rendered="#{fn:length(randomPaperDemo.examCase.essayItems)!=0}">
+                    <h:outputText value="#{row.index+1}、#{essay.question.name}" style="#{essay.marked?'color:red;':''}" styleClass="choiceTitle" escape="false"/>
+                    <br/><br/><br/><br/><br/><br/><br/><br/>
+                </ui:repeat>
+
+                <h3>
+                    <h:outputText value="※ 文件题（每小题#{randomPaperDemo.examCase.examination.randomPaper.fileScore}分。）"/>
+                </h3>
+                
+                <ui:repeat  value="#{randomPaperDemo.examCase.fileItems}" var="file" varStatus="row"  rendered="#{fn:length(randomPaperDemo.examCase.fileItems)!=0}">
+                    <h:outputText value="#{row.index+1}、#{file.question.name}" style="#{file.marked?'color:red!important;':''}" styleClass="choiceTitle" escape="false"/>
+                    <br/><br/><br/><br/><br/><br/><br/><br/>
+                </ui:repeat>
+                
+                
+                
+
+                <ui:repeat value="#{randomPaperDemo.examCase.caseItems}" var="case1">
+                    <p:panel style="width:100%;">
+                        <f:facet name="header">
+                            <h:outputText value="#{case1.question.nickName}" style="" styleClass="choiceTitle" escape="false"/>
+                            <h:outputText value="，得分："/>
+                            <h:outputText value="#{randomPaperDemo.examCase.caseScore}"/>
+                        </f:facet>
+                        <h:outputText value="#{case1.question.content}" styleClass="choiceTitle" escape="false" style="padding:5px 10px 5px 10px;"/>
+                        <br/>
+                        <ui:repeat  value="#{case1.choiceItems}" var="choice" varStatus="row" rendered="#{fn:length(case1.choiceItems)!=0}">
+                            <a id="archor-#{choice.id}" href="#"></a>
+                            <h:outputText value="（#{row.index+1}）#{choice.question.name}" style="#{choice.marked?'color:red;':''}" styleClass="choiceTitle" escape="false"/>
+                            <div style="margin-left: 30px;">
+                                <ui:repeat value="#{choice.question.choices}" var="ch">
+                                    <h:outputText value="#{ch.label}.&nbsp;#{ch.name}" styleClass="choiceTitle"/>
+                                    <br/>
+                                </ui:repeat>
+                            </div>
+                        </ui:repeat>
+
+                        <ui:repeat value="#{case1.multiChoiceItems}" var="choice" varStatus="row" rendered="#{fn:length(case1.multiChoiceItems)!=0}">
+                            <a id="archor-#{choice.id}" href="#"></a>
+                            <h:outputText value="（#{fn:length(case1.choiceItems)+row.index+1}）#{choice.question.name}" styleClass="choiceTitle" escape="false"/>
+
+                            <div style="margin-left: 30px;">
+                                <ui:repeat value="#{choice.question.choices}" var="ch">
+                                    <h:outputText value="#{ch.label}.&nbsp;#{ch.name}" styleClass="choiceTitle"/>
+                                    <br/>
+                                </ui:repeat>
+                            </div>
+                        </ui:repeat>
+                        <ui:repeat   value="#{case1.fillItems}" var="fill"  varStatus="row" rendered="#{fn:length(case1.fillItems)!=0}">
+                            <a id="archor-#{fill.id}" href="#"></a>
+                            <h:outputText value="（#{fn:length(case1.choiceItems)+fn:length(case1.multiChoiceItems)+row.index+1}）"  styleClass="choiceTitle"/>
+                            <ui:repeat value="#{fill.blocks}" var="b">
+                                <h:outputText value="#{b.preStr}" escape="false" styleClass="choiceTitle"/>
+                                <h:outputText value="________"/>
+                            </ui:repeat>
+                            <h:outputText value="#{fill.lastStr}" escape="false" styleClass="choiceTitle"/><br/>
+                        </ui:repeat>
+                        <ui:repeat  value="#{case1.judgeItems}" var="judge" varStatus="row"  rendered="#{fn:length(case1.judgeItems)!=0}">
+                            <a id="archor-#{judge.id}" href="#"></a>
+                            <h:outputText value="（#{fn:length(case1.choiceItems)+fn:length(case1.multiChoiceItems)+fn:length(case1.fillItems)+row.index+1}）#{judge.question.name}" escape="false" styleClass="choiceTitle"/>
+                            <br/>
+                        </ui:repeat>
+                        <ui:repeat  value="#{case1.essayItems}" var="essay" varStatus="row"  rendered="#{fn:length(case1.essayItems)!=0}">
+                            <a id="archor-#{essay.id}" href="#"></a>
+                            <h:outputText value="（#{fn:length(case1.choiceItems)+fn:length(case1.multiChoiceItems)+fn:length(case1.fillItems)+fn:length(case1.judgeItems)+row.index+1}）#{essay.question.name}" style="#{essay.marked?'color:red;':''}" styleClass="choiceTitle" escape="false"/><br/>
+                            <br/>
+                        </ui:repeat>
+                    </p:panel>
+                </ui:repeat>
+                
+                
+                
+                
+            </p:panel>
+            
+            <p:separator/>
+            
+            <p:panel id="paper_demo2"  style="width:957px;margin: 0px auto;">
+                
+                <h3>
+                    试题答案及解析
+                </h3>
+                    
+                <p:dataTable value="#{randomPaperDemo.examCase.choiceItems}" var="choice" rowIndexVar="row" rendered="#{fn:length(randomPaperDemo.examCase.choiceItems)!=0}">
+                    <p:column style="text-align:left;">
+                        <f:facet name="header">
+                            <h:outputText value="※单选题，每题#{randomPaperDemo.examCase.examination.randomPaper.choiceScore}分，共#{fn:length(randomPaperDemo.examCase.choiceItems)}题，得分："/>
+                            <h:outputText value="#{randomPaperDemo.examCase.choiceScore}">
+                                <f:convertNumber maxFractionDigits="2"/>
+                            </h:outputText>
+                        </f:facet>
+                        <h:outputText value="#{row+1}、#{choice.question.name}" escape="false" styleClass="choiceTitle"/>
+                        <div style="margin-left: 30px;">
+                            <ui:repeat value="#{choice.question.choices}" var="ch">
+                                <h:outputText value="#{ch.label}.&nbsp;#{ch.name}" styleClass="choiceTitle"/>
+                                <br/>
+                            </ui:repeat>
+                        </div>
+                        <div style="margin-left: 30px;">
+                            <h:outputText value="正确答案：" styleClass="answer" />
+                            <h:outputText value="#{choice.question.answer}" style="color:green;font-weight: bold;"/> <br/>
+                            <h:outputText value="试题解析：" styleClass="answer"/>
+                            <h:outputText value="#{randomPaperDemo.examCase.examination.showRightStr?choice.question.rightStr:'不显示'}" escape="false"  style="color:green;"/>
+                            
+                        </div>
+                    </p:column>
+                </p:dataTable>
+
+                <p:dataTable value="#{randomPaperDemo.examCase.multiChoiceItems}" var="choice" rowIndexVar="row" rendered="#{fn:length(randomPaperDemo.examCase.multiChoiceItems)!=0}">
+                    <p:column style="text-align:left;">
+                        <f:facet name="header">
+                            <h:outputText value="※多选题，每题#{randomPaperDemo.examCase.examination.randomPaper.multiChoiceScore}分，共#{fn:length(randomPaperDemo.examCase.multiChoiceItems)}题，得分："/>
+                            <h:outputText value="#{randomPaperDemo.examCase.multiChoiceScore}">
+                                <f:convertNumber maxFractionDigits="2"/>
+                            </h:outputText>
+                        </f:facet>
+                        <h:outputText value="#{row+1}、#{choice.question.name}" escape="false" styleClass="choiceTitle"/>
+
+                        <div style="margin-left: 30px;">
+                            <ui:repeat value="#{choice.question.choices}" var="ch">
+                                <h:outputText value="#{ch.label}.&nbsp;#{ch.name}" styleClass="choiceTitle"/>
+                                <br/>
+                            </ui:repeat>
+                        </div>
+                        <div style="margin-left: 30px;">
+                            <h:outputText value="正确答案：" styleClass="answer"/>
+                            <h:outputText value="#{choice.question.answer}" style="color:green;font-weight: bold;"/>&nbsp;
+                            <br/>
+                            <h:outputText value="试题解析：" styleClass="answer"/>
+                            <h:outputText value="#{randomPaperDemo.examCase.examination.showRightStr?choice.question.rightStr:'不显示'}" escape="false"  style="color:green;"/>
+                            
+                        </div>
+                    </p:column>
+                </p:dataTable>
+
+                <p:dataTable  value="#{randomPaperDemo.examCase.fillItems}" var="fill" rowIndexVar="row" rendered="#{fn:length(randomPaperDemo.examCase.fillItems)!=0}">
+                    <p:column style="text-align:left;">
+                        <f:facet name="header">
+                            <h:outputText value="※填空题，每题#{randomPaperDemo.examCase.examination.randomPaper.fillScore}分，共#{fn:length(randomPaperDemo.examCase.fillItems)}题，得分："/>
+                            <h:outputText value="#{randomPaperDemo.examCase.fillScore}">
+                                <f:convertNumber maxFractionDigits="2"/>
+                            </h:outputText>
+                        </f:facet>
+                        <h:outputText value="#{row+1}、" styleClass="choiceTitle"/>
+                        <ui:repeat value="#{fill.blocks}" var="b">
+                            <h:outputText value="#{b.preStr}" escape="false" styleClass="choiceTitle"/>
+                            <h:outputText value="#{b.rightAnswer}" style="text-decoration: underline;font-style: italic;"/>
+                        </ui:repeat>
+                        <h:outputText value="#{fill.lastStr}" escape="false" styleClass="choiceTitle"/><br/>
+                        <div style="margin-left: 30px;">
+                            <h:outputText value="试题解析："  styleClass="answer"/>
+                            <h:outputText value="#{randomPaperDemo.examCase.examination.showRightStr?fill.question.rightStr:'不显示'}"  escape="false" style="color:green;"/>
+                            
+                        </div>
+                    </p:column>
+                </p:dataTable>
+
+                <p:dataTable  value="#{randomPaperDemo.examCase.judgeItems}" var="judge" rowIndexVar="row"  rendered="#{fn:length(randomPaperDemo.examCase.judgeItems)!=0}">
+                    <p:column style="text-align:left;">
+                        <f:facet name="header" >
+                            <h:outputText value="※判断题，每题#{randomPaperDemo.examCase.examination.randomPaper.judgeScore}分，共#{fn:length(randomPaperDemo.examCase.judgeItems)}题，得分："/>
+                            <h:outputText value="#{randomPaperDemo.examCase.judgeScore}">
+                                <f:convertNumber maxFractionDigits="2"/>
+                            </h:outputText>
+                        </f:facet>
+                        <h:outputText value="#{row+1}、#{judge.question.name}" styleClass="choiceTitle"/><br/>
+                        <div style="margin-left: 30px;">
+                            <h:outputText value="正确答案：" styleClass="answer"/>
+                            <h:outputText value="#{randomPaperDemo.examCase.examination.showAnswer?judge.question.answer:'不显示'}"  style="color:green;font-weight: bold;"/>
+                            <br/>
+                            <h:outputText value="试题解析：" styleClass="answer"/>
+                            <h:outputText value="#{randomPaperDemo.examCase.examination.showRightStr?judge.question.rightStr:'不显示'}" escape="false"  style="color:green;"/>
+                            
+                        </div>
+                    </p:column>
+                </p:dataTable>
+
+                <p:dataTable  value="#{randomPaperDemo.examCase.essayItems}" var="essay" rowIndexVar="row"  rendered="#{fn:length(randomPaperDemo.examCase.essayItems)!=0}">
+                    <p:column style="text-align:left;">
+                        <f:facet name="header" >
+                            <h:outputText value="※问答题，每题#{randomPaperDemo.examCase.examination.randomPaper.essayScore}分，共#{fn:length(randomPaperDemo.examCase.essayItems)}题，得分："/>
+                            <h:outputText value="#{randomPaperDemo.examCase.essayScore}">
+                                <f:convertNumber maxFractionDigits="2"/>
+                            </h:outputText>
+                        </f:facet>
+                        <h:outputText value="#{row+1}、#{essay.question.name}" styleClass="choiceTitle" escape="false"/><br/>
+                        <div style="margin-left: 30px;">
+                            <h:outputText value="正确答案：" styleClass="answer"/>
+                            <h:outputText value="#{randomPaperDemo.examCase.examination.showAnswer?essay.question.answer:'不显示'}" escape="false"  style="color:green;font-weight: bold;"/><br/>
+                            
+                            <h:outputText value="试题解析：" styleClass="answer"/>
+                            <h:outputText value="#{randomPaperDemo.examCase.examination.showRightStr?essay.question.rightStr:'不显示'}" escape="false"  style="color:green;"/>
+                            
+                        </div>
+                    </p:column>
+                </p:dataTable>
+
+                <p:dataTable  value="#{randomPaperDemo.examCase.fileItems}" var="file" rowIndexVar="row"  rendered="#{fn:length(randomPaperDemo.examCase.fileItems)!=0}">
+                    <p:column style="text-align:left;">
+                        <f:facet name="header" >
+                            <h:outputText value="※文件题，每题#{randomPaperDemo.examCase.examination.randomPaper.fileScore}分，共#{fn:length(randomPaperDemo.examCase.fileItems)}题，得分："/>
+                            <h:outputText value="#{randomPaperDemo.examCase.fileScore}">
+                                <f:convertNumber maxFractionDigits="2"/>
+                            </h:outputText>
+                        </f:facet>
+                        <h:outputText value="#{row+1}、#{file.question.name}" styleClass="choiceTitle" escape="false"/>
+                        <div style="margin-left: 30px;">
+                            <h:outputText value="备注：" styleClass="answer" escape="false"/>
+                            <h:outputText value="#{file.question.answer}"  style="color:green;font-weight: bold;" escape="false"/><br/>
+                            
+                            <h:outputText value="试题解析：" styleClass="answer"/>
+                            <h:outputText value="#{randomPaperDemo.examCase.examination.showRightStr?file.question.rightStr:'不显示'}" escape="false"  style="color:green;"/>
+                            
+                        </div>
+                    </p:column>
+                </p:dataTable>
+
+
+                <ui:repeat value="#{randomPaperDemo.examCase.caseItems}" var="case1">
+                    <p:panel style="width:100%;">
+                        <f:facet name="header">
+                            <h:outputText value="#{case1.question.nickName}" style="" styleClass="choiceTitle" escape="false"/>
+                            <h:outputText value="，得分："/>
+                            <h:outputText value="#{randomPaperDemo.examCase.caseScore}"/>
+                        </f:facet>
+                        <h:outputText value="#{case1.question.content}" styleClass="choiceTitle" escape="false" style="padding:5px 10px 5px 10px;"/>
+                        
+                        <p:separator/>
+
+                        <ui:repeat  value="#{case1.choiceItems}" var="choice" varStatus="row" rendered="#{fn:length(case1.choiceItems)!=0}">
+                            <a id="archor-#{choice.id}" href="#"></a>
+                            <h:outputText value="（#{row.index+1}）#{choice.question.name}" style="#{choice.marked?'color:red;':''}" styleClass="choiceTitle" escape="false"/>
+                            <div style="margin-left: 30px;">
+                                <ui:repeat value="#{choice.question.choices}" var="ch">
+                                    <h:outputText value="#{ch.label}.&nbsp;#{ch.name}" styleClass="choiceTitle"/>
+                                    <br/>
+                                </ui:repeat>
+                            </div>
+                            <div style="margin-left: 30px;">
+                                <h:outputText value="正确答案：" styleClass="answer"/>
+                                <h:outputText value="#{randomPaperDemo.examCase.examination.showAnswer?choice.question.answer:'不显示'}" style="color:green;font-weight: bold;"/>&nbsp;
+                                
+                                <h:outputText value="试题解析：" styleClass="answer"/>
+                                <h:outputText value="#{randomPaperDemo.examCase.examination.showRightStr?choice.question.rightStr:'不显示'}" escape="false"  style="color:green;"/>
+                            </div>
+
+                            <hr/>
+                        </ui:repeat>
+
+                        <ui:repeat value="#{case1.multiChoiceItems}" var="choice" varStatus="row" rendered="#{fn:length(case1.multiChoiceItems)!=0}">
+                            <a id="archor-#{choice.id}" href="#"></a>
+                            <h:outputText value="（#{fn:length(case1.choiceItems)+row.index+1}）#{choice.question.name}" styleClass="choiceTitle" escape="false"/>
+
+                            <div style="margin-left: 30px;">
+                                <ui:repeat value="#{choice.question.choices}" var="ch">
+                                    <h:outputText value="#{ch.label}.&nbsp;#{ch.name}" styleClass="choiceTitle"/>
+                                    <br/>
+                                </ui:repeat>
+                            </div>
+                            <div style="margin-left: 30px;">
+                                <h:outputText value="正确答案：" styleClass="answer"/>
+                                <h:outputText value="#{randomPaperDemo.examCase.examination.showAnswer?choice.question.answer:'不显示'}" style="color:green;font-weight: bold;"/>&nbsp;
+                                <br/>
+                                <h:outputText value="试题解析：" styleClass="answer"/>
+                                <h:outputText value="#{randomPaperDemo.examCase.examination.showRightStr?choice.question.rightStr:'不显示'}" escape="false"  style="color:green;"/>
+                            </div>
+                            <hr/>
+                        </ui:repeat>
+                        <ui:repeat   value="#{case1.fillItems}" var="fill"  varStatus="row" rendered="#{fn:length(case1.fillItems)!=0}">
+                            <a id="archor-#{fill.id}" href="#"></a>
+                            <h:outputText value="（#{fn:length(case1.choiceItems)+fn:length(case1.multiChoiceItems)+row.index+1}）"  styleClass="choiceTitle"/>
+                            <ui:repeat value="#{fill.blocks}" var="b">
+                                <h:outputText value="#{b.preStr}" escape="false" styleClass="choiceTitle"/>
+                                <h:outputText value="________"/>
+                            </ui:repeat>
+                            <h:outputText value="#{fill.lastStr}" escape="false" styleClass="choiceTitle"/><br/>
+                            <div style="margin-left: 30px;">
+                                <h:outputText value="正确答案：" styleClass="answer"/>
+                                <h:outputText value="#{randomPaperDemo.examCase.examination.showAnswer?fill.question.answerStr:'不显示'}" style="color:green;font-weight: bold;"/>
+                                
+                                <br/>
+                                <h:outputText value="试题解析："  styleClass="answer"/>
+                                <h:outputText value="#{randomPaperDemo.examCase.examination.showRightStr?fill.question.rightStr:'不显示'}"  escape="false" style="color:green;"/>
+                            </div>
+                            <hr/>
+                        </ui:repeat>
+                        <ui:repeat  value="#{case1.judgeItems}" var="judge" varStatus="row"  rendered="#{fn:length(case1.judgeItems)!=0}">
+
+                            <a id="archor-#{judge.id}" href="#"></a>
+                            <h:outputText value="（#{fn:length(case1.choiceItems)+fn:length(case1.multiChoiceItems)+fn:length(case1.fillItems)+row.index+1}）#{judge.question.name}" escape="false" styleClass="choiceTitle"/>
+                            <div style="margin-left: 30px;">
+                                <h:outputText value="正确答案：" styleClass="answer"/>
+                                <h:outputText value="#{randomPaperDemo.examCase.examination.showAnswer?judge.question.answer:'不显示'}"  style="color:green;font-weight: bold;"/>
+                                <br/>
+                                <h:outputText value="试题解析：" styleClass="answer"/>
+                                <h:outputText value="#{randomPaperDemo.examCase.examination.showRightStr?judge.question.rightStr:'不显示'}" escape="false"  style="color:green;"/>
+                            </div>
+                            <hr/>
+                        </ui:repeat>
+                        <ui:repeat  value="#{case1.essayItems}" var="essay" varStatus="row"  rendered="#{fn:length(case1.essayItems)!=0}">
+                            <a id="archor-#{essay.id}" href="#"></a>
+                            <h:outputText value="（#{fn:length(case1.choiceItems)+fn:length(case1.multiChoiceItems)+fn:length(case1.fillItems)+fn:length(case1.judgeItems)+row.index+1}）#{essay.question.name}" style="#{essay.marked?'color:red;':''}" styleClass="choiceTitle" escape="false"/><br/>
+                            <div style="margin-left: 30px;">
+                                <h:outputText value="正确答案：" styleClass="answer"/>
+                                <h:outputText value="#{randomPaperDemo.examCase.examination.showAnswer?essay.question.answer:'不显示'}" escape="false"  style="color:green;font-weight: bold;"/><br/>
+                                <br/>
+                                <h:outputText value="试题解析：" styleClass="answer"/>
+                                <h:outputText value="#{randomPaperDemo.examCase.examination.showRightStr?essay.question.rightStr:'不显示'}" escape="false"  style="color:green;"/>
+                            </div>
+                            <hr/>
+                        </ui:repeat>
+                    </p:panel>
+                </ui:repeat>
+
+                
+                
+                
+                
+            </p:panel>
+
+        </h:form>
+
+    </h:body>
+</html>
+

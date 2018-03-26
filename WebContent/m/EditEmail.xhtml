@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <ui:composition template="BackGeneral.xhtml">
+        <ui:define name="content">
+            <h:form>
+                <ui:include src="/AjaxStatus2.xhtml"/>
+                <h:outputText value="－修改系统邮箱－"  styleClass="tit"/>
+                <p:separator style="margin:5px 0px 10px 0px" />
+                <h:panelGrid columns="1">
+                    <p:dataTable value="#{editSystemEmailBox.emailboxes}" var="email">
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="邮箱地址"></h:outputText> 
+                            </f:facet>
+                            <h:inputText value="#{email.address}" style="width:60px"> </h:inputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="显示名称"></h:outputText> 
+                            </f:facet>
+                            <h:inputText value="#{email.alias}" style="width:60px"> </h:inputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="SMTP主机"></h:outputText>
+                            </f:facet>
+                            <h:inputText value="#{email.smtpHost}" style="width:60px"></h:inputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="SMTP端口"></h:outputText>
+                            </f:facet>
+                            <h:inputText value="#{email.smtpPort}" style="width:60px"></h:inputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="验证"></h:outputText>
+                            </f:facet>
+                            <h:selectBooleanCheckbox value="#{email.auth}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="SSL"></h:outputText>
+                            </f:facet>
+                            <h:selectBooleanCheckbox value="#{email.ssl}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="SMTP用户名"></h:outputText>
+                            </f:facet>
+                            <h:inputText value="#{email.smtpUrn}" style="width:60px"></h:inputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="SMTP密码"></h:outputText>
+                            </f:facet>
+                            <h:inputText value="#{email.smtpPwd}" style="width:60px"> </h:inputText>
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="删除"></h:outputText>
+                            </f:facet>
+                            <p:commandLink value="删除" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'sys')}"
+                                           actionListener="#{editSystemEmailBox.delEmailBox}" update="@form"></p:commandLink>
+                        </p:column>
+                    </p:dataTable>
+                    <p:separator ></p:separator>
+                    <h:panelGrid columns="4"> 
+                        <h:outputLabel value="邮箱地址："></h:outputLabel>
+                        <h:inputText value="#{editSystemEmailBox.eb.address}"></h:inputText>
+                        <h:outputLabel value="显示名称："></h:outputLabel>
+                        <h:inputText value="#{editSystemEmailBox.eb.alias}"></h:inputText>
+                        <h:outputLabel value="SMTP主机："></h:outputLabel>
+                        <h:inputText value="#{editSystemEmailBox.eb.smtpHost}"></h:inputText>
+                        <h:outputLabel value="SMTP端口："></h:outputLabel>
+                        <h:inputText value="#{editSystemEmailBox.eb.smtpPort}"></h:inputText>
+                        <h:outputLabel value="SMTP用户名："></h:outputLabel>
+                        <h:inputText value="#{editSystemEmailBox.eb.smtpUrn}"></h:inputText>
+                        <h:outputLabel value="SMTP密码："></h:outputLabel>
+                        <h:inputText value="#{editSystemEmailBox.eb.smtpPwd}"></h:inputText>
+                        <h:outputLabel value="验证："></h:outputLabel>
+                        <h:selectBooleanCheckbox value="#{editSystemEmailBox.eb.auth}" />
+                        <h:outputLabel value="SSL："></h:outputLabel>
+                        <h:selectBooleanCheckbox value="#{editSystemEmailBox.eb.ssl}" />
+                        <p:commandButton value="添加" update="@form" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'sys')}"
+                                         actionListener="#{editSystemEmailBox.addItem}"></p:commandButton>
+                    </h:panelGrid>
+                    <p:separator ></p:separator>
+                    <p:commandButton value="完成"  disabled="#{!fn:contains(adminSessionBean.admin.authstr,'sys')}"
+                                     action="#{editSystemEmailBox.finish}"></p:commandButton>
+                </h:panelGrid>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

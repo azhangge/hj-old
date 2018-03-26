@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <h:outputText value="&lt;!--[if lte IE 7]&gt;"/>
+        <script>
+            window.location.href = '#{facesContext.externalContext.requestContextPath}/update_browser.jsp';
+        </script>
+        <h:outputText value="&lt;![endif]--&gt;"/>
+        <title>
+            <ui:insert name="title"></ui:insert>
+            - #{applicationBean.info.siteHeader}</title>
+        <meta http-equiv="keywords" content=" #{applicationBean.info.keyWords}" />
+        <meta http-equiv="description"
+              content=" #{applicationBean.info.description}" />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+        
+        <link rel="stylesheet" type="text/css"
+              href="#{facesContext.externalContext.requestContextPath}/resources/jquery.Sonline.2.0/style/gray.css" />
+        <link rel="stylesheet" type="text/css"
+              href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs.css" />
+        <link rel="stylesheet" type="text/css"
+              href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs_a.css" />
+        <link rel="stylesheet" type="text/css"
+              href="#{facesContext.externalContext.requestContextPath}/resources/mainpic.css" />     
+        
+        
+        <f:loadBundle basename="com.huajie.exam.i18n.langs" var="lang"/>
+    </h:head>
+    <h:body>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $("#s_222").Scroll({line: 1, speed: 400, timer: 5000});
+            });
+
+        </script>
+        <!-- 客服插件 -->
+<!--         <ui:include src="CustomerService.xhtml"/> -->
+        <h:form id="myForm">
+        	<!-- 系统公告 -->
+            <ui:include src="/CasusPanel.xhtml"></ui:include>
+            <!-- 登录窗口 -->
+            <ui:include src="LoginPopup.xhtml"></ui:include>
+            <ui:include src="FrontMenu.xhtml"></ui:include>
+            
+            <!-- 轮播图 -->
+            <c:if test="#{!applicationBean.systemConfig.openPicture}">
+                <div style="height:78px;"/>
+            </c:if>
+            <c:if test="#{applicationBean.systemConfig.openPicture}">
+                <div style="width:100%;margin: 0px auto;">
+                    <ui:include src="PictureShow2.xhtml"/>
+                </div>
+            </c:if>
+            <div style="margin: 0px auto;background-color: white;width:970" class="ui-grid ui-grid-fixed">
+
+                <p:outputPanel id="mainPanel" styleClass="mainPanel ui-grid" style="border:0px solid red;">
+                    <ui:insert name="content"></ui:insert>
+                </p:outputPanel>
+<!--                 <p:panel rendered="#{fn:length(links.allPartner)!=0 and copyrightController.sysType!='1'}"  style="width:100%;margin:3px 0px 3px 0px!important;padding: 0px!important;border:0px solid #ccc;"  >
+                    <ui:include src="Links.xhtml"/>
+                </p:panel> -->
+
+                <p:panel styleClass="mainPanel" style="width:100%;border:0px solid #e5e5e5;margin: 0px auto;">
+                    <c:if test="#{copyrightController.copyrightInfo.email!='webmaster@huajie.com'}">
+                        <ui:include src="Footer1.xhtml"/>
+                    </c:if>
+                    <c:if test="#{copyrightController.copyrightInfo.email=='webmaster@huajie.com'}">
+                        <ui:include src="Footer.xhtml"/>
+                    </c:if>
+                </p:panel>
+            </div>
+            
+            <ui:include src="/AjaxStatus2.xhtml"/>
+
+        </h:form>
+        <script type="text/javascript">
+        </script>
+        
+        <script src="#{facesContext.externalContext.requestContextPath}/resources/js/upScroll.js" type="text/javascript" language="javascript"/>
+    </h:body>
+</html>

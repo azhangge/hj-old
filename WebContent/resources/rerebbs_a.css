@@ -1,0 +1,324 @@
+a:link {
+    font-size: 12px;
+    text-decoration: none;
+}
+a:visited {
+    /* font-size: 12px; */
+    text-decoration:none;
+}
+a:hover {
+    font-size: 12px;
+    text-decoration: underline;
+}
+a:active {
+    font-size: 12px!important;
+    text-decoration: none;
+}
+
+.notice{
+    line-height:25px;
+    font-size: 12px!important;
+}
+a.notice:link {
+    font-size: 12px!important;
+    text-decoration: none;
+}
+a.notice:visited {
+    font-size: 12px!important;
+    text-decoration:none;
+}
+a.notice:hover {
+    font-size: 12px!important;
+    text-decoration: underline!important;
+}
+a.notice:active {
+    font-size: 12px!important;
+    text-decoration: none;
+}
+
+.explain{
+    font-size: 13px!important;
+    color:blue!important;
+}
+a.explain:link {
+    font-size: 12px!important;
+    color:blue!important;
+    text-decoration: none;
+}
+a.explain:visited {
+    font-size: 12px!important;
+    text-decoration:none;
+}
+a.explain:hover {
+    font-size: 12px!important;
+    
+    text-decoration: underline!important;
+}
+a.explain:active {
+    font-size: 12px!important;
+    text-decoration: none;
+}
+
+.newMenuNav>a{
+    font-weight: bold!important;
+}
+
+.newMenuNav{
+    font-weight: bold!important;
+}
+.topNav{
+    margin-right: 15px!important;
+}
+a.topNav:link {
+    font-size: 12px!important;
+    font-family: 氓庐鈥姑ぢ解��!important;
+    font-weight: bold!important;
+    
+    text-decoration: none!important;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+a.topNav:visited {
+    font-size: 12px!important;
+    font-family: 氓庐鈥姑ぢ解��!important;
+    font-weight: bold!important;
+    
+    text-decoration:none!important;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+a.topNav:hover {
+    font-size: 12px!important;
+    font-family: 氓庐鈥姑ぢ解��!important;
+    font-weight: bold!important;
+    
+    text-decoration: underline!important;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+a.topNav:active {
+    font-size: 12px!important;
+    font-family: 氓庐鈥姑ぢ解��!important;
+    font-weight: bold!important;
+    
+    text-decoration: none!important;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+a.topNav1:link {
+    font-size: 12px!important;
+    text-decoration: none!important;
+}
+a.topNav1:visited {
+    font-size: 12px!important;
+    text-decoration:none!important;
+}
+a.topNav1:hover {
+    font-size: 12px!important;
+    text-decoration: none!important;
+}
+a.topNav1:active {
+    font-size: 12px!important;
+    text-decoration: none!important;
+}
+
+
+a.news:link {
+    font-size: 14px!important;
+    text-decoration: none;
+}
+a.news:visited {
+    font-size: 14px!important;
+    text-decoration:none;
+}
+a.news:hover {
+    font-size: 14px!important;
+    text-decoration: underline!important;
+}
+a.news:active {
+    font-size: 14px!important;
+    text-decoration: none;
+}
+
+a.operation:link {
+    font-size: 12px!important;
+    color: #0073ea;
+    text-decoration: none;
+}
+a.operation:visited {
+    font-size: 12px!important;
+    text-decoration:none;
+}
+a.operation:hover {
+    font-size: 12px!important;
+    text-decoration: underline!important;
+}
+a.operation:active {
+    font-size: 12px!important;
+    text-decoration: none;
+}
+.headerText {
+    font-size: 14px!important;
+    font-weight: bold;
+    text-decoration: none;
+}
+a.headerx:link {
+    font-size: 11px!important;
+    font-weight: bold;
+    text-decoration: none;
+}
+a.headerx:visited {
+    font-size: 14px!important;
+    font-weight: bold;
+    text-decoration:none;
+}
+a.headerx:hover {
+    font-size: 14px!important;
+    font-weight: bold;
+    text-decoration: underline!important;
+}
+a.headerx:active {
+    font-size: 14px!important;
+    font-weight: bold;
+    text-decoration: none;
+}
+.moreText {
+    font: 9pt Verdana;
+    color: gray;
+    text-decoration: none;
+}
+a.more:link {
+    font: 9pt Verdana;
+    color: gray;
+    text-decoration: none;
+}
+a.more:visited {
+    font: 9pt Verdana;
+    color:gray;
+    text-decoration:none;
+}
+a.more:hover {
+    font: 9pt Verdana;
+    text-decoration: underline;
+}
+a.more:active {
+    font: 9pt Verdana;
+    color: gray;
+    text-decoration: none;
+}
+
+a.top {
+    color: #ffff99;
+    font: 9pt 茂驴陆茂驴陆茂驴陆茂驴陆;
+    text-decoration: none;
+    font-weight: bold!important;
+    line-height: 26px;
+    vertical-align: middle;
+}
+a.top:hover {
+    color: #ffff99;
+    font: 9pt Verdana, 茂驴陆茂驴陆茂驴陆茂驴陆;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+a.nav:link {
+    font: 10pt Verdana!important;
+    font-weight: bold!important;
+    color: #0e5792!important;
+    line-height: 30px!important;
+    text-decoration: none!important;
+}
+a.nav:visited {
+    font: 10pt Verdana!important;
+    font-weight: bold!important;
+    color: #0e5792!important;
+    line-height: 30px!important;
+    text-decoration:none!important;
+}
+a.nav:hover {
+    font: 10pt Verdana!important;
+    font-weight: bold!important;
+    color: #0e5792!important;
+    line-height: 30px!important;
+    text-decoration: underline!important;
+}
+a.nav:active {
+    font: 10pt Verdana!important;
+    font-weight: bold!important;
+    line-height: 30px!important;
+    color: #0e5792!important;
+    text-decoration: none!important;
+}
+
+
+
+a.BottomNav:link {
+    font: 9pt Verdana!important;
+    color: #076b92!important;
+    line-height: 30px!important;
+    text-decoration: none!important;
+}
+a.BottomNav:visited {
+    font: 9pt Verdana!important;
+    color: #076b92!important;
+    line-height: 30px!important;
+    text-decoration:none!important;
+}
+a.BottomNav:hover {
+    font: 9pt Verdana!important;
+    color: #076b92!important;
+    line-height: 30px!important;
+    text-decoration: underline!important;
+}
+a.BottomNav:active {
+    font: 9pt Verdana!important;
+    line-height: 30px!important;
+    color: #076b92!important;
+    text-decoration: none!important;
+}
+/* .ui-widget-content:hover {color:#0073ea;font-size: 13px;  cursor:pointer;} */
+.zonehover:hover {color:#0073ea;font-size: 13px;  cursor:pointer;}
+.sctable row:hover,.sctable row.hilite {background-color:#e9f9fe;}
+/* .ui-datatable-even{background-color:#e9f9fe;}
+.ui-datatable-odd{background-color:#000;} */
+a.comment:link {
+    color:#0080FF!important;
+    text-decoration: none;
+}
+a.comment:visited {
+    text-decoration:none;
+}
+a.comment:hover {
+    text-decoration: underline!important;
+}
+a.comment:active {
+    text-decoration: none;
+}
+
+.nav8{
+    font-family: 氓戮庐猫陆炉茅鈥衡�γ┞烩��!important;
+    font-size: 14px!important;
+}
+a.nav8:link {
+    text-decoration: none;
+    font-family: 氓戮庐猫陆炉茅鈥衡�γ┞烩��!important;
+    font-size: 14px!important;
+}
+a.nav8:visited {
+    text-decoration:none;
+    font-family: 氓戮庐猫陆炉茅鈥衡�γ┞烩��!important;
+    font-size: 14px!important;
+}
+a.nav8:hover {
+    color:#3260a2!important;
+    text-decoration: none!important;
+    font-family: 氓戮庐猫陆炉茅鈥衡�γ┞烩��!important;
+    font-size: 14px!important;
+}
+a.nav8:active {
+    text-decoration: none;
+    font-family: 氓戮庐猫陆炉茅鈥衡�γ┞烩��!important;
+    font-size: 14px!important;
+}

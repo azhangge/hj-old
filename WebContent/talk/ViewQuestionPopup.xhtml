@@ -1,0 +1,158 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core"  lang="en">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition>
+            <p:dialog id="choiceDialog"  widgetVar="choiceDialog" resizable="true" closable="true" fitViewport="true"
+                       width="600"  showEffect="explode" hideEffect="explode">  
+                <f:facet name="header">  
+                    <h:outputText value="查看单选题" /> 
+                </f:facet>
+                <p:outputPanel autoUpdate="true" style="overflow: auto;max-height: 500px;" >
+                    <h:panelGroup id="displayChoice">
+                        <h:outputText value="#{viewQuestionPopup.nowCq.caseQuestion.name}" rendered="#{viewQuestionPopup.nowCq.caseQuestion!=null}" escape="false" styleClass="choiceTitle"/>
+                        <h:outputText value="#{viewQuestionPopup.nowCq.caseQuestion.content}" rendered="#{viewQuestionPopup.nowCq.caseQuestion!=null}" escape="false" styleClass="choiceTitle"/>
+                        <p:separator rendered="#{viewQuestionPopup.nowCq.caseQuestion!=null}"/>
+                        <h:outputText value="#{viewQuestionPopup.nowCq.name}" escape="false" styleClass="choiceTitle"/>
+                        <p:separator rendered="#{viewQuestionPopup.nowCq.caseQuestion!=null}"/>
+                        <div style="margin-left: 30px;">
+                            <ui:repeat value="#{viewQuestionPopup.nowCq.choices}" var="ch">
+                                <h:outputText value="#{ch.label}.&nbsp;#{ch.name}" styleClass="choiceTitle"/>
+                                <br/>
+                            </ui:repeat>
+                        </div>
+                        <p:separator/>
+                        <div style="margin-left: 0px;">
+                            <h:outputText value="正确答案：" styleClass="answer"/>
+                            <h:outputText value="#{viewQuestionPopup.nowCq.answer}" style="color:green;font-weight: bold;"/>&nbsp;
+                            <p:separator/>
+                            <h:outputText value="试题解析：" styleClass="answer"/>
+                            <h:outputText value="#{viewQuestionPopup.nowCq.rightStr}" escape="false" style="color:green;"/>
+                            <br/>
+                        </div>
+                    </h:panelGroup>
+                </p:outputPanel>
+            </p:dialog>
+
+            <p:dialog id="multiChoiceDialog"  widgetVar="multiChoiceDialog" resizable="true"  closable="true"
+                       width="600" showEffect="explode" hideEffect="explode">  
+                <f:facet name="header">  
+                    <h:outputText value="查看多选题" /> 
+                </f:facet>
+                <p:outputPanel autoUpdate="true" style="overflow: auto;max-height: 500px;" >
+                    <h:panelGroup id="displayMultiChoice">
+                        <h:outputText value="#{viewQuestionPopup.nowMcq.name}" escape="false" styleClass="choiceTitle"/>
+                        <p:separator/>
+                        <div style="margin-left: 30px;">
+                            <ui:repeat value="#{viewQuestionPopup.nowMcq.choices}" var="ch">
+                                <h:outputText value="#{ch.label}.&nbsp;#{ch.name}" styleClass="choiceTitle"/>
+                                <br/>
+                            </ui:repeat>
+                        </div>
+                        <p:separator/>
+                        <div style="margin-left: 0px;">
+                            <h:outputText value="正确答案：" styleClass="answer"/>
+                            <h:outputText value="#{viewQuestionPopup.nowMcq.answer}" style="color:green;font-weight: bold;"/>&nbsp;
+                            <p:separator/>
+                            <h:outputText value="试题解析：" styleClass="answer"/>
+                            <h:outputText value="#{viewQuestionPopup.nowMcq.rightStr}"  escape="false" style="color:green;"/>
+                            <br/>
+                        </div>
+                    </h:panelGroup>
+                </p:outputPanel>
+            </p:dialog>
+            <p:dialog id="fillDialog"  widgetVar="fillDialog" resizable="true"  closable="true"
+                       width="600" showEffect="explode" hideEffect="explode">  
+                <f:facet name="header">  
+                    <h:outputText value="查看填空题" /> 
+                </f:facet>
+                <p:outputPanel autoUpdate="true" style="overflow: auto;max-height: 500px;" >
+                    <h:panelGroup id="displayFill">
+                        <h:outputText value="#{viewQuestionPopup.nowFq.name}" escape="false" styleClass="choiceTitle"/><br/>
+                        <p:separator/>
+                        <div style="margin-left: 0px;">
+                            <h:outputText value="试题解析：" styleClass="answer"/>
+                            <h:outputText value="#{viewQuestionPopup.nowFq.rightStr}" escape="false"  style="color:green;"/>
+                            <br/>
+                        </div>
+                    </h:panelGroup>  
+                </p:outputPanel>
+            </p:dialog>
+
+            <p:dialog id="judgeDialog"  widgetVar="judgeDialog" resizable="true" closable="true"
+                       width="600" showEffect="explode" hideEffect="explode">  
+                <f:facet name="header">  
+                    <h:outputText value="查看判断题" /> 
+                </f:facet>
+                <p:outputPanel autoUpdate="true" style="overflow: auto;max-height: 500px;" >
+                    <h:panelGroup id="displayJudge">
+                        <h:outputText value="#{viewQuestionPopup.nowJq.name}" escape="false" styleClass="choiceTitle"/>
+                        <p:separator/>
+                        <div style="margin-left: 0px;">
+                            <h:outputText value="正确答案：" styleClass="answer"/>
+                            <h:outputText value="#{viewQuestionPopup.nowJq.answer}" style="color:green;font-weight: bold;"/>&nbsp;
+                            <p:separator/>
+                            <h:outputText value="试题解析：" styleClass="answer"/>
+                            <h:outputText value="#{viewQuestionPopup.nowJq.rightStr}"  escape="false" style="color:green;"/>
+                            <br/>
+                        </div>
+                    </h:panelGroup>
+                </p:outputPanel>
+            </p:dialog>
+
+            <p:dialog  id="essayDialog" widgetVar="essayDialog" resizable="true" closable="true" style="overflow: auto;max-height: 500px;" 
+                       width="600" showEffect="explode" hideEffect="explode">  
+                <f:facet name="header">  
+                    <h:outputText value="查看问答题" /> 
+                </f:facet>
+                <p:outputPanel autoUpdate="true" style="overflow: auto;max-height: 500px;" >
+                    <h:panelGroup id="displayEssay">
+                        <h:outputText value="#{viewQuestionPopup.nowEq.caseQuestion.name}" rendered="#{viewQuestionPopup.nowEq.caseQuestion!=null}" escape="false" styleClass="choiceTitle"/>
+                        <h:outputText value="#{viewQuestionPopup.nowEq.caseQuestion.content}" rendered="#{viewQuestionPopup.nowEq.caseQuestion!=null}" escape="false" styleClass="choiceTitle"/>
+                        <p:separator rendered="#{viewQuestionPopup.nowEq.caseQuestion!=null}"/>
+                        <h:outputText value="#{viewQuestionPopup.nowEq.name}" escape="false" styleClass="choiceTitle"/>
+                        <p:separator/>
+                        <div style="margin-left: 0px;">
+                            <h:outputText value="正确答案：" styleClass="answer"/>
+                            <h:outputText value="#{viewQuestionPopup.nowEq.answer}"  escape="false" style="color:green;font-weight: bold;"/>&nbsp;
+                            <p:separator/>
+                            <h:outputText value="试题解析：" styleClass="answer"/>
+                            <h:outputText value="#{viewQuestionPopup.nowEq.rightStr}" escape="false" style="color:green;"/>
+                            <br/>
+                        </div>
+                    </h:panelGroup>
+                </p:outputPanel>
+            </p:dialog>
+
+            <p:dialog id="fileDialog"  widgetVar="fileDialog" resizable="true" closable="true"
+                       width="600" showEffect="explode" hideEffect="explode">  
+                <f:facet name="header">  
+                    <h:outputText value="查看文件题" /> 
+                </f:facet>
+                <p:outputPanel autoUpdate="true" style="overflow: auto;max-height: 500px;" >
+                    <h:panelGroup id="displayFile">
+                        <h:outputText value="#{viewQuestionPopup.nowFileq.name}" escape="false" styleClass="choiceTitle"/>
+                        <p:separator/>
+                        <div style="margin-left: 0px;">
+                            <h:outputText value="正确答案：" styleClass="answer"/>
+                            <h:outputText value="#{viewQuestionPopup.nowFileq.answer}" escape="false" style="color:green;font-weight: bold;"/>&nbsp;
+                            <p:separator/>
+                            <h:outputText value="试题解析：" styleClass="answer"/>
+                            <h:outputText value="#{viewQuestionPopup.nowFileq.rightStr}" escape="false"  style="color:green;"/>
+                            <br/>
+                        </div>
+                    </h:panelGroup>
+                </p:outputPanel>
+            </p:dialog>
+        </ui:composition>
+    </h:body>
+</html>
+

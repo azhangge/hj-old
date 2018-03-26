@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="UserCenterGeneral.xhtml">
+            <ui:define name="ucontent">     
+                <p:panel header="用户资料">
+                    <h:panelGrid columns="2" style="width: 100%;height: 300px;" styleClass="generalInfo"  columnClasses="user-left,user-right" >
+                        <f:facet name="header">
+                            <h:outputText value="个人信息" />
+                        </f:facet>
+                        <h:panelGroup>
+                            <h:outputText value="用户名：" ></h:outputText>
+                        </h:panelGroup>
+                          <h:panelGroup>
+                            <h:outputText value="#{userCenter.user.username}"/>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <h:outputText value="姓名：" ></h:outputText>
+                        </h:panelGroup> 
+                         <h:panelGroup>
+                            <h:outputText value="#{userCenter.user.name}" ></h:outputText>
+                        </h:panelGroup> 
+                        <h:panelGroup>
+                            <h:outputText value="性别：" ></h:outputText>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <h:outputText value="#{userCenter.user.gender}" ></h:outputText>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <h:outputText value="部门：" escape="false" ></h:outputText>
+                        </h:panelGroup>
+                          <h:panelGroup>
+                            <h:outputText value="#{userCenter.user.groupCnStr}" escape="false" ></h:outputText>
+                        </h:panelGroup>
+                        
+                        <!-- <h:panelGroup style="display:none">
+                            <h:outputText value="金额：" escape="false" style="display:none"></h:outputText>
+                            <h:outputText value="#{clientSession.fetchRealMoney(clientSession.usr.id)}" escape="false" rendered="#{clientSession.usr!=null}" style="display:none"></h:outputText>
+                        </h:panelGroup> -->
+                        <h:panelGroup>
+                            <h:outputText value="积分：" escape="false" ></h:outputText>   
+                        </h:panelGroup>
+                          <h:panelGroup>
+                            <h:outputText value="#{clientSession.fetchRealScore(clientSession.usr.id)}" escape="false" rendered="#{clientSession.usr!=null}" ></h:outputText>
+                        </h:panelGroup>
+                        
+                       <!--  <h:panelGroup style="display:none">
+                            <h:outputText value="等级：" escape="false" style="display:none"></h:outputText>
+                            <h:outputText value="#{userCenter.user.gradeName}" escape="false" style="display:none"></h:outputText>
+                        </h:panelGroup> 
+                        <h:panelGroup style="display:none">
+                            <h:outputText value="帖子：" escape="false" style="display:none"></h:outputText>
+                            <h:outputText value="#{userCenter.user.talkCount}" escape="false" style="display:none"></h:outputText>
+                        </h:panelGroup>-->
+                        <!-- <h:panelGroup>
+                            <h:outputText value="生日："></h:outputText>
+                        </h:panelGroup>
+                        <h:panelGroup >
+                            <h:outputText value="#{userCenter.user.birthDay}" >
+                                <f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8" />
+                            </h:outputText>
+                        </h:panelGroup> -->
+                        <!-- <h:panelGroup>
+                            <h:outputText value="现居地：" ></h:outputText>
+                        </h:panelGroup>
+                        <h:panelGroup >
+                            <h:outputText value="#{userCenter.user.province.SProvname}-" ></h:outputText>
+                            <h:outputText value="#{userCenter.user.city.SCityname}"></h:outputText>
+                        </h:panelGroup> -->
+                        <h:panelGroup>
+                            <h:outputText value="详细地址：" ></h:outputText>
+                        </h:panelGroup>
+                        <h:panelGroup >
+                       		<h:outputText value="#{userCenter.user.address}"></h:outputText> 
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <h:outputText value="电话：" ></h:outputText>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <h:outputText value="#{userCenter.user.tel}" ></h:outputText>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <h:outputText value="QQ：" ></h:outputText>
+                        </h:panelGroup>
+                         <h:panelGroup>
+                            <h:outputText value="#{userCenter.user.qq}" ></h:outputText>
+                        </h:panelGroup>   
+                        <h:panelGroup>
+                            <h:outputText value="邮箱："></h:outputText>
+                        </h:panelGroup>
+                         <h:panelGroup>
+                            <h:outputText value="#{userCenter.user.email}" ></h:outputText>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <h:outputText value="注册IP：" ></h:outputText>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <h:outputText id="regIp" value="#{userCenter.user.regIp}" ></h:outputText>
+                        </h:panelGroup>
+                        
+                        <h:panelGroup>
+                            <h:outputText value="注册时间：" ></h:outputText>
+                        </h:panelGroup>
+                          <h:panelGroup >
+                            <h:outputText value="#{userCenter.user.regTime}">
+                                <f:convertDateTime pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8"/>
+                            </h:outputText>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <h:outputText value="上次登录："></h:outputText>
+                        </h:panelGroup>
+                         <h:panelGroup >
+                            <h:outputText value="#{clientSession.lastTime}" rendered="#{clientSession.usr!=null}">
+                                <f:convertDateTime pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8"/>
+                            </h:outputText>
+                        </h:panelGroup>
+                    </h:panelGrid>
+                    
+                </p:panel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

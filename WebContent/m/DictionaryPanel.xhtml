@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition>
+
+            <p:dialog id="DictionaryPanel" width="600" style="text-align:left" widgetVar="DictionaryPanel" header="#{applicationBean.departmentStr}" resizable="false">
+                <p:outputPanel autoUpdate="true">
+                    <h:panelGrid columns="2">
+                        <h:outputText value="名称"></h:outputText>
+                        <h:inputText value="#{dictionaryMag2.dic.name}" style="width:400px;"/>
+                        <h:outputText value="电话"></h:outputText>
+                        <h:inputText value="#{dictionaryMag2.dic.tel}" style="width:200px;"/>
+                        <h:outputText value="介绍" />
+                        <h:inputTextarea value="#{dictionaryMag2.dic.description}" style="width:400px;height:80px;" />
+                        <h:outputText value="次序"></h:outputText>
+                        <h:inputText value="#{dictionaryMag2.dic.ord}" style="width:80px;"/>
+
+                        <h:outputText value="前台显示"></h:outputText>
+                        <h:selectBooleanCheckbox value="#{dictionaryMag2.dic.frontShow}">
+                        </h:selectBooleanCheckbox>
+                        <!-- <h:outputText value="默认部门"></h:outputText>
+                        <h:panelGroup>
+                            <h:selectBooleanCheckbox value="#{dictionaryMag2.dic.asDefault}">
+                            </h:selectBooleanCheckbox>
+                            <h:outputLabel value="当用户不选择部门时默认进入此部门" />
+                        </h:panelGroup> -->
+
+                        <h:outputLabel value="有效期" />
+                        <h:panelGroup>
+                            <p:calendar value="#{dictionaryMag2.dic.availableTime}" pattern="yyyy-MM-dd HH:mm" navigator="true"  timeZone="GMT+8" locale="zh_CN" yearRange="c:c+100"/>
+                            <h:outputText value=" -- " />
+                            <p:calendar value="#{dictionaryMag2.dic.expireTime}" pattern="yyyy-MM-dd HH:mm" navigator="true"  timeZone="GMT+8" locale="zh_CN" yearRange="c:c+100"/>
+                        </h:panelGroup>
+                        <h:outputText value="用户有效天数"></h:outputText>
+                        <h:panelGroup>
+                            <h:inputText value="#{dictionaryMag2.dic.defaultDays}" style="width:80px;"/>
+                            <h:outputText value="（本部门下用户的默认有效天数，设置为0此项将无效）" style="color:green;"></h:outputText>
+                        </h:panelGroup>
+
+                    </h:panelGrid>
+                </p:outputPanel>
+                <p:separator/>
+                <p:commandButton value="提交" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'class') and !fn:contains(adminSessionBean.admin.authstr,'user')}" action="#{dictionaryMag2.addOrEditOk}" update="@form"  oncomplete="PF('DictionaryPanel').hide()"/>
+            </p:dialog>
+
+
+
+
+        </ui:composition>
+    </h:body>
+</html>
+

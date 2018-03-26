@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"  lang="en">
+	<head>
+		<title>My Facelets Page</title>
+		<meta http-equiv="keywords" content="enter,your,keywords,here" />
+		<meta http-equiv="description"
+			content="A short description of this page." />
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+		<!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+	</head>
+	<body>
+		<ui:composition>
+			<f:facet name="config">
+                        toolbar: "MyToolbar",
+                        toolbar_MyToolbar:
+                        [
+                        { name: 'document', items : [ 'Source','Preview' ] },
+                        { name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
+                        { name: 'editing', items : [ 'Find','Replace','-','SelectAll','-','Scayt' ] },
+                        { name: 'insert', items : [ 'Image','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak'
+                        ,'Iframe' ] },
+                        '/',
+                        { name: 'styles', items : [ 'Styles','Format' ] },
+                        { name: 'basicstyles', items : [ 'Bold','Italic','Strike','-','RemoveFormat' ] },
+                        { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote' ] },
+                        { name: 'links', items : [ 'Link','Unlink','Anchor' ] },
+                        { name: 'tools', items : [ 'Maximize','-','About' ] }
+                        ]
+                    </f:facet>
+		</ui:composition>
+	</body>
+</html>

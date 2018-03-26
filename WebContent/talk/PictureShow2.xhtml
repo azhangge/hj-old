@@ -1,0 +1,188 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition>
+            <link href="#{facesContext.externalContext.requestContextPath}/resources/jcdate/css/public.css" rel="stylesheet" />
+<!--             <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/jquery.js"></script>
+			<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/jquery-plugins.js"></script>
+            <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jcdate/js/iview.js"></script>
+            <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jcdate/js/jquery.plugins-min.js"></script>
+            <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jcdate/js/scripts-bottom-min.js"></script> -->
+			<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/js/superslide.2.1.2.js"></script>
+			
+            <style>
+				.header{ width:100%; background:url(#{facesContext.externalContext.requestContextPath}/images/banner.png) #0f51b2 center no-repeat; height:358px;}
+				.header #onebyone_slider span a{color:#FFF;}
+				#onebyone_slider .oneByOne_item span.ob1_button .default_button{margin:0;padding:10px 25px;border:1px solid #0b7bb0;font-size:13px;-webkit-border-radius:3px;-moz-border-radius:3px;-o-border-radius:3px;border-radius:3px}
+				.default_button{font:11px Helvetica,Arial,sans-serif;font-weight:400;text-decoration:none;text-transform:uppercase;padding:8px 18px;margin:2px 3px;vertical-align:middle;display:inline-block;border:solid 1px #39cafb;color:#fff;background:#4fcfff;cursor:pointer;-webkit-border-radius:2px;-moz-border-radius:2px;-o-border-radius:2px;border-radius:2px;-webkit-box-shadow:inset 0 1px 0 rgba(255,255,255,.8),inset 0 -1px 0 rgba(255,255,255,.1);-moz-box-shadow:inset 0 1px 0 rgba(255,255,255,.2),inset 0 -1px 0 rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),inset 0 -1px 0 rgba(255,255,255,.1);-moz-transition:all .5s;-webkit-transition:all .5s;-o-transition:all .5s;transition:all .5s;zoom:1;*display:inline}
+				.default_button:hover{color:#fff;background:#0aa3dc;border-color:#0aa3dc}
+				.default_button:active{color:#fff;background:#26a1ce;border-color:#333;box-shadow:inset 0 1px 2px rgba(0,0,0,0.50),0px 0 1px rgba(255,255,255,0.50);-moz-box-shadow:inset 0 1px 2px rgba(255,255,255,0.50),0px 0 1px rgba(255,255,255,0.50);-webkit-box-shadow:inset 0 1px 2px rgba(255,255,255,0.50),0px 0 1px rgba(255,255,255,0.50)}
+				#onebyone_slider .oneByOne_item span.ob1_button{clear:left;position:relative;float:left;margin:40px 12px 0 330px;padding:5px;border:1px solid #27b8ee;background:#fff;background:rgba(255,255,255,.1);-webkit-border-radius:3px;-moz-border-radius:3px;-o-border-radius:3px;border-radius:3px;z-index:50}
+				
+				.fullSlide {
+					width: 100%;
+					position: relative;
+					height: 260px;
+					background: #000;
+				}
+				
+				.fullSlide .bd {
+					margin: 0 auto;
+					position: relative;
+					z-index: 0;
+				}
+				
+				.fullSlide .bd ul {
+					width: 100% !important;
+				}
+				
+				.fullSlide .bd li {
+					width: 100% !important;
+					height: 260px;
+					overflow: hidden;
+					text-align: center;
+				}
+				
+				.fullSlide .bd li a {
+					display: block;
+					height: 260px;
+				}
+				
+				.fullSlide .hd {
+					width: 100%;
+					position: absolute;
+					bottom: 0;
+					left: 0;
+					height: 30px;
+					line-height: 30px;
+				}
+				
+				.fullSlide .hd ul {
+					text-align: center;
+				}
+				
+				.fullSlide .hd ul li {
+					cursor: pointer;
+					display: inline-block;
+					*display: inline;
+					zoom: 1;
+					width: 42px;
+					height: 11px;
+					margin: 1px;
+					overflow: hidden;
+					background: #000;
+					filter: alpha(opacity = 50);
+					opacity: 0.5;
+					line-height: 999px;
+				}
+				
+				.fullSlide .hd ul .on {
+					background: #f00;
+				}
+				
+				.fullSlide .prev, .fullSlide .next {
+					display: block;
+					position: absolute;
+					z-index: 1;
+					top: 50%;
+					margin-top: -30px;
+					left: 30%;
+					z-index: 1;
+					width: 40px;
+					height: 60px;
+					background: url(../image/slider-arrow.png) -126px -137px #000 no-repeat;
+					cursor: pointer;
+					filter: alpha(opacity = 50);
+					opacity: 0.5;
+					display: none;
+				}
+				
+				.fullSlide .next {
+					left: auto;
+					right: 30%;
+					background-position: -6px -137px;
+				}
+				
+            </style>
+            
+<!--             <div class="header" style="margin-top: 75px;height:358px;border:0px solid red;">
+                <div id="onebyone_slider" style="height:400px;">
+                    <ui:repeat value="#{listPicture.pictureList}" var="pic">
+                        <div class="oneByOne_item" style="height:287px;margin: 0px auto;">
+                            <span class="ob1_title">
+                                <h:outputText escape="false" value="#{pic.title}" />
+                            </span>
+                            <span class="ob1_description">
+                                <h:outputText escape="false" value="#{pic.description}" style="font-family: 微软雅黑;"/>
+                            </span>
+                            <span class="ob1_button"><a href="#{pic.link}" target="_blank" class="default_button">查看详情</a></span>
+                            <p:graphicImage value="#{pic.url}" style="height:287px;" class="ob1_img_device1" />
+                        </div>
+                    </ui:repeat>
+
+                </div>
+            </div> -->
+
+			<div style="width: 100%; margin: 0px auto;">
+				<div class="banner" style="height: 260px;margin-top:75px;">
+					<div class="fullSlide">
+						<div class="bd">
+							<ul>
+								<ui:repeat value="#{listPicture.pictureList}" var="pic">
+									<li _src="url(#{pic.url})" style="background:##{pic.backcolor} center 0 no-repeat/* ;background-size:100% 100%; */">
+										<a href="#{pic.link}"></a>
+									</li>
+								</ui:repeat>
+							</ul>
+						</div>
+						
+						<div class="hd">
+							<ul></ul>
+						</div>
+						<!-- <span class="prev"></span> <span class="next"></span> -->
+					</div>
+				</div>
+			</div>
+
+        
+        
+        <script type="text/javascript">
+				$(".fullSlide").hover(
+						function() {
+							$(this).find(".prev,.next").stop(true, true)
+									.fadeTo("show", 0.5)
+						}, function() {
+							$(this).find(".prev,.next").fadeOut()
+						});
+				$(".fullSlide").slide(
+						{
+							titCell : ".hd ul",
+							mainCell : ".bd ul",
+							effect : "fold",
+							autoPlay : true,
+							autoPage : true,
+							trigger : "click",
+							startFun : function(i) {
+								var curLi = jQuery(".fullSlide .bd li").eq(i);
+								if (!!curLi.attr("_src")) {
+									curLi.css("background-image",
+											curLi.attr("_src")).removeAttr(
+											"_src")
+								}
+							}
+						});
+			</script>
+			</ui:composition>
+    </h:body>
+</html>
+

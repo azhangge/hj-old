@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:poue="http://primefaces.org/ui/extensions"
+      xmlns:p="http://primefaces.org/ui">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+
+
+                <h:form id="myForm">
+                    <script type="text/javascript" src="../resources/ckfinder/ckfinder.js"></script>
+                    <script type="text/javascript" language="javascript" src="#{facesContext.externalContext.requestContextPath}/rere_wimg_up/js/wordimage_uploader.js"></script>
+
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <h:outputScript name="chinese_locale.js" library="js"/>
+                    <div>
+                        <h:outputText  styleClass="tit"
+                                       value="－#{aAExamLabel.flag?'修改标签':'添加标签'}－" />
+                        <p:separator/>
+                        <h:panelGrid columns="2" cellpadding="0" >
+                            <h:outputText value="标签名称：" />
+                            <p:inputText value="#{aAExamLabel.exam.name}" style="width:600px;" />
+                            <h:outputText value="标签类型：" />
+                            <h:selectOneMenu value="#{aAExamLabel.typeId}">
+                                <f:selectItem itemValue="0" itemLabel="-请选择标签类型-"/>
+                                <f:selectItems value="#{aAExamLabel.types}" var="type1" itemLabel="#{type1.name}" itemValue="#{type1.id}"/>
+                            </h:selectOneMenu>
+                            <h:outputText value="标签次序：" />
+                            <p:inputText value="#{aAExamLabel.exam.ord}"  style="width:30px;"/>
+
+                            <h:outputText value="适用对象：" />
+                            <h:panelGroup>
+                                <h:outputText value="综合考试" />
+                                <h:selectBooleanCheckbox value="#{aAExamLabel.ifExam}"/><br/>
+                                <h:outputText value="每日竞赛" />
+                                <h:selectBooleanCheckbox value="#{aAExamLabel.ifContest}"/><br/>
+                                <h:outputText value="自助练习" />
+                                <h:selectBooleanCheckbox value="#{aAExamLabel.ifBuffet}"/><br/>
+                            </h:panelGroup>
+
+                            <h:outputText value="标签简介：" />
+                            <p:inputText value="#{aAExamLabel.exam.description}"  style="width:600px;"/>
+
+
+                        </h:panelGrid>
+                        <p:growl/>
+                        <p:separator/>
+                        <p:commandButton ajax="false" action="#{aAExamLabel.done}" value="提交"  styleClass="commonSubmit" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'examination')}"/>
+
+                    </div></h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

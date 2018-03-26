@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<title>My Facelets Page</title>
+	<meta http-equiv="keywords" content="enter,your,keywords,here" />
+	<meta http-equiv="description" content="A short description of this page." />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+	<!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+</h:head>
+<h:body>
+	<ui:composition template="../HJ/HJGeneral.xhtml">
+		<ui:define name="title">
+			<h:outputText value="试题收藏" />
+		</ui:define>
+		<ui:define name="content">
+			<ui:include src="ViewQuestionPopup.xhtml" />
+			<!-- <p:panel id="topNav8" styleClass="frontColumn topNav8Wrapper">
+                    <h:outputLink value="#{facesContext.externalContext.requestContextPath}" styleClass="nav8">
+                        <h:outputText value="首页" />
+                    </h:outputLink>
+                    <h:outputText value=">" styleClass="navSeparator"/>
+
+                    <h:outputLink value="UserCenter.jspx" styleClass="nav8">
+                        <h:outputText value="个人中心" styleClass="nav8"/>
+                    </h:outputLink>
+                    <h:outputText value=">" styleClass="navSeparator"/>
+                    <h:outputText value="试题收藏" styleClass="nav8"/>
+                </p:panel> -->
+			<link type="text/css" rel="stylesheet" href="../HJ/css/navigation.css" />
+			<div class="navigation yahei bold">
+				<div class="navigation_div">
+					<a href="#{facesContext.externalContext.requestContextPath}/" class="navigation_link">首页</a>
+				</div>
+				<div class="navigation_separate">/</div>
+				<div class="navigation_div">试题收藏</div>
+			</div>
+			<div class="div-content">
+				<div class="div-panel">
+					<p:tabView style="min-height: 500px;">
+						<p:tab title="单选类">
+							<p:dataTable value="#{questionCollectionList.choices}" var="collect" rowIndexVar="row" styleClass="frontColumn"
+								emptyMessage="无试题" style="width:100%;" rows="10" paginator="true" paginatorPosition="bottom" lazy="true">
+								<f:facet name="header">
+									<h:outputText value="单选题" />
+									<p:commandButton action="#{questionCollectionList.deleteAllByUserAndType(clientSession.usr.id, 'choice')}"
+										value="全部删除" update="@form"
+										onclick="if (!confirm('确认要删除本类型的所有试题收藏吗？'))
+                                            return false" />
+								</f:facet>
+								<p:column style="text-align: center;">
+									<f:facet name="header">
+										<h:outputText value="序号" />
+									</f:facet>
+									<h:outputText value="#{row+1}"></h:outputText>
+								</p:column>
+								<p:column style="width:550px!important;text-align: left;">
+									<f:facet name="header">
+										<h:outputText value="题目" />
+									</f:facet>
+									<h:outputText
+										value="#{fn:substring(collect.choiceQuestion.cleanName,0,50)}#{fn:length(collect.choiceQuestion.cleanName)>50?'...':''}"></h:outputText>
+								</p:column>
+								<p:column style="text-align: center;">
+									<f:facet name="header">
+										<h:outputText value="查看" />
+									</f:facet>
+									<p:commandLink action="#{viewQuestionPopup.selectChoice(collect.choiceQuestion.id)}"
+										update=":myForm:displayChoice" oncomplete="PF('choiceDialog').show()" styleClass="news" value="查看试题">
+									</p:commandLink>
+								</p:column>
+								<p:column style="text-align: center;">
+									<f:facet name="header">
+										<h:outputText value="删除" />
+									</f:facet>
+									<p:commandLink value="删除" action="#{questionCollectionList.delete(collect.id)}" update="@form"
+										onclick="if (!confirm('确认要删除此试题收藏吗？'))
+                                            return false"
+										styleClass="news" />
+								</p:column>
+							</p:dataTable>
+
+						</p:tab>
+						<p:tab title="多选类">
+							<p:dataTable rowIndexVar="row" value="#{questionCollectionList.mchoices}" var="collect" style="width:100%"
+								styleClass="frontColumn" rows="10" paginator="true" paginatorPosition="bottom" lazy="true" emptyMessage="无试题">
+								<f:facet name="header">
+									<h:outputText value="多选题" />
+									<p:commandButton action="#{questionCollectionList.deleteAllByUserAndType(clientSession.usr.id, 'mchoice')}"
+										value="全部删除" update="@form"
+										onclick="if (!confirm('确认要删除本类型的所有试题收藏吗？'))
+                                            return false" />
+								</f:facet>
+								<p:column style="text-align: center;">
+									<f:facet name="header">
+										<h:outputText value="序号" />
+									</f:facet>
+									<h:outputText value="#{row+1}"></h:outputText>
+								</p:column>
+								<p:column style="width:550px!important;text-align: left;">
+									<f:facet name="header">
+										<h:outputText value="题目" />
+									</f:facet>
+									<h:outputText value="#{collect.multiChoiceQuestion.cleanName}"></h:outputText>
+								</p:column>
+								<p:column style="text-align: center;">
+									<f:facet name="header">
+										<h:outputText value="查看" />
+									</f:facet>
+									<p:commandLink action="#{viewQuestionPopup.selectMultiChoice(collect.multiChoiceQuestion.id)}"
+										update=":myForm:displayMultiChoice" oncomplete="PF('multiChoiceDialog').show()" styleClass="news" value="查看试题">
+									</p:commandLink>
+								</p:column>
+								<p:column style="text-align: center;">
+									<f:facet name="header">
+										<h:outputText value="删除" />
+									</f:facet>
+									<p:commandLink value="删除" action="#{questionCollectionList.delete(collect.id)}" update="@form"
+										onclick="if (!confirm('确认要删除此试题收藏吗？'))
+                                            return false"
+										styleClass="news" />
+								</p:column>
+							</p:dataTable>
+
+						</p:tab>
+						<p:tab title="填空类">
+							<p:dataTable rowIndexVar="row" value="#{questionCollectionList.fills}" var="collect" style="width:100%"
+								styleClass="frontColumn" rows="10" paginator="true" paginatorPosition="bottom" lazy="true" emptyMessage="无试题">
+								<f:facet name="header">
+									<h:outputText value="填空题" />
+									<p:commandButton action="#{questionCollectionList.deleteAllByUserAndType(clientSession.usr.id, 'fill')}"
+										value="全部删除" update="@form"
+										onclick="if (!confirm('确认要删除本类型的所有试题收藏吗？'))
+                                            return false" />
+								</f:facet>
+								<p:column style="text-align: center;">
+									<f:facet name="header">
+										<h:outputText value="序号" />
+									</f:facet>
+									<h:outputText value="#{row+1}"></h:outputText>
+								</p:column>
+								<p:column style="width:550px!important;text-align: left;">
+									<f:facet name="header">
+										<h:outputText value="题目" />
+									</f:facet>
+									<h:outputText value="#{collect.fillQuestion.cleanName}"></h:outputText>
+								</p:column>
+								<p:column style="text-align: center;">
+									<f:facet name="header">
+										<h:outputText value="查看" />
+									</f:facet>
+									<p:commandLink action="#{viewQuestionPopup.selectFill(collect.fillQuestion.id)}" update=":myForm:displayFill"
+										oncomplete="PF('fillDialog').show()" styleClass="news" value="查看试题">
+									</p:commandLink>
+								</p:column>
+								<p:column style="text-align: center;">
+									<f:facet name="header">
+										<h:outputText value="删除" />
+									</f:facet>
+									<p:commandLink value="删除" action="#{questionCollectionList.delete(collect.id)}" update="@form"
+										onclick="if (!confirm('确认要删除此试题收藏吗？'))
+                                            return false;"
+										styleClass="news" />
+								</p:column>
+							</p:dataTable>
+
+						</p:tab>
+						<p:tab title="判断类">
+							<p:dataTable rowIndexVar="row" value="#{questionCollectionList.judges}" var="collect" style="width:100%"
+								styleClass="frontColumn" rows="10" paginator="true" paginatorPosition="bottom" lazy="true" emptyMessage="无试题">
+								<f:facet name="header">
+									<h:outputText value="判断题" />
+									<p:commandButton action="#{questionCollectionList.deleteAllByUserAndType(clientSession.usr.id, 'judge')}"
+										value="全部删除" update="@form"
+										onclick="if (!confirm('确认要删除本类型的所有试题收藏吗？'))
+                                            return false" />
+								</f:facet>
+								<p:column style="text-align: center;">
+									<f:facet name="header">
+										<h:outputText value="序号" />
+									</f:facet>
+									<h:outputText value="#{row+1}"></h:outputText>
+								</p:column>
+								<p:column style="width:550px!important;text-align: left;">
+									<f:facet name="header">
+										<h:outputText value="题目" />
+									</f:facet>
+									<h:outputText value="#{collect.judgeQuestion.cleanName}"></h:outputText>
+								</p:column>
+								<p:column style="text-align: center;">
+									<f:facet name="header">
+										<h:outputText value="查看" />
+									</f:facet>
+									<p:commandLink action="#{viewQuestionPopup.selectJudge(collect.judgeQuestion.id)}"
+										update=":myForm:displayJudge" oncomplete="PF('judgeDialog').show()" styleClass="news" value="查看试题">
+									</p:commandLink>
+								</p:column>
+								<p:column style="text-align: center;">
+									<f:facet name="header">
+										<h:outputText value="删除" />
+									</f:facet>
+									<p:commandLink value="删除" action="#{questionCollectionList.delete(collect.id)}" update="@form"
+										onclick="if (!confirm('确认要删除此试题收藏吗？'))
+                                            return false"
+										styleClass="news" />
+								</p:column>
+							</p:dataTable>
+
+						</p:tab>
+						<p:tab title="问答类">
+							<p:dataTable rowIndexVar="row" value="#{questionCollectionList.essaies}" var="collect" style="width:100%"
+								styleClass="frontColumn" rows="10" paginator="true" paginatorPosition="bottom" lazy="true" emptyMessage="无试题">
+								<f:facet name="header">
+									<h:outputText value="问答题" />
+									<p:commandButton action="#{questionCollectionList.deleteAllByUserAndType(clientSession.usr.id, 'essay')}"
+										value="全部删除" update="@form"
+										onclick="if (!confirm('确认要删除本类型的所有试题收藏吗？'))
+                                            return false" />
+								</f:facet>
+								<p:column style="text-align: center;">
+									<f:facet name="header">
+										<h:outputText value="序号" />
+									</f:facet>
+									<h:outputText value="#{row+1}"></h:outputText>
+								</p:column>
+								<p:column style="width:550px!important;text-align: left;">
+									<f:facet name="header">
+										<h:outputText value="题目" />
+									</f:facet>
+									<h:outputText value="#{collect.essayQuestion.cleanName}"></h:outputText>
+								</p:column>
+								<p:column style="text-align: center;">
+									<f:facet name="header">
+										<h:outputText value="查看" />
+									</f:facet>
+									<p:commandLink action="#{viewQuestionPopup.selectEssay(collect.essayQuestion.id)}"
+										update=":myForm:displayEssay" oncomplete="PF('essayDialog').show()" styleClass="news" value="查看试题">
+									</p:commandLink>
+								</p:column>
+								<p:column style="text-align: center;">
+									<f:facet name="header">
+										<h:outputText value="删除" />
+									</f:facet>
+									<p:commandLink value="删除" action="#{questionCollectionList.delete(collect.id)}" update="@form"
+										onclick="if (!confirm('确认要删除此试题收藏吗？'))
+                                            return false"
+										styleClass="news" />
+								</p:column>
+							</p:dataTable>
+
+						</p:tab>
+						<!-- <p:tab title="文件类">
+                        <p:dataTable rowIndexVar="row"  value="#{questionCollectionList.files}" var="collect" style="width:100%" styleClass="frontColumn"  rows="10" paginator="true" paginatorPosition="bottom" lazy="true" emptyMessage="无试题">
+                            <f:facet name="header">
+                                <h:outputText value="文件题" />
+                                <p:commandButton action="#{questionCollectionList.deleteAllByUserAndType(clientSession.usr.id, 'file')}" value="全部删除" update="@form" onclick="if (!confirm('确认要删除本类型的所有试题收藏吗？'))
+                                            return false"/>
+                            </f:facet>
+                            <p:column style="text-align: center;">
+                                <f:facet name="header">
+                                    <h:outputText value="序号" />
+                                </f:facet>
+                                <h:outputText value="#{row+1}"></h:outputText>
+                            </p:column>
+                            <p:column style="width:550px!important;text-align: left;">
+                                <f:facet name="header">
+                                    <h:outputText value="题目" />
+                                </f:facet>
+                                <h:outputText value="#{collect.fileQuestion.cleanName}"></h:outputText>
+                            </p:column>
+                            <p:column style="text-align: center;">
+                                <f:facet name="header">
+                                    <h:outputText value="查看" />
+                                </f:facet>
+                                <p:commandLink action="#{viewQuestionPopup.selectFile(collect.fileQuestion.id)}"  update=":myForm:displayFile" oncomplete="PF('fileDialog').show()"  styleClass="news" value="查看试题">
+                                </p:commandLink>
+                            </p:column>
+                            <p:column style="text-align: center;">
+                                <f:facet name="header">
+                                    <h:outputText value="删除" />
+                                </f:facet>
+                                <p:commandLink value="删除" action="#{questionCollectionList.delete(collect.id)}" update="@form"  onclick="if (!confirm('确认要删除此试题收藏吗？'))
+                                            return false" styleClass="news"/>
+                            </p:column>
+                        </p:dataTable>
+
+                    </p:tab> -->
+					</p:tabView>
+				</div>
+			</div>
+
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

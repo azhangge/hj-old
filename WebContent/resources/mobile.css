@@ -1,0 +1,128 @@
+
+
+
+
+body {
+    font-family:Arial, Helvetica, sans-serif,微软雅黑!important;
+    
+    padding:0;
+    margin:0;
+}
+
+td{
+    word-break:break-all!important;
+    white-space: normal!important;
+}
+h4{
+    font-size: 16px!important;
+    font-weight: bold;
+    color:#084f81!important;
+}
+.main{
+    margin: 0px auto;
+    width:98%!important;
+}
+
+.main div{
+    padding:15px 0px 15px 0px!important;
+    border:0px solid red!important;
+}
+
+.mainMenu{
+    margin: 0px auto!important;
+    border:0px solid red!important;
+    padding:64px 0px 3px 0px!important;
+    width:85px!important;
+    font-weight: normal;
+    font-size: 14px;
+    background-size:64px 64px;
+}
+
+.noticeIcon{
+    background:url(../resources/images/pics/apache_server.png) no-repeat top center;
+}
+.examIcon{
+    background:url(../resources/images/pics/copy2.png) no-repeat top center;
+}
+.moduleIcon{
+    background:url(../resources/images/pics/boxes.png) no-repeat top center;
+}
+.scoreIcon{
+    background:url(../resources/images/pics/certificate.png) no-repeat top center;
+}
+.courseIcon{
+    background:url(../resources/images/pics/book.png) no-repeat top center;
+}
+.talkIcon{
+    background:url(../resources/images/pics/speech_bubble.png) no-repeat top center;
+}
+.userIcon{
+    background:url(../resources/images/pics/admin.png) no-repeat top center;
+}
+.searchIcon{
+    background:url(../resources/images/pics/zoom.png) no-repeat top center;
+}
+.pcIcon{
+    background:url(../resources/images/pics/monitor.png) no-repeat top center;
+}
+.exitIcon{
+    background:url(../resources/images/pics/left.png) no-repeat top center;
+}
+
+
+.columnLeft{
+    text-align: left!important;
+}
+.columnRight{
+    text-align: right!important;
+}
+
+a:link {
+    font-size: 14px!important;
+    text-decoration: none;
+    color:#1d90e1!important;
+}
+a:visited {
+    font-size: 14px!important;
+    text-decoration:none;
+    color:#1d90e1!important;
+}
+a:hover {
+    font-size: 14px!important;
+    text-decoration: underline!important;
+    color:#1d90e1!important;
+}
+a:active {
+    font-size: 14px!important;
+    text-decoration: none;
+    color:#1d90e1!important;
+}
+
+.loginButton{
+    background-color: #1d90e1!important;
+    font-weight: bold!important;
+    text-shadow: none!important;
+    color:white!important;
+}
+
+.loginTitle{
+    font-size: 28px;
+    color:#1d90e1!important;
+    font-weight: bold!important;
+}
+
+.sayHi{
+    
+    font-size: 14px;
+    color:#084f81!important;
+    font-weight: bold!important;
+}
+
+.tip{
+    font-size: 9pt;
+    color:gray;
+}
+.talkContent{
+    font-size: 14px;
+    line-height: 22px;
+}

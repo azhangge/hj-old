@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <h:outputText value="&lt;!--[if lte IE 7]&gt;"/>
+        <script>
+            window.location.href = '#{facesContext.externalContext.requestContextPath}/update_browser.jsp';
+        </script>
+        <h:outputText value="&lt;![endif]--&gt;"/>
+        <title>欢迎登录#{applicationBean.info.siteBackName}</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" type="text/css"
+              href="#{facesContext.externalContext.requestContextPath}/resources/bbs_back.css" />
+    </h:head>
+    <h:body>
+        <h:form>
+            <div style="width: 100%;text-align:center;padding-top: 100px;">
+                <p:outputPanel autoUpdate="true">
+                    <p:growl/>
+                </p:outputPanel>
+                <p:panel style="width:300px;text-align:left;margin:0px auto;" header="管理登录">
+                    <h:panelGrid columns="2">
+                        <h:outputLabel  for="urn" value="用户名："  />
+                        <h:inputText id="urn" style="width:200px; height:25px" value="#{adminLogin.user.urn}"  autocomplete="off"/>
+                        <h:outputLabel for="pwd" value="密&nbsp;&nbsp;码：" />
+                        <h:inputSecret id="pwd" style="width:200px;height:25px" value="#{adminLogin.user.pwd}"  autocomplete="off"/>
+                        <h:outputLabel for="auc" value="验证码："  rendered="#{adminLogin.showVerificationCode}"/>
+                        <h:panelGroup  rendered="#{adminLogin.showVerificationCode}">
+                            <h:inputText id="auc" style="width:95px;height:25px" value="#{adminLogin.authStr}"  autocomplete="off"/>
+                            <p:commandLink action="#{adminLogin.refresh}" update="auimg">
+                                <h:graphicImage alt="看不清?点击刷新" id="auimg"
+                                                style="border:black 0px solid;vertical-align:bottom;width:100px;height:22px;"
+                                                url="/servlet/AuthImage?sTime=#{adminLogin.STime}" />
+                            </p:commandLink>
+                        </h:panelGroup>
+                        <p:commandButton action="#{adminLogin.login_action}" id="login" style="height:30px;" ajax="false"
+                                         value="登录" />
+                    </h:panelGrid>
+                </p:panel>
+            </div>
+        </h:form>
+    </h:body>
+</html>

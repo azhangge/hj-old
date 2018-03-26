@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <h:head>
+        <title>等待被审核 - #{applicationBean.info.siteHeader}
+        </title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <link rel="stylesheet" type="text/css" href="${facesContext.externalContext.requestContextPath}/resources/rerebbs.css"/>
+        <link rel="stylesheet" type="text/css" href="${facesContext.externalContext.requestContextPath}/resources/rerebbs_a.css"/>
+    </h:head>
+    <h:body style="text-align: center">
+        
+                <style type="text/css">
+                    .inputText {
+                        width: 180px;
+                    }
+
+                    .text {
+                        font-family: 宋体;
+                        font-size: 9pt;
+                    }
+
+                    .c1 {
+                        text-align: right;
+                    }
+
+                    .c2 {
+                        text-align: left;
+                    }
+                </style>
+                <div style="" class="borderx">
+                    <br/>
+                    <br/>
+                    <br/>
+                    <!--页面顶端导航-->
+                    <h:panelGrid columns="5">
+                        <h:outputLink value="${facesContext.externalContext.requestContextPath}" styleClass="topNav1">
+                            <h:outputText value="#{applicationBean.info.siteHeader}" />
+                        </h:outputLink>
+                        <h:outputText value=">>" />
+                        <h:outputText value="等待被审核" styleClass="mark"/>
+                    </h:panelGrid>
+                    <p:separator/>
+                    <p:panel
+                        style="margin:auto;width:500px;text-align:left;margin-top:30px;margin-bottom: 30px;">
+
+                        <h:outputText value="等待被审核" styleClass="headLine"></h:outputText>
+                        <p:separator></p:separator>
+                        <font>您的帐号已经被创建，但还没有经过管理员的审核，在您的帐号被审核前还不能登录系统。<br/>请联系管理员尽快完成审核！
+                        </font>
+                    </p:panel>
+                    <p:outputPanel autoUpdate="true">
+                        <p:growl/>
+                    </p:outputPanel>
+                </div>
+    </h:body>
+</html>

@@ -1,0 +1,594 @@
+@charset "utf-8";
+/*head*/
+.head_separate {
+	width: 1200px;
+	background-color: #f3f3f3;
+	margin: 0px auto;
+	height: 1640px;
+}
+
+.div-wrap {
+	margin-left: 20px;
+	margin-right: 20px;
+	overflow: hidden;
+	border: 1px solid #efeeee;
+	background-color: #fff;
+	height: 398px;
+	padding-top: 30px;
+	padding-left: 30px;
+}
+
+.img-wrap {
+	position: relative;
+	width: 600px;
+	height: 338px;
+	overflow: hidden;
+	background: #000;
+	border: 1px solid #efeeee;
+}
+
+.info-content {
+	width: 465px;
+	float: left;
+	margin-left: 30px;
+	margin-top: 30px;
+}
+
+.info-title {
+	max-height: 64px;
+	overflow: hidden;
+	font-size: 24px;
+	font-weight: normal;
+	color: #333333;
+}
+
+.info-content ul {
+	color: #666;
+	font-size: 14px;
+	margin-top: 21px;
+	background-color: #f3f3f3;
+	height: 92px;
+}
+
+.first-li {
+	height: 92px;
+	width: 465px;
+	line-height: 50px;
+	background-color: #f3f3f3;
+}
+
+.first-li .info-span {
+	width: 95px;
+	letter-spacing: 3px;
+}
+
+.learn-num {
+	display: inline-block;
+	color: #666666;
+	font-size: 18px;
+	/* letter-spacing: 6px; */
+	width: 80px;
+}
+
+.course-one-li {
+	padding-top: 16px;
+	padding-left: 44px;
+	border-bottom: 1px solid #f4f4f4;
+}
+
+.course-left {
+	float: left;
+	width: 50%;
+}
+
+.third-li div, .second-li div {
+	width: 200px;
+}
+
+.yahei {
+	font-family: "Microsoft Yahei";
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.info-em {
+	color: #999;
+	font-style: normal;
+	/* margin-left: 40px; */
+	font-size: 18px;
+	/* width: 140px; */
+}
+
+.course-two-li {
+	padding-left: 44px;
+	padding-top: 10px;
+}
+
+.collect {
+	width: 100%;
+	height: 76px;
+}
+
+.collect_icon {
+	/* height: 50px; */
+	padding-left: 30px;
+}
+
+.uncolect_link {
+	float: left;
+	height: 30px;
+}
+
+.collect_link {
+	float: left;
+	height: 30px;
+}
+
+.collect_word {
+	float: left;
+	font-size: 16px;
+	color: #8a8a8a;
+	padding-top: 3px;
+	padding-left: 10px;
+}
+
+.info-btn-wrap {
+	/* padding: 10px 0 14px 10px; */
+	margin-top: 20px;
+	overflow: hidden;
+}
+
+.info-btn {
+	display: inline-block;
+	margin-top: 18px;
+}
+
+a.info-btn:link {
+	font-size: 22px !important;
+}
+
+.commandButton {
+	width: 160px;
+	float: left;
+	height: 60px;
+	background-repeat: no-repeat;
+	text-align: center;
+}
+
+.info-btn-learn {
+	font-size: 18px;
+}
+
+.never_join_course {
+	background-image: url(../image/never_join_course.png);
+}
+
+.already_join_course {
+	background-image: url(../image/already_join_course.png);
+}
+
+.color_white {
+	color: white !important;
+}
+
+.color_green {
+	color: #49af4f;
+}
+
+.info-btn-buy {
+	display: inline-block;
+	margin-top: 8px;
+}
+
+a.info-btn-buy:link {
+	font-size: 22px !important;
+}
+
+.learn_log {
+	/* background-color: #f9f9f9; */
+	height: 25px;
+}
+
+.course_content {
+	/* width: 100%; */
+	margin: 30px 20px 0 20px;
+}
+
+.m-nav {
+	height: 55px;
+	border: 1px solid #e6e6e6;
+	/*box-shadow: 0 1px 0 rgba(169, 169, 169, .1);*/
+}
+
+.div-wrap-down {
+	width: 835px;
+	height: 755px;
+	float: left;
+	background-color: white;
+}
+
+.div-wrap-down-right {
+	float: left;
+	width: 294px;
+	margin-left: 30px;
+}
+
+.teacher {
+	width: 294px;
+	height: 252px;
+}
+
+.tacher_name {
+	
+}
+
+.tacher_title {
+	height: 42px;
+	background-color: rgb(249, 249, 249);
+}
+
+.blueRange {
+	width: 10px;
+	height: 100%;
+	float: left;
+	background-color: #3596e6;
+}
+
+.tacher_intro {
+	float: left;
+	color: #333333;
+	margin-left: 15px;
+	font-size: 18px;
+	margin-top: 9px;
+}
+
+.teacher_info {
+	width: 100%;
+	height: 160px;
+	background-color: white;
+	float: left;
+}
+
+.teacher_jobtitle {
+	float: left;
+	width: 100%;
+	height: 50px;
+	font-size: 18px;
+	color: #333333;
+	padding-top: 13px;
+	text-align: center;
+	background-color: white;
+}
+
+.teacher_pic {
+	text-align: center;
+	height: 130px;
+}
+
+.teacher_name {
+	color: #333333;
+	text-align: center;
+	font-size: 18px;
+}
+
+.teacher_img {
+	height: 130px;
+}
+
+.border {
+	border: 1px solid #f3f3f3;
+}
+
+.learn_users {
+	margin-top: 30px;
+}
+
+.learn_info {
+	width: 100%;
+	height: 42px;
+}
+
+.learn_num {
+	
+}
+
+.learn_user_info {
+	padding-top: 30px;
+	background-color: white;
+	height: 434px;
+	/* overflow: scroll; */
+}
+
+.user_info_link {
+	height: 114px;
+	width: 94px;
+}
+
+.user_info_div {
+	float: left;
+	height: 94px;
+}
+
+.user_info_img {
+	height: 94px;
+	width: 94px;
+	border-radius: 50%;
+}
+
+.user_info_name {
+	font-size: 14px;
+	text-align: center;
+	float: left;
+	width: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.users {
+	height: 130px;
+	width: 94px;
+	float: left;
+	margin-left: 35px;
+}
+
+.m-nav ul {
+	height: 55px;
+	background-color: rgb(249, 249, 249);
+}
+
+.m-nav li {
+	float: left;
+	height: 55px;
+	text-align: center;
+	margin-right: 40px;
+}
+
+.m-nav li .curr {
+	color: #fefffe;
+	background-image: url(../image/tab-name.png);
+	background-repeat: no-repeat;
+	background-position-x: 5px;
+	background-position-y: 10px;
+}
+
+.m-nav .link {
+	width: 127px;
+	height: 55px;
+	position: relative;
+	font-size: 18px !important;
+	display: block;
+	line-height: 55px;
+	color: #666666;
+}
+
+.ui-icon {
+	height: 20px !important;
+}
+
+.ui-paginator-page {
+	height: 26px;
+}
+
+.m-block-content {
+	/* padding: 0 10px 8px 10px; */
+	height: 650px;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+.lecturer_info {
+	margin-top: 30px;
+	background-color: white;
+	margin-left: 20px;
+	margin-right: 20px;
+	margin-bottom: 30px;
+}
+
+.lecturer_course_title {
+	height: 55px;
+	background-color: rgb(249, 249, 249);
+}
+
+.lecturer_cours {
+	height: 304px;
+	padding-left: 15px;
+}
+
+.learncourse {
+	margin: 20px 30px;
+	height: 254px;
+	width: 252px;
+}
+
+.course-img-link {
+	
+}
+
+.course-img {
+	width: 250px;
+	height: 162px;
+}
+
+.course-tt {
+	height: 92px;
+	width: 252px;
+}
+
+.course-tt-link {
+	
+}
+
+.course-line {
+	
+}
+
+.course-line-bottom {
+	
+}
+
+.line-cell {
+	
+}
+
+.course-price {
+	
+}
+
+.hour {
+	
+}
+
+.course-source {
+	
+}
+
+.course-lecturer {
+	
+}
+
+.curr {
+	color: #fefffe;
+	background-image: url(../image/tab-name.png);
+	background-repeat: no-repeat;
+	background-position-x: 5px;
+	background-position-y: 10px;
+}
+
+.recommend_course {
+	line-height: 55px;
+	height: 55px;
+	text-align: center;
+	float: left;
+	font-size: 18px;
+	width: 127px;
+}
+
+.img-content {
+	width: 100%;
+	height: 100%;
+}
+
+.list {
+	
+}
+
+.lesson_th {
+	background-color: #188eee;
+	color: white;
+	text-align: center;
+	position: relative;
+}
+
+.th1 {
+	width: 60px;
+	border-radius: 5px 0 0 0;
+}
+
+.th2 {
+	width: 300px;
+}
+
+.th3 {
+	width: 80px;
+}
+
+.th4 {
+	width: 70px;
+}
+
+.th5 {
+	width: 90px;
+}
+
+.th6 {
+	width: 90px;
+}
+
+.th7 {
+	width: 92px;
+	border-radius: 0 5px 0 0;
+}
+
+.lesson_td {
+	text-align: center;
+	max-width: 300px;
+	white-space: nowrap !important;
+	overflow: hidden;
+	height: 50px;
+	text-overflow: ellipsis;
+}
+
+.td1 {
+	width: 60px;
+}
+
+.td2 {
+	width: 300px;
+}
+
+.td3 {
+	width: 80px;
+}
+
+.td4 {
+	width: 70px;
+}
+
+.td5 {
+	width: 90px;
+}
+
+.td6 {
+	width: 90px;
+}
+
+.td7 {
+	width: 92px;
+}
+
+table tr:nth-child(odd) {
+	background: #f5f5f5;
+}
+
+table tr:nth-child(even) {
+	background: #f9f9f9;
+}
+
+.lesson_table {
+	margin-left: 10px;
+	table-layout: fixed;
+	/* word-break:break-all; */
+}
+
+.table_div {
+	width: 805px;
+	height: 650px;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+.lesson_head {
+	margin-left: 10px;
+}
+
+div.course:hover {
+	border: 1px solid #ddd;
+	box-shadow: #666 0px 0px 3px;
+}
+
+.learn_log_td {
+	white-space: nowrap!important;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	width: 430px!important;
+}
+div.learn_log table{
+	table-layout: fixed;
+	width: 465px;
+}
+div.learn_log td{
+	width: 31px;
+}

@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition>
+            <p:dialog id="KnowledgeTargetPanel" widgetVar="KnowledgeTargetPanel" width="500" header="移动">
+                <!--
+                <p:dataTable value="#{knowledgeTargetPanel.targets}" var="t" selection="#{knowledgeTargetPanel.target}" selectionMode="single" rowKey="#{t.id}" paginator="true" paginatorPosition="bottom" rows="10">
+                    <p:column>
+                        <h:outputText value="#{t.name}"/>
+                        <f:facet name="header">
+                            <h:outputText value="请选择移动的目标模块"/>
+                        </f:facet>
+                    </p:column>
+
+                </p:dataTable>
+                -->
+                <p:treeTable value="#{knowledgeTargetPanel.root}" var="dic" selectionMode="single" selection="#{knowledgeTargetPanel.selectedNode}">
+                    <p:column style="width:200px;">
+                        <f:facet name="header">
+                            <h:outputText value="请选择移动的目标模块"></h:outputText>
+                        </f:facet>
+                        <h:outputText value="#{dic.name}" ></h:outputText>
+                    </p:column>
+                </p:treeTable>
+                <p:commandButton value="完成" action="#{knowledgeTargetPanel.batchMove()}" oncomplete="PF('KnowledgeTargetPanel').hide();" update="@form"/>
+            </p:dialog>
+        </ui:composition>
+    </h:body>
+</html>
+

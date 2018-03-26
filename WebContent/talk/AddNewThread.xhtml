@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:p="http://primefaces.org/ui"  lang="en" 
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="General3.xhtml">
+            <ui:define name="title">
+                <h:outputText value="#{lang['AddNewThread.newThread']}" />
+            </ui:define>
+            <ui:define name="content">
+                <ui:include src="AdminFilePanel.xhtml"></ui:include>
+                <p:panel id="topNav8" styleClass="frontColumn topNav8Wrapper">
+                    <h:outputLink value="#{facesContext.externalContext.requestContextPath}" styleClass="nav8">
+                        <h:outputText value="#{lang['exam.index']}" />
+                    </h:outputLink>
+                    <h:outputText value="/" styleClass="navSeparator"/>
+                    <h:outputLink value="ZoneList.jspx" styleClass="nav8">
+                        <h:outputText value="#{lang['AddNewThread.talk']}" styleClass="nav8"/>
+                    </h:outputLink>
+                    
+                    <h:outputText value="/" styleClass="navSeparator"/>
+                    <h:outputLink value="ThreadList.jspx?id=#{addNewThread.zone.id}" styleClass="nav8">
+                        <h:outputText value="#{addNewThread.zone.name}" />
+                    </h:outputLink>
+                    <h:outputText value="/" styleClass="navSeparator"/>
+                    <h:outputText value="#{lang['AddNewThread.newThread']}" styleClass="nav8"/>
+                </p:panel>
+                
+                <h:panelGrid columns="2" rendered="#{clientSession.ifLogin}" styleClass="generalInfo" style="width:100%;">
+                    <h:outputLabel value="#{lang['AddNewThread.title']}"></h:outputLabel>
+                    <p:inputText value="#{addNewThread.thread.title}" style="width:80%;"></p:inputText>
+                    <h:outputLabel value="#{lang['AddNewThread.content']}"></h:outputLabel>
+                    <h:panelGroup>
+                        <p:panel  style="width:80%;" rendered="#{applicationBean.systemConfig.openFile}" >
+                            <h:outputLink value="#{facesContext.externalContext.requestContextPath}/fm/ClientListFile.jspx" styleClass="common" target="_blank">
+                                <h:outputText value="#{lang['AddNewThread.upload']}"></h:outputText>
+                            </h:outputLink>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <p:commandLink value="#{lang['AddNewThread.chooseFile']}" action="#{clientListFile.synDB}" styleClass="common" update="AdminFilePanel" oncomplete="PF('AdminFilePanel').show();return false"/>
+
+                        </p:panel>
+                        
+                          <pe:ckEditor value="#{addNewThread.talk.content}" width="80%"  customConfig="#{facesContext.externalContext.requestContextPath}/resources/js/ckeditor_config1.js"/>
+                         <!--
+                        <p:editor value="#{addNewThread.talk.content}" width="700" style="width:700px;">
+                        </p:editor>-->
+                         <h:outputText value="#{lang['AddNewThread.scoreNeeded']}"/>
+                         <h:selectOneMenu value="#{addNewThread.thread.score}">
+                             <c:forEach begin="0" end="100" varStatus="row">
+                                 <f:selectItem itemLabel="#{row.index}" itemValue="#{row.index}"/>
+                             </c:forEach>
+                         </h:selectOneMenu>
+                         <h:outputText value="#{lang['AddNewThread.scoreLock']}"/>
+                    </h:panelGroup>
+                </h:panelGrid>
+                <p:separator/>
+                <p:commandButton value="#{lang['AddNewThread.newThread']}" action="#{addNewThread.add_ok}" ajax="false"></p:commandButton>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition>
+
+            <p:dialog id="photoCam" widgetVar="photoCam" width="700"  minHeight="150"  modal="false" closable="true" draggable="true" header="拍照确认" rendered="#{examCaseGeneral.examCase.examination.ifCheckPhoto}">
+                <h:inputHidden id="photoCaseId" value="#{photoCamView.caseId}"/>
+                <h:inputHidden id="photoUserName" value="#{photoCamView.userName}"/>
+                <h:panelGrid columns="3" cellpadding="5">
+                    <p:photoCam widgetVar="photoc" listener="#{photoCamView.oncapture}" update="photo" process="@form" width="300"/>
+                    <p:commandButton type="button" value="拍照" onclick="capturePhoto()"/>
+                    <p:outputPanel id="photo">
+                        <p:graphicImage value="/upload/photocams/#{examCaseGeneral.examCase.user.username}#{examCaseGeneral.examCase.id}.jpeg?random=#{photoCamView.random}" width="280" alt="请拍照"/>
+                    </p:outputPanel>
+                </h:panelGrid>
+            </p:dialog>
+            <script>
+                jQuery().ready(function () {
+                    if (#{examCaseGeneral.examCase.examination.ifCheckPhoto}) {
+                        var urn = jQuery("#myForm\\:secretUrn").val();
+                        var caseId = jQuery("#myForm\\:secretCaseId").val();
+                        //alert("urn:"+urn);
+                        //alert("caseId:"+caseId);
+                        jQuery("#myForm\\:photoUserName").val(urn);
+                        jQuery("#myForm\\:photoCaseId").val(caseId);
+                        PF('photoCam').show();
+                    }
+                });
+                function capturePhoto() {
+                    PF('photoc').capture();
+                }
+            </script>
+        </ui:composition>
+    </h:body>
+</html>
+

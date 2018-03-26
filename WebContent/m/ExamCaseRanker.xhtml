@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form>
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <div style="text-align: left; margin: 0px 0px 0px 0px; width: 98%;">
+                        <div>
+                            <h:outputText id="outputText1" styleClass="tit"
+                                          value="-按考试操作-" />
+                        </div>
+                        <p:separator/>
+                        <div class="introduction">
+                            <h:outputText value="注意：对全部成绩重新排名是一项高耗资源操作，在正式考试进行高峰期勿进行此操作，考试结束后再统一排名！" style="color:red;font-weight: bold;"/>
+                        </div>
+                        <p:separator/>
+                        <div>
+                            <p:dataTable paginator="true" paginatorPosition="bottom" value="#{listExamination.exams}" var="us" id="dataTable1"
+                                         styleClass="list" rowIndexVar="row" style="width:100%" rows="10" editable="true" editMode="cell">
+
+                                <p:column>
+                                    <h:outputText value="#{fn:substring(us.name,0,20)}#{fn:length(us.name)>20?'..':''}" escape="false"/>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{lang['exam.exam']}#{lang['exam.name']}" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="width:40px;text-align: center;">
+                                    <h:outputText value="#{us.ifDirect?lang['exam.intelligent']:lang['exam.artificial']}" />
+                                    <f:facet name="header">
+                                        <h:outputText value="#{lang['exam.score_type']}" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="width:80px;text-align: center;">
+                                    <h:outputText value="#{us.timeLen} #{lang['exam.minute']}" />
+                                    <f:facet name="header">
+                                        <h:outputText value="#{lang['exam.length']}" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="width:60px;text-align: center;">
+                                    <h:outputText value="#{us.examCaseNum}" />
+                                    <f:facet name="header">
+                                        <h:outputText value="成绩数" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="width:50px!important;text-align: center;">
+                                    <f:facet name="header">
+                                        <h:outputText value="最高分"  escape="false"/>
+                                    </f:facet>
+                                    <h:outputText value="#{us.topExamCase.score}" styleClass="tip">
+                                        <f:convertNumber maxFractionDigits="1" minFractionDigits="1"/>
+                                    </h:outputText>
+                                </p:column> 
+                                <p:column style="width:60px;text-align: center;">
+                                    <h:outputLink value="ListExamCaseByExam.jspx?id=#{us.id}" target="_blank" title="点击查看本考试的全部成绩" style="color:blue;">
+                                        <h:outputText value="成绩列表" />
+                                    </h:outputLink>
+                                    <f:facet name="header">
+                                        <h:outputText value="成绩列表" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="width:110px;text-align: center;">
+                                    <h:outputText value="#{us.lastRankTime}">
+                                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                           timeZone="GMT+8" />
+                                    </h:outputText>
+                                    <f:facet name="header">
+                                        <h:outputText value="上次手动排名时间" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="width:130px;text-align: center;">
+                                    <p:commandButton action="#{listExamination.rankExamCase(us.id)}" value="手动生成排名" image="fa fa-fw fa-building" update="@form" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'examination')}">                                       
+                                    </p:commandButton>
+                                    <f:facet name="header">
+                                        <h:outputText value="生成排名" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="width:130px;text-align: center;">
+                                    <p:commandButton action="#{listExamination.deleteExamCaseByExam(us.id)}" value="清空成绩" image="fa fa-fw fa-send" update="@form"  disabled="#{!fn:contains(adminSessionBean.admin.authstr,'score')}"  onclick="if (!confirm('确认要删除选中的成绩吗？'))
+                                                return false">                                       
+                                    </p:commandButton>
+                                    <f:facet name="header">
+                                        <h:outputText value="清空成绩" />
+                                    </f:facet>
+                                </p:column>
+                            </p:dataTable>
+                            <p:growl/>
+                        </div>
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

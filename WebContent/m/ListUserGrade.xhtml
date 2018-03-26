@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form>
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <div style="text-align: left; margin: 10px 0px 0px 0px; width: 98%;">
+                        <div>
+                            <h:outputText id="outputText1" styleClass="tit"
+                                          value="－积分等级设置－" />
+                            <p:button href="/m/AAUserGrade.jspx" value="添加新积分等级" rendered="#{fn:contains(adminSessionBean.admin.authstr,'talk')}"/>
+                        </div>
+                        <p:separator/>
+                        <p:outputPanel autoUpdate="true">
+                            <h:messages></h:messages>
+                        </p:outputPanel>
+                        <div>
+                            <p:dataTable paginator="true" paginatorPosition="bottom" value="#{listUserGrade.grades}" var="us" id="dataTable1" emptyMessage="#{lang['exam.empty_result']}"
+                                         styleClass="list" rowIndexVar="row" style="width:100%" rows="12">
+                                <p:column style="width:40px;text-align: center;">
+                                    <h:outputText value="#{row+1}" />
+                                    <f:facet name="header">
+                                        <h:outputText value="序号" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="text-align: center;">
+                                    <h:outputText value="#{us.gradeName}" />
+                                    <f:facet name="header">
+                                        <h:outputText value="等级名称" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="width:110px;text-align: center;">
+                                    <h:outputText value="#{us.begainScore}" />
+                                    <f:facet name="header">
+                                        <h:outputText value="起始积分" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="width:110px;text-align: center;">
+                                    <h:outputText value="#{us.endScore}" />
+                                    <f:facet name="header">
+                                        <h:outputText value="终止积分" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="width:110px;text-align: center;">
+                                    <h:outputText value="#{us.genTime}">
+                                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                           timeZone="GMT+8" />
+                                    </h:outputText>
+                                    <f:facet name="header">
+                                        <h:outputText value="添加时间" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="width:40px;text-align: center;">
+                                    <h:outputLink value="AAUserGrade.jspx?id=#{us.id}">
+                                        <h:outputText value="修改" />
+                                    </h:outputLink>
+                                    <f:facet name="header">
+                                        <h:outputText value="修改" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="width:40px;text-align: center;">
+                                    <p:commandLink action="#{listUserGrade.delete(us.id)}" update="@form" onclick="if (!confirm('确认要删除此积分等级吗？')) return false;" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'talk')}">
+                                        
+                                        <h:outputText value="删除" />
+                                    </p:commandLink>
+                                    <f:facet name="header">
+                                        <h:outputText value="删除" />
+                                    </f:facet>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

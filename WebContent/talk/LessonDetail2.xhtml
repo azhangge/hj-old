@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title>#{lessonDetail.lesson.name}</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description" content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    </h:head>
+    <h:body>
+    	<ui:composition template="../HJ/HJGeneral.xhtml">
+    		<ui:define name="title">
+				<h:outputText value="课程学习 - 视频资料播放" />
+			</ui:define>
+			<ui:define name="content">
+				 <link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs.css" />
+        		<link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs_a.css" />
+        		<link type="text/css" rel="stylesheet" href="../HJ/css/navigation.css" />
+        		<link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.requestContextPath}/videojs/video-js.min.css" />
+        		<style >
+        			a.list_name:hover{
+        				color: #3596e6!important;
+        			}
+        			a.list_name:hover div{
+        				background-color:#333333!important;
+        			}
+        			a.img_container_a:hover .img_container{
+        				border: 2px solid #3596e6!important;
+        			}
+        		</style>
+				<script type="text/javascript">
+					$(document).ready(function(){
+						$('#lessonList').scrollTop(10);//控制滚动条下移10px
+						if( $('#lessonList').scrollTop()>0 ){  
+							$(".list_name_div").attr("style","width:230px;height:34px;background-color:#292929;padding-top:5px;max-width:210px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;");
+					    }else{  
+					    	$(".list_name_div").attr("style","width:230px;height:34px;background-color:#292929;padding-top:5px;max-width:230px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;");
+					    }  
+					    $('#lessonList').scrollTop(0);//滚动条返回顶部  
+					});
+				</script>
+
+	            <p:outputPanel rendered="#{lessonDetail.lesson.timingType=='page'}">
+	                <p:poll autoStart="true" interval="30" oncomplete="reportTime2(30)"/>
+	                <script type="text/javascript">
+	                    var tt =#{lessonDetail.lessonLog.timeFinished};
+	                    function reportTime2(step) {
+	                        if (typeof (tt) != "undefined") {
+	                            tt = tt + step;
+	                            var url = "#{facesContext.externalContext.requestContextPath}/servlet/LessonLogNotifier?lid=#{lessonDetail.lesson.id}&amp;action=time&amp;len=" + tt;                    
+	                            jQuery.get(url);
+	                            var minutes = Math.floor(tt / 60);
+	                            var seconds = Math.floor(tt % 60);
+	                            var msg = minutes + " 分 " + seconds + " 秒";
+	                            jQuery('#finishedTime').html(msg);
+	                        }
+	                    }
+	                </script>
+	            </p:outputPanel>
+	
+				<div class="navigation yahei bold">
+					<div class="navigation_div">
+						<a href="#{facesContext.externalContext.requestContextPath}/" class="navigation_link">首页</a>
+					</div>
+					<div class="navigation_separate">/</div>
+					<div class="navigation_div">
+						<a href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{lessonDetail.lesson.lessonType.id}" class="navigation_link">课程</a>
+					</div>
+					<div class="navigation_separate">/</div>
+					<div class="navigation_div">#{lessonDetail.lesson.name}</div>
+				</div>
+				
+	            <div id="main_cont" style="width:1200px;margin:0 auto;height:970px;background-color: #f3f3f3;">
+	            	<div id="main_cont_body" style="width:1200px;height:580px;margin-bottom:35px;">
+		                <div id="learnContent" style="text-align: center;float:left;overflow:hidden;border:0px solid #ccc;width:960px;height:580px;margin-right:5px;">
+		                	<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/videojs/video.min.js" charset="utf-8"></script>
+		                	
+		                	<!-- 播放器和摘要区域  -->
+		                	
+		                	<p:outputPanel rendered="#{lessonDetail.lesson.playType=='outter'}">
+		                		<div id="a2">
+			                		<video id="my-video" class="video-js" controls="controls" preload="auto" width="950" height="580" poster="#{videoPic}" data-setup="{}">
+										<source id="theSourceOfVideo" src="#{lessonDetail.lesson.videoUrl}" type="video/mp4"></source>
+										<p class="vjs-no-js">
+				  							To view this video please enable JavaScript, and consider upgrading to a web browser that
+				 			 				<a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+										</p>
+			 						</video>
+		 						</div>
+		                	</p:outputPanel>
+		                	
+		                	<p:outputPanel  rendered="#{lessonDetail.lesson.playType=='inner'}">
+		                        <div id="a1" oncontextmenu="doNothing()">
+		                        	<video id="my-video" class="video-js" controls="controls" preload="auto" width="950" height="580" poster="#{videoPic}" data-setup="{}">
+										<source id="theSourceOfVideo" src="#{applicationBean.mp4VirtualUrl}#{lessonDetail.lesson.sourceUrl}" type="video/mp4"></source>
+										<p class="vjs-no-js">
+				  							To view this video please enable JavaScript, and consider upgrading to a web browser that
+				 			 				<a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+										</p>
+			 						</video>
+		                        </div>
+		                    </p:outputPanel>
+		                    <p:outputPanel rendered="#{lessonDetail.lesson.playType=='inner'}" style="display:none;">
+		                        <script language="JavaScript">
+			                        function doNothing(){  
+			                            window.event.returnValue=false;  
+			                            return false;  
+			                        }  
+		                        
+		                        	var isLoaded = false;
+		                        	var myPlayer = videojs('my-video');
+		                			videojs("my-video").ready(function(){
+		                			
+		                				var aa="#{lessonDetail.lesson.hasFile}";
+		                				var a="#{lessonDetail.lesson.id}";
+		                				var b="#{playerList.lessons.size()}";
+		                				var data = "#{playerList.lessons}";
+		                				var data2 = "#{playerList.lessonids}";
+		                				var data3 = data2.substring(1,data2.length-1);
+		                				var ids =data3.split(',')			                				
+		                				if(aa=='false'){
+		                					for(var i=0;i&lt;ids.length;i++){
+			                					if(ids[i].replace(/(^\s*)/g, "")==a){
+			                						if(i+1&lt;=ids.length){
+			                							window.location.href="LessonDetail2.jspx?id="+ids[i+1].replace(" ","");
+			                						}
+			                					}
+			                				}
+		                				}
+		                				
+		                				var myPlayer = this;
+		                				if("#{lessonDetail.lessonLog.videoTime}"!=0.0){
+											myPlayer.currentTime("#{lessonDetail.lessonLog.videoTime}");
+										}
+		                				var hasFinished ="#{lessonDetail.lessonLog.timeFinished}";
+			                        	if (typeof (tt) != "undefined"){
+			                        		myPlayer.currentTime(0);
+			                        	}
+		                				myPlayer.play();
+	                					setInterval("reportTime()","30000");
+		                			});
+		                			//视频播放结束
+		                			myPlayer.on("ended", function(){
+		                				reportFinished();
+		                			});
+
+		                			function reportFinished() {
+		                				var url = "#{facesContext.externalContext.requestContextPath}/servlet/LessonLogNotifier?lid=#{lessonDetail.lesson.id}&amp;action=finished";                       
+		                                jQuery.get(url);
+		                                jQuery('#finishedStatus').html('完成');
+		                                
+		                                var a="#{lessonDetail.lesson.id}";
+		                				var b="#{playerList.lessons.size()}";
+		                				var data = "#{playerList.lessons}";
+		                				var data2 = "#{playerList.lessonids}";
+		                				var data3 = data2.substring(1,data2.length-1);
+		                				var ids =data3.split(',')
+		                				for(var i=0;i&lt;ids.length;i++){
+		                					if(ids[i].replace(/(^\s*)/g, "")==a){
+		                						if(i+1&lt;=ids.length){
+		                							window.location.href="LessonDetail2.jspx?id="+ids[i+1].replace(" ","");
+		                						}
+		                					}
+		                				}
+		                			}		                					                		
+		                			
+		                			function reportTime() {
+		                            	var whereYouAt = myPlayer.currentTime();
+										var url = "#{facesContext.externalContext.requestContextPath}/servlet/LessonLogNotifier?lid=#{lessonDetail.lesson.id}&amp;action=vedioTime&amp;len=" + whereYouAt;
+										jQuery.get(url);   
+		                            }
+
+		                            function reportTotalTime() {
+		                            	var howLongIsThis = myPlayer.duration();
+										var url = "#{facesContext.externalContext.requestContextPath}/servlet/LessonLogNotifier?action=total&amp;lid=#{lessonDetail.lesson.id}&amp;len=" + howLongIsThis;                         
+										jQuery.get(url);
+		                            }
+		                        </script>
+		                    </p:outputPanel>
+		                	
+		                	
+		                	<!-- 播放器和摘要区域 
+		                    <p:outputPanel rendered="#{lessonDetail.lesson.playType=='outter'}">
+		                        <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
+		                                codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=10.0" height="950" width="580">
+		                            <param name="quality" value="high" />
+		                            <param name="fullscreen" value="true" />
+		                            <param name="movie" value="#{lessonDetail.lesson.videoUrl}" />
+		                            <embed pluginspage="http://www.macromedia.com/go/getflashplayer" quality="high" allowFullScreen="true"
+		                                   src="#{lessonDetail.lesson.videoUrl}"
+		                                   type="application/x-shockwave-flash" width="950" height="580"/>
+		                        </object>
+		                    </p:outputPanel>
+
+		                    <p:outputPanel  rendered="#{lessonDetail.lesson.playType=='inner'}">
+		                        <div id="a1"></div>
+		                        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/ckplayer/ckplayer.js" charset="utf-8"></script>
+		                        <script type="text/javascript">
+				                    var flashvars = {
+				                        f: '#{applicationBean.mp4VirtualUrl}#{lessonDetail.lesson.sourceUrl}',//视频地址
+				                        c: '0',
+				                        loaded: 'loadedHandler',
+				                        p: 1//1默认播放,0默认暂停，2默认不加载视频
+				                    };
+				                    var params = {bgcolor: '#FFF', allowFullScreen: true, allowScriptAccess: 'always', wmode: "transparent"};
+				                    CKobject.embedSWF('#{facesContext.externalContext.requestContextPath}/ckplayer/ckplayer.swf', 'a1', 'ckplayer_a1', '950', '580', flashvars, params);
+		                        </script>
+		                    </p:outputPanel>
+		                    <p:outputPanel rendered="#{lessonDetail.lesson.playType=='inner'}" style="display:none;">
+		                        <script language="JavaScript">
+		                            var isLoaded = false;
+		                            function loadedHandler() {
+		                                isLoaded = true;//说明播放器已加载
+		                                //goAndSeek();
+		                                //添加监听事件，当视频播放结束后，通知已经结束
+		                                if (CKobject.getObjectById('ckplayer_a1').getType()) {//说明使用HTML5播放器播放器
+		                                    CKobject.getObjectById('ckplayer_a1').addListener('ended', reportFinished);
+		                                    CKobject.getObjectById('ckplayer_a1').addListener('videoLoad', reportTotalTime);
+		                                    CKobject.getObjectById('ckplayer_a1').addListener('loadedmetadata', goAndSeek);
+		                                }
+		                                else {
+		                                    CKobject.getObjectById('ckplayer_a1').addListener('ended', 'reportFinished');
+		                                    //CKobject.getObjectById('ckplayer_a1').addListener('videoLoad', 'reportTotalTime');
+		                                    CKobject.getObjectById('ckplayer_a1').addListener('loadedmetadata', 'goAndSeek');
+		                                }
+		                                //reportTotalTime();
+		                            }
+		
+		                            function goAndSeek() {
+		                            	var ck = CKobject.getObjectById('ckplayer_a1');
+		                            	if(typeof (ck['totalTime']) != "undefined"){
+		                            		if(tt>=ck['totalTime']){
+		                                		ck.videoSeek(0);
+		                                	}
+		                            	}
+		                                //CKobject.getObjectById('ckplayer_a1').videoPlay();
+		                                CKobject.getObjectById('ckplayer_a1').videoSeek(#{lessonDetail.lessonLog.videoTime});
+		                            }
+		                            //CKPLAYER播放时会不断调用该方法
+		                            var _nn = 0;
+		                            function ckplayer_status(str) {
+		                                _nn += 1;
+		                                if (_nn > 10) {
+		                                    _nn = 0;
+		                                    if (_nn % 10 == 0) {
+		                                        reportTime();
+		                                    }
+		                                }
+		                            }
+		
+		                            function reportTime() {
+		                                var a = CKobject.getObjectById('ckplayer_a1').getStatus();
+		                                var ttx = a['time'];
+		                                if (typeof (ttx) != "undefined") {
+		                                    var url = "#{facesContext.externalContext.requestContextPath}/servlet/LessonLogNotifier?lid=#{lessonDetail.lesson.id}&amp;action=vedioTime&amp;len=" + ttx;
+		                                    //alert(url);                                
+		                                    jQuery.get(url);
+		                                    /* var minutes = Math.floor(ttx / 60);
+		                                    var seconds = Math.floor(ttx % 60);
+		                                    var msg = minutes + " 分 " + seconds + " 秒";
+		                                    jQuery('#finishedTime').html(msg); */
+		                                }
+		                            }
+		
+		                            function reportFinished() {
+		                                var url = "#{facesContext.externalContext.requestContextPath}/servlet/LessonLogNotifier?lid=#{lessonDetail.lesson.id}&amp;action=finished";
+		                                //alert(url);                                
+		                                jQuery.get(url);
+		                                jQuery('#finishedStatus').html('完成');
+		                                
+		                                var a="#{lessonDetail.lesson.id}";
+		                                var b="#{playerList.lessons.size()}";
+		                                var arr = "#{playerList.lessons}";
+		                                var c=arr.length;
+		                                var d=arr.length/b;
+		                                var e=arr.length/b/2;
+		                                var f=parseInt("0");
+		                                
+		                                while(true){
+											if(f==b){
+												return;
+											}
+											var temp=arr.substring(e+(d*f),((f+1)*d)-3);
+											if(temp==a){
+												f++;
+												if(f==b){
+													return;
+												}
+												window.location.href="LessonDetail2.jspx?id="+arr.substring(e+(d*f),((f+1)*d)-3);
+												return;
+											}
+											f++;
+										}
+		                            }
+		
+		                            function reportTotalTime() {
+		                                var a = CKobject.getObjectById('ckplayer_a1').getStatus();
+		                                var tt = a['totalTime'];
+		                                //alert(tt);
+		                                if (typeof (tt) != "undefined") {
+		                                    var url = "#{facesContext.externalContext.requestContextPath}/servlet/LessonLogNotifier?action=total&amp;lid=#{lessonDetail.lesson.id}&amp;len=" + tt;
+		                                    //alert(url);                                
+		                                    jQuery.get(url);
+		                                }
+		                            }
+		
+		                            function getstatus() {
+		                                var a = CKobject.getObjectById('ckplayer_a1').getStatus();
+		                                var ss = '';
+		                                for (var k in a) {
+		                                    ss += k + ":" + a[k] + '\n';
+		                                }
+		                                ss + '关于各个参数的意思请到帮助手册查看';
+		                                alert(ss);
+		                            }
+		                        </script>
+		                        <input onclick="CKobject.getObjectById('ckplayer_a1').videoPlay();" type="button" value="play" />
+		                        <p:button id="goAndSeek2" onclick="goAndSeek(); return null;" value="seek" />
+		                    </p:outputPanel>
+		                    -->
+		                </div>
+		                
+		                <!-- 学习资料内容区域 -->
+		                <div id="lessonContent" style="border:0px solid #ccc;width:230px;float:left;height:580px;">
+		                    <h:outputText style="display:none;">#{playerList}</h:outputText>
+		                    <div id="lessonList" style="border:1px solid #fff;height:580px;background-color:#292929;overflow-y:auto;overflow-x:hidden;">
+		              				<div id="list_header" style="width:230px;height:34px;font-family:微软雅黑;font-size:12px;color:#3596e6;padding:5px 0px 0px 20px;border-bottom:2px solid #8c8c8c;" >
+	               						目录
+		              				</div>
+		              				<div style="border-bottom:2px solid #3596E6;width:26px;margin:-2px 0px 0px 20px;"></div>
+		              				<div id="list_main" style="width:210px;height:480px;">
+			                    		<c:forEach items="#{playerList.lessons}" var="zone" varStatus="status">
+			                    			<c:choose>
+			                    				<c:when test="#{lessonDetail.lesson.id eq zone.id}">
+			                    					<c:choose>
+			                    						<c:when test="#{(zone.playType eq 'inner') and (zone.hasFile == true)}">
+			                    							<a class="list_name" href="LessonDetail2.jspx?id=#{zone.id}" style="font-family:微软雅黑;font-size:12px!important;color:#ffffff;text-decoration:none;" title="#{status.index+1}、#{zone.name}">
+			                    								<div style="width:230px;height:34px;background-color:#292929;padding-top:5px;max-width:210px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+						                        					&nbsp;&nbsp;
+						                        					<h:outputText value="#{zone.chapterIndex}" rendered="#{zone.chapterType == 1}"></h:outputText>
+						                        					&nbsp;&nbsp;&nbsp;#{zone.name}
+						                        				</div>
+						                        			</a>
+			                    						</c:when>
+			                    						<c:when test="#{(zone.playType ne 'inner') and (zone.hasFile == true)}">
+			                    							<a class="list_name" href="LessonDetail3.jspx?id=#{zone.id}" style="font-family:微软雅黑;font-size:12px!important;color:#ffffff;text-decoration:none;" title="#{status.index+1}、#{zone.name}">
+			                    								<div style="width:230px;height:34px;background-color:#292929;padding-top:5px;max-width:210px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+						                        					&nbsp;&nbsp;
+						                        					<h:outputText value="#{zone.chapterIndex}" rendered="#{zone.chapterType == 1}"></h:outputText>
+						                        					&nbsp;&nbsp;&nbsp;#{zone.name}
+						                        				</div>
+						                        			</a>
+			                    						</c:when>
+			                    						<c:when test="#{(zone.playType eq 'inner') and (zone.hasFile == false)}">
+			                    							<a class="list_name" style="font-family:微软雅黑;font-size:12px!important;color:#ffffff;text-decoration:none;" title="#{status.index+1}、#{zone.name}">
+			                    								<div style="cursor:default;width:230px;height:34px;background-color:#292929;padding-top:5px;max-width:210px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+						                        					&nbsp;&nbsp;
+						                        					<h:outputText value="#{zone.chapterIndex}" rendered="#{zone.chapterType == 1}"></h:outputText>
+						                        					&nbsp;&nbsp;&nbsp;#{zone.name}
+						                        				</div>
+						                        			</a>
+			                    						</c:when>
+			                    						<c:when test="#{(zone.playType ne 'inner') and (zone.hasFile == false)}">
+			                    							<a class="list_name" style="font-family:微软雅黑;font-size:12px!important;color:#ffffff;text-decoration:none;" title="#{status.index+1}、#{zone.name}">
+			                    								<div style="cursor:default;width:230px;height:34px;background-color:#292929;padding-top:5px;max-width:210px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+						                        					&nbsp;&nbsp;
+						                        					<h:outputText value="#{zone.chapterIndex}" rendered="#{zone.chapterType == 1}"></h:outputText>
+						                        					&nbsp;&nbsp;&nbsp;#{zone.name}
+						                        				</div>
+						                        			</a>
+			                    						</c:when>
+						                        	</c:choose>
+			                    				</c:when>
+			                    				<c:otherwise>
+			                    					<c:choose>
+			                    						<c:when test="#{(zone.playType eq 'inner') and (zone.hasFile == true)}">
+			                    							<a class="list_name" href="LessonDetail2.jspx?id=#{zone.id}" style="font-family:微软雅黑;font-size:12px!important;color:#828282;text-decoration:none;" title="#{status.index+1}、#{zone.name}">
+			                    								<div style="width:230px;height:34px;background-color:#292929;padding-top:5px;max-width:210px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+						                        					&nbsp;&nbsp;
+						                        					<h:outputText value="#{zone.chapterIndex}" rendered="#{zone.chapterType == 1}"></h:outputText>
+						                        					&nbsp;&nbsp;&nbsp;#{zone.name}
+						                        				</div>
+						                        			</a>
+			                    						</c:when>
+			                    						<c:when test="#{(zone.playType ne 'inner') and (zone.hasFile == true)}">
+			                    							<a class="list_name" href="LessonDetail3.jspx?id=#{zone.id}" style="font-family:微软雅黑;font-size:12px!important;color:#828282;text-decoration:none;" title="#{status.index+1}、#{zone.name}">
+			                    								<div style="width:230px;height:34px;background-color:#292929;padding-top:5px;max-width:210px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+						                        					&nbsp;&nbsp;<h:outputText value="#{zone.chapterIndex}" rendered="#{zone.chapterType == 1}"></h:outputText>
+						                        					&nbsp;&nbsp;&nbsp;#{zone.name}
+						                        				</div>
+						                        			</a>
+			                    						</c:when>
+			                    						<c:when test="#{(zone.playType eq 'inner') and (zone.hasFile == false)}">
+			                    							<a class="list_name" style="font-family:微软雅黑;font-size:12px!important;color:#828282;text-decoration:none;" title="#{status.index+1}、#{zone.name}">
+			                    								<div style="cursor:default;width:230px;height:34px;background-color:#292929;padding-top:5px;max-width:210px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+						                        					&nbsp;&nbsp;
+						                        					<h:outputText value="#{zone.chapterIndex}" rendered="#{zone.chapterType == 1}"></h:outputText>
+						                        					&nbsp;&nbsp;&nbsp;#{zone.name}
+						                        				</div>
+						                        			</a>
+			                    						</c:when>
+			                    						<c:when test="#{(zone.playType ne 'inner') and (zone.hasFile == false)}">
+			                    							<a class="list_name" style="font-family:微软雅黑;font-size:12px!important;color:#828282;text-decoration:none;" title="#{status.index+1}、#{zone.name}">
+			                    								<div style="cursor:default;width:230px;height:34px;background-color:#292929;padding-top:5px;max-width:210px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+						                        					&nbsp;&nbsp;<h:outputText value="#{zone.chapterIndex}" rendered="#{zone.chapterType == 1}"></h:outputText>
+						                        					&nbsp;&nbsp;&nbsp;#{zone.name}
+						                        				</div>
+						                        			</a>
+			                    						</c:when>
+			                    					</c:choose>
+			                    					
+			                    				</c:otherwise>
+			                    			</c:choose>
+			                    		</c:forEach>
+		                    		</div>
+		                    	</div>
+		                    </div>
+		                </div>
+	
+	                <div id="foot" style="width:1180px;height:340px;padding:0px 10px 0px 10px;">
+	                	<div id="foot_header" style="width:1180px;height:45px;padding:0px 0px 0px 0px;background:#fafafa;border:1px solid white;">
+	                		<div id="foot_header_button" style="background:url(../image/rounded_rectangle3.png) no-repeat 0px 0px;width:120px;height:40px;margin:3px 0px 3px 25px;">
+	                			<span style="width:100px;font-weight:bold;font-size:22px!important;color:#FEFFFE;display:block;margin-left:auto;margin-right:auto;padding-top:6px;">
+	                				课程推荐
+	                			</span>
+	                		</div>
+	                	</div>
+
+	                	<div id="foot_main" style="width:1180px;height:285px;background-color:#FFFFFF;">
+	                		<c:forEach items="#{lessonDetail.courses}" var="course" size="#{lessonDetail.courses.size()>4?4:lessonDetail.courses.size()}">
+	                			<a class="img_container_a" href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{course.id}" target="_blank"  style="font-size:14px!important;">
+		                			<div class="img_container" style="width:259px;height:250px;border:2px solid #ECECEC;float:left;margin-left:29px;margin-top:17px;background-color:#FFFFFF">
+										<img src="../#{fn:replace(course.picture,'showimage','showabstractimage')}"  class="course-img" width="255px" height="165px"/> 
+										<div id="name_container" style="margin-top:6px;margin-left:25px;">
+					                        	#{course.name}
+					               		 </div>
+					                     <div id="num_container" style="float:left">
+				                        	<img src="../images/keshi.png" style="float:left;margin-left:24px;margin-bottom:15px;margin-top:12px;"/>
+				                        	<span style="display:block;float:left;margin-left:12px;margin-bottom:15px;margin-top:14px;">
+				                        		<h:outputText value="#{course.totalClassNum}">
+													<f:converter converterId="decimalConvert"></f:converter >
+												</h:outputText>
+				                        	</span>
+				                        </div>
+				                        <div id="count_container" style="float:right">
+				                        	<img src="../images/seecount.png" style="margin-right:12px;margin-bottom:15px;margin-top:12px;"/>
+				                        	<span style="display:block;float:right;margin-right:24px;margin-bottom:15px;margin-top:14px;">#{course.userNum}</span>
+				                        </div>
+		                			</div>
+								</a>
+							</c:forEach>
+	                	</div>
+	                	
+	                </div>
+	            </div>
+	            <p:notificationBar position="bottom" autoDisplay="true" effect="slide" style="height: 35px;padding: 0px 0px 0px 0px!important;line-height: 35px;">
+	                <div>
+	                    <h:panelGrid columns="5" style="width:100%;text-align: center;" columnClasses="w10,w10,w10">
+	                        <h:panelGroup>
+	                            <span class="tipStyle1">当前已经记录学习时间：</span>
+	                            <span id="finishedTime" class="tipStyle2">
+	                                <h:outputText value="#{applicationBean.wrapperTimeLen(lessonDetail.lessonLog.timeFinished)}" styleClass="tipStyle"/>
+	                            </span>
+	
+	                            <span class="tip">（每30秒自动记录一次）</span>
+	                        </h:panelGroup>
+	                        <h:panelGroup>
+	                            <span class="tipStyle1">最少学习时间：</span>
+	                            <span id="finishedStatus" class="tipStyle2">#{lessonDetail.lessonLog.lesson.leastTime}分钟</span>
+	                        </h:panelGroup>
+	
+	                    </h:panelGrid>
+	                </div>
+	            </p:notificationBar>
+	        </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

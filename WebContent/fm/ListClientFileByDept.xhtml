@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core"  lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="/talk/UserCenterGeneral.xhtml">
+
+            <ui:define name="ucontent">
+                <div>
+                    <p:tabView>
+                        <p:tab title="分享到#{clientSession.usr.groupCnStr}的文件">
+                            <p:panel style="height: 25px" styleClass="ui-datatable-header" >
+                                <h:panelGroup>路径：
+                                    <ui:repeat value="#{listClientFileByDept.familyTree}" var="path">
+                                        <p:commandLink action="#{listClientFileByDept.reload(path.id)}"
+                                                       value="#{fn:length(path.fileName)>20?fn:substring(path.fileName,0,20):path.fileName}" title="#{path.fileName}"
+                                                       update="@form">
+                                        </p:commandLink>>>
+                                    </ui:repeat>
+                                </h:panelGroup>
+                            </p:panel>
+                            <p:panel style="height: 30px" styleClass="ui-datatable-header"
+                                     rendered="#{listClientFileByDept.fatherID!='0'}">
+                                <h:panelGroup>
+                                    <p:outputPanel autoUpdate="true">
+                                        <p:commandLink action="#{listClientFileByDept.reload(listClientFileByDept.grapaID)}" 
+                                                       value="↖返回上级目录" rendered="#{listClientFileByDept.fatherID!='0'}" title="#{pro.fileName}"
+                                                       update="@form">
+                                        </p:commandLink>
+                                    </p:outputPanel>
+                                </h:panelGroup>
+                            </p:panel>
+                            <p:dataTable value="#{listClientFileByDept.pro2s}" var="pro" paginator="true" paginatorPosition="bottom" emptyMessage="无记录"
+                                         id="dc11" widgetVar="dc11" rows="11" styleClass="tabTable12">
+
+                                <p:column style="text-align:left" sortBy="#{pro.pinyin}">
+                                    <f:facet name="header">
+                                        <h:outputText value="文件名称"></h:outputText>
+                                    </f:facet>
+                                    <h:graphicImage rendered="#{pro.ifFolder}" style="vertical-align: middle;"
+                                                    value="/resources/images/folder.gif">
+
+                                    </h:graphicImage>
+                                    <h:graphicImage rendered="#{!pro.ifFolder}" style="vertical-align: middle;"
+                                                    value="/resources/images/file.gif"></h:graphicImage>
+
+                                    <p:commandLink action="#{listClientFileByDept.reload(pro.id)}"
+                                                   value="#{fn:length(pro.fileName)>20?fn:substring(pro.fileName,0,20):pro.fileName}" rendered="#{pro.ifFolder}" title="#{pro.fileName}"
+                                                   update="@form" oncomplete="dc11.getPaginator().setPage(0);">
+                                    </p:commandLink>
+
+                                    <h:outputLink  title="#{pro.fileName}"
+                                                   value="#{facesContext.externalContext.requestContextPath}/servlet/DownloadFile?id=#{pro.id}&amp;uid=#{ClientSession.usr.id}"
+                                                   rendered="#{!pro.ifFolder}">
+                                        <h:outputText value="#{fn:length(pro.fileName)>20?fn:substring(pro.fileName,0,20):pro.fileName}#{pro.fileExt}"></h:outputText>
+                                    </h:outputLink>
+                                </p:column>
+
+                                <p:column sortBy="#{pro.secretGrade}">
+                                    <f:facet name="header">
+                                        <h:outputText value="文件密级"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{pro.secretGrade}"></h:outputText>
+                                </p:column>
+                                <p:column sortBy="#{pro.realLength}" >
+                                    <f:facet name="header">
+                                        <h:outputText value="大小"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{pro.fileSize}"></h:outputText>
+                                </p:column>
+                                <p:column sortBy="#{pro.user.name}" >
+                                    <f:facet name="header">
+                                        <h:outputText value="上传者"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{pro.user.name}"></h:outputText>
+                                </p:column>
+                                <p:column sortBy="#{pro.uploadTime}" >
+                                    <f:facet name="header">
+                                        <h:outputText value="上传时间"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{pro.uploadTime}">
+                                        <f:convertDateTime timeZone="GMT+8"
+                                                           pattern="yyyy-MM-dd HH:mm:ss" />
+                                    </h:outputText>
+                                </p:column>
+                            </p:dataTable>
+                            <p:separator styleClass="botLine" />
+                        </p:tab>
+                        <p:tab title="我分享到部门的文件" >
+                            <ui:include src="MyDeptFiles.xhtml"/>
+                        </p:tab>
+                    </p:tabView>
+                </div>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

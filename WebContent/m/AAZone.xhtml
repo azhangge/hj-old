@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"  lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form id="form11">
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <div>
+                        <h:outputText id="outputText1" styleClass="tit"
+                                      value="－新增版面－" rendered="#{!aAZone.flag}"/>
+                        <h:outputText id="outputText2" styleClass="tit"
+                                      value="－修改版面－" rendered="#{aAZone.flag}"/>
+                        <p:separator/>
+                        <h:panelGrid columns="2"  columnClasses="thdL,thdR">
+                            <h:outputText value="版面名称：" />
+                            <h:inputText value="#{aAZone.zone.name}" style="width:400px" />
+
+                            <h:outputText value="版面描述：" />
+                            <h:inputTextarea value="#{aAZone.zone.description}"  style="width:400px;height:100px;" />
+
+                            <h:outputText value="版面位次：" />
+                            <h:inputText value="#{aAZone.zone.orderIndex}" style="width:40px" />
+
+                            <h:outputText value="发贴权限：" />
+                            <h:panelGroup>
+                                <h:outputText value="只允许版主发贴？" />
+                                <h:selectBooleanCheckbox value="#{aAZone.zone.ifOnlyMag}"/>
+                            </h:panelGroup>
+                            <h:outputText value="限制访问：" />
+                            <h:panelGroup>
+                                <h:outputText value="只允许登录用户访问？" />
+                                <h:selectBooleanCheckbox value="#{aAZone.zone.checkUser}"/>
+                            </h:panelGroup>
+                            <h:outputText value="版主："  />
+                            <p:dataTable value="#{aAZone.zone.managers}" var="mag" id="mags">
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="用户名"/>
+                                    </f:facet>
+                                    <h:outputText value="#{mag.username}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="积分"/>
+                                    </f:facet>
+                                    <h:outputText value="#{mag.score}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="删除"/>
+                                    </f:facet>
+                                    <p:commandLink value="删除" action="#{aAZone.deleteMag(mag.id)}" update=":form11:mags">
+                                    </p:commandLink>
+                                </p:column>
+                            </p:dataTable>
+                        </h:panelGrid>
+                        <p:panel header="新增版主--搜索">
+                            <h:panelGrid columns="3">
+                                <h:outputLabel value="用户名："/>
+                                <p:inputText value="#{aAZone.str}"/>
+                                <p:commandButton value="查找" action="#{aAZone.searchUser()}" update=":form11:users"/>
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:dataTable value="#{aAZone.newUsers}" var="user" id="users" rows="15" paginator="true" paginatorPosition="bottom">
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="用户名"/>
+                                </f:facet>
+                                <h:outputText value="#{user.username}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="积分"/>
+                                </f:facet>
+                                <h:outputText value="#{user.score}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="添加"/>
+                                </f:facet>
+                                <p:commandLink value="添加" action="#{aAZone.addMag(user.id)}" update=":form11:mags :form11:users">
+                                </p:commandLink>
+                            </p:column>
+                        </p:dataTable>
+
+                        <p:treeTable id="dc" value="#{aAZone.root}" var="dic" style="">
+                            <f:facet name="header">
+                                <h:outputText value="本版面开放的部门（只有被选中部门的用户能够访问，同时选中‘限制访问’才能生效。）"></h:outputText>
+                            </f:facet>
+                            <p:column style="width:200px;">
+                                <f:facet name="header">
+                                    <h:outputText value="部门名称"></h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{dic.name}" ></h:outputText>
+                            </p:column>
+                            <p:column style="width:100px;">
+                                <f:facet name="header">
+                                    <h:outputText value="选择"></h:outputText>
+                                </f:facet>
+                                <h:selectBooleanCheckbox value="#{dic.selected}" >
+                                    <p:ajax process="@form" listener="#{aAZone.checkSons(dic.id,dic.selected)}" update="@form"/>
+                                </h:selectBooleanCheckbox>
+                            </p:column>
+                        </p:treeTable>
+                        <p:separator/>
+                        <p:commandButton ajax="false" action="#{aAZone.done}" value="提交"  disabled="#{!fn:contains(adminSessionBean.admin.authstr,'talk')}" />
+                        <p:outputPanel autoUpdate="true">
+                            <p:growl/>
+                        </p:outputPanel>
+
+                    </div></h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

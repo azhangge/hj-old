@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<h:body>
+<li class="learncourse">
+	<a
+		href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{course.id}"
+		target="_blank" class="course-img-link"> <img
+		src="../#{fn:replace(course.picture,'showimage','showabstractimage')}"
+		class="course-img" width="207px" height="203px" />
+	</a>
+	<div class="course-tt">
+		<a
+			href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{course.id}"
+			target="_blank" class="course-tt-link">#{course.name}</a>
+	</div>
+	<div class="course-line course-line-bottom">
+		<span class="line-cell course-price hour">
+			<h:outputText value="#{course.totalClassNum}">
+				<f:converter converterId="decimalConvert"></f:converter >
+			</h:outputText>
+			课时
+		</span>
+		<span class="course-source"> <h:panelGroup
+				rendered="#{!(empty course.teacher)}">
+				<a
+					href="#{facesContext.externalContext.requestContextPath}/HJ/LecturerStyle.xhtml?name=#{course.teacher.name}">
+					<img src="#{facesContext.externalContext.requestContextPath}/HJ/image/img_lecturer.png" class="course-lecturer" />
+					#{course.teacher.name}
+				</a>
+			</h:panelGroup>
+		</span>
+	</div>
+</li>
+</h:body>
+</html>

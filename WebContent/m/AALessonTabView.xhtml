@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:poue="http://primefaces.org/ui/extensions"
+      xmlns:p="http://primefaces.org/ui">
+    <head>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form id="myForm">
+                    <script type="text/javascript" src="../resources/ckfinder/ckfinder.js"></script>
+                    <script type="text/javascript" language="javascript" src="#{facesContext.externalContext.requestContextPath}/rere_wimg_up/js/wordimage_uploader1.1.js"></script>
+                    <script type="text/javascript">
+                        function onLoadCallback(editor1) {
+                            var ed = PF(editor1).instance;
+                            CKFinder.setupCKEditor(ed, '../resources/ckfinder/');
+                        }
+			            function checkAll(whichTable) {
+			                var idds = '#myForm\\:tabView\\:' + whichTable + '\\:checkAll';
+			                var vv = $(idds).is(':checked');
+			                //alert(vv);
+			                $('input[type="checkbox"]').each(function (index, element) {
+			                    try {
+			                        var idd = $(element).attr('id');
+			                        if (idd.indexOf(whichTable) >= 0) {
+			                            $(element).prop('checked', vv);
+			                            //alert(idd);
+			                        }
+			                    } catch (e) {
+			                    }
+			                });
+			            }
+                        function changeStatus(obj){
+                        	var type = obj.value;
+                        	var id = 'myForm:tabView:'+type;
+                        	var urlId = id+'Url';
+                        	var obj1 = document.getElementById('myForm:tabView:inner');
+                        	var obj2 = document.getElementById('myForm:tabView:innerUrl');
+                        	var obj3 = document.getElementById('myForm:tabView:outter');
+                        	var obj4 = document.getElementById('myForm:tabView:outterUrl');
+                        	if(type == 'inner'){
+                        		obj1.style.display='inline';
+                        		obj2.style.display='inline';
+                        		obj3.style.display='none';
+                        		obj4.style.display='none';
+                        	}else if(type == 'outter'){
+                        		obj1.style.display='none';
+                        		obj2.style.display='none';
+                        		obj3.style.display='inline';
+                        		obj4.style.display='inline';
+                        	}else{
+                        		obj1.style.display='none';
+                        		obj2.style.display='none';
+                        		obj3.style.display='none';
+                        		obj4.style.display='none';
+                        	}
+                        }
+
+                    </script>
+                    <h:outputScript target="body" rendered="#{applicationBean.systemConfig.autoUpload}">
+                        var sUrl = 'http://#{facesContext.externalContext.requestServerName}:#{facesContext.externalContext.requestServerPort}#{facesContext.externalContext.requestContextPath}/servlet/WordImageUploader';
+                        var appName = '#{facesContext.externalContext.requestContextPath}';
+                        var repStr1 = 'http://#{facesContext.externalContext.requestServerName}:#{facesContext.externalContext.requestServerPort}#{facesContext.externalContext.requestContextPath}';
+                        var repStr2 = '..';
+                        var uploader = new WordImageUploader(sUrl, appName,repStr1,repStr2);
+                    </h:outputScript>
+                    <ui:include src="/AjaxStatus3.xhtml"/>
+                    <ui:include src="/fm/NewFilePanel2.xhtml"></ui:include>
+                    <ui:include src="/fm/NewFolderPanel2.xhtml"></ui:include>
+                    <ui:include src="/fm/ChangeFileDir2.xhtml"></ui:include>
+                    <h:outputScript name="chinese_locale.js" library="js"/>
+                     <p:tabView id="tabView">
+				        <p:tab title="基本设置">
+				            <h:outputText  styleClass="tit"
+                                       value="－#{aALesson2.flag?'修改资料':'添加资料'}－" />
+                        <p:separator/>
+                        <h:panelGrid columns="2" cellpadding="0"  columnClasses="thdL,thdR">
+                            <h:outputText value="资料名称：" />
+                            <h:panelGroup>
+	                            <p:inputText value="#{aALesson.exam.name}" style="width:600px;" required="true" label="资料名称" id="name" >
+		                            <p:ajax update="msgName" event="keyup" />
+	                            </p:inputText>
+	                            <p:message for="name" showSummary="请填写名称" id="msgName" display="default" style="float:right;"/>
+                            </h:panelGroup>
+                            <!-- <h:outputText value="教师：" />
+                            <p:inputText value="#{aALesson2.exam.teacher}" style="width:80px;" /> -->
+                            <h:outputText value="课时数：" />
+                            <p:inputText value="#{aALesson2.exam.classNum}" style="width:80px;" />
+                            <h:outputText value="次序：" />
+                            <p:inputText value="#{aALesson2.exam.ord}" style="width:80px;" />
+                            <h:outputText value="所属课程：" />
+                            <h:selectOneMenu value="#{aALesson2.typeId}">
+                                <f:selectItem itemValue="0" itemLabel="-请选择所属课程-"/>
+                                <f:selectItems value="#{aALesson2.types}" var="type1" itemLabel="#{type1.name}" itemValue="#{type1.id}"/>
+                            </h:selectOneMenu>
+                            <h:outputText value="前台显示？" style="display:none"/>
+                            <h:panelGroup style="display:none">
+                                <h:selectBooleanCheckbox value="#{aALesson2.exam.ifShow}"/>
+                                <h:outputText value="（已经过期的学习资料或还未开放的资料可以先设置好，但不在前台显示）。" />
+                            </h:panelGroup>
+                            <h:outputText value="删除记录？" style="display:none"/>
+                            <h:panelGroup style="display:none">
+                                <h:selectBooleanCheckbox id="allowUserDel" value="#{aALesson2.exam.allowUserDel}"/>
+                                <h:outputLabel for="allowUserDel" value="（是否允许用户在前台将自己的学习记录删除（重要资料不推荐））。" />
+                            </h:panelGroup>
+                            <h:outputText value="消耗积分："  rendered="#{copyrightController.sysType!='1'}"/>
+                            <h:panelGroup rendered="#{copyrightController.sysType!='1'}">
+                                <p:spinner value="#{aALesson2.exam.scorePaid}"  min="0" size="5"/>
+                                <h:outputText value="（用户学习此学习资料需要消耗的积分数）。" />
+                            </h:panelGroup>
+                            <h:outputText value="开放时间：" />
+                            <p:calendar value="#{aALesson2.exam.availableBegain}" navigator="true" pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" locale="zh_CN"/>
+                            <h:outputText value="结束时间：" />
+                            <p:calendar value="#{aALesson2.exam.availableEnd}" navigator="true" pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" locale="zh_CN"/>
+
+                            <h:outputText value="选择随堂练习挂载点：" />
+                            <p:treeTable id="goodsTable" value="#{aALesson2.root2}"  var="dic" style="width:600px;" scrollHeight="250"
+                            emptyMessage="无章节练习！" selectionMode="multiple" selection="#{aALesson2.selectedNodes}" scrollable="true">
+                                <f:facet name="header">
+                               		 <h:outputText value="请使用Ctrl、Shift键完成知识点的多选"></h:outputText>
+                           		</f:facet>
+                                <p:column >
+                                    <f:facet name="header" >
+                                        <h:outputText value="知识点名称" />
+                                    </f:facet>
+                                    <h:outputText value="#{dic.name}" ></h:outputText>
+                                </p:column>
+                                <p:column style="text-align: center;"> 
+                                    <f:facet name="header" >
+                                        <h:outputText value="试题数" />
+                                    </f:facet>
+                                    <h:outputText value="#{dic.exam.totalNum}题"  rendered="#{dic.exam.totalNum ne 0 and dic.sons.size()==0}"></h:outputText>
+                                </p:column>
+                            </p:treeTable>
+                            <h:outputText value="最少学习时长：" />
+                            <h:panelGroup>
+                                <p:inputText value="#{aALesson.exam.leastTime}" style="width:80px;float: left;" id="leastTime" required="true" label="最少学习时长">
+                                	<f:validateLongRange minimum="1" />
+                                	<p:ajax update="ltMessage" event="keyup" />
+                                </p:inputText>
+                                <h:outputLabel value="分钟（超过此时长即认为此门资料‘已完成’学习）" style="float: left;margin-top: 4px;"/>
+                                <p:message display="default" for="leastTime" id="ltMessage" style="float: left;"></p:message>
+                            </h:panelGroup>
+
+                            <h:outputText value="计时方式：" />
+                            <h:selectOneMenu value="#{aALesson2.exam.timingType}">
+                                <f:selectItem itemLabel="按页面打开时间" itemValue="page"/>
+                                <f:selectItem itemLabel="按视频播放时间（仅支持内置播放器）" itemValue="player"/>
+                            </h:selectOneMenu>
+                            
+                            <h:outputText value="播放方式：" />
+                            <h:selectOneMenu value="#{aALesson2.exam.playType}" onchange="changeStatus(this);">
+                                <f:selectItem itemLabel="内置FLASH播放器（在下方填写 视频源URL(MP4、FLV)）" itemValue="inner"/>
+                                <f:selectItem itemLabel="连带整体播放器（在下方填写 FLASH播放URL）" itemValue="outter"/>
+                                <f:selectItem itemLabel="无视频" itemValue="none"/>
+                            </h:selectOneMenu>
+                            <h:outputText value="视频源URL：" id="inner"/>
+                            <h:panelGroup id="innerUrl">
+                                <p:inputText value="#{aALesson2.exam.sourceUrl}" style="width:600px;"/><br/>
+                                <h:outputText value="精确填写视频源地址，PC使用内置FLASH播放器播放，支持MP4、FLV；手机使用HTML5技术播放，仅支持MP4。可以记录学习时间。" />
+                            </h:panelGroup>
+                            <h:outputText value="FLASH播放URL：" id="outter" style="display:none"/>
+                            <h:panelGroup id="outterUrl" style="display:none">
+                                <p:inputText value="#{aALesson2.exam.videoUrl}"  style="width:600px;"/><br/>
+                                <h:outputText value="适用于整体引用外部FLASH播放器地址，如优酷（播放器为FLASH地址+参数，非HTML页面）。" />
+                            </h:panelGroup>
+                        </h:panelGrid>
+				        </p:tab>
+				        <p:tab title="摘要内容">
+				            <h:panelGrid columns="2" cellpadding="0"  columnClasses="thdL,thdR">
+	                            <h:outputText value="资料摘要：" />
+	                            <poue:ckEditor id="editor2" widgetVar="editor2" value="#{aALesson2.exam.description}" customConfig="#{facesContext.externalContext.requestContextPath}/resources/js/ckeditor_config2.js" >
+	                            </poue:ckEditor>
+	                            <h:outputText value="资料内容：" />
+	                            <poue:ckEditor id="editor1" widgetVar="editor1" value="#{aALesson2.exam.lessonInfo}" customConfig="#{facesContext.externalContext.requestContextPath}/resources/js/ckeditor_config1.js" >
+	                                <poue:javascript  event="initialize" execute="onLoadCallback('editor1')" />
+	                                <!-- <poue:javascript rendered="#{applicationBean.systemConfig.autoUpload}" event="blur" execute="uploader.uploadWordImagesFromCKEditor(PF('editor1').instance,'#{aALesson2.exam.id}')" /> -->
+	                            </poue:ckEditor>
+	                        </h:panelGrid>    
+				        </p:tab>
+				        <p:tab title="文件上传">
+				            <div>
+                        <h:panelGrid columns="2" style="">
+                            <h:outputText id="outputText1" styleClass="tit"
+                                          value="－学习资料文件列表－" />
+                        </h:panelGrid>
+                    </div>
+                    <p:separator />
+
+                    <div style="border-top:0px;" id="up">
+                        <p:commandButton id="flink" value="上传文件" action="#{adminNewFile2.newAdd}" style="margin:3px 5px 3px 2px;"  update="myForm:fName"  oncomplete="PF('newFile').show();">
+                            <f:param name="action" value="new"></f:param>
+                            <f:param name="scope" value="pers" ></f:param>
+                            <f:param name="lessonId" value="#{aALesson2.exam.id}" ></f:param>
+                        </p:commandButton>
+                        <p:commandButton id="batDel" value="删除" style="margin:3px 5px 3px 2px;"
+                                         action="#{listFilesOfLesson.batDel}" update="dc"
+                                         onclick="if (!confirm('确认要删除选中的文件及目录（包括所有子目录及文件）吗？'))
+                                                     return false">
+                        </p:commandButton>
+                    </div>
+
+                    <h:panelGrid columns="3" width="60%">
+                    </h:panelGrid>
+						<p:dataTable id="dc" value="#{listFilesOfLesson.pro1s}" var="pro"
+							paginator="true" paginatorPosition="bottom"
+							emptyMessage="#{lang['exam.empty_result']}" rows="15"
+							styleClass="list">
+							<p:column style="width:30px;text-align: center;">
+								<f:facet name="header">
+									<h:outputText value="选择"></h:outputText>
+									<h:selectBooleanCheckbox id="checkAll"
+										onclick="checkAll('dc');">
+									</h:selectBooleanCheckbox>
+								</f:facet>
+								<h:selectBooleanCheckbox value="#{pro.selected}">
+									<p:ajax event="change"></p:ajax>
+								</h:selectBooleanCheckbox>
+							</p:column>
+							<p:column style="" filterBy="#{pro.fileName}">
+								<f:facet name="header">
+									<h:outputText value="文件名称"></h:outputText>
+								</f:facet>
+
+								<h:graphicImage rendered="#{pro.ifFolder}"
+									value="/resources/images/folder.gif"
+									style="vertical-align: middle;"></h:graphicImage>
+								<h:graphicImage rendered="#{!pro.ifFolder}"
+									value="/resources/images/file.gif"
+									style="vertical-align: middle;"></h:graphicImage>
+								<h:outputLink value="listFilesOfLesson.jspx?fid=#{pro.id}"
+									title="点击进入文件夹" rendered="#{pro.ifFolder}">
+									<h:outputText
+										value="#{fn:length(pro.fileName)>20?fn:substring(pro.fileName,0,20):pro.fileName}"></h:outputText>
+								</h:outputLink>
+
+								<h:outputLink title="点击下载文件" target="_blank" styleClass="common"
+									value="../servlet/DownloadFile?id=#{pro.id}"
+									rendered="#{(!pro.ifFolder)&amp;&amp;(!(((pro.fileExt=='.jpg'||pro.fileExt=='.gif')||(pro.fileExt=='.png'||(pro.fileExt=='.flv')||(pro.fileExt=='.mp3')))||(pro.fileExt=='.mp4')))}">
+									<h:outputText
+										value="#{fn:length(pro.fileName)>20?(fn:substring(pro.fileName,0,20)):pro.fileName}#{pro.fileExt}"></h:outputText>
+								</h:outputLink>
+								<h:outputLink title="点击播放视频" target="_blank" styleClass="common"
+									value="#{facesContext.externalContext.requestContextPath}/vp/RerePlayer.swf?xml=x.rplayer?fid=#{pro.id}"
+									rendered="#{(!pro.ifFolder)&amp;&amp;(pro.fileExt=='.flv'||pro.fileExt=='.mp4')}">
+									<h:outputText
+										value="#{fn:length(pro.fileName)>20?(fn:substring(pro.fileName,0,20)):pro.fileName}#{pro.fileExt}"></h:outputText>
+								</h:outputLink>
+								<h:outputLink title="点击播放MP3" target="_blank"
+									styleClass="common"
+									value="#{facesContext.externalContext.requestContextPath}/dewplayer/dewplayer-vol.swf?mp3=../#{applicationBean.relativePath}#{pro.id}.mp3&amp;autostart=0"
+									rendered="#{(!pro.ifFolder)&amp;&amp;(pro.fileExt=='.mp3')}">
+									<h:outputText
+										value="#{fn:length(pro.fileName)>20?(fn:substring(pro.fileName,0,20)):pro.fileName}#{pro.fileExt}"></h:outputText>
+								</h:outputLink>
+								<h:outputLink title="点击查看图片" target="_blank" styleClass="common"
+									value="#{facesContext.externalContext.requestContextPath}/servlet/ShowImage?id=#{pro.id}"
+									rendered="#{(!pro.ifFolder)&amp;&amp;((pro.fileExt=='.jpg'||pro.fileExt=='.gif')||pro.fileExt=='.png')}">
+									<h:outputText
+										value="#{fn:length(pro.fileName)>20?(fn:substring(pro.fileName,0,20)):pro.fileName}#{pro.fileExt}"></h:outputText>
+								</h:outputLink>
+								<h:outputText value="(#{pro.sonNum})" rendered="#{pro.ifFolder}"></h:outputText>
+							</p:column>
+							<p:column sortBy="#{pro.realLength}"
+								style="width:60px;text-align: center;">
+								<f:facet name="header">
+									<h:outputText value="大小"></h:outputText>
+								</f:facet>
+								<h:outputText value="#{pro.fileSize}"></h:outputText>
+							</p:column>
+							<p:column sortBy="#{pro.uploadTime}"
+								style="width:120px;text-align: center;">
+								<f:facet name="header">
+									<h:outputText value="上传时间"></h:outputText>
+								</f:facet>
+								<h:outputText value="#{pro.uploadTime}">
+									<f:convertDateTime timeZone="GMT+8" pattern="yyyy-MM-dd HH:mm" />
+								</h:outputText>
+							</p:column>
+							<p:column style="width:180px;text-align: center;">
+								<f:facet name="header">
+									<h:outputText value="操作"></h:outputText>
+								</f:facet>
+								<h:outputLink title="点击直接下载文件" target="_blank"
+									styleClass="common"
+									value="../servlet/DownloadFile?id=#{pro.id}"
+									rendered="#{(!pro.ifFolder)}">
+									<h:outputText value="下载"></h:outputText>
+								</h:outputLink>
+								<h:outputLink title="点右键复制链接" target="_blank"
+									styleClass="common"
+									value="#{facesContext.externalContext.requestContextPath}/images/content/#{pro.id}.mp3"
+									rendered="#{(!pro.ifFolder)&amp;&amp;(pro.fileExt=='.mp3')}">
+									<h:outputText value="&nbsp;音频源" escape="false"></h:outputText>
+								</h:outputLink>
+								<h:outputLink title="点击播放MP3" target="_blank"
+									styleClass="common"
+									value="#{facesContext.externalContext.requestContextPath}/dewplayer/dewplayer-vol.swf?mp3=../#{applicationBean.relativePath}#{pro.id}.mp3&amp;autostart=0"
+									rendered="#{(!pro.ifFolder)&amp;&amp;(pro.fileExt=='.mp3')}">
+									<h:outputText value="&nbsp;播放MP3" escape="false"></h:outputText>
+								</h:outputLink>
+							</p:column>
+						</p:dataTable>
+					</p:tab>
+				    </p:tabView>
+                        <p:growl/>
+                        <p:separator/>
+                        <p:commandButton ajax="false" action="#{aALesson2.done}" value="保存"  styleClass="commonSubmit" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'lesson')}"/>
+                    </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

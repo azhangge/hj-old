@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <h:head>
+        <title>您已在其它地方登录</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <link rel="stylesheet" type="text/css" href="${facesContext.externalContext.requestContextPath}/resources/stylesheet.css"/>
+    </h:head>
+    <h:body style="text-align: center">
+        <ui:composition template="talk/General.xhtml">
+            <ui:define name="title">您已在其它地方登录 </ui:define>
+            <ui:define name="content">
+                <style type="text/css">
+                    .inputText {
+                        width: 180px;
+                    }
+
+                    .text {
+                        font-family: 宋体;
+                        font-size: 9pt;
+                    }
+
+                    .c1 {
+                        text-align: right;
+                    }
+
+                    .c2 {
+                        text-align: left;
+                    }
+                </style>
+                <div style="" class="borderx">
+                    <!--页面顶端导航-->
+                    <h:panelGrid columns="5">
+                        <h:outputText value="您已在其它地方登录" styleClass="mark"/>
+                    </h:panelGrid>
+                    <p:separator/>
+                    <p:panel
+                        style="margin:auto;width:600px;text-align:left;margin-top:30px;margin-bottom: 30px;">
+
+                        <h:outputText value="您已在其它地方登录" styleClass="headLine"></h:outputText>
+                        <p:separator></p:separator>
+
+                        <font color="red">
+                            <h:outputText value="您已经在其它地方登录，当前会话已被迫下线，如果不是您本人操作，请核实帐号是否被盗。" rendered="#{kickedOut.us.kicked}"/><br/>
+                            <h:outputText value="登录IP地址：#{kickedOut.us.kickerIp}" rendered="#{kickedOut.us.kicked}"/>
+                        </font>
+
+                    </p:panel>
+                    <p:outputPanel autoUpdate="true">
+                        <p:growl/>
+                    </p:outputPanel>
+                </div></ui:define></ui:composition>
+    </h:body>
+</html>

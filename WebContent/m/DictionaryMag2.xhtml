@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form id="DicMag">
+                    <h:outputScript name="chinese_locale.js" library="js"/>
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <ui:include src="DictionaryPanel.xhtml"></ui:include>
+                    <ui:include src="ChangeDictionaryDir.xhtml"></ui:include>
+
+                    <h:outputText  styleClass="tit"
+                                   value="#{applicationBean.departmentStr}管理" />
+                    <p:separator/>
+                    <p:commandButton id="editDic_top" value="添加顶级#{applicationBean.departmentStr}" image="fa fa-fw fa-edit" action="#{dictionaryMag2.addDic}"  oncomplete="PF('DictionaryPanel').show();">
+                        <f:param name="fid" value="#{dictionaryMag2.businessId}"/>
+                    </p:commandButton>
+                    
+                    <p:commandButton value="移动" image="fa fa-fw fa-truck" onclick="PF('ChangeDicDir').show()" style="margin-bottom:5px; "/>
+
+                    <p:treeTable id="dc" value="#{dictionaryMag2.root}" var="dic" emptyMessage="暂无#{applicationBean.departmentStr}" resizableColumns="true" liveResize="true">
+                        <p:column style="width:400px" resizable="true" >
+                            <f:facet name="header">
+                                <h:outputText value="#{applicationBean.departmentStr}名称"></h:outputText>
+                            </f:facet>
+                            <h:selectBooleanCheckbox value="#{dic.selected}"/>
+                            <h:outputText value="#{dic.name}" ></h:outputText>
+                        </p:column>
+                        <p:column style="width:40px;text-align: center;" resizable="true" >
+                            <h:outputText value="#{dic.ord}" />
+                            <f:facet name="header">
+                                <h:outputText value="次序" />
+                            </f:facet>
+                        </p:column>
+                        <p:column style="width:60px;text-align: center;" resizable="true" >
+                            <h:outputText value="#{dic.frontShow?'是':'否'}" />
+                            <f:facet name="header">
+                                <h:outputText value="前台显示" />
+                            </f:facet>
+                        </p:column>
+                        <!-- <p:column style="width:40px;text-align: center;">
+                            <h:outputText value="#{dic.asDefault?'是':'否'}" />
+                            <f:facet name="header">
+                                <h:outputText value="默认部门" />
+                            </f:facet>
+                        </p:column> -->
+                        <p:column resizable="true" >
+                            <h:outputText value="#{dic.tel}" />
+                            <f:facet name="header">
+                                <h:outputText value="联系电话" />
+                            </f:facet>
+                        </p:column>
+                        <!-- <p:column style="width:80px;text-align: center;">
+                            <h:outputText value="#{dic.defaultDays}" />
+                            <f:facet name="header">
+                                <h:outputText value="用户默认有效天数" />
+                            </f:facet>
+                        </p:column> -->
+                        <p:column style="width:180px;text-align: center;" resizable="true" >
+                            <h:outputText value="#{dic.availableTime}">
+                                <f:convertDateTime pattern="起始：yyyy-MM-dd HH:mm:ss" timeZone="GMT+8" />
+                            </h:outputText>
+                            <br/>
+                            <h:outputText value="#{dic.expireTime}">
+                                <f:convertDateTime pattern="结束：yyyy-MM-dd HH:mm:ss" timeZone="GMT+8" />
+                            </h:outputText>
+                            <f:facet name="header">
+                                <h:outputText value="有效期" />
+                            </f:facet>
+                        </p:column>
+                        <p:column  style="width:150px;text-align: center;" resizable="true" >
+                            <f:facet name="header">
+                                <h:outputText value="操作"></h:outputText>
+                            </f:facet>
+                            <p:commandLink value="编辑" action="#{dictionaryMag2.editDic}"  oncomplete="PF('DictionaryPanel').show();" update=":DicMag:dyChange">
+                                <f:param name="id" value="#{dic.id}"/>
+                            </p:commandLink>&nbsp;
+                            <p:commandLink  value="添加" rendered="#{dic.deep&lt;8}" action="#{dictionaryMag2.addDic}" oncomplete="PF('DictionaryPanel').show();" update=":DicMag:dyChange">
+                                <f:param name="fid" value="#{dic.id}"/>
+                            </p:commandLink>&nbsp;
+                            <p:commandLink value="删除" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'class')}" action="#{dictionaryMag2.delDic(dic.id)}" update="@form" onclick="if (!confirm('确认要删除本部门（包括所有子部门）吗？'))
+                                        return false">
+                            </p:commandLink>
+                        </p:column>
+                    </p:treeTable>
+                    <h:outputText value="*用户部门可以多选，当用户注册或添加用户时若不选部门，将设置用户的部门为所有默认部门。" style="color:green;"/>
+                    <p:growl autoUpdate="true"/>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

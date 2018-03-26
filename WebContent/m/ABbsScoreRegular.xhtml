@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form><div>
+                        <h:outputText  styleClass="tit"
+                                       value="－修改积分规则－" />
+                        <p:separator/>
+                        <h:panelGrid columns="2">
+                            <h:outputText value="登录：" />
+                            <h:panelGroup>
+                                <h:inputText value="#{aBbsScoreRegular.module.login}" style="" />
+                                <h:outputText value="每天第一次登录时获得积分" style="" />
+                            </h:panelGroup>
+                            <h:outputText value="新贴子：" />
+                            <h:panelGroup>
+                                <h:inputText value="#{aBbsScoreRegular.module.newThread}" style="" />
+                                <h:outputText value="发表新贴时获得积分" style="" />
+                            </h:panelGroup>
+                            <h:outputText value="回复：" />
+                            <h:panelGroup>
+                                <h:inputText value="#{aBbsScoreRegular.module.newTalk}" style="" />
+                                <h:outputText value="发表回复时获得积分" style="" />
+                            </h:panelGroup>
+                            <h:outputText value="置顶：" />
+                            <h:panelGroup>
+                                <h:inputText value="#{aBbsScoreRegular.module.top}" style="" />
+                                <h:outputText value="贴子被置顶时获得积分" style="" />
+                            </h:panelGroup>
+
+                        </h:panelGrid>
+                        <p:separator/>
+                        <p:commandButton ajax="false" action="#{aBbsScoreRegular.done}" value="提交"  styleClass="commonSubmit" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'talk')}"/>
+
+
+                    </div></h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

@@ -1,0 +1,58 @@
+
+
+
+.sonFont{
+    font-size: 14px;
+}
+
+.queTd{
+    border:1px solid #cccccc;
+    padding: 3px 5px 3px 5px;
+}
+.queTd:hover{
+    border:1px solid blue;
+}
+
+.queSpan{
+    width:100%!important;
+}
+.queSpan:hover{
+    background-color: #ccccff;
+    cursor: pointer;
+}
+
+.queSpanJSF{
+    width:100%;
+}
+
+
+
+.queSpanJSF td label{
+    /*color:red;*/
+}
+.queSpanJSF td label:hover{
+    background-color: #ccccff;
+    cursor: pointer;
+}
+
+.queTable{
+    width:98%;
+    border:1px solid #cccccc;
+    margin:0px auto;
+}
+
+.tdTitle{
+    background-color: #6e7683;
+    color:white;
+    font-weight: bold;
+    height:30px;
+    padding-left: 10px;
+}
+
+.markQuestion{
+    
+}
+.markQuestion:hover{
+    cursor: pointer;
+}
+

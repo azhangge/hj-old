@@ -1,0 +1,22 @@
+@charset "utf-8";
+/*head*/
+.my_from {
+	background-color: white;
+}
+
+.g_mainPanel {
+	border: 0px solid #e5e5e5;
+	width: 100%;
+	padding: 0px !important;
+	margin: 0px !important;
+	/* height: 1640px; */
+}
+
+.ui-panel .ui-panel-content {
+	padding: 0px!important;
+}
+
+div.top2{
+	display: block!important;
+	position: absolute;
+}

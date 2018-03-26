@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:p="http://primefaces.org/ui" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <script type="text/javascript" src="../resources/ckfinder/ckfinder.js"></script>
+                <script type="text/javascript" language="javascript" src="#{facesContext.externalContext.requestContextPath}/rere_wimg_up/js/wordimage_uploader1.1.js"></script>
+
+                <script type="text/javascript">
+                    //var editor1 = CKEDITOR.replace('myForm:editor1');
+                    function onLoadCallback(editor1) {
+                        var ed = PF(editor1).instance;
+                        CKFinder.setupCKEditor(ed, '../resources/ckfinder/');
+                    }
+                </script>
+                <h:outputScript target="body" rendered="#{applicationBean.systemConfig.autoUpload}">
+                    var sUrl = 'http://#{facesContext.externalContext.requestServerName}:#{facesContext.externalContext.requestServerPort}#{facesContext.externalContext.requestContextPath}/servlet/WordImageUploader';
+                    var appName = '#{facesContext.externalContext.requestContextPath}';
+                    var repStr1 = 'http://#{facesContext.externalContext.requestServerName}:#{facesContext.externalContext.requestServerPort}#{facesContext.externalContext.requestContextPath}';
+                    var repStr2 = '..';
+                    var uploader = new WordImageUploader(sUrl, appName,repStr1,repStr2);
+                </h:outputScript>
+                <h:form id="myForm">
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <div>
+                        <h:outputText  styleClass="tit"
+                                       value="#{aACaseQuestion.flag?'修改综合题':'添加综合题'}>>#{aACaseQuestion.em.name}" />
+                        <p:separator/>
+                        <h:panelGrid columns="2"  columnClasses="thdL,thdR" style="width:100%;">
+                            <h:outputText value="内部标识名：" />
+                            <h:panelGroup>
+                                <h:inputText value="#{aACaseQuestion.cq.innerName}" style="width:50%;"/>
+                                <h:outputText value="(用于在系统后台管理时唯一确定此综合题，不会在考试中显示)"  style="color:blue;"/>
+                            </h:panelGroup>
+                            <h:outputText value="题目别称：" />
+                            <h:panelGroup>
+                                <h:inputText value="#{aACaseQuestion.cq.nickName}" style="width:50%;"/>
+                                <h:outputText value="(如：阅读理解、完型填空、案例分析)"  style="color:blue;"/>
+                            </h:panelGroup>
+                        </h:panelGrid>
+
+                        <p:separator/>
+                        <h:panelGrid columns="2" columnClasses="thdL,thdR" style="width:100%;">
+                            <h:outputText value="题目引导：" escape="false"/>
+                            
+                            <h:panelGroup>
+                                <h:inputTextarea value="#{aACaseQuestion.cq.name}" style="width:100%;height:60px;"/>
+                                <br/>
+                                <h:outputText value="(对题目的引导、解释、辅助说明)"  style="color:blue;"/>
+                            </h:panelGroup>
+                        </h:panelGrid>
+
+                        <p:separator/>
+                        <h:panelGrid columns="2" columnClasses="thdL,thdR" style="width:100%;">
+                            <h:outputText value="题目材料：" />
+                            <h:panelGroup>
+                                <pe:ckEditor id="rightStr" widgetVar="rightStr" value="#{aACaseQuestion.cq.content}"  customConfig="#{facesContext.externalContext.requestContextPath}/resources/js/ckeditor_config1.js"  width="98%" height="150">
+                                    <pe:javascript  event="initialize" execute="onLoadCallback('rightStr')" />
+                                    <pe:javascript  rendered="#{applicationBean.systemConfig.autoUpload}" event="blur" execute="uploader.uploadWordImagesFromCKEditor(PF('rightStr').instance,'#{aACaseQuestion.cq.id}')" />
+                                </pe:ckEditor>
+                                <h:outputText value="（阅读理解的正文、案例分析的说明材料。)"  style="color:blue;"/>
+                            </h:panelGroup>
+                            <h:outputText value="音频源：" />
+                            <h:panelGroup>
+                                <h:inputText value="#{aACaseQuestion.cq.audioUrl}" style="width:50%;"/>
+                                <h:outputText value="(直接填入MP3地址，用于听力等题型，无音频请留空。)" style="color:blue;"/>
+                            </h:panelGroup>
+                        </h:panelGrid>
+                        <p:separator/>
+                        <h:panelGrid columns="2" columnClasses="thdL,thdR" style="width:100%;">
+                            <h:outputText value="单选分值：" />
+                            <h:inputText  value="#{aACaseQuestion.cq.choiceScore}" style="width:80px;" />
+                            <h:outputText value="多选分值：" />
+                            <h:inputText  value="#{aACaseQuestion.cq.multiChoiceScore}" style="width:80px;" />
+                            <h:outputText value="填空分值：" />
+                            <h:inputText  value="#{aACaseQuestion.cq.fillScore}" style="width:80px;" />
+                            <h:outputText value="判断分值：" />
+                            <h:inputText  value="#{aACaseQuestion.cq.judgeScore}" style="width:80px;" />
+                            <h:outputText value="问答分值：" />
+                            <h:inputText  value="#{aACaseQuestion.cq.essayScore}" style="width:80px;" />
+                            <h:outputText value="次序：" />
+                            <h:inputText  value="#{aACaseQuestion.cq.ord}" style="width:40px;" />
+                        </h:panelGrid>
+                        <p:separator/>
+                        <p:dataTable paginator="true" paginatorPosition="bottom" value="#{aACaseQuestion.cq.choices}" var="us" id="dataTable1" liveResize="true" emptyMessage="#{lang['exam.empty_result']}"
+                                     styleClass="list" rowIndexVar="row" style="" rows="30">
+                            <f:facet name="header">
+                                <h:outputText value="单选题列表" style="margin-right: 50px;"/> </f:facet>
+                            <p:column>
+                                <h:outputText value="#{row+1}"/>
+                                <f:facet name="header">
+                                    <h:outputText value="序号" />
+                                </f:facet>
+                            </p:column>
+                            <p:column sortBy="#{us.cleanName}" style="width:370px!important;word-wrap:break-word!important;word-break:break-all!important;">
+                                <h:outputText value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}" escape="false"/>
+                                <f:facet name="header">
+                                    <h:outputText value="题目名称" />
+                                </f:facet>
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{us.answer}" />
+                                <f:facet name="header">
+                                    <h:outputText value="答案" />
+                                </f:facet>
+                            </p:column>
+                            <p:column style="width:30px;text-align: center;">
+                                <h:outputText value="#{us.ord}" />
+                                <f:facet name="header">
+                                    <h:outputText value="次序" />
+                                </f:facet>
+                            </p:column>
+                            <p:column sortBy="#{us.genTime}">
+                                <h:outputText value="#{us.genTime}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                       timeZone="GMT+8" />
+                                </h:outputText>
+                                <f:facet name="header">
+                                    <h:outputText value="添加时间" />
+                                </f:facet>
+                            </p:column>
+                        </p:dataTable>
+                        <p:commandButton action="#{aACaseQuestion.saveAndEditChoice()}" value="保存并编辑单选题" ajax="false"/>
+                        <p:separator/>
+
+                        <p:dataTable paginator="true" paginatorPosition="bottom" value="#{aACaseQuestion.cq.multiChoices}" var="us" id="dataTable3" liveResize="true" emptyMessage="#{lang['exam.empty_result']}"
+                                     styleClass="list" rowIndexVar="row" style="" rows="30">
+                            <f:facet name="header">
+                                <h:outputText value="多选题列表" style="margin-right: 50px;"/> </f:facet>
+                            <p:column>
+                                <h:outputText value="#{row+1}"/>
+                                <f:facet name="header">
+                                    <h:outputText value="序号" />
+                                </f:facet>
+                            </p:column>
+                            <p:column sortBy="#{us.cleanName}" style="width:370px!important;word-wrap:break-word!important;word-break:break-all!important;">
+                                <h:outputText value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}" escape="false"/>
+                                <f:facet name="header">
+                                    <h:outputText value="题目名称" />
+                                </f:facet>
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{us.answer}" />
+                                <f:facet name="header">
+                                    <h:outputText value="答案" />
+                                </f:facet>
+                            </p:column>
+                            <p:column style="width:30px;text-align: center;">
+                                <h:outputText value="#{us.ord}" />
+                                <f:facet name="header">
+                                    <h:outputText value="次序" />
+                                </f:facet>
+                            </p:column>
+                            <p:column sortBy="#{us.genTime}">
+                                <h:outputText value="#{us.genTime}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                       timeZone="GMT+8" />
+                                </h:outputText>
+                                <f:facet name="header">
+                                    <h:outputText value="添加时间" />
+                                </f:facet>
+                            </p:column>
+                        </p:dataTable>
+                        <p:commandButton action="#{aACaseQuestion.saveAndEditMultiChoice()}" value="保存并编辑多选题" ajax="false"/>
+
+                        <p:separator/>
+                        <p:dataTable paginator="true" paginatorPosition="bottom" value="#{aACaseQuestion.cq.fills}" var="us" id="dataTable4" liveResize="true" emptyMessage="#{lang['exam.empty_result']}"
+                                     styleClass="list" rowIndexVar="row" style="" rows="30">
+                            <f:facet name="header">
+                                <h:outputText value="填空题列表" style="margin-right: 50px;"/>
+                            </f:facet>
+                            <p:column>
+                                <h:outputText value="#{row+1}"/>
+                                <f:facet name="header">
+                                    <h:outputText value="序号" />
+                                </f:facet>
+                            </p:column>
+                            <p:column sortBy="#{us.cleanName}" style="width:370px!important;word-wrap:break-word!important;word-break:break-all!important;">
+                                <h:outputText value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}" escape="false"/>
+                                <f:facet name="header">
+                                    <h:outputText value="题目内容" />
+                                </f:facet>
+                            </p:column>
+                            <p:column style="width:30px;text-align: center;">
+                                <h:outputText value="#{us.ord}" />
+                                <f:facet name="header">
+                                    <h:outputText value="次序" />
+                                </f:facet>
+                            </p:column>
+                            <p:column sortBy="#{us.genTime}">
+                                <h:outputText value="#{us.genTime}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                       timeZone="GMT+8" />
+                                </h:outputText>
+                                <f:facet name="header">
+                                    <h:outputText value="添加时间" />
+                                </f:facet>
+                            </p:column>
+                        </p:dataTable>
+                        <p:commandButton action="#{aACaseQuestion.saveAndEditFill()}" value="保存并编辑填空题" ajax="false"/>
+
+                        <p:separator/>
+                        <p:dataTable paginator="true" paginatorPosition="bottom" value="#{aACaseQuestion.cq.judges}" var="us" id="dataTable5" liveResize="true" emptyMessage="#{lang['exam.empty_result']}"
+                                     styleClass="list" rowIndexVar="row" style="" rows="30">
+                            <f:facet name="header">
+                                <h:outputText value="判断题列表" style="margin-right: 50px;"/>
+                            </f:facet>
+                            <p:column>
+                                <h:outputText value="#{row+1}"/>
+                                <f:facet name="header">
+                                    <h:outputText value="序号" />
+                                </f:facet>
+                            </p:column>
+                            <p:column sortBy="#{us.cleanName}" style="width:370px!important;word-wrap:break-word!important;word-break:break-all!important;">
+                                <h:outputText value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}" escape="false"/>
+                                <f:facet name="header">
+                                    <h:outputText value="题目内容" />
+                                </f:facet>
+                            </p:column>
+                            <p:column style="width:30px;text-align: center;">
+                                <h:outputText value="#{us.ord}" />
+                                <f:facet name="header">
+                                    <h:outputText value="次序" />
+                                </f:facet>
+                            </p:column>
+                            <p:column sortBy="#{us.genTime}">
+                                <h:outputText value="#{us.genTime}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                       timeZone="GMT+8" />
+                                </h:outputText>
+                                <f:facet name="header">
+                                    <h:outputText value="添加时间" />
+                                </f:facet>
+                            </p:column> 
+                        </p:dataTable>
+                        <p:commandButton action="#{aACaseQuestion.saveAndEditJudge()}" value="保存并编辑判断题" ajax="false"/>
+                        <p:separator/>
+                        <p:dataTable paginator="true" paginatorPosition="bottom" value="#{aACaseQuestion.cq.essaies}" var="us" id="dataTable2" liveResize="true" emptyMessage="#{lang['exam.empty_result']}"
+                                     styleClass="list" rowIndexVar="row" style="" rows="30">
+                            <f:facet name="header">
+                                <h:outputText value="问答题列表" style="margin-right: 50px;"/>
+                            </f:facet>
+                            <p:column>
+                                <h:outputText value="#{row+1}"/>
+                                <f:facet name="header">
+                                    <h:outputText value="序号" />
+                                </f:facet>
+                            </p:column>
+                            <p:column sortBy="#{us.cleanName}" style="width:370px!important;word-wrap:break-word!important;word-break:break-all!important;">
+                                <h:outputText value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}" escape="false"/>
+                                <f:facet name="header">
+                                    <h:outputText value="题目内容" />
+                                </f:facet>
+                            </p:column>
+                            <p:column style="width:30px;text-align: center;">
+                                <h:outputText value="#{us.ord}" />
+                                <f:facet name="header">
+                                    <h:outputText value="次序" />
+                                </f:facet>
+                            </p:column>
+                            <p:column sortBy="#{us.genTime}">
+                                <h:outputText value="#{us.genTime}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                       timeZone="GMT+8" />
+                                </h:outputText>
+                                <f:facet name="header">
+                                    <h:outputText value="添加时间" />
+                                </f:facet>
+                            </p:column>
+                        </p:dataTable>
+                        <p:commandButton action="#{aACaseQuestion.saveAndEditEssay()}" value="保存并编辑问答题" ajax="false"/>
+
+                        <p:separator/>
+                        <p:commandButton action="#{aACaseQuestion.done}" value="添加并返回" styleClass="" rendered="#{!aACaseQuestion.flag}" ajax="false"/>
+                        <p:commandButton action="#{aACaseQuestion.done}"  value="保存修改并返回" styleClass="" style="" rendered="#{aACaseQuestion.flag}" ajax="false" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'question')}"/>
+
+                    </div></h:form>
+                <br/><br/>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </h:head>
+    <h:body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form>
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <div >
+                        <h:outputText  styleClass="tit"
+                                       value="用户在线状态统计" />
+                        <p:separator/>
+                        <p:panel>
+                            <h:outputText value="当前系统共有 #{fn:length(sessionStateApplication.sessionList)} 人在线，其中登录用户#{fn:length(sessionStateApplication.userSessionList)}人，正在考试#{fn:length(sessionStateApplication.examSessionList)}人，章节练习#{fn:length(sessionStateApplication.moduleExamList)}人。" styleClass="tit"/>
+                        </p:panel>
+
+
+                        <p:tabView dynamic="true">
+                            <p:tab title="考试用户统计">
+                                <p:dataTable paginator="true" paginatorPosition="bottom" value="#{sessionStateApplication.examSessionList}" var="us"
+                                             styleClass="list" rowIndexVar="row" style="width:100%" rows="20" emptyMessage="无数据">
+                                    <p:column  filterBy="#{us.user.name}" filterMatchMode="contains">
+                                        <h:outputText value="#{us.user.name}（#{us.user.username}）" />
+                                        <f:facet name="header">
+                                            <h:outputText value="用户" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column filterBy="#{us.exam.name}" filterMatchMode="contains">
+                                        <h:outputText value="#{us.exam.name}" />
+                                        <f:facet name="header">
+                                            <h:outputText value="考试名称" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column filterBy="#{us.ip}" filterMatchMode="contains">
+                                        <h:outputText value="#{us.ip}" />
+                                        <f:facet name="header">
+                                            <h:outputText value="IP地址" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column filterBy="#{us.ipAddr}" filterMatchMode="contains">
+                                        <h:outputText value="#{us.ipAddr}" />
+                                        <f:facet name="header">
+                                            <h:outputText value="地理地址" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column filterBy="#{us.agent}" filterMatchMode="contains">
+                                        <h:outputLink value="#" title="#{us.agent}">
+                                            <h:outputText value="#{fn:substring(us.agent,0,30)}" />
+                                        </h:outputLink>
+                                        <f:facet name="header">
+                                            <h:outputText value="客户端环境" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column  sortBy="#{us.examTime}">
+                                        <h:outputText value="#{us.examTime}">
+                                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"
+                                                               timeZone="GMT+8" />
+                                        </h:outputText>
+                                        <f:facet name="header">
+                                            <h:outputText value="开考时间" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column filterBy="#{us.sessionId}" filterMatchMode="contains">
+                                        <h:outputText value="#{us.sessionId}" />
+                                        <f:facet name="header">
+                                            <h:outputText value="会话ID" />
+                                        </f:facet>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:tab>
+                            
+                            <p:tab title="章节练习用户统计">
+                                <p:dataTable paginator="true" paginatorPosition="bottom" value="#{sessionStateApplication.moduleExamList}" var="us"
+                                             styleClass="list" rowIndexVar="row" style="width:100%" rows="20" emptyMessage="无数据">
+                                    <p:column  filterBy="#{us.user.name}" filterMatchMode="contains">
+                                        <h:outputText value="#{us.user.name}（#{us.user.username}）" />
+                                        <f:facet name="header">
+                                            <h:outputText value="用户" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column filterBy="#{us.exam.name}" filterMatchMode="contains">
+                                        <h:outputText value="#{us.moduleExam.module.name}" />
+                                        <f:facet name="header">
+                                            <h:outputText value="章节名称" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column filterBy="#{us.ip}" filterMatchMode="contains">
+                                        <h:outputText value="#{us.ip}" />
+                                        <f:facet name="header">
+                                            <h:outputText value="IP地址" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column filterBy="#{us.ipAddr}" filterMatchMode="contains">
+                                        <h:outputText value="#{us.ipAddr}" />
+                                        <f:facet name="header">
+                                            <h:outputText value="地理地址" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column filterBy="#{us.agent}" filterMatchMode="contains">
+                                        <h:outputLink value="#" title="#{us.agent}">
+                                            <h:outputText value="#{fn:substring(us.agent,0,30)}" />
+                                        </h:outputLink>
+                                        <f:facet name="header">
+                                            <h:outputText value="客户端环境" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column  sortBy="#{us.examTime}">
+                                        <h:outputText value="#{us.moduleExamTime}">
+                                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"
+                                                               timeZone="GMT+8" />
+                                        </h:outputText>
+                                        <f:facet name="header">
+                                            <h:outputText value="开始时间" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column filterBy="#{us.sessionId}" filterMatchMode="contains">
+                                        <h:outputText value="#{us.sessionId}" />
+                                        <f:facet name="header">
+                                            <h:outputText value="会话ID" />
+                                        </f:facet>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:tab>
+
+                            <p:tab title="登录用户统计">
+                                <p:dataTable paginator="true" paginatorPosition="bottom" value="#{sessionStateApplication.userSessionList}" var="us"
+                                             styleClass="list" rowIndexVar="row" style="width:100%" rows="20" emptyMessage="无数据">
+                                    <p:column  filterBy="#{us.user.name}" filterMatchMode="contains">
+                                        <h:outputText value="#{us.user.name}（#{us.user.username}）" />
+                                        <f:facet name="header">
+                                            <h:outputText value="用户" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column filterBy="#{us.ip}" filterMatchMode="contains">
+                                        <h:outputText value="#{us.ip}" />
+                                        <f:facet name="header">
+                                            <h:outputText value="IP地址" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column filterBy="#{us.ipAddr}" filterMatchMode="contains">
+                                        <h:outputText value="#{us.ipAddr}" />
+                                        <f:facet name="header">
+                                            <h:outputText value="地理地址" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column filterBy="#{us.agent}" filterMatchMode="contains">
+                                        <h:outputLink value="#" title="#{us.agent}">
+                                            <h:outputText value="#{fn:substring(us.agent,0,30)}" />
+                                        </h:outputLink>
+                                        <f:facet name="header">
+                                            <h:outputText value="客户端环境" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column sortBy="#{us.loginTime}">
+                                        <h:outputText value="#{us.loginTime}">
+                                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"
+                                                               timeZone="GMT+8" />
+                                        </h:outputText>
+                                        <f:facet name="header">
+                                            <h:outputText value="登录时间" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column sortBy="#{us.genTime}">
+                                        <h:outputText value="#{us.genTime}">
+                                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"
+                                                               timeZone="GMT+8" />
+                                        </h:outputText>
+                                        <f:facet name="header">
+                                            <h:outputText value="到来时间" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column style="width:40px;">
+                                        <h:outputText value="#{us.kicked}" />
+                                        <f:facet name="header">
+                                            <h:outputText value="Kicked" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column filterBy="#{us.sessionId}" filterMatchMode="contains">
+                                        <h:outputText value="#{us.sessionId}" />
+                                        <f:facet name="header">
+                                            <h:outputText value="会话ID" />
+                                        </f:facet>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:tab>
+
+                            <p:tab title="游客统计">
+                                <p:dataTable paginator="true" paginatorPosition="bottom" value="#{sessionStateApplication.idleList}" var="us"
+                                             styleClass="list" rowIndexVar="row" style="width:100%" rows="20">
+                                    <p:column filterBy="#{us.ip}" filterMatchMode="contains">
+                                        <h:outputText value="#{us.ip}" />
+                                        <f:facet name="header">
+                                            <h:outputText value="IP地址" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column filterBy="#{us.ipAddr}" filterMatchMode="contains">
+                                        <h:outputText value="#{us.ipAddr}" />
+                                        <f:facet name="header">
+                                            <h:outputText value="地理地址" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column filterBy="#{us.agent}" filterMatchMode="contains">
+                                        <h:outputLink value="#" title="#{us.agent}">
+                                            <h:outputText value="#{fn:substring(us.agent,0,30)}" />
+                                        </h:outputLink>
+                                        <f:facet name="header">
+                                            <h:outputText value="客户端环境" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column sortBy="#{us.genTime}">
+                                        <h:outputText value="#{us.genTime}">
+                                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"
+                                                               timeZone="GMT+8" />
+                                        </h:outputText>
+                                        <f:facet name="header">
+                                            <h:outputText value="到来时间" />
+                                        </f:facet>
+                                    </p:column>
+                                    <p:column filterBy="#{us.sessionId}" filterMatchMode="contains">
+                                        <h:outputText value="#{us.sessionId}" />
+                                        <f:facet name="header">
+                                            <h:outputText value="会话ID" />
+                                        </f:facet>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:tab>
+
+                        </p:tabView>
+
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

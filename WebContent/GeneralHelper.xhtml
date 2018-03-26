@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"> 
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition> 
+            <p:commandLink styleClass="notice" action="#{listManual.viewManual(id)}"  oncomplete="PF('ManualPanel').show()" title="帮助">
+                <h:outputText value="#{name}" style="color:blue;"/>
+                <h:graphicImage value="/resources/images/help1.png" style="height:15px;border:0px solid black;"/>
+            </p:commandLink>
+        </ui:composition>
+    </h:body>
+</html>
+

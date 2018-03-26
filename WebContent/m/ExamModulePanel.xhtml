@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition>
+            <p:dialog id="ExamModulePanel" width="600" height="350" style="text-align:left" widgetVar="ExamModulePanel" header="试题模块" resizable="false">
+                <p:outputPanel id="dyPanel" autoUpdate="false" style="height:300px;overflow: auto;">
+                    <h:panelGrid columns="2">
+                        <h:outputText value="名称"></h:outputText>
+                        <h:inputText value="#{examModuleMag2.dic.name}" style="width:500px;"/>
+                        <h:outputText value="介绍" />
+                        <h:inputTextarea value="#{examModuleMag2.dic.description}" style="width:500px;height:80px;" />
+                        <h:outputText value="次序"></h:outputText>
+                        <h:inputText value="#{examModuleMag2.dic.ord}" style="width:500px;"/>
+                        <h:outputText value="前台显示"></h:outputText>
+                        <h:selectBooleanCheckbox value="#{examModuleMag2.dic.frontShow}">
+                            </h:selectBooleanCheckbox>
+                        <ui:remove>
+                        <h:outputText value="章节随机练习开放#{applicationBean.departmentStr}" />
+                        <p:treeTable id="dcpcs" value="#{examModuleMag2.root3}" var="dic3" style="width:500px;" >
+                            <p:column style="width:200px;">
+                                <f:facet name="header">
+                                    <h:outputText value="部门名称"></h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{dic3.name}" ></h:outputText>
+                            </p:column>
+                            <p:column style="width:100px;">
+                                <f:facet name="header">
+                                    <h:outputText value="选择"></h:outputText>
+                                </f:facet>
+                                <h:selectBooleanCheckbox value="#{dic3.selected}" >
+                                    <p:ajax process="@form" listener="#{examModuleMag2.checkSons(dic3.id,dic3.selected)}" update="dcpcs"/>
+                                </h:selectBooleanCheckbox>
+                            </p:column>
+                        </p:treeTable>
+                        </ui:remove>
+                    </h:panelGrid>
+                   <!--  <p:dataTable value="#{examModuleMag2.admins}" var="exam"  style="" rendered="#{copyrightController.sysType!='1'}">
+                        <f:facet name="header">
+                            <h:outputText value="请选择拥有本模块权限的管理员" />
+                        </f:facet>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="管理员（用户名）"></h:outputText>
+                            </f:facet>
+                            <h:outputText value="#{exam.nickname}（#{exam.urn}）" escape="false" />
+                        </p:column>
+                        <p:column style="width:100px;">
+                            <f:facet name="header">
+                                <h:outputText value="选择"></h:outputText>
+                            </f:facet>
+                            <h:selectBooleanCheckbox value="#{exam.selected}">
+                            </h:selectBooleanCheckbox>
+                        </p:column>
+                    </p:dataTable> -->
+                </p:outputPanel>
+                <p:separator/>
+                <p:commandButton value="提交" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'module')}" action="#{examModuleMag2.addOrEditOk}" update="@form"  oncomplete="PF('ExamModulePanel').hide()"/>
+            </p:dialog>
+
+
+
+
+        </ui:composition>
+    </h:body>
+</html>
+

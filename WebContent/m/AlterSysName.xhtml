@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+
+        <f:view>
+            <ui:composition template="BackGeneral.xhtml">
+                <ui:define name="content">
+                    <h:form>
+                        <h:outputText id="outputText1" styleClass="tit"
+                                      value="－修改系统名称&amp;版权－" />
+                        <p:separator style="margin:5px 0px 10px 0px"></p:separator>
+                        <h:panelGrid columns="2">
+                            <h:outputText value="系统名称：" />
+                            <h:panelGroup>
+                                <h:inputText value="#{SystemConfigMB.sc.siteName}"
+                                             style="margin-left:0px" size="40"></h:inputText>
+                                <h:outputText value="（刷新页面后生效）" />
+                            </h:panelGroup>
+                            <h:outputText value="版权信息：" />
+                            <p:editor value="#{SystemConfigMB.sc.copyRight}"/>
+                            <p:commandButton value="确定"
+                                             action="#{SystemConfigMB.updateTimesNum}" />
+                        </h:panelGrid>
+                        <p:outputPanel autoUpdate="true">
+                            <p:growl />
+                        </p:outputPanel>
+                    </h:form>
+                </ui:define>
+            </ui:composition>
+        </f:view>
+    </body>
+</html>

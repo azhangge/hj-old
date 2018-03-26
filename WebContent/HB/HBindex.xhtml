@@ -1,0 +1,310 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+ 	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:c="http://java.sun.com/jsp/jstl/core" 
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions" 
+	xmlns:fmt="http://java.sun.com/jsp/jstl/fmt" 
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:f="http://java.sun.com/jsf/core">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+
+</head>
+<ui:composition template="/HB/HBGeneral.xhtml">
+	<ui:define name="title">
+		<h:outputText value="首页" />
+	</ui:define>
+	<ui:define name="content">
+		<script type="text/javascript" src="/HJ/js/banner.js"></script>
+		<script type="text/javascript" src="/HJ/js/nav.js"></script>
+		<script type="text/javascript" src="/JT/js/slider.js"></script>
+		<link type="text/css" rel="stylesheet" href="/JT/css/index.css" />
+		<link type="text/css" rel="stylesheet" href="/JT/css/slider.css" />
+		<link type="text/css" rel="stylesheet" href="/JT/css/nav.css" />
+		<link type="text/css" rel="stylesheet" href="/JT/css/slideTxtBox.css" />
+		<link type="text/css" rel="stylesheet" href="/JT/css/course.css" />
+		<script type="text/javascript">
+			$(document).ready(function(){
+				
+			});
+			function findLessonsByName0(){
+				var name = $("#search-input0")[0].value;
+				if (name == '课程搜索') {
+					name='';
+				}
+				location.href="../talk/LessonTypeList2.jspx?name="+name;
+			}
+		</script>
+		<body>
+		<div style="background-color: white;">
+			<div class="head_widget">
+				<div class="test1">
+					<a href="#{facesContext.externalContext.requestContextPath}/talk/LessonTypeList2.jspx">
+						<div class="all_classify">全部分类</div>
+					</a>
+					<div class="test2">
+						<div class="all-sort-list">
+							<ui:repeat value="#{jTindex.courseTypes}" var="labelType">
+								<div class="item bo">
+									<h3>
+										<a href="#{facesContext.externalContext.requestContextPath}/talk/LessonTypeList2.jspx?lid=#{labelType.id}">
+											<div style="margin-left: 74px;:">
+												#{labelType.name}
+											</div>
+										</a>
+									</h3>
+									<div class="item-list clearfix">
+										<div class="subitem">
+											<dl class="fore1">
+												<dt>
+													<a href="#"></a>
+												</dt>
+												<dd>
+													<ui:repeat value="#{labelType.sons}" var="label">
+														<span>
+															<a href="#{facesContext.externalContext.requestContextPath}/talk/LessonTypeList2.jspx?lid=#{label.id}">#{label.name}</a>
+														</span>
+													</ui:repeat>
+												</dd>
+											</dl>
+										</div>
+									</div>
+								</div>
+							</ui:repeat>
+						</div>
+					</div>
+				</div>
+				
+					<a href="#{facesContext.externalContext.requestContextPath}/">
+						<div class="head_word margin1">首页</div>
+					</a>
+
+				<a href="#{facesContext.externalContext.requestContextPath}/talk/LessonTypeList2.jspx">
+					<div class="head_word margin2">课程</div>
+				</a>
+				<a href="#{facesContext.externalContext.requestContextPath}/talk/BuffetExaminationList.jspx">
+					<div class="head_word margin2" onclick="return ifLogin()">练习</div>
+				</a>
+				<div class="search">
+					<input id="search-input0" class="search_input" />
+					<a id="searchLesson" onclick="findLessonsByName0()">
+						<div class="search_word">搜索</div>
+					</a>
+					<a href="#" style="background: #4BB9F3;width: 224px;height: 61px;font-size: 20px;color: #FFFFFF;letter-spacing: 2px;text-align: center;line-height: 61px;float: right;margin-right:0px;">
+						<div class="all_classify2">我的学习</div>
+					</a>
+				</div>
+
+					
+
+					
+					<div class="test3">
+						<div class="all-sort-list2">
+							<div class="item2 bo2">
+								<h3>
+									<a href="#{facesContext.externalContext.requestContextPath}/talk/UserCourses.jspx?index=1" onclick="return ifLogin()">
+										<div class="item2left" >
+											<img src="/image/study.png"></img>
+										</div>
+										<span class="item2right1">学习</span>
+										<span class="item2right2">进入我的课程中心</span>
+									</a>
+								</h3>
+							</div>
+							
+								<div class="item2 bo2">
+								<h3>
+									<a href="#{facesContext.externalContext.requestContextPath}/talk/QuestionCollectionList.jspx" onclick="return ifLogin()">
+										<div class="item2left" >
+											<img src="/image/collection.png"></img>
+										</div>
+										<span class="item2right1">收藏</span>
+										<span class="item2right2">随时随地收藏题目</span>
+									</a>
+								</h3>
+							</div>
+							
+								<div class="item2 bo2">
+								<h3>
+									<a href="#{facesContext.externalContext.requestContextPath}/talk/BuffetExaminationList.jspx" onclick="return ifLogin()">
+										<div class="item2left" >
+											<img src="/image/practice2.png"></img>
+										</div>
+										<span class="item2right1">练习</span>
+										<span class="item2right2">学习后练习巩固知识</span>
+									</a>
+								</h3>
+							</div>
+							
+								
+							<div class="item2 bo2">
+								<h3>
+									<a href="#{facesContext.externalContext.requestContextPath}/talk/MyExaminationList.xhtml" onclick="return ifLogin()">
+										<div class="item2left" >
+											<img src="/image/examination.png"></img>
+										</div>
+										<span class="item2right1">考试</span>
+										<span class="item2right2">快速进入考试界面</span>
+									</a>
+								</h3>
+							</div>
+							
+							
+							<!-- <div class="item2 bo2">
+								<h3>
+									<a href="#{facesContext.externalContext.requestContextPath}/talk/WrongQuestionList.jspx" onclick="return ifLogin()">
+										<div class="item2left" >
+											<img src="/image/wrong_question.png"></img>
+										</div>
+										<span class="item2right1">错题</span>
+										<span class="item2right2">错题自动收集</span>
+									</a>
+								</h3>
+							</div> -->
+							
+
+						</div>
+					</div>
+			</div>
+		
+			<!-- 轮播图 -->
+			<div class="banner_bg">
+			<div class="banner">
+				<div class="fullSlide">
+					<div class="bd">
+						<ul class="banner_ul">
+							<ui:repeat value="#{listPicture.pictureList}" var="pic">
+								<li class="banner_li" style="display:none;background-color: ##{pic.backcolor};">
+								<!-- <li class="banner_li"> -->
+									<a href="#{pic.link}">
+									<div class="img_div">
+										<img src="../#{fn:replace(pic.url,'showimage','showabstractimage')}" class="banner_img" />
+									</div>
+									</a>
+								</li>
+							</ui:repeat>
+						</ul>
+					</div>
+					<div class="hd">
+						<ul class="ul"></ul>
+					</div>
+					<div class="banner_widget">
+						<span class="prev" style="display: none;">
+							<img src="/image/prev.png" alt="" />
+						</span>
+						<span class="next" style="display: none;">
+							<img src="/image/next.png" alt="" />
+						</span>
+						<!-- 用户登录 -->
+						<!--  
+						<c:if test="#{!clientSession.ifLogin}">
+							<div class="user_info">
+								<img src="/image/unlogin2.png" alt="" class="user_pic" />
+								<a onclick="PF('login1').show();">
+									<div class="user_login">马上登录</div>
+								</a>
+							</div>
+						</c:if>
+						<c:if test="#{clientSession.ifLogin}">
+							<div class="user_info_login">
+								<div class="user_info_up">
+									<div class="user_info_left">
+										<div class="user_info_word">我的课程</div>
+										<div class="user_info_num">#{myLessonTypeList.courseNum}</div>
+									</div>
+									<div class="user_info_right">
+										<div class="user_info_word">累计学时</div>
+										<div class="user_info_num">#{myLessonTypeList.totalFinishNum}</div>
+									</div>
+									<div style="clear: both;"></div>
+								</div>
+								<a href="/talk/UserCourses.jspx?index=1">
+									<div class="user_info_down">查看我的课程</div>
+								</a>
+							</div>
+						</c:if> 
+						-->
+						<!-- 用户登录 -->
+						
+					</div>
+				</div>
+			</div>
+			<script type="text/javascript">
+				var time = #{jTindex.picChangeTime};
+				$(".fullSlide").slide({
+				    titCell: ".hd ul",
+				    mainCell: ".bd ul",
+				    effect: "fold",
+				    autoPlay: true,
+				    autoPage: true,
+				    trigger: "click",
+				    interTime : time,
+				    startFun: function(i) {
+				    	/*var curLi = jQuery(".fullSlide .bd li").eq(i);
+				    	var bgcolor = curLi.css('background-color');
+				    	$('.banner').css('background-color',bgcolor);
+			    		changbgcolor(bgcolor); 
+				        if ( !! curLi.attr("_src")) {
+				            curLi.css("background-image", curLi.attr("_src")).removeAttr("_src")
+				        }*/
+				    }
+				});
+			</script>
+			</div>
+			<!-- 菜单 -->
+			<!--  
+			<div style="background-color: white;">
+				<div class="bottom_widget">
+					<div class="bottom_link">
+							<div class="bottom_div">
+							<a href="#{facesContext.externalContext.requestContextPath}/talk/BuffetExaminationList.jspx"
+								onclick="return ifLogin()">
+								<img src="/image/practice.png" alt="" class="bottom_img" />
+								<div class="bottom_word1">练习</div>
+								<div class="bottom_word2">学习后练习巩固知识</div>
+							</a>
+							</div>
+					</div>
+					<div class="bottom_link">
+							<div class="bottom_div">
+							<a href="#{facesContext.externalContext.requestContextPath}/talk/WrongQuestionList.jspx" onclick="return ifLogin()">
+								<img src="/image/mistakes.png" alt="" class="bottom_img" />
+								<div class="bottom_word1">错题</div>
+								<div class="bottom_word2">错题自动收集</div>
+							</a>
+							</div>
+					</div>
+					<div class="bottom_link">
+							<div class="bottom_div">
+							<a href="#{facesContext.externalContext.requestContextPath}/talk/QuestionCollectionList.jspx"
+								onclick="return ifLogin()">
+								<img src="/image/collect.png" alt="" class="bottom_img" />
+								<div class="bottom_word1">收藏</div>
+								<div class="bottom_word2">随时随地收藏题目</div>
+							</a>
+							</div>
+					</div>
+					<div class="bottom_link">
+							<div class="bottom_div">
+							<a href="#{facesContext.externalContext.requestContextPath}/talk/MyExaminationList.xhtml"
+								onclick="return ifLogin()">
+								<img src="/image/exam.png" alt="" class="bottom_img" />
+								<div class="bottom_word1">考试</div>
+								<div class="bottom_word2">快速进入考试界面</div>
+							</a>
+							</div>
+					</div>
+				</div>
+			</div>
+			-->
+			</div>
+			<div style="height:20px;background-color:white;"></div>
+			<div style="background-color:white;">
+				<ui:include src="/JT/CourseBody.xhtml"></ui:include> 
+			</div>
+		</body>
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,172 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title>Facelet Title</title>
+        <f:loadBundle basename="com.huajie.exam.i18n.langs" var="lang"/>
+    </h:head>
+    <h:body>
+        <ui:composition template="General3.xhtml">
+            <ui:define name="title">
+                <h:outputText value="用户资料" />
+            </ui:define>
+            <ui:define name="content">
+
+                <ui:include src="AdminFilePanel.xhtml"></ui:include>
+                <ui:include src="SendMessagePopup.xhtml"></ui:include>
+                <p:panel id="topNav8" styleClass="frontColumn topNav8Wrapper">
+                    <h:outputLink value="#{facesContext.externalContext.requestContextPath}" styleClass="nav8">
+                        <h:outputText value="首页" />
+                    </h:outputLink>
+                    <h:outputText value="/" styleClass="navSeparator"/>
+                    <h:outputText value="个人中心" styleClass="nav8"/>
+                </p:panel>
+                <p:separator/>
+                <div style="width:100%;overflow: hidden;" >
+
+                    <div style="width:190px;border:0px red solid;float:left;overflow: hidden;">
+                        <div style="margin: 0 auto;text-align: center;width:180px;padding: 10px 10px 0px 10px;">
+
+                            <h:panelGrid style="border:0px solid black;text-align: left;margin: 0 auto;width:90%;" columns="1" styleClass="">
+                                <!-- <p:graphicImage  value="#{userCenter.user.picUrl==''?'/resources/images/user_model.gif':userCenter.user.picUrl}" style="width:60px;height:60px;margin: 0px 0px 0px 0px;" /> -->
+                                <!-- <p:graphicImage  value="/resources/images/morentouxiang.png" style="width:70px;height:70px;margin: 0px 10px 0px 30px;" rendered="#{userCenter.user.picUrl==null || userCenter.user.picUrl==''}"/>
+                                 <p:graphicImage  value="#{userCenter.user.picUrl}" style="width:70px;height:70px;margin: 0px 10px 0px 30px;" rendered="#{userCenter.user.picUrl!=null || userCenter.user.picUrl!=''}"/>  -->
+                               
+                               <c:choose>
+                                   <c:when test="#{userCenter.user.picUrl==null || userCenter.user.picUrl==''}">
+                                       <p:graphicImage  value="/resources/images/morentouxiang.png" style="width:70px;height:70px;margin: 0px 10px 0px 30px;" id="pic"/>
+                                   </c:when>
+                                   <c:otherwise>
+                                      <p:graphicImage  value="#{clientSession.usr.picUrl}" style="width:70px;height:70px;margin: 0px 10px 0px 30px;" id="pic" /> 
+                                   </c:otherwise>
+                               </c:choose>
+                               
+                                <h:panelGroup>
+                                    <h:outputText value="" escape="false"></h:outputText>
+                                    <h:outputLink value="#{facesContext.externalContext.requestContextPath}/talk/UserDetail.jspx?id=#{userCenter.user.id}" rendered="#{userCenter.user.id==clientSession.usr.id}" styleClass="operation" style="margin:0px 10px 0px 40px;">
+                                        <h:outputText value="修改资料" rendered="#{clientSession.usr!=null}"/>
+                                    </h:outputLink>
+                                    <br/>
+                                    <p:commandLink action="#{clientSession.exit()}" rendered="#{clientSession.ifLogin}"  value="退出系统"  styleClass="operation" style="margin:0px 10px 0px 40px;"/>
+                                </h:panelGroup>
+                            </h:panelGrid>
+                            <hr/>
+                            <h:outputText value="#{userCenter.user.username}" style="color:#000000;font-weight:bold;"/>
+                            <br/>
+                            <h:outputText value="上次登录：" style="color:#0073ea;font-weight:bold;font-size:12px;"></h:outputText>
+                            <h:outputText value="#{clientSession.lastTime}" rendered="#{clientSession.usr!=null}" style="color:#0073ea;font-weight:bold;font-size:12px;">
+                                <f:convertDateTime pattern="MM月dd日 HH:mm" timeZone="GMT+8" />
+                            </h:outputText>
+                        </div>
+                        <p:separator/>
+
+						<!-- 
+                        <p:panelMenu>
+                            <p:submenu label="消息管理" >
+                                <p:menuitem value="个人中心" url="/talk/UserCenter.jspx" rendered="#{clientSession.ifLogin}" icon="ui-icon-home"  />
+                                <p:menuitem value="我的消息（#{clientSession.usr.unReadedMsgNum}）" url="/talk/ClientListMsg.jspx?id=#{userCenter.user.id}" rendered="#{userCenter.user.id==clientSession.usr.id and applicationBean.systemConfig.openMessage}" icon="ui-icon-mail-closed"  />
+                            </p:submenu>
+                            <p:submenu label="学习资料管理">
+                                <p:menuitem value="我的学习资料" url="/talk/BuyedLessonList.jspx" icon="ui-icon-tag" rendered="#{applicationBean.systemConfig.openLesson and clientSession.ifLogin and userCenter.user.id==clientSession.usr.id}"/>
+                            </p:submenu>
+                            <p:submenu label="文件管理">
+                                <p:menuitem value="我的文件" url="/fm/ClientListFile.jspx" rendered="#{userCenter.user.id==clientSession.usr.id and applicationBean.systemConfig.openFile}" icon="ui-icon-folder-open"  />
+                            </p:submenu> 
+                                 <p:menuitem value="我的文件" url="/fm/ListClientFilebyUsr.jspx" rendered="#{userCenter.user.id==clientSession.usr.id and applicationBean.systemConfig.openFile}" icon="ui-icon-folder-open"  /> 
+                                <p:menuitem value="部门文件" url="/fm/ListClientFileByDept.jspx" rendered="#{userCenter.user.id==clientSession.usr.id and applicationBean.systemConfig.openFile}" icon="ui-icon-folder-open"  />
+                                <p:menuitem value="文件分享" url="/fm/ListSharedClientFile.jspx" rendered="#{userCenter.user.id==clientSession.usr.id and applicationBean.systemConfig.openFile}" icon="ui-icon-folder-open"  />
+                            </p:submenu>
+                            <p:submenu label="交流讨论">
+                                <p:menuitem value="我的发言" url="/talk/UserTalkList.jspx?id=#{userCenter.user.id}" rendered="#{applicationBean.systemConfig.openForum and clientSession.ifLogin}" icon="ui-icon-comment"  />
+                                <p:menuitem value="购买/收藏" url="/talk/BuyedThreadList.jspx" icon="ui-icon-cart"   rendered="#{applicationBean.systemConfig.openForum and clientSession.ifLogin and userCenter.user.id==clientSession.usr.id}"/>
+                            </p:submenu>
+                            <p:submenu label="积分&amp;财务">
+                                <p:menuitem value="充值预付款" url="/talk/AACashOrder.jspx" rendered="#{userCenter.user.id==clientSession.usr.id and applicationBean.systemConfig.openTrade}" icon="ui-icon-person"  />
+                                <p:menuitem value="积分兑换" url="/talk/ScoreExchange.jspx" rendered="#{userCenter.user.id==clientSession.usr.id and applicationBean.systemConfig.openTrade}" icon="ui-icon-gear"  />
+                                <p:menuitem value="财务明细" url="/talk/ClientListFinanceLog.jspx" rendered="#{userCenter.user.id==clientSession.usr.id and applicationBean.systemConfig.openTrade}" icon="ui-icon-copy"  />
+                                <p:menuitem value="积分记录" url="/talk/UserScoreLogList.jspx?id=#{userCenter.user.id}" rendered="#{userCenter.user.id==clientSession.usr.id}" icon="ui-icon-clipboard"  />
+                            企业
+							<p:submenu label="账户设置">
+                                <p:menuitem value="企业资料" url="#" icon="ui-icon-folder-open"  />
+                                <p:menuitem value="账号安全" url="#" icon="ui-icon-folder-open"  />
+                            </p:submenu>
+                            <p:submenu label="消息中心">
+                                <p:menuitem value="发布消息" url="#" icon="ui-icon-folder-open"  />
+                                <p:menuitem value="消息列表" url="#" icon="ui-icon-folder-open"  />
+                            </p:submenu>
+                            <p:submenu label="课程中心">
+                                <p:menuitem value="课程分配" url="#" icon="ui-icon-folder-open"  />
+                                <p:menuitem value="收藏课程" url="#" icon="ui-icon-folder-open"  />
+                                <p:menuitem value="已购课程" url="#" icon="ui-icon-folder-open"  />
+                            </p:submenu>
+                            <p:submenu label="考试中心">
+                                <p:menuitem value="考试管理" url="#" icon="ui-icon-folder-open"  />
+                                <p:menuitem value="知识点管理" url="#" icon="ui-icon-folder-open"  />
+                                <p:menuitem value="题库管理" url="#" icon="ui-icon-folder-open"  />
+                                <p:menuitem value="试卷管理" url="#" icon="ui-icon-folder-open"  />
+                                <p:menuitem value="证书管理" url="#" icon="ui-icon-folder-open"  />
+                            </p:submenu>
+                            <p:submenu label="讲师课程">
+                                <p:menuitem value="创建课程" url="#" icon="ui-icon-folder-open"  />
+                                <p:menuitem value="暂存课程" url="#" icon="ui-icon-folder-open"  />
+                                <p:menuitem value="在审课程" url="#" icon="ui-icon-folder-open"  />
+                                <p:menuitem value="已上架课程" url="#" icon="ui-icon-folder-open"  />
+                            </p:submenu>
+                            <p:submenu label="企业管理">
+                                <p:menuitem value="组织管理" url="#" icon="ui-icon-folder-open"  />
+                                <p:menuitem value="人员管理" url="#" icon="ui-icon-folder-open"  />
+                                <p:menuitem value="管理员管理" url="#" icon="ui-icon-folder-open"  />
+                            </p:submenu>
+                        </p:panelMenu>
+						-->
+
+						<p:panelMenu>
+                            <p:submenu label="个人设置" >
+                                <p:menuitem value="个人信息" url="/talk/UserCenter.jspx" rendered="#{clientSession.ifLogin}" icon="ui-icon-home"  />
+                                <p:menuitem value="账号安全" url="#" icon="ui-icon-folder-open"></p:menuitem>
+                                <p:menuitem value="讲师信息" url="/talk/TeacherInfo.jspx" icon="ui-icon-folder-open"></p:menuitem>
+                            </p:submenu>
+                            <p:submenu label="我的消息" >
+                                <p:menuitem value="我的消息（#{clientSession.usr.unReadedMsgNum}）" url="/talk/ClientListMsg.jspx?id=#{userCenter.user.id}" rendered="#{userCenter.user.id==clientSession.usr.id and applicationBean.systemConfig.openMessage}" icon="ui-icon-mail-closed"  />
+                            </p:submenu>
+                            <p:submenu label="课程中心">
+                                <p:menuitem value="课程分配" url="#" icon="ui-icon-folder-open"  />
+                                <p:menuitem value="收藏课程" url="#" icon="ui-icon-folder-open"  />
+                                <p:menuitem value="已购课程" url="#" icon="ui-icon-folder-open"  />
+                            </p:submenu>
+                            <p:submenu label="考试中心">
+                                <p:menuitem value="考试通知" url="#" icon="ui-icon-folder-open"  />
+                                <p:menuitem value="考试日程" url="#" icon="ui-icon-folder-open"  />
+                                <p:menuitem value="过期考试" url="#" icon="ui-icon-folder-open"  />
+                            </p:submenu>
+                            <p:submenu label="成绩和证书">
+                                <p:menuitem value="成绩和证书" url="#" icon="ui-icon-folder-open"  />
+                            </p:submenu>
+                            <p:submenu label="讲师课程">
+                                <p:menuitem value="创建课程" url="#" icon="ui-icon-folder-open"  />
+                                <p:menuitem value="暂存课程" url="#" icon="ui-icon-folder-open"  />
+                                <p:menuitem value="在审课程" url="#" icon="ui-icon-folder-open"  />
+                                <p:menuitem value="被驳回课程" url="#" icon="ui-icon-folder-open"  />
+                                <p:menuitem value="已上架课程" url="#" icon="ui-icon-folder-open"  />
+                            </p:submenu>
+                        </p:panelMenu>
+
+                    </div>
+                    <div id="ucontent" style="margin-left: 200px;overflow: hidden;border:0px solid blue;margin-right: 5px;">
+
+                        <ui:insert name="ucontent">
+                        </ui:insert>
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+            </ui:define>
+        </ui:composition>
+
+    </h:body>
+</html>
+

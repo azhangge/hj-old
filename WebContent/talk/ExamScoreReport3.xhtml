@@ -1,0 +1,151 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="General3.xhtml">
+            <ui:define name="title">
+                <h:outputText value="#{examScoreReport.examCase.examination.name}-成绩单-#{examScoreReport.examCase.user.name}" />
+            </ui:define>
+            <ui:define name="content">
+                <h:panelGrid columns="3">
+                    <h:outputLink styleClass="topNav1"
+                                  value="ExamCaseReportList.jspx">
+                        <h:outputText value="成绩查询" />
+                    </h:outputLink>
+                    <h:outputText value=">>" />
+                    <h:outputText value="成绩单"  styleClass="mark"/>
+                </h:panelGrid>
+                <p:separator/>
+                <p:commandButton value="打印成绩单" type="button">  
+                    <p:printer target="scoreReport" />  
+                </p:commandButton>  
+                <p:separator/>
+                <div style="border:1px solid black;">
+                    <p:panel id="scoreReport" style="padding: 20px 20px 20px 20px;border:0px solid black;text-align: center;">
+
+                        <h:panelGrid columns="1" style="width:90%;margin: 0px auto;text-align: center;">
+                            <p:graphicImage value="/resources/images/logo_score_report.png" style=""/>
+
+                            <h:panelGroup>
+                                <h:outputText value="中国民航湖北安全监督管理局" style="font-size: 24px;font-weight: bold;line-height: 50px;"/>
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <h:outputText value="航空人员理论考试成绩报告单" style="font-size: 20px;font-weight: bold;"/>
+                            </h:panelGroup>
+                        </h:panelGrid>
+                        <br/><br/><br/>
+                        <style>
+                            #scoreContent{
+                                width:90%;
+                                margin: 0px auto;
+                                border:0px solid red;
+                            }
+                            #scoreContent td{
+                                font-weight: bold;
+                                font-family: 宋体;
+                                font-size: 16px;
+                                text-align: left;
+                                border:0px solid red;
+                            }
+                            .tdRightSide{
+                                border-right:2px solid black!important;
+                            }
+                            .tdBottomSide{
+                                border-bottom:2px solid black!important;
+                            }
+                            .tdInfo{
+                                height: 25px;
+                            }
+                            .tdCon{
+                                width:30%;
+                            }
+
+                        </style>
+
+                        <table id="scoreContent" cellpadding="5" cellspacing="0">
+                            <tr>
+                                <td style="width:50%;">
+                                    <table>
+                                        <tr>
+                                            <td class="tdInfo"><h:outputText value="#{applicationBean.cidStr}：" escape="false"/></td>
+                                            <td class=""><h:outputText value="#{examScoreReport.examCase.user.cid}"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="tdInfo"><h:outputText value="考试科目：" escape="false"/></td>
+                                            <td class=""><h:outputText value="#{examScoreReport.examCase.examination.name}"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="tdInfo"><h:outputText value="姓&nbsp;&nbsp;&nbsp;&nbsp;名：" escape="false"/></td>
+                                            <td class=""><h:outputText value="#{examScoreReport.examCase.user.name}"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="tdInfo"><h:outputText value="身份证号："/></td>
+                                            <td class=""><h:outputText value="#{examScoreReport.examCase.user.pid}"/></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="tdInfo"><h:outputText value="考试日期："/></td>
+                                            <td class="">
+                                                <h:outputText value="#{examScoreReport.examCase.submitTime}">
+                                                    <f:convertDateTime pattern="yyyy-MM-dd" timeZone="GMT+8"/>
+                                                </h:outputText>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="tdInfo"><h:outputText value="考试成绩：" escape="false"/></td>
+                                            <td class=""><h:outputText value="#{examScoreReport.examCase.score}"/></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="tdInfo"><h:outputText value="结&nbsp;&nbsp;&nbsp;&nbsp;论："/></td>
+                                            <td class=""><h:outputText value="#{examScoreReport.examCase.score ge examScoreReport.examCase.examination.qualified?'合格':'不合格'}"/></td>
+                                        </tr>
+
+                                    </table>
+                                </td>
+                                <td style="width:50%;text-align: right;padding-right: 20px;">
+                                    <p:graphicImage id="picss" value="#{examScoreReport.examCase.user.picUrl==''?'/resources/images/user_model.gif':examScoreReport.examCase.user.picUrl}" style="width:100px;height:120px;"/>
+
+                                </td>
+                            </tr>
+
+
+
+                            <tr>
+                                <td colspan="2" class="tdInfo" style="">
+                                    <br/><br/><br/>
+                                    说明：<br/>
+                                    1、本成绩单签字/盖章后方有效；<br/>
+                                    2、成绩单由公司航空专业人员档案管理部门存档；<br/>
+                                    3、本成绩单可以作为定期资质检查的理论考试证明文件；<br/>
+                                    4、本成绩单使用的最终解释权归民航湖北安全监督管理局。<br/>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="" style="height:160px;text-align: right;">
+                                    监考部门盖章/签字
+
+                                </td>
+                            </tr>
+                        </table>
+
+
+                    </p:panel>
+                </div>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

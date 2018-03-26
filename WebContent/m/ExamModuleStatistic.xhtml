@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </h:head>
+    <h:body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form>
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <div >
+                        <p:treeTable value="#{examModuleMag2.root}"  var="us" styleClass="list" style="width:100%" liveResize="true" resizableColumns="true">
+                            <f:facet name="header">
+                                <h:outputText value="试题情况统计" />
+                            </f:facet>
+                            <p:column style="width:600px" resizable="true">
+                                <h:outputText value="#{us.name}" />
+                                <f:facet name="header">
+                                    <h:outputText value="模块名称" />
+                                </f:facet>
+                            </p:column>
+                            <p:column resizable="true">
+                                <h:outputText value="#{us.choiceNum}" rendered="#{fn:length(us.sons)==0}">
+                                </h:outputText>
+                                <f:facet name="header">
+                                    <h:outputText value="单选题" />
+                                </f:facet>
+                            </p:column>
+                            <p:column resizable="true">
+                                <h:outputText value="#{us.multiChoiceNum}" rendered="#{fn:length(us.sons)==0}">
+                                </h:outputText>
+                                <f:facet name="header">
+                                    <h:outputText value="多选题" />
+                                </f:facet>
+                            </p:column>
+                            <p:column resizable="true">
+                                <h:outputText value="#{us.fillNum}" rendered="#{fn:length(us.sons)==0}">
+                                </h:outputText>
+                                <f:facet name="header">
+                                    <h:outputText value="填空题" />
+                                </f:facet>
+                            </p:column>
+                            <p:column resizable="true">
+                                <h:outputText value="#{us.judgeNum}" rendered="#{fn:length(us.sons)==0}">
+                                </h:outputText>
+                                <f:facet name="header">
+                                    <h:outputText value="判断题" />
+                                </f:facet>
+                            </p:column>
+                            <p:column resizable="true">
+                                <h:outputText value="#{us.essayNum}" rendered="#{fn:length(us.sons)==0}">
+                                </h:outputText>
+                                <f:facet name="header">
+                                    <h:outputText value="问答题" />
+                                </f:facet>
+                            </p:column>
+                            <!-- <p:column>
+                                <h:outputText value="#{us.fileNum}" rendered="#{fn:length(us.sons)==0}">
+                                </h:outputText>
+                                <f:facet name="header">
+                                    <h:outputText value="文件题" />
+                                </f:facet>
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{us.caseNum}" rendered="#{fn:length(us.sons)==0}">
+                                </h:outputText>
+                                <f:facet name="header">
+                                    <h:outputText value="综合题" />
+                                </f:facet>
+                            </p:column> -->
+                            
+                        <p:column style="width:100px;text-align: center;" resizable="true">
+                            <h:outputText value="#{us.choiceNum+us.multiChoiceNum+us.fillNum+us.judgeNum+us.essayNum}" />
+                            <f:facet name="header">
+                                <h:outputText value="总数量" />
+                            </f:facet>
+                        </p:column>
+                        </p:treeTable>
+                        <br/>
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

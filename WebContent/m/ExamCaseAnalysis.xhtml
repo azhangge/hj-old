@@ -1,0 +1,263 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+
+                <h:form>
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <h:outputScript name="chinese_locale.js" library="js"/>
+                    <div>
+                        <h:outputText id="outputText1" styleClass="tit" value="-成绩分析与统计-" />
+                    </div>
+                    <p:separator/>
+                    <p:panel header="筛选考试与部门">
+                        <h:panelGrid columns="2">
+                            <p:pickList id="pickList" value="#{examCaseAnalysis.examinations}" var="examination" style="height:100%;"
+                                        itemLabel="#{examination.name}" itemValue="#{examination}" converter="examinationConverter">
+                            </p:pickList>  
+                            <p:treeTable value="#{examCaseAnalysis.root}" var="dic" selectionMode="multiple" selection="#{examCaseAnalysis.selectedNodes}" style="width:450px;">
+                                <f:facet name="header">
+                                    <h:outputText value="请使用Ctrl、Shift键完成#{applicationBean.departmentStr}的多选"></h:outputText>
+                                </f:facet>
+                                <p:column style="width:200px;">
+                                    <f:facet name="header">
+                                        <h:outputText value="#{applicationBean.departmentStr}名称"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{dic.name}" ></h:outputText>
+                                </p:column>
+                            </p:treeTable>
+                        </h:panelGrid>
+
+                    </p:panel>
+
+                    <p:separator/>
+                    <h:outputText value="筛选时间："></h:outputText>
+                    <p:calendar value="#{examCaseAnalysis.date1}" navigator="true" pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" locale="zh_CN"/>
+                    -
+                    <p:calendar value="#{examCaseAnalysis.date2}" navigator="true" pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" locale="zh_CN"/>
+                    &nbsp;&nbsp;&nbsp;
+                    <p:commandButton value="分析成绩" action="#{examCaseAnalysis.analyze()}" update="@form" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'analysis')}"/>
+                    <p:separator/>
+
+                    <!--
+                                        <p:panelGrid columns="8" style="width:100%;">
+                                            <f:facet name="header">
+                                                <h:outputText value="分题型平均成绩统计（仅适用于简单随机试卷）"/>
+                                            </f:facet>
+                                            <h:outputText value="单选题"/>
+                                            <h:outputText value="多选题"/>
+                                            <h:outputText value="填空题"/>
+                                            <h:outputText value="判断题"/>
+                                            <h:outputText value="问答题"/>
+                                            <h:outputText value="文件题"/>
+                                            <h:outputText value="综合题"/>
+                                            <h:outputText value="平均总分"/>
+                                            <h:outputText value="#{examCaseAnalysis.averageChoiceScore}"><f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/></h:outputText>
+                                            <h:outputText value="#{examCaseAnalysis.averageMultiChoiceScore}"><f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/></h:outputText>
+                                            <h:outputText value="#{examCaseAnalysis.averageFillScore}"><f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/></h:outputText>
+                                            <h:outputText value="#{examCaseAnalysis.averageJudgeScore}"><f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/></h:outputText>
+                                            <h:outputText value="#{examCaseAnalysis.averageEssayScore}"><f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/></h:outputText>
+                                            <h:outputText value="#{examCaseAnalysis.averageFileScore}"><f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/></h:outputText>
+                                            <h:outputText value="#{examCaseAnalysis.averageCaseScore}"><f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/></h:outputText>
+                                            <h:outputText value="#{examCaseAnalysis.averageScore}"><f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/></h:outputText>
+                                        </p:panelGrid>
+                    -->
+
+
+                    <p:chart type="bar" model="#{examCaseAnalysis.barModel}"  style="height:300px;width:100%;" />
+                    <br/><br/>
+                    <p:chart type="line" model="#{examCaseAnalysis.lineModel}"  style="height:300px;width:100%;" />
+                    <br/><br/>
+
+                    <p:panelGrid columns="8" style="width:100%;">
+                        <f:facet name="header">
+                            <h:outputText value="统计指标"/>
+                        </f:facet>
+                        <h:outputText value="成绩数"/>
+                        <h:outputText value="算术平均分"/>
+                        <h:outputText value="几何平均分"/>
+                        <h:outputText value="方差"/>
+                        <h:outputText value="标准差"/>
+                        <h:outputText value="偏态"/>
+                        <h:outputText value="峰态"/>
+                        <h:outputText value="众数"/>
+
+                        <h:outputText value="#{examCaseAnalysis.stats.n}"></h:outputText>
+                        <h:outputText value="#{examCaseAnalysis.stats.mean}"><f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/></h:outputText>
+                        <h:outputText value="#{examCaseAnalysis.stats.geometricMean}"><f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/></h:outputText>
+                        <h:outputText value="#{examCaseAnalysis.stats.variance}"><f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/></h:outputText>
+                        <h:outputText value="#{examCaseAnalysis.stats.standardDeviation}"><f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/></h:outputText>
+                        <h:outputText value="#{examCaseAnalysis.stats.skewness}"><f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/></h:outputText>
+                        <h:outputText value="#{examCaseAnalysis.stats.kurtosis}"><f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/></h:outputText>
+                        <h:outputText value="#{examCaseAnalysis.freq.mode.get(0)}"><f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/></h:outputText>
+
+                    </p:panelGrid>
+                    <br/>
+                    <p:panelGrid columns="11" style="width:100%;">
+                        <f:facet name="header">
+                            <h:outputText value="成绩分位数"/>
+                        </f:facet>
+                        <h:outputText value="0%"/>
+                        <h:outputText value="10%"/>
+                        <h:outputText value="20%"/>
+                        <h:outputText value="30%"/>
+                        <h:outputText value="40%"/>
+                        <h:outputText value="50%"/>
+                        <h:outputText value="60%"/>
+                        <h:outputText value="70%"/>
+                        <h:outputText value="80%"/>
+                        <h:outputText value="90%"/>
+                        <h:outputText value="100%"/>
+                        <h:outputText value="#{examCaseAnalysis.stats.getPercentile(0.000000001)}"><f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/></h:outputText>
+                        <h:outputText value="#{examCaseAnalysis.stats.getPercentile(10.0)}"><f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/></h:outputText>
+                        <h:outputText value="#{examCaseAnalysis.stats.getPercentile(20.0)}"><f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/></h:outputText>
+                        <h:outputText value="#{examCaseAnalysis.stats.getPercentile(30.0)}"><f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/></h:outputText>
+                        <h:outputText value="#{examCaseAnalysis.stats.getPercentile(40.0)}"><f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/></h:outputText>
+                        <h:outputText value="#{examCaseAnalysis.stats.getPercentile(50.0)}"><f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/></h:outputText>
+                        <h:outputText value="#{examCaseAnalysis.stats.getPercentile(60.0)}"><f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/></h:outputText>
+                        <h:outputText value="#{examCaseAnalysis.stats.getPercentile(70.0)}"><f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/></h:outputText>
+                        <h:outputText value="#{examCaseAnalysis.stats.getPercentile(80.0)}"><f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/></h:outputText>
+                        <h:outputText value="#{examCaseAnalysis.stats.getPercentile(90.0)}"><f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/></h:outputText>
+                        <h:outputText value="#{examCaseAnalysis.stats.getPercentile(99.9999999)}"><f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/></h:outputText>
+
+                    </p:panelGrid>
+                    <br/><br/>
+
+
+                    <p:dataTable paginator="true" paginatorPosition="bottom" value="#{examCaseAnalysis.cases}" var="us" id="dc11"  emptyMessage="#{lang['exam.empty_result']}"
+                                 styleClass="list" rowIndexVar="row" style="width:100%" rows="10">
+                        <f:facet name="header">
+                            <h:outputText value="成绩详情(仅有简单随机试卷能统计到题型分数)" />
+                        </f:facet>
+                        <p:column>
+                            <h:outputText value="#{us.examination.name}" />
+                            <f:facet name="header">
+                                <h:outputText value="考试名称" />
+                            </f:facet>
+                        </p:column>
+                        <p:column filterBy="#{us.user.name}" filterStyle="width:30px;" style="text-align:center;">
+                            <h:outputText value="#{us.user.name}"/>
+                            <f:facet name="header">
+                                <h:outputText value="姓名" />
+                            </f:facet>
+                        </p:column>
+                        <p:column style="text-align:center;">
+                            <h:outputText value="#{us.user.groupCnStr}"/>
+                            <f:facet name="header">
+                                <h:outputText value="#{applicationBean.departmentStr}" />
+                            </f:facet>
+                        </p:column>
+                        <p:column sortBy="#{us.choiceScore}">
+                            <h:outputText value="#{us.choiceScore}">
+                                <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/>
+                            </h:outputText>/<h:outputText value="#{us.choiceFullScore}">
+                                <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/>
+                            </h:outputText>
+                            <f:facet name="header">
+                                <h:outputText value="单选" />
+                            </f:facet>
+                        </p:column>
+                        <p:column sortBy="#{us.multiChoiceScore}">
+                            <h:outputText value="#{us.multiChoiceScore}">
+                                <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/>
+                            </h:outputText>/<h:outputText value="#{us.multiChoiceFullScore}">
+                                <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/>
+                            </h:outputText>
+                            <f:facet name="header">
+                                <h:outputText value="多选" />
+                            </f:facet>
+                        </p:column>
+                        <p:column sortBy="#{us.fillScore}">
+                            <h:outputText value="#{us.fillScore}">
+                                <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/>
+                            </h:outputText>/<h:outputText value="#{us.fillFullScore}">
+                                <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/>
+                            </h:outputText>
+                            <f:facet name="header">
+                                <h:outputText value="填空" />
+                            </f:facet>
+                        </p:column>
+
+                        <p:column sortBy="#{us.judgeScore}">
+                            <h:outputText value="#{us.judgeScore}">
+                                <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/>
+                            </h:outputText>/<h:outputText value="#{us.judgeFullScore}">
+                                <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/>
+                            </h:outputText>
+                            <f:facet name="header">
+                                <h:outputText value="判断" />
+                            </f:facet>
+                        </p:column>
+                        <p:column sortBy="#{us.essayScore}">
+                            <h:outputText value="#{us.essayScore}">
+                                <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/>
+                            </h:outputText>/<h:outputText value="#{us.essayFullScore}">
+                                <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/>
+                            </h:outputText>
+                            <f:facet name="header">
+                                <h:outputText value="问答" />
+                            </f:facet>
+                        </p:column>
+                        <p:column sortBy="#{us.fileScore}">
+                            <h:outputText value="#{us.fileScore}">
+                                <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/>
+                            </h:outputText>/<h:outputText value="#{us.fileFullScore}">
+                                <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/>
+                            </h:outputText>
+                            <f:facet name="header">
+                                <h:outputText value="文件" />
+                            </f:facet>
+                        </p:column>
+                        <p:column sortBy="#{us.caseScore}">
+                            <h:outputText value="#{us.caseScore}">
+                                <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/>
+                            </h:outputText>/<h:outputText value="#{us.caseFullScore}">
+                                <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/>
+                            </h:outputText>
+                            <f:facet name="header">
+                                <h:outputText value="综合" />
+                            </f:facet>
+                        </p:column>
+
+                        <p:column sortBy="#{us.score}">
+                            <h:outputText value="#{us.score}">
+                                <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/>
+                            </h:outputText>/<h:outputText value="#{us.totalFullScore}">
+                                <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/>
+                            </h:outputText>
+                            <f:facet name="header">
+                                <h:outputText value="总分" />
+                            </f:facet>
+                        </p:column>
+
+                        <p:column exportable="false">
+                            <h:outputLink value="AAExamCaseReportGeneral.jspx?case_id=#{us.id}" target="_blank">
+                                <h:outputText value="详情"/>
+                            </h:outputLink>
+                            <f:facet name="header">
+                                <h:outputText value="详情" />
+                            </f:facet>
+                        </p:column>
+
+                    </p:dataTable>
+                    <p:commandButton value="导出筛选的数据" ajax="false" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'export')}">
+                        <p:dataExporter type="xls" target="dc11" fileName="score_detail" /> 
+                    </p:commandButton>
+
+
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

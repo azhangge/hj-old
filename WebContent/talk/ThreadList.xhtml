@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="General3.xhtml">
+            <ui:define name="title">
+                <h:outputText value="版块 - #{threadList.zone.name}" />
+            </ui:define>
+            <ui:define name="content">
+                <p:panel id="topNav8" styleClass="frontColumn topNav8Wrapper">
+                    <h:outputLink value="#{facesContext.externalContext.requestContextPath}" styleClass="nav8">
+                        <h:outputText value="首页" />
+                    </h:outputLink>
+                    <h:outputText value="/" styleClass="navSeparator"/>
+                    <h:outputLink value="ZoneList.jspx" styleClass="nav8">
+                        <h:outputText value="交流讨论" />
+                    </h:outputLink>
+                    <h:outputText value="/" styleClass="navSeparator"/>
+                    <h:outputText value="#{threadList.zone.name}"  styleClass="nav8"/>
+                </p:panel>
+                <h:panelGrid columns="2" columnClasses="w50,w50" style="width:100%" rendered="#{clientSession.ifLogin}">
+                    <p:button value="发表新帖" outcome="AddNewThread" rendered="#{threadList.zone.ifOnlyMag?(fn:contains(threadList.zone.magsStr,clientSession.usr.username) and clientSession.ifLogin):true}">
+                        <f:param name="zone_id" value="#{threadList.zone.id}"/>
+                    </p:button>
+                </h:panelGrid>
+
+
+                <p:dataTable id="dc" value="#{threadList.threads}" var="thread" rowIndexVar="r" rows="10" style="width:100%;padding: 0px;margin: 0px;" styleClass="frontColumn" paginator="true" paginatorPosition="bottom" emptyMessage="暂无数据">
+                    <p:column style="width:30px!important;text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="序号"></h:outputText>
+                        </f:facet>
+                        <h:outputText value="#{r+1}"></h:outputText>
+                    </p:column>
+                    <p:column id="columnRefType"  style="width:260px!important;text-align: left;" filterBy="#{thread.title}" filterMatchMode="contains"  filterStyle="width:60%;display:inline;margin-left:10px;">
+                        <f:facet name="header">
+                            <h:outputText value="主题"></h:outputText>
+                        </f:facet>
+                        <h:outputText value="[置顶]" rendered="#{thread.top}"></h:outputText>
+                        <h:outputLink value="ThreadDetail.jspx?id=#{thread.id}" styleClass="news"
+                                      target="_self">
+
+                            <h:outputText value="#{thread.title==''?'空白':thread.title}"></h:outputText>
+
+                        </h:outputLink>
+                        <h:outputText value="[￥#{thread.score}]" rendered="#{thread.score>0}" styleClass="sell"></h:outputText>
+                    </p:column>
+                    <p:column  style="width:90px!important;text-align: left;">
+                        <f:facet name="header">
+                            <h:outputText value="作者"></h:outputText>
+                        </f:facet>
+                        <h:outputLink value="UserCenter.jspx?id=#{thread.genBy.id}" styleClass="more"
+                                      target="_blank">
+                            <h:outputText value="#{thread.genBy.username}"></h:outputText>
+                        </h:outputLink>
+                        <br />
+                        <h:outputText value="#{thread.genTime}" styleClass="tip">
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:30px!important;text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="回复/阅读"></h:outputText>
+                        </f:facet>
+                        <h:outputText value="#{thread.replyCount}" styleClass="tip"></h:outputText><br/>
+                        <h:outputText value="#{thread.readCount}" styleClass="tip"></h:outputText>
+                    </p:column>
+                    <p:column style="width:90px!important;text-align: left;">
+                        <f:facet name="header">
+                            <h:outputText value="最新回复"></h:outputText>
+                        </f:facet>
+                        <h:outputLink value="ThreadDetail.jspx?id=#{thread.id}" styleClass="more"
+                                      target="_blank">
+                            <h:outputText value="#{thread.latestTalk.genBy.username}"></h:outputText>
+                        </h:outputLink>
+                        <br />
+                        <h:outputText value="#{thread.latestTalk.genTime}" styleClass="tip">
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column rendered="#{fn:contains(threadList.zone.magsStr,clientSession.usr.username)and clientSession.ifLogin}" style="width:50px;" headerText="操作">
+
+                        <p:commandLink action="#{threadList.delete(thread.id)}" value="删除" update="dc" styleClass="operation"/><br/>
+
+                        <p:commandLink action="#{threadList.top(thread.id)}" value="置顶" rendered="#{!thread.top}" update="dc" styleClass="operation"/>
+                        <p:commandLink action="#{threadList.unTop(thread.id)}" value="取消置顶" rendered="#{thread.top}" update="dc" styleClass="operation"/><br/>
+
+                        <p:commandLink action="#{threadList.lock(thread.id)}" value="锁贴" rendered="#{!thread.ifLocked}" update="dc" styleClass="operation"/>
+                        <p:commandLink action="#{threadList.unlock(thread.id)}" value="解锁" rendered="#{thread.ifLocked}" update="dc" styleClass="operation"/>
+                    </p:column>
+
+                </p:dataTable>
+
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

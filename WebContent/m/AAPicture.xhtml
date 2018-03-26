@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui" lang="en">
+    <h:head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </h:head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+            <style>
+            	.jPicker.Container {
+				    color: #000;
+				    z-index: 10;
+				    top: 80.9688px!important;
+				}
+            </style>
+                <h:form id="fm">
+                    <h:outputScript name="chinese_locale.js" library="js"/>
+
+                    <h:outputText
+                        styleClass="tit"
+                        value="－#{aAPicture.flag?'修改轮播图片':'添加轮播图片'}－" />
+                    	<h:outputLink value="ListPicture.jspx" styleClass="common">
+                            <h:outputText value="返回"></h:outputText>
+                        </h:outputLink>
+                    <hr/>
+                    
+                    <h:panelGrid columns="2" columnClasses="thdL,thdR" style="width:100%;">
+                        <h:outputText value="名称：" />
+                        <h:inputText value="#{aAPicture.picture.title}" style="width:400px"/>
+                        <h:outputText value="次序：" />
+                        <h:inputText value="#{aAPicture.picture.ord}" style="width:40px"/>
+                        
+                        <h:outputText value="链接方式：" />
+                            <h:selectOneMenu value="#{aAPicture.picture.linkType}" onchange="changeStatus(this);" id="linkType">
+                                <f:selectItem itemLabel="课程链接" itemValue="inner"/>
+                                <f:selectItem itemLabel="其他链接" itemValue="outter"/>
+                        	</h:selectOneMenu>
+                        
+                        <h:outputText value="链接课程：" id="inner" />
+                        <h:panelGroup id="innerUrl">
+                        <p:dataTable  paginator="false" paginatorPosition="bottom"
+							value="#{aAPicture.lessonTypes}" var="us" id="dataTable"
+							emptyMessage="#{lang['exam.empty_result']}" styleClass="list"
+							rowIndexVar="row" style="width:500px;height:300px;overflow-x:hidden;" >
+                        	<p:column filterBy="#{us.name}" filterMatchMode="contains" sortBy="#{us.name}">
+								<h:outputText value="#{us.name}" />
+								<f:facet name="header">
+									<h:outputText value="课程名称" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:30px;text-align: center;">
+								<h:selectBooleanCheckbox value="#{us.selected}" ></h:selectBooleanCheckbox>
+								<f:facet name="header">
+									<h:outputText value="选择"></h:outputText>
+								</f:facet>
+							</p:column>
+						</p:dataTable>
+                        </h:panelGroup>
+                        <h:outputText value="链接地址：" id="outter" style="display:none"/>
+                        <h:inputText value="#{aAPicture.picture.link}" style="width:400px;display:none" id="outterUrl" />
+                        
+                        <h:outputText value="背景颜色：" />
+                        <h:inputText id="Binded" type="text" value="#{aAPicture.picture.backcolor}"/>
+                        <h:outputText value="图像：" />
+                        <p:graphicImage  id="simg"
+                                         url="#{fn:replace(aAPicture.picture.url,'showimage','showabstractimage')}"
+                                         style="width: 160px; height: 120px;" />
+                        <h:outputLabel style="" 
+                                       value="图片源：" />
+
+                        <h:panelGrid columns="1">
+                            <h:panelGroup>
+                                <h:inputText id="title" value="#{aAPicture.picture.url}"
+                                             style="width:400px" >
+                                    <f:ajax event="change" render="simg" />
+                                </h:inputText>
+                            </h:panelGroup>
+                            <!-- <h:outputText style="color:red" value="推荐图像高度为：287px，尽量使用背景透明的PNG格式图片。" /> -->
+                        </h:panelGrid>
+                        <h:outputLabel style="" 
+                                       value="上传：" />
+                        <p:fileUpload id="upl" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'sys')}" fileUploadListener="#{aAPicture.up_action}" update="simg title" uploadLabel="上传" auto="true" label="选择图片" allowTypes="/(\.|\/)(gif|jpe?g|png)$/">
+                        </p:fileUpload>
+                        <h:outputText value="录入时间：" />
+                        <p:calendar pattern="yyyy-MM-dd HH:mm:ss"  timeZone="GMT+8" locale="zh_CN"
+                                    value="#{aAPicture.picture.genTime}"></p:calendar>
+                        <h:outputText value="描述：" />
+                        <!-- <p:editor value="#{aAPicture.picture.description}" style="width:600px;height:200px;"/> -->
+                        <h:inputTextarea value="#{aAPicture.picture.description}" style="width:600px;height:200px;" />
+                    </h:panelGrid>
+                    <br/> <br/> <br/> <br/>
+                    <p:separator/>
+                    <p:commandButton process="@form" onclick="bcakcolor()" ajax="false" action="#{aAPicture.save_action}" value="提交" />
+                </h:form>
+                <script  type="text/javascript">
+                $(function(){
+                    $(':checkbox[type="checkbox"]').each(function(){
+                        $(this).click(function(){
+                            if($(this).is(':checked')){
+                                $(':checkbox[type="checkbox"]').prop('checked', false);
+                                $(this).prop('checked', true);
+                            }
+                        });
+                    });
+                    var obj = document.getElementById('fm:linkType');
+                    changeStatus(obj);
+                    
+                });
+                function changeStatus(obj){
+                	var type = obj.value;
+                	var obj1 = document.getElementById('fm:inner');
+                	var obj2 = document.getElementById('fm:innerUrl');
+                	var obj3 = document.getElementById('fm:outter');
+                	var obj4 = document.getElementById('fm:outterUrl');
+                	if(type == 'inner'){
+                		obj1.style.display='inline';
+                		obj2.style.display='inline';
+                		obj2.style.width='500px';
+                		obj3.style.display='none';
+                		obj4.style.display='none';
+                	}else if(type == 'outter'){
+                		obj1.style.display='none';
+                		obj2.style.display='none';
+                		obj3.style.display='inline';
+                		obj4.style.display='inline';
+                	}
+                }
+                </script>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"  lang="en">
+    <head>
+        <title>注册</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="/HJ/HJGeneral.xhtml">
+            <ui:define name="title" style="margin-top:30px">用户注册协议 </ui:define>
+
+            <ui:define name="content">
+                <h:form>
+                    <p:outputPanel autoUpdate="true">
+                        <p:growl/>
+                    </p:outputPanel>
+                    <h:panelGrid columns="5">
+                        <h:outputLink value="ZoneList.jspx" styleClass="topNav1">
+                            <h:outputText value="讨论" />
+                        </h:outputLink>
+                        <h:outputText value=">>" />
+                        <h:outputText value="用户注册协议" styleClass="mark"/>
+                    </h:panelGrid>
+                    <p:separator/>
+                    <p:panel style="width:800px;margin: 0 auto;">
+                        <h:outputText value="#{applicationBean.info.siteName} - 用户注册协议" styleClass="headLine"></h:outputText>
+                        <p:separator/>
+                        <div>
+                            <h4 class="h4" style="margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: baseline; height: 30px; line-height: 30px; color: rgb(119, 119, 119); font-family: 宋体, Arial, Helvetica, sans-serif;">
+                                协议细则</h4>
+                            <h4 class="h4" style="margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: baseline; height: 30px; line-height: 30px; color: rgb(119, 119, 119); font-family: 宋体, Arial, Helvetica, sans-serif;">
+                                1、本网站服务条款的确认和接纳</h4>
+                            <p class="p1" style="margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: baseline; line-height: 24px; color: rgb(119, 119, 119); text-indent: 2em; font-family: 宋体, Arial, Helvetica, sans-serif;">
+                                本网站各项服务的所有权和运作权归本网站拥有。</p>
+                            <h4 class="h4" style="margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: baseline; height: 30px; line-height: 30px; color: rgb(119, 119, 119); font-family: 宋体, Arial, Helvetica, sans-serif;">
+                                2、用户必须：</h4>
+                            <p class="p2" style="margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: baseline; line-height: 24px; color: rgb(119, 119, 119); font-family: 宋体, Arial, Helvetica, sans-serif;">
+                                (1)自行配备上网的所需设备， 包括个人电脑、调制解调器或其他必备上网装置。<br />
+                                (2)自行负担个人上网所支付的与此服务有关的电话费用、 网络费用。</p>
+                            <h4 class="h4" style="margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: baseline; height: 30px; line-height: 30px; color: rgb(119, 119, 119); font-family: 宋体, Arial, Helvetica, sans-serif;">
+                                3、用户在本网站交易平台上不得发布下列违法信息：</h4>
+                            <p class="p2" style="margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: baseline; line-height: 24px; color: rgb(119, 119, 119); font-family: 宋体, Arial, Helvetica, sans-serif;">
+                                (1)反对宪法所确定的基本原则的；<br />
+                                (2)危害国家安全，泄露国家秘密，颠覆国家政权，破坏国家统一的；<br />
+                                (3)损害国家荣誉和利益的；<br />
+                                (4)煽动民族仇恨、民族歧视，破坏民族团结的；<br />
+                                (5)破坏国家宗教政策，宣扬邪教和封建迷信的；<br />
+                                (6)散布谣言，扰乱社会秩序，破坏社会稳定的；<br />
+                                (7)散布淫秽、色情、赌博、暴力、凶杀、恐怖或者教唆犯罪的；<br />
+                                (8)侮辱或者诽谤他人，侵害他人合法权益的；<br />
+                                (9)含有法律、行政法规禁止的其他内容的。</p>
+                            <h4 class="h4" style="margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: baseline; height: 30px; line-height: 30px; color: rgb(119, 119, 119); font-family: 宋体, Arial, Helvetica, sans-serif;">
+                                4、有关个人资料</h4>
+                            <p class="p1" style="margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: baseline; line-height: 24px; color: rgb(119, 119, 119); text-indent: 2em; font-family: 宋体, Arial, Helvetica, sans-serif;">
+                                用户同意：</p>
+                            <p class="p2" style="margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: baseline; line-height: 24px; color: rgb(119, 119, 119); font-family: 宋体, Arial, Helvetica, sans-serif;">
+                                (1) 提供及时、详尽及准确的个人资料。<br />
+                                (2) 同意接收来自本网站的信息。<br />
+                                (3) 不断更新注册资料，符合及时、详尽准确的要求。所有原始键入的资料将引用为注册资料。</p>
+                            <h4 class="h4" style="margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: baseline; height: 30px; line-height: 30px; color: rgb(119, 119, 119); font-family: 宋体, Arial, Helvetica, sans-serif;">
+                                5、电子邮件</h4>
+                            <p class="p1" style="margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: baseline; line-height: 24px; color: rgb(119, 119, 119); text-indent: 2em; font-family: 宋体, Arial, Helvetica, sans-serif;">
+                                用户在注册时应当选择稳定性及安全性相对较好的电子邮箱，并且同意接受并阅读本网站发往用户的各类电子邮件。如用户未及时从自己的电子邮箱接受电子邮件或因用户电子邮箱或用户电子邮件接收及阅读程序本身的问题使电子邮件无法正常接收或阅读的，只要本网站成功发送了电子邮件，应当视为用户已经接收到相关的电子邮件。电子邮件在发信服务器上所记录的发出时间视为送达时间。</p>
+                            <h4 class="h4" style="margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: baseline; height: 30px; line-height: 30px; color: rgb(119, 119, 119); font-family: 宋体, Arial, Helvetica, sans-serif;">
+                                6、服务条款的修改</h4>
+                            <p class="p1" style="margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: baseline; line-height: 24px; color: rgb(119, 119, 119); text-indent: 2em; font-family: 宋体, Arial, Helvetica, sans-serif;">
+                                本网站有权在必要时修改服务条款，本网站服务条款一旦发生变动，将会在重要页面上提示修改内容。如果不同意所改动的内容，用户可以主动取消获得的本网站信息服务。如果用户继续享用本网站信息服务，则视为接受服务条款的变动。本网站保留随时修改或中断服务而不需通知用户的权利。本网站行使修改或中断服务的权利，不需对用户或第三方负责。</p>
+                            <h4 class="h4" style="margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: baseline; height: 30px; line-height: 30px; color: rgb(119, 119, 119); font-family: 宋体, Arial, Helvetica, sans-serif;">
+                                7、用户的帐号、密码和安全性</h4>
+                            <p class="p1" style="margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: baseline; line-height: 24px; color: rgb(119, 119, 119); text-indent: 2em; font-family: 宋体, Arial, Helvetica, sans-serif;">
+                                你一旦注册成功成为用户，你将得到一个密码和帐号。如果你不保管好自己的帐号和密码安全，将负全部责任。另外，每个用户都要对其帐户中的所有活动和事件负全责。你可随时根据指示改变你的密码，也可以结束旧的帐户重开一个新帐户。用户同意若发现任何非法使用用户帐号或安全漏洞的情况，请立即通知本网站。</p>
+                            <h4 class="h4" style="margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: baseline; height: 30px; line-height: 30px; color: rgb(119, 119, 119); font-family: 宋体, Arial, Helvetica, sans-serif;">
+                                8、拒绝提供担保</h4>
+                            <p class="p1" style="margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: baseline; line-height: 24px; color: rgb(119, 119, 119); text-indent: 2em; font-family: 宋体, Arial, Helvetica, sans-serif;">
+                                用户明确同意信息服务的使用由用户个人承担风险。本网站不担保服务不会受中断，对服务的及时性，安全性，出错发生都不作担保，但会在能力范围内，避免出错。</p>
+                            <h4 class="h4" style="margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: baseline; height: 30px; line-height: 30px; color: rgb(119, 119, 119); font-family: 宋体, Arial, Helvetica, sans-serif;">
+                                9、有限责任</h4>
+                            <p class="p1" style="margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: baseline; line-height: 24px; color: rgb(119, 119, 119); text-indent: 2em; font-family: 宋体, Arial, Helvetica, sans-serif;">
+                                本网站对任何直接、间接、偶然、特殊及继起的损害不负责任，这些损害来自：不正当使用本网站服务，或用户传送的信息不符合规定等。这些行为都有可能导致本网站形象受损，所以本网站事先提出这种损害的可能性，同时会尽量避免这种损害的发生。</p>
+                            <h4 class="h4" style="margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: baseline; height: 30px; line-height: 30px; color: rgb(119, 119, 119); font-family: 宋体, Arial, Helvetica, sans-serif;">
+                                10、信息的储存及限制</h4>
+                            <p class="p1" style="margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: baseline; line-height: 24px; color: rgb(119, 119, 119); text-indent: 2em; font-family: 宋体, Arial, Helvetica, sans-serif;">
+                                本网站有判定用户的行为是否符合本网站服务条款的要求和精神的权利，如果用户违背本网站服务条款的规定，本网站有权中断其服务的帐号。</p>
+                            <h4 class="h4" style="margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: baseline; height: 30px; line-height: 30px; color: rgb(119, 119, 119); font-family: 宋体, Arial, Helvetica, sans-serif;">
+                                11、用户管理</h4>
+                            <p class="p1" style="margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: baseline; line-height: 24px; color: rgb(119, 119, 119); text-indent: 2em; font-family: 宋体, Arial, Helvetica, sans-serif;">
+                                用户必须遵循：</p>
+                            <p class="p2" style="margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: baseline; line-height: 24px; color: rgb(119, 119, 119); font-family: 宋体, Arial, Helvetica, sans-serif;">
+                                (1) 使用信息服务不作非法用途。<br />
+                                (2) 不干扰或混乱网络服务。<br />
+                                (3) 遵守所有使用服务的网络协议、规定、程序和惯例。用户的行为准则是以因特网法规，政策、程序和惯例为根据的。</p>
+
+                        </div>
+                    </p:panel>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

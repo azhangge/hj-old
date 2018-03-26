@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form id="fm">
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <ui:include src="GoodsModulePanel.xhtml"></ui:include>
+                    <h:outputText  styleClass="headLine"
+                                   value="-商品类目管理-" />
+                    <p:separator/>
+                    <h:panelGroup>
+                        <p:commandButton id="editDic_top" value="添加顶级类目" action="#{goodsModuleMag2.addDic}"  oncomplete="PF('GoodsModulePanel').show();">
+                            <f:param name="fid" value="10000000000000000"/>
+                        </p:commandButton>
+
+                    </h:panelGroup>
+                    <p:treeTable id="dc" value="#{goodsModuleMag2.root}" var="dic" >
+                        <p:column style="width:200px;">
+                            <f:facet name="header">
+                                <h:outputText value="商品类目名称"></h:outputText>
+                            </f:facet>
+                            <h:selectBooleanCheckbox value="#{dic.selected}"/>
+                            <h:outputText value="#{dic.name}" ></h:outputText>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{dic.ord}" />
+                            <f:facet name="header">
+                                <h:outputText value="次序" />
+                            </f:facet>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{dic.frontShow?'是':'否'}" />
+                            <f:facet name="header">
+                                <h:outputText value="前台显示" />
+                            </f:facet>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{dic.goods.size()}" />
+                            <f:facet name="header">
+                                <h:outputText value="商品数量" />
+                            </f:facet>
+                        </p:column>
+                        <p:column style="text-align:center;">
+                            <f:facet name="header">
+                                <h:outputText value="操作"></h:outputText>
+                            </f:facet>
+                            <p:commandLink value="编辑" action="#{goodsModuleMag2.editDic}"  oncomplete="PF('GoodsModulePanel').show();" update=":fm:dyPanel">
+                                <f:param name="id" value="#{dic.id}"/>
+                            </p:commandLink>&nbsp;
+                            <p:commandLink  value="添加" rendered="#{dic.deep&lt;8}"  action="#{goodsModuleMag2.addDic}" oncomplete="PF('GoodsModulePanel').show();" update=":fm:dyPanel">
+                                <f:param name="fid" value="#{dic.id}"/>
+                            </p:commandLink>&nbsp;
+                            <p:commandLink value="删除" action="#{goodsModuleMag2.delDic(dic.id)}" update="@form" onclick="if (!confirm('确认要删除本模块（包括所有子模块）吗？'))
+                                return false">
+                            </p:commandLink>
+                        </p:column>
+                    </p:treeTable>
+                    <p:separator/>
+                    <h:outputText escape="false" value="注意：&lt;br/&gt;1、只有叶子类目下能有商品，如果要建子类目，请先保证将此类目中的商品已被移出；&lt;br/&gt;2、类目建立后要给部门分配该类目的权限后该部门员工才能使用。" style="color:green;font-weight: bold;"></h:outputText>
+                    </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

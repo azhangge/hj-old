@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form id="DicMag">
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <h:outputText  styleClass="tit"
+                                   value="习题集管理" />
+                    <p:separator/>
+                    <div class="introduction">
+                        <h:outputText value="*习题集(题库)模块按层级结构显示，若上层模块设置为不显示，或者没有向用户所在部门开放，下层永远无法显示。" />
+                    </div>
+                    <p:treeTable id="dc" value="#{moduleExamMag.root}" var="dic"  liveResize="true" resizableColumns="true">
+                        <p:column style="" resizable="true" >
+                            <f:facet name="header">
+                                <h:outputText value="习题集名称"></h:outputText>
+                            </f:facet>
+                            <h:selectBooleanCheckbox value="#{dic.selected}"/>
+                            <h:outputText value="#{dic.name}" ></h:outputText>
+                        </p:column>
+                        <p:column  style="width:40px;text-align: center;" resizable="true" >
+                            <h:outputText value="#{dic.ord}" />
+                            <f:facet name="header">
+                                <h:outputText value="次序" />
+                            </f:facet>
+                        </p:column>
+                        <p:column  style="width:50px;text-align: center;" resizable="true" >
+                            <h:outputText value="#{dic.exam!=null?'是':'否'}" style="color:#{dic.exam==null?'red':'green'};"/>
+                            <f:facet name="header">
+                                <h:outputText value="已设置？" />
+                            </f:facet>
+                        </p:column>
+                        <p:column  style="width:50px;text-align: center;" resizable="true" >
+                            <h:outputText value="#{dic.exam.ifOpen?'是':'否'}" style="color:#{!dic.exam.ifOpen?'red':'green'};"/>
+                            <f:facet name="header">
+                                <h:outputText value="已开放？" />
+                            </f:facet>
+                        </p:column>
+                        <p:column style="width:60px;text-align: center;" resizable="true" >
+                            <h:outputText value="#{dic.choiceNum+dic.multiChoiceNum+dic.fillNum+dic.judgeNum+dic.essayNum+dic.fileNum+dic.caseNum}" />
+                            <f:facet name="header">
+                                <h:outputText value="试题总数" />
+                            </f:facet>
+                        </p:column>
+                        <p:column style="width:70px;text-align: center;" resizable="true" >
+                            <h:outputText value="#{dic.exam.totalNum}" />
+                            <f:facet name="header">
+                                <h:outputText value="试题数" />
+                            </f:facet>
+                        </p:column>
+                        <p:column  style="width:50px;text-align: center;" resizable="true" >
+                            <f:facet name="header">
+                                <h:outputText value="加载方式"></h:outputText>
+                            </f:facet>
+                            <h:outputText value="#{dic.exam.displayMode eq 'single'?'单题':'批量'}" rendered="#{dic.exam!=null}" style="color:#{dic.exam.displayMode eq 'single'?'red':'green'};"/>
+                        </p:column>
+                        <p:column  style="width:50px;text-align: center;" resizable="true" >
+                            <f:facet name="header">
+                                <h:outputText value="操作"></h:outputText>
+                            </f:facet>
+                            <h:outputLink value="AAModuleExam.jspx?module_id=#{dic.id}">
+                                <h:outputText value="设置"/>
+                            </h:outputLink>
+                        </p:column>
+                        <p:column style="width:60px;text-align: center;" resizable="true" >
+                            <h:outputText value="#{dic.exam.caseNum}"  rendered="#{dic.exam!=null}"/>
+                            <f:facet name="header">
+                                <h:outputText value="练习记录" />
+                            </f:facet>
+                        </p:column>
+                        <p:column  style="width:40px;text-align: center;" resizable="true" >
+                            <f:facet name="header">
+                                <h:outputText value="清空"></h:outputText>
+                            </f:facet>
+                            <p:commandLink rendered="#{dic.exam!=null}" action="#{moduleExamMag.delCases(dic.id)}" update="@form" value="清空"/>
+                        </p:column>
+                    </p:treeTable>
+                    <p:outputPanel autoUpdate="true">
+                        <p:growl/>
+                    </p:outputPanel>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

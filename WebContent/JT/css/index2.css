@@ -1,0 +1,385 @@
+@charset "utf-8";
+input{outline:none;/*去除蓝色边框*/}
+div {
+	font-family: Verdana, Arial, Microsoft YaHei, simhei, simsun;
+}
+
+div.head_widget {
+	height: 61px;
+	background: #FFFFFF;
+	/* border: 1px solid #D8D8D8; */
+	width: 1200px;
+	margin: 0 auto;
+	box-shadow: 0 0 1px 0 rgba(158, 158, 158, 0.50);
+	position: relative;
+}
+
+div.all_classify {
+	background: #4BB9F3;
+	width: 224px;
+	height: 61px;
+	font-size: 20px;
+	color: #FFFFFF;
+	letter-spacing: 2px;
+	text-align: center;
+	line-height: 61px;
+	float: left;
+	margin-right: 20px;
+	position: absolute;
+}
+
+div.head_word {
+	float: left;
+	font-size: 15px;
+	color: #4BB9F3;
+	letter-spacing: 0.54px;
+	margin-right: 64px;
+	line-height: 61px;
+}
+
+input.search_input {
+	border: 1px solid #D8D8D8 !important;
+	box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0.50) !important;
+	border-radius: 100px;
+	height: 28px;
+	width: 164px;
+	padding: 0 0 0 10px;
+	font-size: 16px;
+}
+
+div.search {
+	float: right;
+	height: 61px;
+	line-height: 61px;
+	margin-right: 15px;
+}
+
+div.search_word {
+	float: right;
+	margin-left: 15px;
+	font-size: 14px;
+	color: #999999;
+	letter-spacing: 0.5px;
+}
+
+div.banner {
+	/* width: 100%; */
+	height: 405px;
+	position: relative;
+	/* width: 1200px; */
+	/* margin: 0 auto; */
+}
+
+img.banner_img {
+	width: 1200px;
+	height: 405px;
+}
+
+li.banner_li {
+	height: 405px;
+}
+
+ul.banner_ul {
+	margin: 0;
+	padding: 0;
+	height: 405px !important;
+}
+
+div.hd {
+	
+}
+
+div.hd ul.ul {
+	padding: 0;
+	margin: 0;
+}
+
+div.fullSlide .hd ul li {
+	width: 15px;
+	height: 15px;
+	margin-left: 13.9px;
+}
+
+div.fullSlide .hd ul .on {
+	background: rgba(75, 185, 243, 0.55);
+}
+
+span.prev {
+	position: absolute;
+	width: 20px;
+	height: 51px;
+	top: 87px;
+	left: 235px;
+	cursor: pointer;
+}
+
+span.next {
+	position: absolute;
+	width: 20px;
+	height: 51px;
+	top: 87px;
+	right: 249px;
+	cursor: pointer;
+}
+
+div.bottom_widget {
+	height: 75px;
+	width: 1200px;
+	background: #FFFFFF;
+	border: 1px solid #D8D8D8;
+	box-shadow: 0 0 1px 0 rgba(158, 158, 158, 0.50);
+	margin: 0 auto;
+}
+
+div.course_body {
+	background-color: #F6F5F4;
+	width: 1200px;
+	margin: 0 auto;
+}
+
+div.bottom_link {
+	width: 298px;
+	height: 75px;
+	float: left;
+	position: relative;
+}
+
+div.user_info {
+	background: rgba(18, 18, 18, 0.29);
+	border-radius: 11px;
+	width: 224px;
+	height: 405px;
+	position: absolute;
+	/* top: 89px; */
+	right: 0;
+	float: right;
+}
+
+img.user_pic {
+	position: absolute;
+	top: 38px;
+	left: 52px;
+}
+
+div.user_login {
+	position: absolute;
+	bottom: 38px;
+	left: 15px;
+	width: 160px;
+	height: 34px;
+	background-image: linear-gradient(-180deg, #4BB9F3 0%, #95D9FE 100%);
+	border-radius: 3px;
+	font-size: 13px;
+	color: #FFFFFF;
+	line-height: 34px;
+	letter-spacing: -0.61px;
+	text-align: center;
+}
+
+img.bottom_img {
+	position: absolute;
+	top: 23px;
+	left: 58px;
+}
+
+div.bottom_word1 {
+	width: 103px;
+	height: 25px;
+	position: absolute;
+	left: 101px;
+	top: 16px;
+	font-size: 18px;
+	color: #4A4A4A;
+	letter-spacing: 0.64px;
+}
+
+div.bottom_word2 {
+	font-size: 15px;
+	color: #A5A5A5;
+	letter-spacing: 0.54px;
+	position: absolute;
+	top: 40px;
+	left: 100px;
+	max-width: 180px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+hr.vertical_line {
+	float: left;
+	size: 10px;
+	width: 0.1px;
+}
+
+div.bottom_div {
+	height: 34px;
+	/* position: absolute; */
+	/* width: 300px; */
+	/* top: 24px; */
+	margin-top: 24px;
+	border-right: 1px solid #D8D8D8;
+	/* border-left: 1px solid #D8D8D8; */
+}
+div.bottom_widget div.bottom_link:last-child div.bottom_div{
+	border-right: none;
+}
+div.bottom_div:hover {
+	
+}
+div.new_hot{
+    margin-top: 48px;
+    width: 975px;
+    float: left;
+    /* padding-left: 5px; */
+}
+div.new_course{
+}
+div.hot_course{
+    margin-top: 57px;
+}
+div.teacher_div{
+    float: left;
+    width: 220px;
+    height: 458px;
+    margin-top: 48px;
+}
+div.course_type{
+    height: 18px;
+    width: 940px;
+}
+div.courses{
+    height: 170px;
+    margin-top: 15px;
+}
+div.type_word{
+    float: left;
+    font-size: 20px;
+    color: #333333;
+    letter-spacing: 0.71px;
+    line-height: 18px;
+    margin-left: 10px;
+}
+div.more_course{
+    float: right;
+    font-size: 12px;
+    color: #666666;
+    letter-spacing: 0.43px;
+    line-height: 12px;
+}
+div.tachers{
+    margin-top: 15px;
+    background: #FFFFFF;
+}
+div.teacher{
+    height: 85px;
+}
+div.teacher_pic{
+    width: 54px;
+    height: 54px;
+    float: left;
+    margin: 15px;
+}
+img.t_img{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+div.tacher_info{
+    float: left;
+    width: 120px;
+    margin-top: 24px;
+}
+div.t_name{
+    font-size: 15px;
+    color: #666666;
+    letter-spacing: 0.54px;
+    line-height: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+div.t_company{
+    font-size: 13px;
+    color: #999999;
+    letter-spacing: 0.46px;
+    line-height: 15px;
+    margin-top: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+div.banner_surface{
+	width: 1200px;
+	margin: 0 auto;
+	position: absolute;
+	top: 0;
+	left: 75px;
+}
+div.test1{
+	z-index: 1;
+}
+div.test2{
+	position: absolute;
+	top: 61px;
+}
+div.margin1{
+	margin-left: 244px;
+}
+div.banner_widget{
+    width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    top: -405px;
+}
+
+div.user_info_login{
+    position: absolute;
+    right: 30px;
+    top: 109px;
+    background: #8ECEF1;
+    border-radius: 11px;
+    width: 190px;
+}
+div.user_info_login div.user_info_up{}
+div.user_info_login div.user_info_left{
+    width: 99px;
+    height: 111px;
+    float: left;
+    border-radius: 11px 0 0 0;
+    border-bottom: 1px solid;
+    border-right: 1px solid;
+}
+div.user_info_login div.user_info_word{
+    font-size: 15px;
+    color: #FFFFFF;
+    letter-spacing: 0.54px;
+    margin-top: 19px;
+    text-align: center;
+    height: 21px;
+    line-height: 21px;
+}
+div.user_info_login div.user_info_num{
+    font-size: 36px;
+    color: #FFFFFF;
+    letter-spacing: 1.29px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    margin-top: 4px;
+}
+div.user_info_login div.user_info_right{
+    width: 90px;
+    height: 111px;
+    float: left;
+    border-bottom: 1px solid;
+}
+div.user_info_login div.user_info_down{
+    width: 190px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    font-size: 12px;
+    color: #FFFFFF;
+    letter-spacing: 0.43px;
+}

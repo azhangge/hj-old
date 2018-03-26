@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fmt="http://java.sun.com/jsp/jstl/fmt" 
+	xmlns:f="http://java.sun.com/jsf/core" lang="en">
+<h:head>
+	<title>Menu</title>
+	<meta http-equiv="keywords" content="enter,your,keywords,here" />
+	<meta http-equiv="description" content="A short description of this page." />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<f:loadBundle basename="com.huajie.exam.i18n.langs" var="lang" />
+</h:head>
+<h:body>
+	<ui:composition>
+		<div class="course_body">
+			<div class="course_body_left">		
+			<!-- 最新课程 -->
+			<div class="new_hot">
+				<div class="new_course">
+					<div class="course_type">
+						<img src="/image/newest_course.png" style="display:block;float:left;margin:16px 0px 16px 15px;"></img>
+						<img src="/image/newest_course_font.png" style="display:block;float:left;margin:16px 0px 0px 10px;"></img>
+						<!--  
+						<div class="type_word">最新课程</div>
+						-->
+						<a href="/talk/NewMoreLessonTypeList.jspx">
+							<div class="more_course">更多 ></div>
+						</a>
+					</div>
+					<div class="new_courses">
+						<c:forEach items="#{jTindex.lessonTypes2}" var="course" begin="0" end="16" varStatus="status">
+							<c:choose>
+								<c:when test="#{status.count%2==1}">
+									<div class="ncourse" style="background-color:#F7F7F7">
+										<a href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{course.id}" target="_blank">
+											<div class="ncourse2" title="#{course.name}">#{course.name}</div>
+										</a>
+							 			<h:inputText value="#{course.availableBegain}" class="abtime" style="background-color:#F7F7F7">
+											<f:convertDateTime pattern="yyyy/MM/dd" />  
+										</h:inputText>
+									</div>
+								</c:when>
+								<c:otherwise>
+									<div class="ncourse">
+										<a href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{course.id}" target="_blank">
+											<div class="ncourse2" title="#{course.name}">#{course.name}</div>
+										</a>
+								 		<h:inputText value="#{course.availableBegain}" class="abtime">
+											<f:convertDateTime pattern="yyyy/MM/dd" />  
+										</h:inputText>
+									</div>
+								</c:otherwise>
+							</c:choose>
+								
+						</c:forEach>
+					</div>
+				</div>
+				
+			</div>
+			<!-- 新修改热点 -->
+			<div style="float:right">
+			<div class="new_hot_1">
+				<div class="new_course">
+					<div class="course_type">
+						<img src="/image/hotest_course.png" style="display:block;float:left;margin:16px 0px 16px 15px;"></img>
+						<img src="/image/hotest_course_font.png" style="display:block;float:left;margin:16px 0px 0px 10px;"></img>
+						 
+						<a href="/talk/LessonTypeList2.jspx">
+							<div class="more_course">更多 ></div>
+						</a>
+					</div>
+					<div class="new_courses">
+						<c:forEach items="#{jTindex.lessonTypes}" var="course" begin="0" end="16" varStatus="status">
+							<c:choose>
+								<c:when test="#{status.count%2==1}">
+									<div class="ncourse" style="background-color:#F7F7F7">
+										<a href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{course.id}" target="_blank">
+											<div class="ncourse2" title="#{course.name}">#{course.name}</div>
+										</a>
+							 			<h:inputText value="#{course.availableBegain}" class="abtime" style="background-color:#F7F7F7">
+											<f:convertDateTime pattern="yyyy/MM/dd" />  
+										</h:inputText>
+									</div>
+								</c:when>
+								<c:otherwise>
+									<div class="ncourse">
+										<a href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{course.id}" target="_blank">
+											<div class="ncourse2" title="#{course.name}">#{course.name}</div>
+										</a>
+								 		<h:inputText value="#{course.availableBegain}" class="abtime">
+											<f:convertDateTime pattern="yyyy/MM/dd" />  
+										</h:inputText>
+									</div>
+								</c:otherwise>
+							</c:choose>
+								
+						</c:forEach>
+					</div>
+				</div>
+				
+			</div>
+			</div>
+			
+			<!-- 热门课程 -->
+			<!-- <div style="width:478px;height:193px;float:left;border:1px solid #F0F0F0;margin:20px 0px 0px 0px;">
+				<div style="width:956px;height:62px;">
+					<img src="/image/hotest_course.png" style="display:block;float:left;margin:26px 0px 0px 15px;"></img>
+					<img src="/image/hotest_course_font.png" style="display:block;float:left;margin:26px 0px 0px 10px;"></img>
+					 
+					<div class="hot_course">热门课程</div>
+					
+					<a href="/talk/LessonTypeList2.jspx">
+						<div class="more_course">更多 ></div>
+					</a>
+				</div>
+				<div class="hot_course2">
+					<c:forEach items="#{jTindex.lessonTypes}" var="course" begin="0" end="6" varStatus="status">
+								<a href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{course.id}" target="_blank">
+									<div class="hotc">
+									<img src="/#{course.picture}" alt="#{course.name}" class="cpicture"/>
+										<div class="cname">#{course.name}</div>
+										<div style="width:150px;height:20px;font-size:12px;font-family:微软雅黑;color:#999999;padding:0px 0px 0px 10px;">
+											<div style="float:left;">
+												#{course.teacher.name}
+											</div>
+											<div style="float:right;">
+												课时
+											</div>
+											<h:outputText value="#{course.totalClassNum}" style="float:right;">
+												<f:converter converterId="decimalConvert"></f:converter>
+											</h:outputText>
+										</div>
+									</div>
+								</a>
+					</c:forEach>
+				</div>
+			</div> -->
+			
+			</div>
+			
+			<!-- 讲师风采 -->
+			<!-- <div class="teacher_div">
+				<div style="width:224px;height:50px;">
+						<div class="type_word">讲师风采</div>
+					<a href="/HJ/OutLecturerList.jspx" target="_blank">
+						<div class="more_course">更多 ></div>
+					</a>
+
+				</div>
+				<div class="teachers">
+					<c:forEach items="#{listTeacher.innerCasusList}" var="teacher" begin="0" end="6">
+						<div class="teacher">
+							<a href="/HJ/LecturerStyle.xhtml?id=#{teacher.id}">
+							<div class="teacher_pic">
+								<img src="/#{(empty teacher.picture)?'servlet/ShowImage?id=100':teacher.picture}" alt="" class="t_img" />
+							</div>
+							<div class="teacher_info">
+								<div class="t_name">讲师：#{teacher.name}</div>
+								<div class="t_company">#{teacher.company}</div>
+							</div>
+							</a>
+						</div>
+					</c:forEach>
+				</div>
+			</div> -->
+			<!-- 课程分类 -->
+			<!--  
+			<ui:repeat value="#{jTindex.FSCourseTypes}" var="labelType" >
+				<div class="course_info">
+					<div class="course_right">
+						<div class="slideTxtBox">
+							<div class="hd">
+								<div class="course_type_name">#{labelType.name}</div>
+								<ul class="hd_left">
+									<ui:repeat value="#{labelType.sons}" var="label">
+										<li>#{label.name}</li>
+									</ui:repeat>
+								</ul>
+								<div class="hd_right lightgray">
+									<a href="#{facesContext.externalContext.requestContextPath}/talk/LessonTypeList2.jspx?lid=#{labelType.id}">更多></a>
+								</div>
+							</div>
+							<div class="bd">
+								<ui:repeat value="#{labelType.sons}" var="label">
+									<ul>
+										<li>
+											<div class="class-category">
+												<ul>
+													<h:panelGroup rendered="#{empty (welcomePage.getLessonTypesByIdAndNum(label.id,'4'))}">
+														<div class="class-category_none">
+															<img src="../HJ/image/none.png" class="" width="200px" height="146px" />
+														</div>
+													</h:panelGroup>
+													<h:panelGroup rendered="#{!empty (welcomePage.getLessonTypesByIdAndNum(label.id,'4'))}">
+														<ui:repeat value="#{welcomePage.getLessonTypesByIdAndNum(label.id,'5')}" var="course">
+															<ui:include src="/JT/course.xhtml"></ui:include>
+														</ui:repeat>
+													</h:panelGroup>
+												</ul>
+											</div>
+										</li>
+									</ul>
+								</ui:repeat>
+							</div>
+						</div>
+					</div>
+				</div>
+			</ui:repeat>
+			-->
+		</div>
+	</ui:composition>
+</h:body>
+</html>

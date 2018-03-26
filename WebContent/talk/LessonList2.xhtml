@@ -1,0 +1,589 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:f="http://java.sun.com/jsf/core" lang="en">
+<h:head>
+	<title>My Facelets Page</title>
+	<meta http-equiv="keywords" content="enter,your,keywords,here" />
+	<meta http-equiv="description" content="A short description of this page." />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+	<!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+</h:head>
+<h:body>
+	<ui:composition template="General3.xhtml">
+		<ui:define name="title">
+			<h:outputText value="课程学习 - 课程列表" />
+		</ui:define>
+		<ui:define name="content">
+			<!-- 弹框确认 -->
+			<p:dialog header="购买确认：" widgetVar="confirm" resizable="false">
+				<h:panelGrid columns="2" cellpadding="5">
+					<h:outputText
+						rendered="#{lessonList.lessonType.totalScorePaid!=0 and clientSession.usr.score ge lessonList.lessonType.totalScorePaid}"
+						value="您还有#{clientSession.usr.score}积分，购买本课程将会消耗#{lessonList.lessonType.totalScorePaid}积分,  确认购买课程吗？" />
+					<h:outputText
+						rendered="#{lessonList.lessonType.totalScorePaid==0 and clientSession.usr.score ge lessonList.lessonType.totalScorePaid}"
+						value="该课程免费，是否立即参加该课程？" />
+					<h:outputText rendered="#{clientSession.usr.score le lessonList.lessonType.totalScorePaid}"
+						value="该课程需消耗积分#{lessonList.lessonType.totalScorePaid},您当前积分（#{clientSession.usr.score}）不够，无法购买该课程 " />
+					<f:facet name="footer">
+						<p:commandButton value="取消" onclick="PF('confirm').hide()" style="float:right;" />
+						<p:commandButton value="确认" action="#{lessonTypeDetail.buy()}" update="@form" style="float:right;">
+							<f:param name="tid" value="#{lessonList.lessonType.id}"></f:param>
+						</p:commandButton>
+					</f:facet>
+				</h:panelGrid>
+			</p:dialog>
+
+			<link type="text/css" rel="stylesheet" href="../HJ/css/lesson-tab.css" />
+			<link type="text/css" rel="stylesheet" href="../HJ/css/lecturer_style.css" />
+			<link rel="stylesheet" type="text/css" href="./css/lesson-tab.css"></link>
+			<script type="text/javascript" language="javascript">
+				function aabbcc(url) {
+					var scrWidth = screen.availWidth;
+					var scrHeight = screen.availHeight;
+					var self = window
+							.open(
+									url,
+									'',
+									"fullscreen=3,resizable=false,toolbar=no,menubar=no,scrollbars=yes,location=no,top=0,left=0,width="
+											+ scrWidth + ",height=" + scrHeight);
+					//self.resizeTo(scrWidth,scrHeight);
+					self.moveTo(0, 0);
+				}
+				function ConfirmBuy() {
+					if(#{lessonList.lessonType.totalScorePaid}==0){
+						return confirm("该课程免费，是否立即参加该课程？");
+					}else{
+						return confirm("您还有#{clientSession.usr.score}积分，购买本课程将会消耗#{lessonList.lessonType.totalScorePaid}积分,  确认购买课程吗？");
+					}
+				}
+				function buy(){
+					if(#{not empty clientSession.usr}){
+						PF('confirm').show();
+					}else{
+						PF('login1').show();
+					}
+				}
+			</script>
+			<p:panel id="topNav8" styleClass="frontColumn topNav8Wrapper">
+				<h:outputLink value="#{facesContext.externalContext.requestContextPath}" styleClass="nav8">
+					<h:outputText value="首页" />
+				</h:outputLink>
+				<!-- <h:outputText value="/" styleClass="navSeparator" />
+				<h:outputLink value="LessonTypeList.jspx" styleClass="nav8">
+					<h:outputText value="在线课程" />
+				</h:outputLink> -->
+				<h:outputText value="/" styleClass="navSeparator" rendered="#{lessonList.lessonType!=null}" />
+				<h:outputText value="#{lessonList.lessonType.name}" styleClass="nav8" />
+			</p:panel>
+
+			<div class="div-wrap">
+				<div class="img-wrap f-left">
+					<img class="img-content" src="#{lessonList.lessonType.picture}"></img>
+				</div>
+				<div class="info-content">
+					<h3 class="info-title">#{lessonList.lessonType.name}</h3>
+					<ul>
+						<li class="first-li">
+							<span class="info-span f-left">
+								<i class="teacher-icon"></i>
+								主讲人
+							</span>
+							<span class="info-name f-left">
+								<a target="_blank"
+									href="#{facesContext.externalContext.requestContextPath}/HJ/LecturerStyle.xhtml?id=#{lessonList.lessonType.teacher.id}"
+									class="info-name f-left"> #{lessonList.lessonType.teacher.name} </a>
+							</span>
+						</li>
+						<li class="second-li clearborh">
+							<div class="f-left">
+								<span class="info-span">学习人次</span>
+								<em class="info-em">#{lessonList.lessonType.userNum} </em>
+							</div>
+							<span class="info-span" style="width: 85px; letter-spacing: 6px;">满意度</span>
+							<em class="info-em">100%</em>
+						</li>
+						<li class="third-li clearborh">
+							<div class="f-left">
+								<span class="info-span font-letter">总课时</span>
+								<em class="info-em">#{lessonList.lessonType.totalClassNum}</em>
+								课时
+							</div>
+							<div class="f-left" style="margin-top: -2px;">
+								<span class="info-span font-letter" style="width: 85px">有效期</span>
+								<em class="info-em">#{lessonList.lessonType.effectiveDays}</em>
+								天
+							</div>
+						</li>
+					</ul>
+					<c:if test="#{clientSession.ifLogin and !(empty lessonList.message)}">
+						<div style="background-color: #f9f9f9">
+							<table>
+								<tr>
+									<td>
+										<h:graphicImage value="../image/message.png"
+											style="width:16px;height:16px;vertical-align:middle;margin-left: 10px; margin-right: 5px"></h:graphicImage>
+									</td>
+									<td>
+										<h:outputText value="#{lessonList.message}" style="vertical-align:middle; color :#8a8a8a"></h:outputText>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</c:if>
+					<div class="info-btn-wrap">
+						<div>
+							<c:if
+								test="#{!clientSession.usr.lessonTypeStr.contains(lessonList.lessonType.id) and lessonList.lessonType.totalScorePaid!=0}">
+								<a href="javascript:;" class="info-btn-orange f-left" onclick="buy()" style="font-size: 14px !important;">
+									#{lessonList.lessonType.totalScorePaid}积分
+									<br />
+									立即购买
+								</a>
+							</c:if>
+							<c:if test="#{clientSession.usr.lessonTypeStr.contains(lessonList.lessonType.id)}">
+								<a href="LessonDetail2.jspx?lessonTypeId=#{lessonList.lessonType.id}" class="info-btn-blue f-left"
+									style="font-size: 18px !important;">
+									<c:if test="#{empty lessonList.message}">
+										开始学习
+									</c:if>
+									<c:if test="#{!(empty lessonList.message)}">
+										继续学习
+									</c:if>
+								</a>
+
+							</c:if>
+							<c:if
+								test="#{lessonList.lessonType.totalScorePaid==0 and !clientSession.usr.lessonTypeStr.contains(lessonList.lessonType.id)}">
+								<a href="javascript:;" class="info-btn-green f-left" onclick="buy()" style="font-size: 18px !important;">参加该课程</a>
+							</c:if>
+						</div>
+					</div>
+					<!-- <a href="javascript:;" class="abtn f-left"> <i class="ask-icon"></i>
+						<span class="aspan">提问</span>
+					</a> <span class="sperator f-left">|</span> <a href="javascript:;"
+						class="abtn f-left"> <i class="share-icon"></i> <span
+						class="aspan">分享</span>
+					</a> -->
+				</div>
+			</div>
+
+			<div class="div-wrap-down">
+				<div class="m-nav" id="tabs">
+					<ul id="tab_switch">
+						<!-- <li><a href="javascript:;" class="link curr">课程目录</a></li> -->
+						<li>
+							<a href="javascript:;" class="link curr">学习资料</a>
+						</li>
+						<c:if test="#{lessonList.lessonType.exams.size()!=0}">
+							<li>
+								<a href="javascript:;" class="link">模拟考试</a>
+							</li>
+						</c:if>
+					</ul>
+				</div>
+				<div class="m-content" id="box_content">
+					<!-- 课程目录 -->
+					<!-- <div class="m-block" style="display: block">
+						<div class="m-block-content">
+							<p:dataTable id="lessonTypeDc" rendered="#{lessonList.lessonType!=null}" value="#{lessonList.lessonType}" var="kechen" styleClass="frontColumn" emptyMessage="暂无课程">
+								<p:column id="columnRefType" resizable="true" style="width:300px!important;text-align: left;">
+									<f:facet name="header">
+										<h:outputText value="课程" />
+									</f:facet>
+									<h:outputText value="#{kechen.name}">
+									</h:outputText>
+								</p:column>
+
+								<p:column style="width:100px;text-align: center;" resizable="true" rendered="#{applicationBean.systemConfig.showScore and copyrightController.sysType!='1'}">
+									<f:facet name="header">
+										<h:outputText value="消耗积分" />
+									</f:facet>
+									<h:outputText id="totalScorePaid" value="#{kechen.totalScorePaid}" styleClass="tip" />
+									<br />
+								</p:column>
+
+								<p:column style="text-align: center;" resizable="true">
+									<f:facet name="header">
+										<h:outputText value="课时数" />
+									</f:facet>
+									<h:outputText value="#{kechen.totalClassNum}" styleClass="tip" />
+									<br />
+								</p:column>
+
+								<p:column style="text-align: center;" resizable="true">
+									<f:facet name="header">
+										<h:outputText value="操作" />
+									</f:facet>
+									<h:panelGroup rendered="#{!clientSession.usr.lessonTypeStr.contains(kechen.id)}">
+										<script type="text/javascript" language="javascript">
+								function ConfirmBuy() {
+									if(#{kechen.totalScorePaid}==0){
+										return confirm("该课程免费，是否立即参加该课程？");
+									}else{
+										return confirm("您还有#{clientSession.usr.score}积分，购买本课程将会消耗#{kechen.totalScorePaid}积分,  确认购买课程吗？");
+									}
+								}
+							</script>
+										<p:commandLink value="请登录" rendered="#{!clientSession.ifLogin}" onclick="PF('login1').show()" />
+										<p:commandButton value="购买" action="#{lessonTypeDetail.buy()}" onclick="return ConfirmBuy()" rendered="#{clientSession.ifLogin and clientSession.usr.score>=kechen.totalScorePaid and kechen.totalScorePaid!=0}">
+											<f:param name="tid" value="#{kechen.id}"></f:param>
+										</p:commandButton>
+										<p:commandButton value="参加该课程" action="#{lessonTypeDetail.buy()}" onclick="return ConfirmBuy()" rendered="#{clientSession.ifLogin and clientSession.usr.score>=kechen.totalScorePaid and kechen.totalScorePaid==0}">
+											<f:param name="tid" value="#{kechen.id}"></f:param>
+										</p:commandButton>
+										<h:outputText value="积分不够，我的积分#{clientSession.usr.score}" rendered="#{clientSession.ifLogin and kechen.totalScorePaid>clientSession.usr.score}" />
+									</h:panelGroup>
+									<h:panelGroup rendered="#{clientSession.ifLogin and clientSession.usr.lessonTypeStr.contains(kechen.id)}">
+										<h:outputText value="已购买" />
+									</h:panelGroup>
+								</p:column>
+							</p:dataTable>
+						</div>
+					</div> -->
+					<!-- 学习资料 -->
+					<div class="m-block" style="display: block">
+						<div class="m-block-content">
+							<p:dataTable id="lessonDc" resizableColumns="true" value="#{lessonList.lessons}" var="zone" rows="10"
+								paginator="true" paginatorPosition="bottom" rowIndexVar="row" style="width:100%" styleClass="list"
+								emptyMessage="暂无课程资料">
+								<p:column id="num" style="width:50px;text-align: center;" styleClass="m-block-tablecol">
+									<h:outputText style="height: 5%" value="#{row+1}" />
+									<f:facet name="header">
+										<h:outputText id="outputTextnum" value="序号" />
+									</f:facet>
+								</p:column>
+
+								<p:column id="columnRefType" styleClass="m-block-tablecol" style="width:50%;" resizable="true">
+									<!-- filterBy="#{zone.name}" filterMatchMode="contains" filterStyle="width:60%;display:inline;margin-left:10px;" -->
+									<f:facet name="header">
+										<h:outputText value="学习资料" />
+									</f:facet>
+									<div style="text-align: left;">
+										<h:outputText value="#{zone.name}"></h:outputText>
+									</div>
+
+								</p:column>
+
+								<p:column styleClass="m-block-tablecol" resizable="true">
+									<!-- filterBy="#{zone.name}" filterMatchMode="contains" filterStyle="width:60%;display:inline;margin-left:10px;" -->
+									<f:facet name="header">
+										<h:outputText value="资料类型" />
+									</f:facet>
+									<h:graphicImage url="../image/flash.png" style="width:20px;height:20px; vertical-align:middle;" title="视频"
+										rendered="#{zone.playType=='inner'||zone.playType=='outter'}" />
+									<h:graphicImage url="../image/txt.png" style="width:20px;height:20px; vertical-align:middle;" title="文档"
+										rendered="#{zone.playType=='none'}" />
+									<h:outputLink value="../servlet/DownloadFile?id=#{zone.files.get(0).id}" title="下载"
+										rendered="#{!empty(zone.files) and zone.playType=='none' and clientSession.ifLogin and clientSession.usr.lessonTypeStr.contains(lessonList.lessonType.id)}">下载</h:outputLink>
+								</p:column>
+
+								<!-- <p:column style="width:100px;text-align: center;" resizable="true">
+									<f:facet name="header">
+										<h:outputText value="消耗积分" />
+									</f:facet>
+									<h:outputText id="scorePaid" value="#{zone.scorePaid}" styleClass="tip" />
+									<br />
+								</p:column> -->
+
+								<p:column styleClass="m-block-tablecol" resizable="true">
+									<f:facet name="header">
+										<h:outputText value="课时数" />
+									</f:facet>
+									<h:outputText value="#{zone.classNum}" styleClass="tip" />
+									<h:outputText value="#{zone.log.finished?'（已完成）':''}" styleClass="tip" rendered="#{clientSession.ifLogin}" />
+									<br />
+								</p:column>
+
+								<!-- <p:column style="width:200px;" sortBy="#{zone.availableBegain}" resizable="true">
+									<f:facet name="header">
+										<h:outputText value="开放时间" />
+									</f:facet>
+									<h:outputText value="开始时间：" />
+									<h:outputText value="#{zone.availableBegain}" styleClass="tip">
+										<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8" />
+									</h:outputText>
+									<br />
+									<h:outputText value="结束时间：" />
+									<h:outputText value="#{zone.availableEnd}" styleClass="tip">
+										<f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8" />
+									</h:outputText>
+								</p:column> -->
+
+								<p:column styleClass="m-block-tablecol" resizable="true"
+									rendered="#{clientSession.ifLogin and clientSession.usr.lessonTypeStr.contains(lessonList.lessonType.id)}">
+									<f:facet name="header">
+										<h:outputText value="操作" />
+									</f:facet>
+									<h:panelGroup>
+										<h:outputText value="未开放&lt;br/>" escape="false" rendered="#{!zone.ifOpen}" />
+										<p:button styleClass="m-block-tablebtn" value="学 习" href="LessonDetail2.jspx?id=#{zone.id}"
+											rendered="#{zone.ifOpen}" target="_blank" />
+										<div style="height: 5px"></div>
+										<p:button styleClass="m-block-tablebtn" value="随堂练习" style="background:#F5A623!important"
+											rendered="#{zone.moduleExaminations.size()>0}"
+											href="/servlet/pc/ExamCaseModule2Controller?type=3&amp;exam_id=#{zone.moduleExaminations.get(0).id}&amp;tid=#{lessonList.lessonType.id}" />
+									</h:panelGroup>
+								</p:column>
+
+							</p:dataTable>
+						</div>
+					</div>
+					<!-- 模拟考试 -->
+					<div class="m-block" style="display: none">
+						<div class="m-block-content">
+							<p:dataTable id="examDc" rendered="#{lessonList.lessonType.exams.size()!=0}"
+								value="#{lessonList.lessonType.exams}" var="exam" style="width:100%" styleClass="frontColumn"
+								emptyMessage="暂无考试" rows="10" paginator="true" paginatorPosition="bottom">
+								<f:facet name="header">
+									<h:outputText rendered="#{clientSession.usr.lessonTypeStr.contains(lessonList.lessonType.id)}"
+										value="关联的综合考试（开放考试要求完成的最低课时数：#{lessonList.lessonType.openExamNum}，我已经完成的课时数：#{lessonList.lessonTypeLog.finishedClassNum}）" />
+								</f:facet>
+
+								<p:column id="columnRefType" styleClass="m-block-tablecol t-left">
+									<f:facet name="header">
+										<h:outputText value="考试" />
+									</f:facet>
+									<h:outputText value="#{exam.name}"></h:outputText>
+									<br />
+									<h:outputText value="#{exam.availableBegain}" styleClass="tip">
+										<f:convertDateTime pattern="开放时间：yyyy-MM-dd HH:mm" timeZone="GMT+8" />
+									</h:outputText>
+									<br />
+									<h:outputText value="#{exam.availableEnd}" styleClass="tip">
+										<f:convertDateTime pattern="结束时间：yyyy-MM-dd HH:mm" timeZone="GMT+8" />
+									</h:outputText>
+								</p:column>
+
+								<!-- <p:column style="text-align: center;width:100px">
+                        <f:facet name="header">
+                            <h:outputText value="评分类型" />
+                        </f:facet>
+                        <h:outputText value="#{exam.ifDirect?'智能评分':'手工评分'}" styleClass="tip"/><br/>
+                    </p:column> -->
+
+								<p:column styleClass="m-block-tablecol">
+									<f:facet name="header">
+										<h:outputText value="考试时长" />
+									</f:facet>
+									<h:outputText value="#{exam.timeLen}分钟" styleClass="tip" />
+									<br />
+								</p:column>
+
+								<!-- <p:column style="text-align: center;" rendered="#{applicationBean.systemConfig.showScore and copyrightController.sysType!='1'}">
+                        <f:facet name="header">
+                            <h:outputText value="积分" />
+                        </f:facet>
+                        <h:outputText id="scorePaid" value="积分消耗：#{exam.scorePaid}" styleClass="tip"/><br/>
+                        <h:outputText id="fullScore" value="满分积分：#{exam.bbsScore}" styleClass="tip"/>
+                        <p:tooltip for="scorePaid" value="参加考试时消耗积分#{exam.scorePaid}"/>
+                        <p:tooltip for="fullScore" value="实际获得积分=实际成绩/满分*#{exam.bbsScore}"/>
+                    </p:column> -->
+
+								<p:column styleClass="m-block-tablecol">
+									<f:facet name="header">
+										<h:outputText value="题目" />
+									</f:facet>
+									<h:panelGrid rendered="#{exam.paperType=='manual'}" columns="1" cellpadding="0" cellspacing="0">
+										<ui:repeat value="#{exam.manualPaper.parts}" rendered="#{exam.ifManualPaper}" var="part1">
+											<h:outputText value="#{part1.name}：#{part1.itemNum}" styleClass="tip" />
+											<br />
+											<h:outputText value="，" rendered="#{!row.last}" styleClass="tip" />
+										</ui:repeat>
+									</h:panelGrid>
+									<h:panelGrid rendered="#{exam.paperType=='random2'}" columns="1" styleClass="threadColumn special1 special2"
+										style="text-align: center;" cellpadding="0" cellspacing="0">
+										<ui:repeat value="#{exam.random2Paper.parts}" rendered="#{exam.ifRandom2Paper}" var="part1" varStatus="row">
+											<h:outputText value="#{part1.name}：#{part1.itemNum}" styleClass="tip" />
+											<br />
+											<h:outputText value="，" rendered="#{!row.last}" styleClass="tip" />
+										</ui:repeat>
+									</h:panelGrid>
+									<h:panelGrid rendered="#{exam.paperType=='random'}" columns="2" styleClass="threadColumn special1 special2"
+										style="text-align: center;" cellpadding="0" cellspacing="0">
+										<h:outputText value="单选题：#{exam.choiceTotal}" styleClass="tip" rendered="#{exam.choiceTotal!=0}" />
+										<h:outputText value="多选题：#{exam.multiChoiceTotal}" styleClass="tip" rendered="#{exam.multiChoiceTotal!=0}" />
+										<h:outputText value="填空题：#{exam.fillTotal}" styleClass="tip" rendered="#{exam.fillTotal!=0}" />
+										<h:outputText value="判断题：#{exam.judgeTotal}" styleClass="tip" rendered="#{exam.judgeTotal!=0}" />
+										<h:outputText value="问答题：#{exam.essayTotal}" styleClass="tip" rendered="#{exam.essayTotal!=0}" />
+										<h:outputText value="文件题：#{exam.fileTotal}" styleClass="tip" rendered="#{exam.fileTotal!=0}" />
+										<h:outputText value="#{exam.caseAlias}：#{exam.caseTotal}" styleClass="tip" rendered="#{exam.caseTotal!=0}" />
+									</h:panelGrid>
+								</p:column>
+
+								<p:column styleClass="m-block-tablecol">
+									<f:facet name="header">
+										<h:outputText value="最高分" escape="false" />
+									</f:facet>
+									<h:outputText value="#{exam.topExamCase.score}" styleClass="tip" />
+								</p:column>
+
+								<p:column styleClass="m-block-tablecol" rendered="#{clientSession.ifLogin}">
+									<f:facet name="header">
+										<h:outputText value="考试" />
+									</f:facet>
+									<p:commandButton styleClass="m-block-tablebtn" value="正式考试" action="#{examinationList.paticipateExam(exam.id)}"
+										update="examDc"
+										onclick="aabbcc('#{facesContext.externalContext.requestContextPath}/servlet/pc/ExamCaseController?exam_id=#{exam.id}')"
+										rendered="#{exam.ifOpen and exam.checkParticipateTimes(clientSession.usr.id) lt exam.maxNum and lessonList.lessonTypeLog.finishedClassNum ge lessonList.lessonType.openExamNum}" />
+									<br></br>
+									<h:outputText value="考试次数用完" rendered="#{exam.checkParticipateTimes(clientSession.usr.id) ge exam.maxNum}" />
+									<h:outputText value="课程未完成"
+										rendered="#{lessonList.lessonTypeLog.finishedClassNum lt lessonList.lessonType.openExamNum}" />
+									<h:outputText value="未开放&lt;br/>" escape="false" rendered="#{!exam.ifOpen}" />
+									<h:outputText value="不允许重复参加" rendered="#{exam.scoreExsits and (!exam.allowUserRepeat)}" />
+									<br></br>
+									<p:commandButton styleClass="m-block-tablebtn" value="模拟考试" action="#{examinationList.paticipateExam(exam.id)}"
+										update="examDc"
+										onclick="aabbcc('#{facesContext.externalContext.requestContextPath}/servlet/pc/ExamCaseController?exam_id=#{exam.id}&amp;exam_type=1')"
+										rendered="#{exam.ifOpen and lessonList.lessonTypeLog.finishedClassNum ge lessonList.lessonType.openExamNum}" />
+								</p:column>
+
+							</p:dataTable>
+						</div>
+					</div>
+				</div>
+				<div class="lecturer_info">
+					<div class="lecturer_course_title">
+						<span>讲师其他课程</span>
+						<span style="float: right;">
+							<a href="">
+								<div style="float: left;">更多</div>
+								<div style="float: left;">>></div>
+							</a>
+						</span>
+					</div>
+					<div class="lecturer_cours">
+						<ul>
+							<ui:repeat var="course" value="#{lessonList.courses}">
+								<li class="learncourse">
+									<a href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{course.id}"
+										target="_blank" class="course-img-link">
+										<img src="../#{fn:replace(course.picture,'showimage','showabstractimage')}" class="course-img" width="207px"
+											height="203px" />
+									</a>
+									<div class="course-tt">
+										<a href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{course.id}"
+											target="_blank" class="course-tt-link">#{course.name}</a>
+									</div>
+									<div class="course-line course-line-bottom">
+										<span class="line-cell course-price hour">#{course.totalClassNum}</span>
+										<span class="course-source">
+											<img src="../HJ/image/img_lecturer.png" class="course-lecturer" />
+											<a
+												href="#{facesContext.externalContext.requestContextPath}/HJ/LecturerStyle.xhtml?name=#{course.teacher.name}">
+												#{course.teacher.name} </a>
+										</span>
+									</div>
+								</li>
+							</ui:repeat>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="div-wrap-down-right">
+				<div class="lecturer_img" style="width: 100%;">
+					<div class="lecturer_img_info" style="width: 50%; float: left;">
+						<img style="width: 130px; height: 205px; margin-left: 10%;"
+							src="#{(empty lessonList.lessonType.teacher.picture)?facesContext.externalContext.requestContextPath.concat('/HJ/image/notlogin.png'):facesContext.externalContext.requestContextPath.concat('/').concat(lessonList.lessonType.teacher.picture)}" />
+					</div>
+					<div style="float: left; width: 50%; text-align: center;">
+						<div class="lecturer_introduction" style="margin-left: 30%; margin-top: 50%; width: 50%;">
+							<div class="lecturer_name">#{lessonList.lessonType.teacher.name}</div>
+							<!-- <span>#{lessonList.lessonType.teacher.jobTitle}</span>
+							<p>个人简介：#{lessonList.lessonType.teacher.introduction}</p> -->
+						</div>
+					</div>
+				</div>
+				<div class="users-div">
+					<!-- <div style="text-align: center;">共有#{lessonList.lessonType.userNum}人在学习该课程</div>
+					<div id="users" style="height: 200px; border-style: solid; border-width: 1px; border-color: #000">
+						<c:forEach items="#{lessonList.users}" var="user" begin="0" end="9">
+							<div style="float: left; width: 20%; height: 50%;" class="j-pics pics">
+								<div style="height: 80%; text-align: center;" class="j-icon">
+									<img src="#{empty user.picUrl?'servlet/ShowAbstractImage?id=1':user.picUrl}" alt=""
+										style="width: 90%; height: 90%; margin: 5% 5%;" class="j-img" />
+									<em class="f-thide"
+										style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; -ms-text-overflow: ellipsis;">#{user.name}</em>
+								</div>
+								<div style="height: 20%; width: 90%; overflow: hidden; text-align: center;">
+									<em style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; -ms-text-overflow: ellipsis;">
+										#{user.name} </em>
+								</div>
+							</div>
+							<div class="j-pics pics">
+								<div class="j-icon" id="auto-id-1492516692479" data-cid="cid2">
+									<img src="#{empty user.picUrl?'servlet/ShowAbstractImage?id=1':user.picUrl}" alt="" class="j-img" />
+									<em class="f-thide"
+										style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; -ms-text-overflow: ellipsis;">#{user.name}</em>
+								</div>
+							</div>
+						</c:forEach>
+					</div> -->
+					<div id="j-courseusers">
+						<div id="auto-id-1492565756608">
+							<div class="u-Pusers j-Pusers f-bg f-cb f-pr">
+								<h3 class="f-cb">
+									<em class="num j-num f-fl">#{lessonList.lessonType.userNum}</em>
+									<span class="nTask nCourse j-taskOrCourse f-fl"></span>
+								</h3>
+								<div class="j-pics pics">
+									<a class="uItem j-uItem f-fl f-pr" target="_blank" href="http://study.163.com/u/ykt1471177575678"
+										id="auto-id-1492565756609">
+										<div class="j-icon" id="auto-id-1492565756610" data-cid="cid2">
+											<img class="j-img"
+												src="http://edu-image.nosdn.127.net/AF91AAC2AA1519EBD367AC1E3A5A3A15.jpg?imageView&amp;thumbnail=49y49&amp;quality=100" />
+											<em class="f-thide">Sonia麻麻</em>
+										</div>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- <div class="m-side-operation auto-1492516691353" id="j-side-operation" style="display: block; opacity: 1;">
+				<div class="side-service-item ">
+					<a class="item-link-block app-download" data-name="手机课堂" href="javascript:void(0)">
+						<i class="f-icon icon-mobile icon-hover-none"></i>
+						<span class="item-hover-text">手机课堂</span>
+						<div class="qrcode-bubble">
+							<div class="qrcode">
+								<div class="download">
+									<img src="http://s.stu.126.net/res/images/qrcode/sideBar90.png"/>
+										<p>下载App</p>
+								</div>
+								<div class="follow-weixin">
+									<img src="http://s.stu.126.net/res/images/qrcode/weixin.png"/>
+										<p>关注微信</p>
+								</div>
+							</div>
+							<div class="arrow">
+								<div class="arrow-border"></div>
+								<div class="arrow-cnt"></div>
+							</div>
+						</div>
+					</a>
+				</div>
+				<div class="line-wrap">
+					<div class="line"></div>
+				</div>
+				<div class="side-service-item ">
+					<a class="item-link-block side-service-top" data-name="回到顶部" href="javascript:void(0)" id="auto-id-1492516691426">
+						<i class="f-icon icon-totop icon-hover-none"></i>
+						<span class="item-hover-text scrtop-text" id="auto-id-1492516692724">返回顶部</span>
+					</a>
+				</div>
+			</div> -->
+
+			<script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/HJ/js/lesson-tab.js"></script>
+			<ui:include src="/NewFile.html"></ui:include>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

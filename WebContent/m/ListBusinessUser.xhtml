@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions" lang="en">
+<head>
+<title>My Facelets Page</title>
+<meta http-equiv="keywords" content="enter,your,keywords,here" />
+<meta http-equiv="description"
+	content="A short description of this page." />
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+</head>
+<body>
+	<ui:composition template="BackGeneral.xhtml">
+		<ui:define name="content">
+			<h:form id="myForm">
+				<ui:include src="/AjaxStatus2.xhtml" />
+				<div style="text-align: left; margin: 10px 0px 0px 0px; width: 98%;">
+					<div>
+						<h:outputText id="outputText1" styleClass="tit" value="-企业客户管理-" />
+						<p:button href="/m/AABusinessUser.jspx" value="添加企业客户"
+							rendered="#{adminSessionBean.ifSuper}" />
+					</div>
+					<p:outputPanel autoUpdate="true">
+						<h:messages></h:messages>
+					</p:outputPanel>
+					
+					<div>
+						<p:dataTable paginator="true" paginatorPosition="bottom"
+							value="#{listBusinessUser.businessUserList}" var="us" id="dataTable1"
+							emptyMessage="#{lang['exam.empty_result']}" styleClass="list"
+							rowIndexVar="row" style="width:100%" liveResize="true" resizableColumns="true">
+							<p:column id="num" style="width:40px;text-align: center;"  resizable="true" >
+								<h:outputText style="height: 5%" value="#{row+1}" />
+								<f:facet name="header">
+									<h:outputText id="outputTextnum" value="序号" />
+								</f:facet>
+							</p:column>
+							<p:column filterBy="#{us.businessNameCn}" filterMatchMode="contains"  sortBy="#{us.businessNameCn}"  resizable="true" >
+								<h:outputText value="#{us.businessNameCn}" />
+								<f:facet name="header">
+									<h:outputText value="企业名称" />
+								</f:facet>
+							</p:column>
+							<p:column filterBy="#{us.legalPerson}" filterMatchMode="contains"  sortBy="#{us.legalPerson}"  resizable="true" >
+								<h:outputText value="#{us.legalPerson}" />
+								<f:facet name="header">
+									<h:outputText value="法人" />
+								</f:facet>
+							</p:column>
+							<p:column filterBy="#{us.domainName}" filterMatchMode="contains"  sortBy="#{us.legalPerson}"  resizable="true" >
+								<h:outputText value="#{us.domainName}" />
+								<f:facet name="header">
+									<h:outputText value="域名" />
+								</f:facet>
+							</p:column>
+							
+							<p:column style="width:70px;text-align: center;"  sortBy="#{us.deleteFlag}"  resizable="true" >
+								<h:outputText value="（已启用）" style="color:green"
+									rendered="#{(us.deleteFlag==0)}" />
+								<h:outputText value="（已禁用）" style="color:red"
+									rendered="#{(us.deleteFlag==1)}" />
+								<br />
+								<p:commandLink
+									rendered="#{(us.deleteFlag==0) }"
+									actionListener="#{listBusinessUser.operBuisnessUser(us.id)}" update="@form"
+									value="禁用">
+								</p:commandLink>
+								<p:commandLink
+									rendered="#{(us.deleteFlag==1)}"
+									actionListener="#{listBusinessUser.operBuisnessUser(us.id)}" update="@form"
+									value="启用">
+								</p:commandLink>
+								<f:facet name="header">
+									<h:outputText value="启用/禁用" />
+								</f:facet>
+							</p:column>
+							
+							
+							<p:column style="text-align: center;width:60px;"  resizable="true" >
+								<h:outputLink value="AABusinessUser.jspx?id=#{us.id}">
+									<h:outputText value="修改"/>
+								</h:outputLink>
+								<f:facet name="header">
+									<h:outputText value="修改" />
+								</f:facet>
+							</p:column>
+							<p:column style="text-align: center;width:60px;"  resizable="true" >
+								<h:outputLink value="AADefaultAdmin.jspx?businessId=#{us.id}" rendered="#{!(us.hasAdmin)}">
+									<h:outputText value="设置"/>
+								</h:outputLink>
+								<h:outputLink value="AADefaultAdmin.jspx?businessId=#{us.id}" rendered="#{(us.hasAdmin)}">
+									<h:outputText value="修改"/>
+								</h:outputLink>
+								<f:facet name="header">
+									<h:outputText value="管理员" />
+								</f:facet>
+							</p:column>
+							<!-- <p:column rendered="#{adminSessionBean.ifSuper}"
+								style="text-align: center;width:60px;"  resizable="true" >
+								<p:commandLink action="#{listBusinessUser.delete(us.id)}" update="@form"
+									onclick="if (!confirm('确认要删除此管理员吗？')) return false">
+									<h:outputText value="删除"/>
+								</p:commandLink>
+								<f:facet name="header">
+									<h:outputText value="删除" />
+								</f:facet>
+							</p:column> -->
+						</p:dataTable>
+
+
+
+
+					</div>
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

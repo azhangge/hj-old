@@ -1,0 +1,683 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <h:head>
+        <title>
+            <ui:insert name="title"></ui:insert>
+            #{contestCaseMB.examCase.examination.name} - #{applicationBean.info.siteHeader}</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <link rel="stylesheet" type="text/css"
+              href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs.css" />
+        <link rel="stylesheet" type="text/css"
+              href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs_a.css" />
+        <link rel="stylesheet" type="text/css"
+              href="#{facesContext.externalContext.requestContextPath}/resources/external.css" />
+        <script src="#{facesContext.externalContext.requestContextPath}/resources/js/floatdiv.js" type="text/javascript" language="javascript"/>
+        <script src="#{facesContext.externalContext.requestContextPath}/resources/js/contest_case.js" type="text/javascript" language="javascript"/>
+        <script src="#{facesContext.externalContext.requestContextPath}/resources/js/kibo.js" type="text/javascript" language="javascript"/>
+        <script src="#{facesContext.externalContext.requestContextPath}/resources/js/screenfull.min.js" type="text/javascript" language="javascript"/>
+        
+        <script src="#{facesContext.externalContext.requestContextPath}/resources/js/jquery.jplayer.min.js" type="text/javascript" language="javascript"/>
+        <script src="#{facesContext.externalContext.requestContextPath}/resources/js/mp3player.js" type="text/javascript" language="javascript"/>
+
+        <script type="text/javascript">
+
+        </script>
+    </h:head>
+    <h:body style="padding:0;margin:0;">
+
+        <script type="text/javascript" language="javascript">
+           //<![CDATA[
+
+
+
+            function begain() {
+                //dig11.hide();
+                begainCount();
+
+                jQuery(window).focus();
+            }
+            document.onkeydown = function(e) {
+                var ev = window.event || e;
+                var code = ev.keyCode || ev.which;
+                if (code == 116) {
+                    ev.keyCode ? ev.keyCode = 0 : ev.which = 0;
+                    cancelBubble = true;
+                    return false;
+                }
+                if (window.event.altKey)
+                {
+//                    alert("不准使用ALT键！");
+//                    event.returnValue = false;
+//                    return false();
+                }
+            };
+
+            var kk = new Kibo();
+            kk.down(['alt', 'tab'], handlerAlt);
+            function handlerAlt() {
+                //alert('不允许使用ALT或TAB键！ ');
+                PF('dlg1').show();
+                return false;
+
+            }
+
+            kk.down('f5', function() {
+                //alert('不允许刷新！ ');
+            });
+
+
+            //window.location = no;
+            //window.status = no;
+            //document.oncontextmenu = new Function("event.returnValue=false;"); //禁止右键功能,单击右键将无任何反应
+            //document.onselectstart = new Function("event.returnValue=false;"); //禁止选择,也就是无法复制
+            //window.onblur = blur11;
+
+
+            var timer = null;
+            var maxtime = 0;
+            var passtime = 0;
+            var altered = false;
+            var remaining =#{contestCaseMB.remainingTime};
+
+            function begainCount() {
+                //alert('begain');
+                testClose();
+                maxtime = remaining;
+                if ((timer == null) &&#{contestCaseMB.examCase.examination.ifCountDown}) {
+                    timer = setInterval("CountDown()", 1000);
+                }
+            }
+
+            function CountDown()
+            {
+                //alert(maxtime);
+                if (maxtime >= 0)
+                {
+                    minutes = Math.floor(maxtime / 60);
+                    seconds = Math.floor(maxtime % 60);
+                    msg = minutes + " 分 " + seconds + " 秒";
+                    jQuery("#remain").html(msg);
+                    maxtime--;
+                    passtime++;
+                }
+                else
+                {
+                    PF('presubcase11').disable();
+                    alert('交卷时间已到，点[确定]后试卷将自动提交！');
+                    jQuery("#myForm\\:subcase").trigger("click");
+                    clearInterval(timer);
+                }
+            }
+
+
+            //监听回车 
+            $(document).ready(function() {
+                $(document).keydown(function(e) {
+                    if (e.keyCode == 13) {
+                        //alert("xxxxNX");
+                        //return false;
+                    }
+                });
+            });
+
+            begain();
+//]]>
+        </script>
+        <h:form id="myForm" style="padding: 0px 0px 0px 0px;margin: 0px 0px 0px 0px;">
+            <ui:include src="ExamPrompt.xhtml"/>
+            <ui:include src="ExamCaseFileUploader.xhtml"/>
+            <p:notificationBar position="top"  widgetVar="bar11" autoDisplay="true" effect="slide" style="height: 20px;" > 
+                <div style="margin: 0 auto;width:955px;text-align: left;">
+                    <h:panelGrid columns="5" style="width:90%;" cellpadding="0" cellspacing="0">
+                        <h:panelGroup>
+                            <h:outputText value="竞赛名称：" styleClass="topExamCase1"/>
+                            <h:outputText value="#{contestCaseMB.examCase.examination.name}" styleClass="topExamCase2"/>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <h:outputText value="考生姓名：" styleClass="topExamCase1"/>
+                            <h:outputText value="#{clientSession.usr.name}" styleClass="topExamCase2"/>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <h:outputText value="竞赛时长：" styleClass="topExamCase1"/>
+                            <h:outputText value="#{contestCaseMB.examCase.examination.timeLen}分钟" styleClass="topExamCase2"/>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <h:outputText value="开考时间：" styleClass="topExamCase1"/>
+                            <h:outputText value="#{contestCaseMB.begainTime}" styleClass="topExamCase2">
+                                <f:convertDateTime pattern="HH:mm:ss" timeZone="GMT+8"/>
+                            </h:outputText>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <h:outputText value="试卷总分：" styleClass="topExamCase1"/>
+                            <h:outputText value="#{contestCaseMB.examCase.totalFullScore}分" styleClass="topExamCase2"/>
+                        </h:panelGroup>
+
+                    </h:panelGrid>
+                    <p:growl id="msg" autoUpdate="true"/>
+                </div>
+            </p:notificationBar>
+
+            <p:notificationBar position="bottom"  widgetVar="bar12" autoDisplay="true" effect="slide" style="height: 28px;padding-top: 0px;" >  
+                <div style="margin: 0 auto;width:955px;text-align: left;">
+                    <h:panelGrid columns="5" style="width:90%;margin-top: 2px;" cellpadding="0" cellspacing="0">
+                        <h:panelGroup rendered="#{contestCaseMB.examCase.examination.ifCountDown}" style="display:inline-block;width:200px;">
+                            <h:outputText value="剩余时间："/>
+                            <span id="remain" style="font-weight:bold;color:red;">
+                                <h:outputText value="#{contestCaseMB.remainingTime/60}">
+                                    <f:convertNumber maxFractionDigits="0"/>
+                                </h:outputText>&nbsp;分&nbsp;0&nbsp;秒</span>
+                        </h:panelGroup>
+                        <p:button id="presubcase11" widgetVar="presubcase11"  onclick="checkCase();return false;" value="提交竞赛" disabled="#{clientSession.usr==null}" styleClass="" ></p:button>
+                    </h:panelGrid>
+
+                    <p:outputPanel id="checkCase" autoUpdate="true">
+                        <script type="text/javascript" language="javascript">
+                            //<![CDATA[
+                            var redirectIndex = -1;//检查作答情况后，记录第一个未做的试题的index
+                            function checkCase() {
+                                PF('presubcase11').enable();
+                                b1 = false;
+                                var indx = checkAllQuestionForSingleMode();//checkAllQuestion的定义在contest_case.js中
+                                //alert(str);
+                                if (indx !== -1) {
+                                    redirectIndex = indx;
+                                    //bl = confirm("试卷还有题目未完成，确认要提交吗？\n点击【取消】定位到未做题目");
+                                    PF('cdts').show();
+                                } else {
+                                    window.onbeforeunload = null;
+                                    jQuery("#myForm\\:subcase").trigger("click");
+                                    clearInterval(timer);//清除间歇计时
+                                    return;
+                                }
+                            }
+                            function tok11() {
+                                PF('presubcase11').disable();
+                                window.onbeforeunload = null;
+                                jQuery("#myForm\\:subcase").trigger("click");
+                                clearInterval(timer);
+                                PF('cdts').hide();
+                            }
+                            function tunok11() {
+                                cid = redirectIndex;
+                                cidd = '#archor-' + cid;
+                                //reply(cidd);
+                                switchTo(cid);
+                                PF('cdts').hide();
+                            }
+                            //]]>
+                        </script>
+                    </p:outputPanel>
+                </div>
+            </p:notificationBar>
+
+            <ui:include src="ViewQuestionPopup.xhtml"/>
+
+
+            <div style="width:957px;margin: 0px auto;">
+                <div style="height: 30px;"/>
+                <div id="float_left" style="overflow: auto;text-align: center;width: 200px;">
+                    <script type="text/javascript" language="javascript">
+                        jQuery(window).resize(function() {
+                            //process here
+                            reheightFloat();
+                        });
+                        jQuery(document).ready(function() {
+                            //process here
+                            reheightFloat();
+                        });
+                        function reheightFloat() {
+                            scrollx({id: 'float_left', l: 0, t: 42, f: 1});
+                            var dialHeight = jQuery(window).height();
+                            jQuery("#float_left").height(dialHeight - 70);
+
+                        }
+
+                    </script>
+                    <script type="text/javascript" language="javascript">
+
+                    </script>
+
+
+                    <p:panel id="dial"  style="width: 195px;min-height:99%;padding: 0px 0px 0px 0px;">
+                        <c:forEach items="#{contestCaseMB.examCase.cparts}" var="part">
+                            <p:panelGrid columns="5"  styleClass="cell1" style="width:100%;">
+                                <f:facet name="header">
+                                    <h:outputText value="#{part.name}"/>
+                                </f:facet>
+                                <c:forEach items="#{part.cadapters}" var="chcc" varStatus="row">
+                                    <h:outputLink value="#" onclick="switchTo(#{chcc.item.index});" rendered="#{chcc.qtype!='case'}">
+                                        <span id="dial-#{chcc.item.id}" class="#{chcc.done?'dialA':'dialB'}#{chcc.marked?' dialC':''}">#{chcc.item.index}</span>
+                                    </h:outputLink>
+                                    <c:if test="#{chcc.qtype=='case'}">
+                                        <c:forEach items="#{chcc.item.choiceItems}" var="chcc1" varStatus="row">
+                                            <h:outputLink value="#" onclick="switchTo(#{chcc1.index});">
+                                                <span id="dial-#{chcc1.id}"  class="#{chcc1.done?'dialA':'dialB'}#{chcc1.marked?' dialC':''}">#{chcc1.index}</span>
+                                            </h:outputLink>
+                                        </c:forEach>
+                                        <c:forEach items="#{chcc.item.multiChoiceItems}" var="chcc1" varStatus="row" rendered="#{chcc.qtype=='case'}">
+                                            <h:outputLink value="#" onclick="switchTo(#{chcc1.index});">
+                                                <span id="dial-#{chcc1.id}"  class="#{chcc1.done?'dialA':'dialB'}#{chcc1.marked?' dialC':''}">#{chcc1.index}</span>
+                                            </h:outputLink>
+                                        </c:forEach>
+                                        <c:forEach items="#{chcc.item.fillItems}" var="chcc1" varStatus="row" rendered="#{chcc.qtype=='case'}">
+                                            <h:outputLink value="#" onclick="switchTo(#{chcc1.index});">
+                                                <span id="dial-#{chcc1.id}"  class="#{chcc1.done?'dialA':'dialB'}#{chcc1.marked?' dialC':''}">#{chcc1.index}</span>
+                                            </h:outputLink>
+                                        </c:forEach>
+                                        <c:forEach items="#{chcc.item.judgeItems}" var="chcc1" varStatus="row" rendered="#{chcc.qtype=='case'}">
+                                            <h:outputLink value="#" onclick="switchTo(#{chcc.index});">
+                                                <span id="dial-#{chcc1.id}"  class="#{chcc.done?'dialA':'dialB'}#{chcc1.marked?' dialC':''}">#{chcc1.index}</span>
+                                            </h:outputLink>
+                                        </c:forEach>
+                                        <c:forEach items="#{chcc.item.essayItems}" var="chcc1" varStatus="row" rendered="#{chcc.qtype=='case'}">
+                                            <h:outputLink value="#" onclick="switchTo(#{chcc1.index});">
+                                                <span id="dial-#{chcc1.id}"  class="#{chcc1.done?'dialA':'dialB'}#{chcc1.marked?' dialC':''}">#{chcc1.index}</span>
+                                            </h:outputLink>
+                                        </c:forEach>
+                                    </c:if>
+                                </c:forEach>
+                            </p:panelGrid>
+                        </c:forEach>
+                    </p:panel>
+                </div>
+                <p:panel id="mainPanel" style="width:757px;float:right;min-height:620px;" styleClass="mainPanel">
+
+                    <p:separator/>
+
+                    <script type="text/javascript" language="javascript">
+                        var questionIndex = 1;
+                        jQuery(document).ready(function() {
+                            //alert('I\'m here');
+                            jQuery('#question-wrapper-' + questionIndex).show();
+                            checkButton();
+                        });
+                        function switchPrevious() {
+                            jQuery('#question-wrapper-' + questionIndex).hide();
+                            questionIndex--;
+                            jQuery('#question-wrapper-' + questionIndex).show();
+                            checkButton();
+                        }
+                        function switchNext() {
+                            jQuery('#question-wrapper-' + questionIndex).hide();
+                            questionIndex++;
+                            jQuery('#question-wrapper-' + questionIndex).show();
+                            checkButton();
+                        }
+                        function switchTo(index) {
+                            jQuery('#question-wrapper-' + questionIndex).hide();
+                            questionIndex = index;
+                            //jQuery('.questionWrapper').hide();
+                            jQuery('#question-wrapper-' + questionIndex).show();
+                            checkButton();
+                        }
+                        function checkButton() {
+                            if (questionIndex == 1) {
+                                PF('previousButton').disable();
+                            } else {
+                                PF('previousButton').enable();
+                            }
+                            if (questionIndex ==#{contestCaseMB.total}) {
+                                PF('nextButton').disable();
+                            } else {
+                                PF('nextButton').enable();
+                            }
+                        }
+
+
+                    </script>
+
+                    <div style="height:450px;overflow: hidden;">
+                        <ui:repeat value="#{contestCaseMB.examCase.cparts}" var="part">
+                            <ui:repeat value="#{part.cadapters}" var="adapter"  varStatus="row">
+
+                                <p:outputPanel rendered="#{adapter.qtype=='choice'}">
+                                    <div id="question-wrapper-#{adapter.choiceItem.index}" class="questionWrapper" style="display:none;height:450px;">
+                                        <div style="height:240px;overflow: auto;">
+                                            <br/>
+                                            <a id="archor-#{adapter.choiceItem.id}" href="#"></a>
+                                            <h:outputText value="#{adapter.choiceItem.index}、（单选题，#{part.choiceScore}分）" styleClass="choiceTitle2" escape="false"/><hr/>
+                                            <h:outputText value="#{adapter.choiceItem.question.name}" styleClass="choiceTitle2" escape="false"/><br/><br/>
+                                        </div>
+                                        <div style="margin-left: 30px;height:180px;overflow: auto;">
+                                            <h:selectOneRadio  onchange="testSelectDial('#{adapter.choiceItem.id}', this.value)" value="#{adapter.choiceItem.userAnswer}" layout="pageDirection"  styleClass="threadColumn cell0 choiceTitle2 queSpanJSF" > 
+                                                <f:selectItems value="#{adapter.choiceItem.question.choices}" var="ch" 
+                                                               itemLabel="#{ch.labelRendered}.&nbsp;#{ch.name}&lt;br&gt;" itemValue="#{ch.label}" />
+                                            </h:selectOneRadio> 
+                                        </div>
+                                        <p:commandLink action="#{viewQuestionPopup.selectChoice(adapter.choiceItem.question.id)}" rendered="#{contestCaseMB.examCase.examination.ifShowAnswer}"  oncomplete="PF('choiceDialog').show()" style="margin-left:40px;"  styleClass="explain" value="△试题解析"/>
+                                        <h:selectBooleanCheckbox id="markChoice" value="#{adapter.choiceItem.marked}" onchange="markQuestion('#{adapter.choiceItem.id}', this.checked)" style="margin-left:40px;"/>
+                                        <h:outputLabel value="标记" for="markChoice" styleClass="explain markQuestion"/>
+                                        <br/>
+                                    </div>
+                                </p:outputPanel>
+
+
+
+                                <p:outputPanel rendered="#{adapter.qtype=='mchoice'}">
+                                    <div id="question-wrapper-#{adapter.multiChoiceItem.index}" class="questionWrapper" style="display:none;height:450px;">
+                                        <div style="height:240px;overflow: auto;">
+                                            <br/>
+                                            <a id="archor-#{adapter.multiChoiceItem.id}" href="#"></a>
+                                            <h:outputText value="#{adapter.multiChoiceItem.index}、（多选题，#{part.multiChoiceScore}分）" styleClass="choiceTitle2" escape="false"/><hr/>
+                                            <h:outputText value="#{adapter.multiChoiceItem.question.name}" styleClass="choiceTitle2" escape="false"/>
+                                        </div>
+                                        <div id="multi-select-#{adapter.multiChoiceItem.id}"  style="margin-left: 30px;height:180px;overflow: auto;">
+                                            <h:selectManyCheckbox  onchange="testMultiSelectDial('#{adapter.multiChoiceItem.id}')" value="#{adapter.multiChoiceItem.selectedLabels}" layout="pageDirection"  styleClass="threadColumn cell0 choiceTitle2 queSpanJSF" > 
+                                                <f:selectItems value="#{adapter.multiChoiceItem.question.choices}" var="ch" 
+                                                               itemLabel="#{ch.labelRendered}.&nbsp;#{ch.name}&lt;br&gt;" itemValue="#{ch.label}" />
+                                            </h:selectManyCheckbox> 
+                                        </div>
+                                        <p:commandLink action="#{viewQuestionPopup.selectMultiChoice(adapter.multiChoiceItem.question.id)}" rendered="#{contestCaseMB.examCase.examination.ifShowAnswer}"  oncomplete="PF('multiChoiceDialog').show()" style="margin-left:40px;"  styleClass="explain" value="△试题解析"/>
+                                        <h:selectBooleanCheckbox id="markMultiChoice" value="#{adapter.multiChoiceItem.marked}"  onchange="markQuestion('#{adapter.multiChoiceItem.id}', this.checked)" style="margin-left:40px;"/>
+                                        <h:outputLabel value="标记" for="markMultiChoice" styleClass="explain markQuestion"/>
+                                    </div>
+                                </p:outputPanel>
+
+
+
+                                <p:outputPanel rendered="#{adapter.qtype=='fill'}">
+                                    <div id="question-wrapper-#{adapter.fillItem.index}" class="questionWrapper" style="display:none;height:450px;">
+                                        <div style="height:90px;overflow: auto;">
+                                            <br/>
+                                            <a id="archor-#{adapter.fillItem.id}" href="#"></a>
+                                            <h:outputText value="#{adapter.fillItem.index}、（填空题，#{part.fillScore}分）" styleClass="choiceTitle2" escape="false"/><hr/>
+
+                                        </div>
+                                        <div id="fill-#{adapter.fillItem.id}" style="margin-left: 0px;margin-left: 30px;height:330px;overflow: auto;">
+
+                                            <ui:repeat value="#{adapter.fillItem.blocks}" var="b">
+                                                <h:outputText value="#{b.preStr}" style="#{fill.marked?'color:red;':''}" escape="false" styleClass="choiceTitle2"/>
+                                                <h:inputText  onchange="testFillDial('#{adapter.fillItem.id}')" value="#{b.userAnswer}" styleClass="fillBlank">
+
+                                                </h:inputText>
+                                            </ui:repeat>
+                                            <h:outputText value="#{adapter.fillItem.lastStr}" style="#{adapter.fillItem.marked?'color:red;':''}" escape="false" styleClass="choiceTitle2"/> 
+                                        </div>
+                                        <p:commandLink action="#{viewQuestionPopup.selectFill(adapter.fillItem.question.id)}" rendered="#{contestCaseMB.examCase.examination.ifShowAnswer}"  oncomplete="PF('fillDialog').show()" style="margin-left:40px;"  styleClass="explain" value="△试题解析"/>
+                                        <h:selectBooleanCheckbox id="markFill" value="#{adapter.fillItem.marked}"  onchange="markQuestion('#{adapter.fillItem.id}', this.checked)" style="margin-left:40px;"/>
+                                        <h:outputLabel value="标记" for="markFill" styleClass="explain markQuestion"/>
+                                    </div>
+                                </p:outputPanel>
+
+
+
+                                <p:outputPanel rendered="#{adapter.qtype=='judge'}">
+                                    <div id="question-wrapper-#{adapter.judgeItem.index}" class="questionWrapper" style="display:none;height:450px;">
+                                        <div style="height:240px;overflow: auto;">
+                                            <br/>
+                                            <a id="archor-#{adapter.judgeItem.id}" href="#"></a>
+                                            <h:outputText value="#{adapter.judgeItem.index}、（判断题，#{part.judgeScore}分）" styleClass="choiceTitle2" escape="false"/><hr/>
+                                            <h:outputText value="#{adapter.judgeItem.question.name}" styleClass="choiceTitle2" escape="false"/>
+                                        </div>
+                                        <div id="multi-select-#{adapter.judgeItem.id}"  style="margin-left: 30px;height:180px;overflow: auto;">
+                                            <h:selectOneRadio onchange="testJudgeDial('#{adapter.judgeItem.id}', this.value)" value="#{adapter.judgeItem.userAnswer}" layout="pageDirection"   styleClass="threadColumn choiceTitle2 queSpanJSF">
+
+                                                <f:selectItem itemLabel="正确" itemValue="true"/>
+                                                <f:selectItem itemLabel="错误" itemValue="false"/>
+                                                <f:selectItem itemLabel="未填写" itemValue="null"/>
+                                            </h:selectOneRadio>
+                                        </div>
+                                        <p:commandLink action="#{viewQuestionPopup.selectJudge(adapter.judgeItem.question.id)}" rendered="#{contestCaseMB.examCase.examination.ifShowAnswer}"  oncomplete="PF('judgeDialog').show()" style="margin-left:40px;"  styleClass="explain" value="△试题解析"/>
+                                        <h:selectBooleanCheckbox id="markJudge" value="#{adapter.judgeItem.marked}"  onchange="markQuestion('#{adapter.judgeItem.id}', this.checked)" style="margin-left:40px;"/>
+                                        <h:outputLabel value="标记" for="markJudge" styleClass="explain markQuestion"/>
+                                    </div>
+                                </p:outputPanel>
+
+
+                                <p:outputPanel rendered="#{adapter.qtype=='essay'}">
+                                    <div id="question-wrapper-#{adapter.essayItem.index}" class="questionWrapper" style="display:none;height:450px;">
+                                        <div style="height:240px;overflow: auto;">
+                                            <br/>
+                                            <a id="archor-#{adapter.essayItem.id}" href="#"></a>
+                                            <h:outputText value="#{adapter.essayItem.index}、（问答题，#{part.essayScore}分）" styleClass="choiceTitle2" escape="false"/><hr/>
+                                            <h:outputText value="#{adapter.essayItem.question.name}" styleClass="choiceTitle2" escape="false"/>
+                                        </div>
+                                        <div id="multi-select-#{essay.id}"  style="margin-left: 30px;height:180px;overflow: auto;">
+                                            <h:inputTextarea onchange="testEssayDial('#{adapter.essayItem.id}', this.value)"  value="#{adapter.essayItem.userAnswer}" style="width:600px;height:150px;margin-left: 10px;">
+
+                                            </h:inputTextarea><br/>
+                                        </div>
+                                        <p:commandLink action="#{viewQuestionPopup.selectEssay(adapter.essayItem.question.id)}" rendered="#{contestCaseMB.examCase.examination.ifShowAnswer}"  oncomplete="PF('essayDialog').show()" style="margin-left:40px;"  styleClass="explain" value="△试题解析"/>
+                                        <h:selectBooleanCheckbox id="markEssay" value="#{adapter.essayItem.marked}"  onchange="markQuestion('#{adapter.essayItem.id}', this.checked)" style="margin-left:40px;"/>
+                                        <h:outputLabel value="标记" for="markEssay" styleClass="explain markQuestion"/>
+                                    </div>
+                                </p:outputPanel>
+
+                                <p:outputPanel rendered="#{adapter.qtype=='file'}">
+
+                                    <div id="question-wrapper-#{adapter.fileItem.index}" class="questionWrapper" style="display:none;height:450px;">
+                                        <div style="height:210px;overflow: auto;">
+                                            <br/>
+                                            <a id="archor-#{adapter.fileItem.id}" href="#"></a>
+                                            <h:outputText value="#{adapter.fileItem.index}、（文件题，#{part.fileScore}分）" styleClass="choiceTitle2" escape="false"/><hr/>
+                                            <h:outputText value="#{adapter.fileItem.question.name}" styleClass="choiceTitle2" escape="false"/>
+                                        </div>
+                                        <div id="multi-select-#{adapter.fileItem.id}"  style="margin-left: 30px;height:220px;overflow: auto;">
+                                            <p:separator/>
+                                            <h:panelGrid columns="1" style="margin-left:10px;" columnClasses="w20,w70" border="0" styleClass="threadColumn" cellpadding="0" cellspacing="0">
+                                                <h:panelGroup id="fileAttacher">
+                                                    <h:outputText value="附件：" styleClass="choiceTitle"/>
+                                                    <div id="fwrapper-#{file.id}" style="display:inline;">
+                                                        <h:outputLink  target="_blank"  value="#{facesContext.externalContext.requestContextPath}/DownloadFileQuestionAttach?id=#{file.id}&amp;uid=#{clientSession.usr.id}&amp;eid=#{examCaseMB.examCase.examination.id}"  rendered="#{file.attached}">
+                                                            <h:outputText value="点击下载"/>
+                                                        </h:outputLink>
+                                                        <h:outputText value="无" rendered="#{!adapter.fileItem.attached}"/>
+                                                    </div>
+                                                </h:panelGroup>
+                                                <h:panelGrid columns="2" >
+                                                    <p:commandButton value="上传附件" action="#{examCaseFileUploader.prepareToUpload(adapter.fileItem.id, contestCaseMB.examCase.examination.id)}" oncomplete="PF('examFileUploader').show();" update="@none"/>
+                                                    <h:outputText value="仅.ZIP和.RAR文件有效"/>
+                                                </h:panelGrid>
+                                            </h:panelGrid>
+                                            <p:separator/>
+                                            <h:panelGrid style="margin-left:10px;" styleClass="threadColumn" columns="1">
+                                                <h:outputText value="操作步骤：" styleClass="choiceTitle2"/>
+                                                <h:inputTextarea value="#{adapter.fileItem.userAnswer}" style="width:600px;height:80px;margin-left: 0px;" />
+                                            </h:panelGrid>
+                                        </div>
+                                        <p:commandLink action="#{viewQuestionPopup.selectFile(adapter.fileItem.question.id)}" rendered="#{contestCaseMB.examCase.examination.ifShowAnswer}"  oncomplete="PF('fileDialog').show()" style="margin-left:40px;"  styleClass="explain" value="△试题解析"/>
+                                        <h:selectBooleanCheckbox id="markFile" value="#{adapter.fileItem.marked}"  onchange="markQuestion('#{adapter.fileItem.id}', this.checked)" style="margin-left:40px;"/>
+                                        <h:outputLabel value="标记" for="markFile" styleClass="explain markQuestion"/>
+                                    </div>
+                                </p:outputPanel>
+
+                                <p:outputPanel rendered="#{adapter.qtype=='case'}">
+                                    <ui:repeat  value="#{adapter.caseItem.choiceItems}" var="choice" varStatus="row" rendered="#{fn:length(adapter.caseItem.choiceItems)!=0}">
+                                        <div id="question-wrapper-#{choice.index}" class="questionWrapper" style="display:none;height:450px;">
+                                            <div style="height:35px;">
+                                                <h:outputText value="#{choice.index}、#{adapter.caseItem.question.nickName}" style="" styleClass="choiceTitle" escape="false"/>
+                                                <h:outputText value="（#{adapter.caseItem.question.name}）" style="" styleClass="choiceTitle" escape="false"/>
+                                                
+                                            </div>
+                                            <hr/>
+                                            <div style="height:150px;overflow: auto;">
+                                                <h:outputText value="#{adapter.caseItem.question.content}" style="" styleClass="choiceTitle" escape="false"/>
+                                                <hr/>
+                                            </div>
+                                            <h:panelGroup rendered="#{adapter.caseItem.question.audioUrl ne ''}">
+                                                <input id="#{adapter.caseItem.id}-#{row.index}" type="button" value="播放音频材料" onclick="player.startPlayer('#{adapter.caseItem.question.audioUrl}');
+                                                    disablePP('#{adapter.caseItem.id}');
+                                                    return null;"/>
+                                                <h:outputText value="（只允许播放一次）" style="color:blue;"/>
+                                            </h:panelGroup>
+                                            <div style="height:150px;overflow: auto;">
+                                                <h:outputText value="#{choice.question.name}" style="#{choice.marked?'color:red;':''}" styleClass="choiceTitle" escape="false"/>
+                                            </div>
+                                            <div style="margin-left: 30px;height:100px;overflow: auto;">
+                                                <h:selectOneRadio  value="#{choice.userAnswer}" onchange="testSelectDial('#{choice.id}', this.value)"  layout="pageDirection" class="threadColumn cell0 choiceTitle queSpanJSF"> 
+                                                    <f:selectItems value="#{choice.question.choices}" var="ch" itemLabel="#{ch.labelRendered}.&nbsp;#{ch.name}" itemValue="#{ch.label}" />
+                                                </h:selectOneRadio> 
+                                            </div>
+                                            <p:commandLink action="#{viewQuestionPopup.selectChoice(choice.question.id)}" rendered="#{contestCaseMB.examCase.examination.ifShowAnswer}"  oncomplete="PF('choiceDialog').show()" style="margin-left:50px;"  styleClass="explain" value="△试题解析"/>
+                                            <h:selectBooleanCheckbox id="markChoice" value="#{choice.marked}" style="margin-left:50px;" onchange="markQuestion('#{choice.id}', this.checked)" >
+                                            </h:selectBooleanCheckbox>
+                                            <h:outputLabel value="标记" for="markChoice" styleClass="explain markQuestion"/>
+                                        </div>
+                                    </ui:repeat>
+
+                                    <ui:repeat value="#{adapter.caseItem.multiChoiceItems}" var="choice2" varStatus="row" rendered="#{fn:length(adapter.caseItem.multiChoiceItems)!=0}">
+                                        <div id="question-wrapper-#{choice2.index}" class="questionWrapper" style="display:none;height:450px;">
+                                            <div style="height:35px;">
+                                                <h:outputText value="#{choice2.index}、#{case1.question.nickName}" style="" styleClass="choiceTitle" escape="false"/>
+                                                <h:outputText value="（#{adapter.caseItem.question.name}）" style="" styleClass="choiceTitle" escape="false"/>
+                                                <hr/>
+                                            </div>
+                                            <div style="height:150px;overflow: auto;">
+                                                <h:outputText value="#{adapter.caseItem.question.content}" style="" styleClass="choiceTitle" escape="false"/>
+                                            </div>
+                                            <hr/>
+                                            <div style="height:100px;overflow: auto;">
+                                                <a id="archor-#{choice2.id}" href="#"></a>
+                                                <h:outputText value="（#{fn:length(adapter.caseItem.choiceItems)+row.index+1}）#{choice2.question.name}" styleClass="choiceTitle" escape="false"/>
+                                            </div>
+                                            <div id="multi-select-#{choice2.id}" style="margin-left: 30px;">
+                                                <h:selectManyCheckbox  onchange="testMultiSelectDial('#{choice2.id}')" value="#{choice2.selectedLabels}" layout="pageDirection"  styleClass="threadColumn cell0 choiceTitle queSpanJSF" > 
+                                                    <f:selectItems value="#{choice2.question.choices}" var="ch" 
+                                                                   itemLabel="#{ch.labelRendered}.&nbsp;#{ch.name}&lt;br&gt;" itemValue="#{ch.label}" />
+                                                </h:selectManyCheckbox> 
+                                            </div>
+                                            <p:commandLink action="#{viewQuestionPopup.selectMultiChoice(choice2.question.id)}" rendered="#{contestCaseMB.examCase.examination.ifShowAnswer}"  oncomplete="PF('multiChoiceDialog').show()" style="margin-left:50px;"  styleClass="explain" value="△试题解析"/>
+                                            <h:selectBooleanCheckbox id="markMultiChoice" value="#{choice2.marked}"  onchange="markQuestion('#{choice2.id}', this.checked)" style="margin-left:50px;"/>
+                                            <h:outputLabel value="标记" for="markMultiChoice" styleClass="explain markQuestion"/>
+                                            <hr/>
+                                        </div>
+                                    </ui:repeat>
+                                    <ui:repeat   value="#{adapter.caseItem.fillItems}" var="fill"  varStatus="row" rendered="#{fn:length(adapter.caseItem.fillItems)!=0}">
+                                        <div id="question-wrapper-#{fill.index}" class="questionWrapper" style="display:none;height:450px;">
+                                            <div style="height:35px;">
+                                                <h:outputText value="#{fill.index}、#{adapter.caseItem.question.nickName}" style="" styleClass="choiceTitle" escape="false"/>
+                                                <h:outputText value="（#{adapter.caseItem.question.name}）" style="" styleClass="choiceTitle" escape="false"/>
+                                                <hr/>
+                                            </div>
+                                            <div style="height:150px;overflow: auto;">
+                                                <h:outputText value="#{adapter.caseItem.question.content}" style="" styleClass="choiceTitle" escape="false"/>
+                                                <hr/>
+                                            </div>
+                                            <div id="fill-#{fill.id}" style="margin-left: 0px;height:100px;">
+                                                <ui:repeat value="#{fill.blocks}" var="b">
+                                                    <h:outputText value="#{b.preStr}" style="#{fill.marked?'color:red;':''}" escape="false" styleClass="choiceTitle"/>
+                                                    <h:inputText  onchange="testFillDial('#{fill.id}')" value="#{b.userAnswer}" styleClass="fillBlank">
+
+                                                    </h:inputText>
+                                                </ui:repeat>
+                                                <h:outputText value="#{fill.lastStr}" style="#{fill.marked?'color:red;':''}" escape="false" styleClass="choiceTitle"/> 
+                                            </div>
+                                            <p:commandLink action="#{viewQuestionPopup.selectFill(fill.question.id)}" rendered="#{contestCaseMB.examCase.examination.ifShowAnswer}"  oncomplete="PF('fillDialog').show()" style="margin-left:50px;"  styleClass="explain" value="△试题解析"/>
+
+                                            <h:selectBooleanCheckbox id="markFill" value="#{fill.marked}"  onchange="markQuestion('#{fill.id}', this.checked)" style="margin-left:50px;"/>
+                                            <h:outputLabel value="标记" for="markFill" styleClass="explain markQuestion"/>
+                                            <hr/>
+                                        </div>
+                                    </ui:repeat>
+                                    <ui:repeat  value="#{adapter.caseItem.judgeItems}" var="judge" varStatus="row"  rendered="#{fn:length(adapter.caseItem.judgeItems)!=0}">
+                                        <div id="question-wrapper-#{judge.index}" class="questionWrapper" style="display:none;height:450px;">
+                                            <div style="height:35px;">
+                                                <h:outputText value="#{judge.index}、#{case1.question.nickName}" style="" styleClass="choiceTitle" escape="false"/>
+                                                <h:outputText value="（#{adapter.caseItem.question.name}）" style="" styleClass="choiceTitle" escape="false"/>
+                                                <hr/>
+                                            </div>
+                                            <div style="height:150px;overflow: auto;">
+                                                <h:outputText value="#{adapter.caseItem.question.content}" style="" styleClass="choiceTitle" escape="false"/>
+                                                <hr/>
+                                            </div>
+                                            <div style="height:100px;overflow: auto;">
+                                                <a id="archor-#{judge.id}" href="#"></a>
+                                                <h:outputText value="#{judge.question.name}" escape="false" styleClass="choiceTitle"/>
+                                            </div>
+                                            <h:selectOneRadio onchange="testJudgeDial('#{judge.id}', this.value)" value="#{judge.userAnswer}" style="display:inline;" styleClass="threadColumn choiceTitle queSpanJSF">
+                                                <f:selectItem itemLabel="正确" itemValue="true"/>
+                                                <f:selectItem itemLabel="错误" itemValue="false"/>
+                                                <f:selectItem itemLabel="未填写" itemValue="null"/>
+                                            </h:selectOneRadio>
+                                            <h:panelGroup>
+                                                <p:commandLink action="#{viewQuestionPopup.selectJudge(judge.question.id)}" rendered="#{contestCaseMB.examCase.examination.ifShowAnswer}" oncomplete="PF('judgeDialog').show()" style="margin-left:50px;"  styleClass="explain" value="△试题解析"/>
+                                                <h:selectBooleanCheckbox id="markJudge" value="#{judge.marked}"  onchange="markQuestion('#{judge.id}', this.checked)" style="margin-left:50px;"/>
+                                                <h:outputLabel value="标记" for="markJudge" styleClass="explain markQuestion"/>
+                                            </h:panelGroup>
+                                            <hr/>
+                                        </div>
+                                    </ui:repeat>
+                                    <ui:repeat  value="#{adapter.caseItem.essayItems}" var="essay" varStatus="row"  rendered="#{fn:length(adapter.caseItem.essayItems)!=0}">
+                                        <div id="question-wrapper-#{essay.index}" class="questionWrapper" style="display:none;height:450px;">
+                                            <div style="height:35px;">
+                                                <h:outputText value="#{essay.index}、#{adapter.caseItem.question.nickName}" style="" styleClass="choiceTitle" escape="false"/>
+                                                <h:outputText value="（#{adapter.caseItem.question.name}）" style="" styleClass="choiceTitle" escape="false"/>
+                                                <hr/>
+                                            </div>
+                                            <div style="height:150px;overflow: auto;">
+                                                <h:outputText value="#{adapter.caseItem.question.content}" style="" styleClass="choiceTitle" escape="false"/>
+                                                <hr/>
+                                            </div>
+                                            <div style="height:100px;overflow: auto;">
+                                                <h:outputText value="#{essay.question.name}" style="#{essay.marked?'color:red;':''}" styleClass="choiceTitle" escape="false"/><br/>
+                                            </div>
+                                            <h:inputTextarea  value="#{essay.userAnswer}" onchange="testEssayDial('#{essay.id}', this.value)"  style="width:500px;height:150px;margin-left: 10px;"/><br/>
+                                            <h:panelGroup>
+                                                <p:commandLink action="#{viewQuestionPopup.selectEssay(essay.question.id)}" rendered="#{contestCaseMB.examCase.examination.ifShowAnswer}"  oncomplete="PF('essayDialog').show()" style="margin-left:50px;"  styleClass="explain" value="△试题解析"/>
+                                                <h:selectBooleanCheckbox id="markEssay" value="#{essay.marked}"  onchange="markQuestion('#{essay.id}', this.checked)" style="margin-left:50px;"/>
+                                                <h:outputLabel value="标记" for="markEssay" styleClass="explain markQuestion"/>
+                                            </h:panelGroup>
+                                            <hr/>
+                                        </div>
+                                    </ui:repeat>
+                                </p:outputPanel>
+
+
+                            </ui:repeat>
+
+                        </ui:repeat>
+                    </div>
+
+                    <div>
+                        <p:separator/>
+                        <p:button id="previousButton" widgetVar="previousButton" value="上一题" onclick="switchPrevious();
+                                return false;" style="margin-left:40px;"/>
+                            <p:button id="nextButton" widgetVar="nextButton" value="下一题" onclick="switchNext();
+                                return false;" style="margin-left:30px;"
+                                  />
+                        <h:outputText value="（使用方向键左、右可以切换试题）" style="color:blue;"/>
+                        <p:hotkey bind="left" handler="pressLeft();"  />
+                        <p:hotkey bind="right" handler="pressRight();" />
+                        <script type="text/javascript" language="javascript">
+                            //<![CDATA[
+                            function pressLeft() {
+                                if (questionIndex > 1) {
+                                    jQuery('#myForm\\:previousButton').trigger('click');
+                                }
+                            }
+                            function pressRight() {
+                                if (questionIndex < #{contestCaseMB.total}) {
+                                    jQuery('#myForm\\:nextButton').trigger('click');
+                                }
+                            }
+                            //]]>
+                        </script>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <p:separator/>
+                    </div>
+
+                    <div style="display:none;">
+                        <p:commandButton id="subcase" ajax="false" widgetVar="subcase11"  value="提交试卷" disabled="#{contestCaseMB.examCase.user==null}" action="#{contestCaseMB.submitExamCase}" styleClass=""></p:commandButton>
+                    </div>
+                </p:panel>
+            </div>
+
+            <ui:include src="/AjaxStatus2.xhtml"/>
+        </h:form>
+
+    </h:body>
+</html>
+

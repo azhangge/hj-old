@@ -1,0 +1,166 @@
+div.foot {
+	width: 1200px;
+	height: 188px;
+	margin: 0 auto;
+	background-color: inherit;
+}
+
+div.footLogo {
+	/* width: 197px; */
+	/* height: 46px; */
+	padding-left: 16px;
+	margin-top: 17px;
+	text-align: left;
+	height: 46px;
+}
+
+div.contact {
+	margin-top: 31px;
+	font-size: 12px;
+	color: #FFFFFF;
+	letter-spacing: 0.43px;
+	line-height: 20px;
+	text-align: left;
+	margin-left: 15px;
+}
+
+div.contact div.left {
+	font-size: 12px;
+	color: #FFFFFF;
+	letter-spacing: 0.43px;
+	width: 282px;
+	height: 85px;
+	float: left;
+	margin-left: 15px;
+}
+
+div.contact div.right {
+	float: right;
+	/* padding-top: 36px; */
+	margin-left: 523px;
+}
+
+div.contact div.right div.row1 {
+	font-size: 12px;
+	color: #FFFFFF;
+	letter-spacing: 0.43px;
+	line-height: 26px;
+	padding-left: 55px;
+}
+
+div.contact div.right div.row2 {
+	font-size: 12px;
+	color: #BCBCBC;
+	letter-spacing: 0.43px;
+	line-height: 12px;
+	margin-top: 26px;
+	text-align: right;
+	padding-right: 13px;
+}
+
+div.contact div.right div.row3 {
+	font-family: PingFangSC-Regular;
+	font-size: 12px;
+	color: #BCBCBC;
+	line-height: 12px;
+	margin-top: 12px;
+	text-align: right;
+	padding-right: 13px;
+}
+
+div.contact div.right div.row1 div.word1 {
+	float: left;
+	margin-right: 10px;
+}
+
+div.contact div.right div.row1 div.word2 {
+	float: left;
+	margin-right: 10px;
+}
+
+div.contact div.right div.row1 div.word3 {
+	float: left;
+	margin-right: 5px;
+}
+
+div.app1 {
+	float: right;
+	margin-right: 13px;
+}
+
+div.app2 {
+	float: right;
+	margin-right: 5px;
+}
+
+div.foot_div {
+	background: #7C7C7C;
+	width: 100%;
+}
+
+div.foot div.left {
+	float: left;
+	height: 100%;
+	margin: 0;
+	width: auto;
+}
+
+div.foot div.right {
+	float: right;
+}
+
+div.row1 {
+	margin-top: 72px;
+	font-size: 12px;
+	color: #FFFFFF;
+	letter-spacing: 0.43px;
+	line-height: 24px;
+	height: 24px;
+}
+
+div.word3 {
+	float: right;
+	margin-right: 5px;
+}
+
+div.word2 {
+	float: right;
+	margin-right: 10px;
+}
+
+div.word1 {
+	float: right;
+	margin-right: 10px;
+}
+
+div.row2 {
+	font-size: 12px;
+	color: #BCBCBC;
+	letter-spacing: 0.43px;
+	line-height: 12px;
+	margin-top: 26px;
+	text-align: right;
+	margin-right: 13px;
+}
+
+div.row3 {
+	font-size: 12px;
+	color: #BCBCBC;
+	letter-spacing: 0.43px;
+	line-height: 12px;
+	margin-top: 12px;
+	margin-right: 6px;
+	text-align: right;
+}
+
+div.word1:after {
+	clear: both;
+}
+
+div.foot_div img {
+	vertical-align: top;
+}
+
+div.foot_div p {
+	margin: 0;
+}

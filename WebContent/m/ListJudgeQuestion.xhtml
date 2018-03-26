@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form>
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <ui:include src="DMTargetPanelJudge.xhtml"/>
+                    <div style="text-align: left; margin: 10px 0px 0px 0px; width: 98%;">
+                        <div>
+                            <h:outputText id="outputText1" styleClass="tit"
+                                          value="试题>>#{listJudgeQuestion.module.name}>>判断题" />
+                            <h:outputLink id="addCasus" 
+                                          value="#{applicationBean.path}/m/AAJudgeQuestion.jspx?module_id=#{listJudgeQuestion.module.id}">
+                                <h:outputText value="添加新题目" />
+                            </h:outputLink>
+                        </div>
+                        <p:separator/>
+                        <div>
+                            <p:button value="添加" href="/m/AAJudgeQuestion.jspx?module_id=#{listJudgeQuestion.module.id}">
+                            </p:button>
+                            <p:commandButton value="移动" onclick="DMTargetPanel.show()"/>
+                            <p:commandButton value="删除" action="#{listJudgeQuestion.batchDelete()}" update="@form"  onclick="if (!confirm('确认要删除所选的条目吗？')) return false"/>
+                        </div>
+                        <p:separator/>
+                        <div>
+                            <p:dataTable paginator="true" paginatorPosition="bottom" value="#{listJudgeQuestion.questions}" var="us" id="dataTable1"
+                                         styleClass="list" rowIndexVar="row" style="width:100%" rows="30">
+                                <p:column>
+                                    <h:selectBooleanCheckbox value="#{us.selected}"/>
+                                    <f:facet name="header">
+                                        <h:outputText value="选择" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column  sortBy="#{us.name}" filterBy="#{us.name}">
+                                    <h:outputText value="#{us.name}" />
+                                    <f:facet name="header">
+                                        <h:outputText value="题目内容" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{us.answer}" />
+                                    <f:facet name="header">
+                                        <h:outputText value="题目答案" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column sortBy="#{us.genTime}">
+                                    <h:outputText value="#{us.genTime}">
+                                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"
+                                                           timeZone="GMT+8" />
+                                    </h:outputText>
+                                    <f:facet name="header">
+                                        <h:outputText value="添加时间" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column>
+                                    <h:outputLink value="AAJudgeQuestion.jspx?id=#{us.id}&amp;module_id=#{listJudgeQuestion.module.id}">
+                                        <h:outputText value="修改" />
+                                    </h:outputLink>
+                                    <f:facet name="header">
+                                        <h:outputText value="修改" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column >
+                                    <p:commandLink action="#{listJudgeQuestion.delete(us.id)}" update="@form" onclick="if (!confirm('确认要删除此试题吗？')) return false">                                       
+                                        <h:outputText value="删除" />
+                                    </p:commandLink>
+                                    <f:facet name="header">
+                                        <h:outputText value="删除" />
+                                    </f:facet>
+                                </p:column>
+                            </p:dataTable>
+                            <h:outputText value="共有#{listChoiceQuestion.module.judgeNum}条数据！" />
+                        </div>
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title>#{lessonDetail.lesson.name}</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description" content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs.css" />
+        <link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs_a.css" />
+        <link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.requestContextPath}/css/kkPages2.css" />
+        <script src="#{facesContext.externalContext.requestContextPath}/js/jquery.kkPages2.js"></script>
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+        <style >
+       		ul{
+       			padding:0px!important;margin:0px!important;
+       		}
+       		li{
+       			list-style: none;
+       		}
+        	.ui-icon-seek-first ,.ui-icon-seek-prev ,.ui-icon-seek-next ,.ui-icon-seek-end{
+				height: 20px!important;
+			}
+			.ui-state-default{
+				display:none;
+			}
+			.top_nav_a{
+				color:#333333;font-family:微软雅黑;font-weight:bold;
+			}
+			.top_nav_span{
+				color:#333333;font-family:微软雅黑;font-size:16px!important;font-weight:bold;
+			}
+			.name_container_a{
+				font-family:宋体常规;padding-left:24px;font-size: 14px!important;color:#333333;
+			}
+        </style>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				var addCount = #{playerList.lessons.size()%5};
+  				if(addCount>0){
+  					for(var i=0;i &lt; (5-addCount);i++){
+  						$('#list_ui').find('li:last-child').append('<li><div style="width:186px;height:98px;background-color:#000000;"></div></li>');
+  					}
+  				}
+				
+  				$('#lessonList').kkPages({
+  					PagesClass:'li', //需要分页的元素
+  					PagesMth:5, //每页显示个数		
+  					PagesNavMth:#{playerList.lessons.size()} //显示导航个数
+  				});
+			}); 
+		</script>
+    </h:head>
+    <h:body>
+        <h:form id="form">
+            <p:notificationBar  position="top" autoDisplay="true" effect="slide" style="height: 75px;padding: 0px 0px 0px 0px!important;">
+                <div style="width:1080px;border:0px solid green;height:75px;float: left;overflow: hidden;">
+                    <div style="width:280px;border:0px solid green;height:75px;float: left;overflow: hidden;">
+                        <h:graphicImage id="adv2" style="width:100%;margin: 0px 0px 0px 0px;" value="#{adv.advsMap.src}"/>
+                    </div>
+                    
+                    <div style="width:600px;margin-left: 280px;text-align: left;font-size:20px;font-weight: bold;line-height: 75px;font-family: 微软雅黑;">
+                         <div>《#{lessonDetail.lesson.lessonType.name}》</div>
+                        <h:outputText value="《#{lessonDetail.lesson.lessonType.name}》"  styleClass="" style="font-size: 12px;line-height: 75px;font-family: 微软雅黑;"/>
+                    </div>
+                </div>
+                <div style="height:75px;width:500px;border:0px solid red;position: absolute;top: 0px;right: 0px;">
+
+                    <div style="width:300px;border:0px solid blue;margin-left: 0px;text-align: right;float:right;">
+                        <p:menubar id="front_menu"  style="border:0px solid red;width: 400px;height: 28px;background-color: inherit; margin-top:20px;text-align: right!important;" styleClass="front_menu">
+                            <p:menuitem icon="ui-icon-extlink" value="系统首页" url="../"  styleClass="topNav"/>
+                            <p:menuitem icon="ui-icon-extlink" value="课程学习" url="LessonTypeList.jspx"  styleClass="topNav"/>
+                            <p:menuitem icon="ui-icon-extlink" value="我的学习资料" url="BuyedLessonList.jspx"  styleClass="topNav"/>
+                        </p:menubar>
+                    </div>
+                </div>
+            </p:notificationBar>
+            <div style="clear:both;height:75px;background-color: white;"/>
+            <p:outputPanel rendered="#{lessonDetail.lesson.timingType=='page'}">
+                <p:poll autoStart="true" interval="10" oncomplete="reportTime2(10)"/>
+                <script type="text/javascript">
+                    var tt =#{lessonDetail.lessonLog.timeFinished};
+                    function reportTime2(step) {
+                        if (typeof (tt) != "undefined") {
+                            tt = tt + step;
+                            var url = "#{facesContext.externalContext.requestContextPath}/servlet/LessonLogNotifier?lid=#{lessonDetail.lesson.id}&amp;action=time&amp;len=" + tt;
+                            //alert(url);                                
+                            jQuery.get(url);
+                            var minutes = Math.floor(tt / 60);
+                            var seconds = Math.floor(tt % 60);
+                            var msg = minutes + " 分 " + seconds + " 秒";
+                            jQuery('#finishedTime').html(msg);
+                        }
+                    }
+                </script>
+            </p:outputPanel>
+
+			<div id="top" style="height:24px;padding:11px 0px 11px 20px">
+				<a href="#{facesContext.externalContext.requestContextPath}" class="top_nav_a" style="font-size:16px!important;">
+					首页
+				</a>
+				<span class="top_nav_span">
+					/
+				</span>
+				<a href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{lessonDetail.lesson.lessonType.id}" class="top_nav_a" style="font-size:16px!important;">
+					#{lessonDetail.lesson.lessonType.name}
+				</a>
+				<span class="top_nav_span">
+					/
+				</span>
+				<span class="top_nav_span">
+					#{lessonDetail.lesson.name}
+				</span>
+			</div>
+			
+            <div id="main_cont" style="width:1160px;margin:0 auto;height:1120px;">
+            	<div id="main_cont_body" style="width:1160px;height:580px;margin-bottom:35px;">
+	                <div id="learnContent" style="text-align: center;float:left;overflow:hidden;border:0px solid #ccc;width:960px;height:580px;margin-right:10px;">
+	                <!-- 播放器和摘要区域 -->
+	                    <p:outputPanel rendered="#{lessonDetail.lesson.playType=='outter'}">
+	                        <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
+	                                codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=10.0" height="950" width="580">
+	                            <param name="quality" value="high" />
+	                            <param name="fullscreen" value="true" />
+	                            <param name="movie" value="#{lessonDetail.lesson.videoUrl}" />
+	                            <embed pluginspage="http://www.macromedia.com/go/getflashplayer" quality="high" allowFullScreen="true"
+	                                   src="#{lessonDetail.lesson.videoUrl}"
+	                                   type="application/x-shockwave-flash" width="950" height="580"/>
+	                        </object>
+	                    </p:outputPanel>
+	                    <p:outputPanel  rendered="#{lessonDetail.lesson.playType=='inner'}">
+	                        <div id="a1"></div>
+	                        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/ckplayer/ckplayer.js" charset="utf-8"></script>
+	                        <script type="text/javascript">
+			                    var flashvars = {
+			                        f: '#{applicationBean.mp4VirtualUrl}#{lessonDetail.lesson.sourceUrl}',//视频地址
+			                        c: '0',
+			                        loaded: 'loadedHandler',
+			                        p: 1//1默认播放,0默认暂停，2默认不加载视频
+			                    };
+			                    var params = {bgcolor: '#FFF', allowFullScreen: true, allowScriptAccess: 'always', wmode: "transparent"};
+			                    CKobject.embedSWF('#{facesContext.externalContext.requestContextPath}/ckplayer/ckplayer.swf', 'a1', 'ckplayer_a1', '950', '580', flashvars, params);
+	                        </script>
+	                    </p:outputPanel>
+	                    <p:outputPanel rendered="#{lessonDetail.lesson.playType=='inner'}" style="display:none;">
+	                        <script language="JavaScript">
+	                            var isLoaded = false;
+	                            function loadedHandler() {
+	                                isLoaded = true;//说明播放器已加载
+	                                //goAndSeek();
+	                                //添加监听事件，当视频播放结束后，通知已经结束
+	                                if (CKobject.getObjectById('ckplayer_a1').getType()) {//说明使用HTML5播放器播放器
+	                                    CKobject.getObjectById('ckplayer_a1').addListener('ended', reportFinished);
+	                                    CKobject.getObjectById('ckplayer_a1').addListener('videoLoad', reportTotalTime);
+	                                    CKobject.getObjectById('ckplayer_a1').addListener('loadedmetadata', goAndSeek);
+	                                }
+	                                else {
+	                                    CKobject.getObjectById('ckplayer_a1').addListener('ended', 'reportFinished');
+	                                    //CKobject.getObjectById('ckplayer_a1').addListener('videoLoad', 'reportTotalTime');
+	                                    CKobject.getObjectById('ckplayer_a1').addListener('loadedmetadata', 'goAndSeek');
+	                                }
+	                                //reportTotalTime();
+	                            }
+	
+	                            function goAndSeek() {
+	                            	var ck = CKobject.getObjectById('ckplayer_a1');
+	                            	if(typeof (ck['totalTime']) != "undefined"){
+	                            		if(tt>=ck['totalTime']){
+	                                		ck.videoSeek(0);
+	                                	}
+	                            	}
+	                                //CKobject.getObjectById('ckplayer_a1').videoPlay();
+	                                CKobject.getObjectById('ckplayer_a1').videoSeek(#{lessonDetail.lessonLog.videoTime});
+	                            }
+	                            //CKPLAYER播放时会不断调用该方法
+	                            var _nn = 0;
+	                            function ckplayer_status(str) {
+	                                _nn += 1;
+	                                if (_nn > 10) {
+	                                    _nn = 0;
+	                                    if (_nn % 10 == 0) {
+	                                        reportTime();
+	                                    }
+	                                }
+	                            }
+	
+	                            function reportTime() {
+	                                var a = CKobject.getObjectById('ckplayer_a1').getStatus();
+	                                var ttx = a['time'];
+	                                if (typeof (ttx) != "undefined") {
+	                                    var url = "#{facesContext.externalContext.requestContextPath}/servlet/LessonLogNotifier?lid=#{lessonDetail.lesson.id}&amp;action=vedioTime&amp;len=" + ttx;
+	                                    //alert(url);                                
+	                                    jQuery.get(url);
+	                                    /* var minutes = Math.floor(ttx / 60);
+	                                    var seconds = Math.floor(ttx % 60);
+	                                    var msg = minutes + " 分 " + seconds + " 秒";
+	                                    jQuery('#finishedTime').html(msg); */
+	                                }
+	                            }
+	
+	                            function reportFinished() {
+	                                var url = "#{facesContext.externalContext.requestContextPath}/servlet/LessonLogNotifier?lid=#{lessonDetail.lesson.id}&amp;action=finished";
+	                                //alert(url);                                
+	                                jQuery.get(url);
+	                                jQuery('#finishedStatus').html('完成');
+	                                
+	                                var a="#{lessonDetail.lesson.id}";
+	                                var b="#{playerList.lessons.size()}";
+	                                var arr = "#{playerList.lessons}";
+	                                var c=arr.length;
+	                                var d=arr.length/b;
+	                                var e=arr.length/b/2;
+	                                var f=parseInt("0");
+	                                
+	                                while(true){
+										if(f==b){
+											return;
+										}
+										var temp=arr.substring(e+(d*f),((f+1)*d)-3);
+										if(temp==a){
+											f++;
+											if(f==b){
+												return;
+											}
+											window.location.href="LessonDetail2.jspx?id="+arr.substring(e+(d*f),((f+1)*d)-3);
+											return;
+										}
+										f++;
+									}
+	                            }
+	
+	                            function reportTotalTime() {
+	                                var a = CKobject.getObjectById('ckplayer_a1').getStatus();
+	                                var tt = a['totalTime'];
+	                                //alert(tt);
+	                                if (typeof (tt) != "undefined") {
+	                                    var url = "#{facesContext.externalContext.requestContextPath}/servlet/LessonLogNotifier?action=total&amp;lid=#{lessonDetail.lesson.id}&amp;len=" + tt;
+	                                    //alert(url);                                
+	                                    jQuery.get(url);
+	                                }
+	                            }
+	
+	                            function getstatus() {
+	                                var a = CKobject.getObjectById('ckplayer_a1').getStatus();
+	                                var ss = '';
+	                                for (var k in a) {
+	                                    ss += k + ":" + a[k] + '\n';
+	                                }
+	                                ss + '关于各个参数的意思请到帮助手册查看';
+	                                alert(ss);
+	                            }
+	                        </script>
+	                        <input onclick="CKobject.getObjectById('ckplayer_a1').videoPlay();" type="button" value="play" />
+	                        <p:button id="goAndSeek2" onclick="goAndSeek(); return null;" value="seek" />
+	                    </p:outputPanel>
+	                </div>
+	                
+	                <!-- 学习资料内容区域 -->
+	                <div id="lessonContent" style="border:0px solid #ccc;width:190px;float:left;height:580px;">
+	                    <h:outputText style="display:none;">#{playerList}</h:outputText>
+	                    <div id="lessonList" style="border:1px solid #fff;height:580px;background-color:#000000;">
+	              				<div id="list_header" style="width:190px;height:58px;" >
+	              					<div id="list_header_menu" style="width:80px;height:28px;float:left;font-weight:bold;font-size:16px;color:#a8d8ff;padding:15px 53px 15px 53px;background-color:#1a1a1a">
+               								章节目录
+	              					</div>
+	              				</div>
+	              				<ul id="list_ui">
+	                    		<c:forEach items="#{playerList.lessons}" var="zone" varStatus="status">
+	                    			<li>
+	                    				<div style="width:186px;height:98px;background-color:#000000;">
+		                    				<a href="LessonDetail2.jspx?id=#{zone.id}" style="font-family:微软雅黑;font-size:16px!important;font-weight:bold;color:#999999;">
+				                        		#{status.index+1}、#{zone.name}
+				                        	</a>
+				                        </div>
+			                        </li>
+	                    		</c:forEach>
+	                    		</ul>
+	                    	</div>
+	                    </div>
+	                </div>
+
+                <div id="foot" style="width:1160px;height:340px;">
+                	<div id="foot_header" style="width:1158px;height:35px;padding:10px 0px 10px 0px;background:#F3F3F3;border:1px solid white;">
+                		<div id="foot_header_button" style="background:url(../image/rounded_rectangle3.png) no-repeat 0px 0px;width:120px;height:40px;">
+                			<span style="width:100px;font-weight:bold;font-size:22px!important;color:#FEFFFE;display:block;margin-left:auto;margin-right:auto;padding-top:6px;">
+                				课程推荐
+                			</span>
+                		</div>
+                	</div>
+                	<div id="foot_main" style="width:1160px;height:285px;background-color:#FFFFFF;">
+                		<c:forEach items="#{welcomePage.getLessonTypesByNameAndNum('推荐','0','4')}" var="course">
+                			<div id="img_container" style="width:255px;height:250px;border:3px solid #ECECEC;float:left;margin-left:25px;margin-top:17px;background-color:#FFFFFF">
+                				<a href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{course.id}" style="margin:0px;padding:0px;">
+									<img src="../#{fn:replace(course.picture,'showimage','showabstractimage')}"  class="course-img" width="255px" height="165px"/> 
+								</a>
+								<div id="name_container" style="margin-top:6px;">
+			                        <a href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{course.id}" target="_blank" class="name_container_a" style="font-size:14px!important;">
+			                        	#{course.name}
+			                        </a>
+			               		 </div>
+			                     <div id="num_container" style="float:left">
+		                        	<img src="../images/keshi.png" style="float:left;margin-left:24px;margin-bottom:15px;margin-top:12px;"/>
+		                        	<span style="display:block;float:left;margin-left:12px;margin-bottom:15px;margin-top:14px;">#{course.totalClassNum}课时</span>
+		                        </div>
+		                        <div id="count_container" style="float:right">
+		                        	<img src="../images/seecount.png" style="margin-right:12px;margin-bottom:15px;margin-top:12px;"/>
+		                        	<span style="display:block;float:right;margin-right:24px;margin-bottom:15px;margin-top:14px;">#{course.userNum}学习人次</span>
+		                        </div>
+                			</div>
+							
+						</c:forEach>
+                		
+                	
+<!--                 		<p:dataTable id="courseDc" resizableColumns="true" value="#{welcomePage.getLessonTypesByNameAndNum('推荐','0','3')}"
+                 		var="course"  paginator="false" paginatorPosition="bottom" styleClass="list" emptyMessage="暂无课程资料" style="width:254px;">
+                 		<p:column id="columnRefType2" resizable="true" style="width:254px;text-align: left;font-family: 微软雅黑;float:left;" >
+	                        <div id="img_container" style="margin:0px,0px,0px,0px">
+		                        <a href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{course.id}" target="_blank">
+									<img src="../#{fn:replace(course.picture,'showimage','showabstractimage')}"  class="course-img" width="80%" height="130px" style="width:100%;margin:10px,0px,10px,0px"/> 
+		                        </a>
+	                        </div>
+	                        <div id="name_container">
+	                        <a href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{course.id}" target="_blank">
+	                        	#{course.name}
+	                        </a>
+	                        </div>
+	                        <div id="num_container" style="float:left">
+	                        	<img src="../images/keshi.png" style="float:left;"/>
+	                        	<span style="display:block;float:left;margin-bottom:1px">#{course.totalClassNum}课时</span>
+	                        </div>
+	                        <div id="count_container" style="float:right">
+	                        	<img src="../images/seecount.png"/>
+	                        	<span style="display:block;float:right;margin-bottom:1px">#{course.userNum}学习人数</span>
+	                        </div>
+                    	</p:column>
+                 	</p:dataTable> -->
+                	</div>
+                </div>
+            </div>
+            <p:notificationBar position="bottom" autoDisplay="false" effect="slide" style="height: 35px;padding: 0px 0px 0px 0px!important;line-height: 35px;">
+                <div>
+                    <!-- <style>
+                        .tipStyle1{
+                            color:blue;
+                            font-weight: bold;
+                        }
+                        .tipStyle2{
+                            color:blue;
+                            font-weight: bold;
+                        }
+                    </style> -->
+                    <h:panelGrid columns="5" style="width:100%;text-align: center;" columnClasses="w10,w10,w10">
+                        <h:panelGroup>
+                            <span class="tipStyle1">当前已经记录学习时间：</span>
+                            <span id="finishedTime" class="tipStyle2">
+                                <h:outputText value="#{applicationBean.wrapperTimeLen(lessonDetail.lessonLog.timeFinished)}" styleClass="tipStyle"/>
+                            </span>
+
+                            <span class="tip">（每10秒自动记录一次）</span>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <span class="tipStyle1">最少学习时间：</span>
+                            <span id="finishedStatus" class="tipStyle2">#{lessonDetail.lessonLog.lesson.leastTime}分钟</span>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <h:outputText styleClass="tipStyle1" value="如视频不能正常播放请安装或升级flash,"/>
+                            <h:outputLink styleClass="tipStyle2" value="http://get.adobe.com/cn/flashplayer/" target="_blank">
+                                <h:outputText value="请点这里下载"/>
+                            </h:outputLink>
+                        </h:panelGroup>
+
+                    </h:panelGrid>
+                </div>
+            </p:notificationBar>
+        </h:form>
+    </h:body>
+</html>

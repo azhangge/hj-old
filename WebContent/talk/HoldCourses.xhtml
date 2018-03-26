@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<title>Facelet Title</title>
+</h:head>
+<h:body>
+	<ui:composition template="UserCenterGeneral.xhtml">
+		<ui:define name="ucontent">
+			<link type="text/css" rel="stylesheet" href="../HJ/css/hold_courses.css" />
+			<script type="text/javascript" src="../HJ/js/account_security.js"></script>
+			<div class="as_title">
+				<div class="title_1">讲师课程</div>
+				<a>
+					<div class="title_2 onclick">创建课程</div>
+				</a>
+				<a>
+					<div class="title_3">暂存课程</div>
+				</a>
+				<a>
+					<div class="title_3">在审课程</div>
+				</a>
+				<a>
+					<div class="title_3">被驳回课程</div>
+				</a>
+				<a>
+					<div class="title_3">已上架课程</div>
+				</a>
+			</div>
+			<div class="accountsecurity">
+				<div class="as_content">
+					<p:dataGrid value="#{myLessonTypeList.ltLogs}" var="car" paginator="true" paginatorPosition="bottom" emptyMessage="暂无">
+						<li class="course">
+							<a href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{car.lessonType.id}"
+								target="_blank" title="#{car.lessonType.name}" class="course-img-link">
+								<p:graphicImage id="simg" url="#{fn:replace(car.lessonType.picture,'showimage','showabstractimage')}"
+									style="width: 212px; height: 124px;" />
+							</a>
+
+							<div class="course-status">
+								<span>
+									<h:outputText value="#{car.lessonType.description1}" />
+								</span>
+							</div>
+
+							<div class="course-tt course-tt-link">#{car.lessonType.name}</div>
+
+							<div class="course-line course-line-bottom">
+								<span class="line-cell course-price xueshi">完成学时：#{car.finishedClassNum}/#{car.lessonType.totalClassNum}</span>
+								<span class="course-source">#{car.lessonType.teacher.name}</span>
+							</div>
+						</li>
+					</p:dataGrid>
+				</div>
+				<div class="as_content" style="display: none;">暂存课程</div>
+				<div class="as_content" style="display: none;">在审课程</div>
+				<div class="as_content" style="display: none;">被驳回课程</div>
+				<div class="as_content" style="display: none;">已上架课程</div>
+			</div>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>
+

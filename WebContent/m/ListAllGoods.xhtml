@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form>
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <p:panel id="main_panel" style="text-align: left;border:0px solid red; margin: 0px 0px 0px 0px!important; width: 98%;padding: 0px 0px 0px 0px!important;">
+                        <div>
+                            <h:outputText  styleClass="headLine"
+                                          value="商品管理" />
+                            <script type="text/javascript">
+
+                                function checkAll(whichTable) {
+                                    var idds = '#fm\\:' + whichTable + '\\:checkAll';
+                                    var vv = $(idds).is(':checked');
+                                    //alert(vv);
+                                    $('input[type="checkbox"]').each(function(index, element) {
+                                        var idd = $(element).attr('id');
+                                        if (idd.indexOf(whichTable) >= 0) {
+                                            $(element).prop('checked', vv);
+                                            //alert(idd);
+                                        }
+
+                                    });
+                                }
+                            </script>
+
+
+                        </div>
+                        <p:separator/>
+                                <div>
+                                    <p:button value="添加" href="/m/AASaleGoods.jspx?module_id=#{listSaleGoods.module.id}">
+                                    </p:button>
+                                    <p:commandButton value="删除" action="#{listSaleGoods.batchDelete()}" update="@form"  onclick="if (!confirm('确认要删除所选的条目吗？'))
+                                                return false"/>
+                                    <p:commandButton value="清空" action="#{listSaleGoods.deleteAll()}" update="@form"  onclick="if (!confirm('确认要清空所有条目吗？'))
+                                                return false"/>
+                                </div>
+                                <p:separator/>
+                                <div>
+                                    <p:dataTable paginator="true" paginatorPosition="bottom" value="#{listSaleGoods.lcqs}" var="us1" id="dataTable1" liveResize="true" emptyMessage="无商品" editable="true" editMode="cell"
+                                                 styleClass="list" rowIndexVar="row" style="width:100%;" rows="20" lazy="true">
+                                        <p:column style="width:30px;">
+                                            <h:selectBooleanCheckbox id="checkMe" value="#{us1.selected}"/>
+                                            <f:facet name="header">
+                                                <h:outputText value="选择" />
+                                                <h:selectBooleanCheckbox id="checkAll" onclick="checkAll('dataTable1');">
+                                                </h:selectBooleanCheckbox>
+
+                                            </f:facet>
+                                        </p:column>
+                                        
+                                        <p:column>
+                                            <h:outputText value="#{us1.gid}" />
+                                            <f:facet name="header">
+                                                <h:outputText value="商品编号" />
+                                            </f:facet>
+                                        </p:column>
+                                        
+                                        <p:column style=";word-wrap:break-word!important;word-break:break-all!important;width: 180px;">
+                                            
+                                                <h:outputText id="choiceTitle" value="#{fn:substring(us1.name,0,25)}#{fn:length(us1.name)>25?'...':''}" escape="false"/>
+                                           
+                                            
+                                            <f:facet name="header">
+                                                <h:outputText value="名称" />
+                                            </f:facet>
+                                        </p:column>
+                                        <p:column>
+                                            <h:outputText value="#{us1.unitName}" />
+                                            <f:facet name="header">
+                                                <h:outputText value="单位" />
+                                            </f:facet>
+                                        </p:column>
+                                        <p:column>
+                                            <h:outputText value="#{us1.price}" />
+                                            <f:facet name="header">
+                                                <h:outputText value="价格" />
+                                            </f:facet>
+                                        </p:column>
+                                        <p:column>
+                                            <h:outputText value="#{us1.discount}" />
+                                            <f:facet name="header">
+                                                <h:outputText value="折扣" />
+                                            </f:facet>
+                                        </p:column>
+                                        <p:column sortBy="#{us1.ord}">
+                                            <p:tooltip for="modelOutput" value="点击编辑"/>
+                                            <p:cellEditor>  
+                                                <f:facet name="output">
+                                                    <h:outputText id="modelOutput" value="#{us1.ord}" />
+                                                </f:facet>  
+                                                <f:facet name="input">
+                                                    <p:inputText id="modelInput" value="#{us1.ord}" style="width:30px;">
+                                                        <p:ajax event="change" update="@none" listener="#{listSaleGoods.editOrd(us1.id)}"/>
+                                                    </p:inputText>
+                                                </f:facet>  
+                                            </p:cellEditor> 
+                                            <f:facet name="header">
+                                                <h:outputText value="次序" />
+                                            </f:facet>
+                                        </p:column>
+                                        <p:column>
+                                            <h:outputLink value="AASaleGoods.jspx?id=#{us1.id}&amp;module_id=#{listSaleGoods.module.id}">
+                                                <h:outputText value="修改" />
+                                            </h:outputLink>
+                                            <f:facet name="header">
+                                                <h:outputText value="修改" />
+                                            </f:facet>
+                                        </p:column>
+                                    </p:dataTable>
+                                    <p:outputPanel autoUpdate="true">
+                                        <h:outputText value="共有#{listSaleGoods.lcqs.rowCount}条数据！" />
+                                    </p:outputPanel>
+
+                                </div>
+                    </p:panel>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

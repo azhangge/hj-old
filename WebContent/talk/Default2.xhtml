@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core"  lang="en"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </h:head>
+    <h:body>
+        <ui:composition template="General.xhtml">
+            <ui:define name="title">
+                <h:outputText value="首页" />
+            </ui:define>
+            <ui:define name="content">
+                <div style="width:100%;margin: 0px auto;border:0px solid red;">
+
+                    <div style="height: 100%;float:left;">
+                        <h:panelGrid columns="1" style="height:100%;border:0px solid red;">
+                            <p:panel header="考试分类" style="width: 180px;">
+                                <ui:repeat value="#{listExamLabelType.labelTypes}" var="labelType" >
+                                    <h:outputText value="#{labelType.name}" style="font-weight: bold;"/>
+                                    <p:separator/>
+                                    <p:dataGrid value="#{labelType.examLabels}" var="label" columns="2" styleClass="threadColumn3" emptyMessage="">
+                                        <h:outputLink value="#{facesContext.externalContext.requestContextPath}/talk/ExaminationList.jspx?lid=#{label.id}" style="margin-left: -10px;">
+                                            <h:outputText value="#{label.name}" style="margin:0px 10px 0px 10px;"/>  
+                                        </h:outputLink>
+                                    </p:dataGrid>
+                                </ui:repeat>
+
+                            </p:panel>
+
+
+
+
+
+                            <p:panel header="课程分类" rendered="#{copyrightController.sysType!='1' and copyrightController.sysType!='2' and applicationBean.systemConfig.openLesson}" style="width: 180px;">
+
+                                <h:panelGrid columns="1" style="width:100%;">
+                                    <c:forEach items="#{lessonTypeList.lessonTypes}" var="zone">
+                                        <h:outputLink value="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{zone.id}">
+                                            <h:outputText value="#{zone.name}"></h:outputText>
+                                        </h:outputLink>
+                                    </c:forEach>
+                                </h:panelGrid>
+                            </p:panel>
+
+                        </h:panelGrid>
+                    </div>
+
+                    <div style="">
+                        <style>
+                            .indexPanel{
+                                text-align: center;width:235px; 
+                            }
+                        </style>
+
+                        <h:panelGrid columns="3">
+
+                            <p:panel header="章节训练" rendered="#{applicationBean.systemConfig.openModuleExam}" styleClass="indexPanel">
+                                <p:graphicImage value="/resources/images/icon/icon4.png"/>
+                                <br/>
+                                <div class="indexPanelContent">
+                                    <h:outputText value="按章节分别练习，有针对性地重点突破。"/> 
+                                </div>
+                                <br/>
+                                <p:button href="/talk/ExamModuleSelect.jspx" value="进入训练"/>
+                            </p:panel>
+                            <p:panel header="每日竞赛" rendered="#{applicationBean.systemConfig.openContest}"  styleClass="indexPanel">
+                                <p:graphicImage value="/resources/images/icon/icon2.png"/>
+                                <br/>
+                                <div class="indexPanelContent">
+                                    <h:outputText value="竞赛题目每日更新，竞赛成绩分别排名。"/> 
+                                </div>
+                                <br/>
+                                <p:button href="/talk/ExamContestList.jspx" value="进入赛场"/>
+                            </p:panel>
+
+                            <p:panel header="自助练习" rendered="#{applicationBean.systemConfig.openBuffet}"  styleClass="indexPanel">
+                                <p:graphicImage value="/resources/images/icon/icon1.png"/>
+                                <br/>
+                                <div class="indexPanelContent">
+                                    <h:outputText value="题目数量自主设置，我的练习我做主。"/> 
+                                </div>
+                                <br/>
+                                <p:button href="/talk/BuffetExaminationList.jspx" value="进入练习"/>
+                            </p:panel>
+
+
+
+
+
+
+
+                            <p:panel header="模拟考试"  styleClass="indexPanel">
+                                <p:graphicImage value="/resources/images/icon/icon8.png"/>
+                                <br/>
+                                <div class="indexPanelContent">
+                                    <h:outputText value="正式规范的考试，多种试卷类型，快来参加！"/> 
+                                </div>
+
+                                <br/>
+                                <p:button href="/talk/ExaminationList.jspx" value="进入考试"/>
+                            </p:panel>
+
+
+
+
+                            <p:panel header="错题中心" rendered="#{(copyrightController.sysType=='1' or copyrightController.sysType=='2') and applicationBean.systemConfig.openWrong}"  styleClass="indexPanel">
+                                <p:graphicImage value="/resources/images/icon/icon6.png"/>
+                                <br/>
+                                <div class="indexPanelContent">
+                                    <h:outputText value="做错的试题再次练习，加强巩固。"/> 
+                                </div>
+                                <br/>
+                                <p:button href="/talk/WrongQuestionList.jspx" rendered="#{clientSession.ifLogin}" value="错题中心"/>
+                                <p:button value="请登录" rendered="#{!clientSession.ifLogin}" onclick="PF('login1').show();
+                                        return false;"/>
+                            </p:panel>
+                            
+                            
+
+                            <p:panel header="试题收藏"   styleClass="indexPanel">
+                                <p:graphicImage value="/resources/images/icon/icon3.png"/>
+                                <br/>
+                                <div class="indexPanelContent">
+                                    <h:outputText value="查看我收藏的试题，温故而知新。"/> 
+                                </div>
+                                <br/>
+                                <p:button href="/talk/QuestionCollectionList.jspx" rendered="#{clientSession.ifLogin}" value="试题收藏"/>
+                                <p:button value="请登录" rendered="#{!clientSession.ifLogin}" onclick="PF('login1').show();
+                                        return false;"/>
+                            </p:panel>
+                            
+                            <p:panel header="成绩统计" rendered="#{applicationBean.systemConfig.openScore}"  styleClass="indexPanel">
+                                <p:graphicImage value="/resources/images/icon/icon7.png"/>
+                                <br/>
+                                <div class="indexPanelContent">
+                                    <h:outputText value="模拟考试的得分、排名、成绩详情、成绩统计。"/> 
+                                </div>
+                                <br/>
+                                <p:button href="/talk/ExamCaseReportList.jspx" rendered="#{clientSession.ifLogin}" value="成绩统计"/>
+                                <p:button value="请登录" rendered="#{!clientSession.ifLogin}" onclick="PF('login1').show();
+                                        return false;"/>
+                            </p:panel>
+                            
+                            <p:panel header="在线课程" rendered="#{copyrightController.sysType!='1' and copyrightController.sysType!='2' and applicationBean.systemConfig.openLesson}" styleClass="indexPanel">
+                                <p:graphicImage value="/resources/images/icon/icon7.png"/>
+                                <br/>
+                                <div class="indexPanelContent">
+                                    <h:outputText value="大量在线视频课程任你学，边学边考。"/> 
+                                </div>
+                                <br/>
+                                <p:button href="/talk/LessonTypeList.jspx" value="进入学习"/>
+                            </p:panel>
+
+                            <p:panel header="交流讨论" rendered="#{applicationBean.systemConfig.openForum}"  styleClass="indexPanel">
+                                <p:graphicImage value="/resources/images/icon/icon9.png"/>
+                                <br/>
+                                <div class="indexPanelContent">
+                                    <h:outputText value="分享资源与经验，交流讨论，共同提高。"/> 
+                                </div>
+                                <br/>
+                                <p:button href="/talk/ZoneList.jspx" value="进入讨论"/>
+                            </p:panel>
+
+
+                        </h:panelGrid>
+
+                    </div>
+
+
+
+                    <div style="clear: both;"></div>
+
+                </div>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

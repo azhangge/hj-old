@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form>
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <div style="text-align: left; margin: 10px 0px 0px 0px; width: 98%;">
+                        <div>
+                            <h:outputText id="outputText1" styleClass="tit"
+                                          value="-积分情况统计-" />
+                        </div>
+                        <p:separator/>
+                        <div>
+                            <p:dataTable paginator="true" paginatorPosition="bottom" value="#{listClientUser.casusList}" var="Case" id="dataTable1" emptyMessage="#{lang['exam.empty_result']}"
+                                         styleClass="list" rowIndexVar="row" style="width:100%" rows="15">
+
+                                <p:column filterBy="#{Case.username}" sortBy="#{Case.username}">
+                                    <h:outputLink 
+                                        value="#{facesContext.externalContext.requestContextPath}/m/ViewClientUser.jspx?id=#{Case.id}">
+                                        <h:outputText style="height: 5%" value="#{Case.username}" />
+                                    </h:outputLink>
+                                    <f:facet name="header">
+                                        <h:outputText value="用户名" />
+                                    </f:facet>
+                                </p:column>
+
+                                <p:column filterBy="#{Case.name}" sortBy="#{Case.name}">
+                                    <h:outputLink 
+                                        value="#{facesContext.externalContext.requestContextPath}/m/ViewClientUser.jspx?id=#{Case.id}">
+                                        <h:outputText style="height: 5%" value="#{Case.name}" />
+                                    </h:outputLink>
+                                    <f:facet name="header">
+                                        <h:outputText value="姓名" />
+                                    </f:facet>
+                                </p:column>
+
+                                <p:column sortBy="#{Case.groupCnStr}" filterBy="#{Case.groupCnStr}" filterMatchMode="contains">
+                                    <h:outputText style="height: 5%" value="#{Case.groupCnStr}">
+                                    </h:outputText>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{applicationBean.departmentStr}" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column sortBy="#{Case.regTime}" style="width:110px;text-align: center;">
+                                    <h:outputText style="height: 5%" value="#{Case.regTime}">
+                                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" />
+                                    </h:outputText>
+                                    <f:facet name="header">
+                                        <h:outputText value="注册时间" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="width:40px;text-align: center;">
+                                    <h:outputText value="#{Case.examScore}" />
+                                    <f:facet name="header">
+                                        <h:outputText value="考试总积分" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="width:40px;text-align: center;">
+                                    <h:outputText value="#{Case.examScoreCM}" />
+                                    <f:facet name="header">
+                                        <h:outputText value="本月考试积分" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="width:40px;text-align: center;">
+                                    <h:outputText value="#{Case.examScoreCY}" />
+                                    <f:facet name="header">
+                                        <h:outputText value="本年考试积分" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="width:40px;text-align: center;">
+                                    <h:outputText value="#{Case.lessonScore}" />
+                                    <f:facet name="header">
+                                        <h:outputText value="课程总积分" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="width:40px;text-align: center;">
+                                    <h:outputText value="#{Case.lessonScoreCM}" />
+                                    <f:facet name="header">
+                                        <h:outputText value="本月课程积分" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="width:40px;text-align: center;">
+                                    <h:outputText value="#{Case.lessonScoreCY}" />
+                                    <f:facet name="header">
+                                        <h:outputText value="本年课程积分" />
+                                    </f:facet>
+                                </p:column>
+
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

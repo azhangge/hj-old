@@ -1,0 +1,532 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core"  lang="en">
+    <h:head>
+        <title>
+            <ui:insert name="title"></ui:insert>
+            #{examCaseMB.examCase.examination.name} - #{applicationBean.info.siteHeader}</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <link rel="stylesheet" type="text/css"
+              href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs.css" />
+        <link rel="stylesheet" type="text/css"
+              href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs_a.css" />
+
+
+        <script type="text/javascript" language="javascript">
+            //<![CDATA[
+            function   KeyDown() { //屏蔽鼠标右键、Ctrl+n、shift+F10、F5刷新、退格键  
+                if ((window.event.altKey) &&
+                        ((window.event.keyCode == 37) || //屏蔽   Alt+   方向键   ←  
+                                (window.event.keyCode == 39))) {     //屏蔽   Alt+   方向键   →  
+                    alert("不准你使用ALT+方向键前进或后退网页！");
+                    event.returnValue = false;
+                }
+                if ((event.keyCode == 8) || //屏蔽退格删除键  
+                        (event.keyCode == 116) || //屏蔽   F5   刷新键  
+                        (event.keyCode == 112) || //屏蔽   F1   刷新键  
+                        (event.ctrlKey && event.keyCode == 82)) {   //Ctrl   +   R  
+                    event.keyCode = 0;
+                    event.returnValue = false;
+                }
+                if ((event.ctrlKey) && (event.keyCode == 78))       //屏蔽   Ctrl+n  
+                    event.returnValue = false;
+                if ((event.shiftKey) && (event.keyCode == 121))   //屏蔽   shift+F10  
+                    event.returnValue = false;
+                if (window.event.srcElement.tagName == "A" && window.event.shiftKey)
+                    window.event.returnValue = false;     //屏蔽   shift   加鼠标左键新开一网页  
+                if ((window.event.altKey) && (window.event.keyCode == 115)) {   //屏蔽Alt+F4  
+                    window.showModelessDialog("about:blank", "", "dialogWidth:1px;dialogheight:1px");
+                    return   false;
+                }
+                if ((window.event.altkey) && (window.event.keyCode == 27)) {
+                    alert("认真答题！");
+                }
+            }
+            function   Showhelp() {
+                alert("认真答题！");
+                return   false;
+            }
+            //]]>
+        </script>
+    </h:head>
+    <h:body style="padding:0;margin:0;">
+
+        <script type="text/javascript" language="javascript">
+            //<![CDATA[
+            document.onkeydown = function(e) {
+                var ev = window.event || e;
+                var code = ev.keyCode || ev.which;
+                if (code == 116) {
+                    ev.keyCode ? ev.keyCode = 0 : ev.which = 0;
+                    cancelBubble = true;
+                    return false;
+                }
+                if (window.event.altKey)
+                {
+                    //alert("不准使用ALT键！");
+                    //event.returnValue = false;
+                    //return null;
+                }
+            };
+            //window.location = no;
+            //window.status = no;
+            document.oncontextmenu = new Function("event.returnValue=false;"); //禁止右键功能,单击右键将无任何反应
+            document.onselectstart = new Function("event.returnValue=false;"); //禁止选择,也就是无法复制
+            //window.onblur = blur11;
+
+            function blur11() {
+                alert("考试期间不准离开！");
+            }
+
+
+
+            //]]>
+        </script>
+
+        <script type="text/javascript" language="javascript">
+            var timer = null;
+            var maxtime = 0;
+
+            jQuery(document).ready(new function() {
+                //alert('begain');
+                testClose();
+                maxtime = #{examCaseMB.remainingTime};
+                if (timer == null) {
+                    timer = setInterval("CountDown()", 1000);
+                }
+            });
+            function CountDown()
+            {
+                if (maxtime >= 0)
+                {
+                    minutes = Math.floor(maxtime / 60);
+                    seconds = Math.floor(maxtime % 60);
+                    msg = minutes + " 分 " + seconds + " 秒";
+                    jQuery("#remain").html(msg);
+                    maxtime--;
+                    if (maxtime == 60 * 15) {
+                        alert('考试将于15分钟后结束！');
+                    } else if (maxtime == 60 * 5) {
+                        alert('考试将于5分钟后结束！');
+                    }
+                }
+                else
+                {
+                    alert('交卷时间已到，点[确定]后试卷将自动提交！');
+                    jQuery("#myForm\\:subcase").trigger("click");
+                    clearInterval(timer);
+                }
+            }
+            function closeWindow() {
+                window.onbeforeunload = null;
+                alert('试卷提交成功，点[确定]后窗口将关闭！');
+                var browserName = navigator.appName;
+                //window.opener = null; //禁止关闭窗口的提示
+                if (browserName == "Netscape")
+                {
+                    window.open('', '_parent', '');
+                    window.close();
+                }
+                else if (browserName == "Microsoft Internet Explorer")
+                {
+                    window.opener = "whocares";
+                    window.close();
+                }
+
+                //window.close(); //自动关闭本窗口
+            }
+
+            function testRetry() {
+                var bl = confirm("由于网络问题，未能提交当前考试！！\n系统将尝试再次提交，是否继续？");
+                if (bl) {
+                    jQuery("#myForm\\:subcase").trigger("click");
+                    clearInterval(timer);
+                }
+            }
+
+            function testPreRetry() {
+                var bl = confirm("由于网络问题，未能提交当前考试！！\n系统将尝试再次提交，是否继续？");
+                if (bl) {
+                    jQuery("#myForm\\:presubcase").trigger("click");
+                    clearInterval(timer);
+                }
+            }
+
+
+            function testClose() {
+                window.onbeforeunload = function(e) {
+                    return "确认试卷提交过才可以关闭窗口，否则考试信息将丢失，自负后果哦！";
+                }
+            }
+
+            function reply(cidd) {
+                jQuery("html,body").animate({scrollTop: jQuery(cidd).offset().top - 60}, 500);
+            }
+
+            //监听回车 
+            $(document).ready(function() {
+                $(document).keydown(function(e) {
+                    if (e.keyCode == 13) {
+                        //alert("xxxxNX");
+                        return false;
+                    }
+                });
+            });
+
+        </script>
+        <h:form id="myForm" style="padding: 0px 0px 0px 0px;margin: 0px 0px 0px 0px;">
+
+            <p:notificationBar position="top"  widgetVar="bar11" autoDisplay="true" effect="slide" style="height: 35px;" >  
+                <div style="margin: 0 auto;width:955px;text-align: left;">
+                    <p:poll interval="120" listener="#{examCaseMB.reserveSession()}" process="@form" update="@this" autoStart="true"/> 
+                    <h:panelGrid columns="5" style="width:90%;" cellpadding="0" cellspacing="0">
+                        <h:panelGroup>
+                            <h:outputText value="考试名称："/>
+                            <h:outputText value="#{examCaseMB.examCase.examination.name}"/>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <h:outputText value="考生姓名："/>
+                            <h:outputText value="#{clientSession.usr.name}"/>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <h:outputText value="考试时长："/>
+                            <h:outputText value="#{examCaseMB.examCase.examination.timeLen}分钟"/>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <h:outputText value="开考时间："/>
+                            <h:outputText value="#{examCaseMB.begainTime}">
+                                <f:convertDateTime pattern="HH:mm:ss" timeZone="GMT+8"/>
+                            </h:outputText>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <h:outputText value="剩余时间："/>
+                            <span id="remain" style="font-weight:bold;color:red;">
+                                <h:outputText value="#{examCaseMB.remainingTime/60}">
+                                    <f:convertNumber maxFractionDigits="0"/>
+                                </h:outputText>&nbsp;分&nbsp;0&nbsp;秒</span>
+                        </h:panelGroup>
+                    </h:panelGrid>
+                    <h:outputText value="提交试卷前请勿关闭此窗口，直接关闭窗口将丢失考试信息，#{examCaseMB.examCase.examination.retryInterval}分钟内不准再次参加考试！" style="color:red;"/>
+                    <h:commandButton value="保存考试" rendered="#{examCaseMB.examCase.examination.ifAllowSave}" style="margin-left:80px;width:120px;height:22px;">
+                        <p:ajax process="@form" listener="#{examCaseMB.saveExamCase()}" />
+                    </h:commandButton>
+                    <p:growl id="msg" autoUpdate="true"/>
+                    <!--
+                    <p:poll interval="10" listener="#{examCaseMB.computeRemainingTime()}" update="outputPanelJavaScript" onsuccess="testRemainningTime()"/> 
+                                        <p:outputPanel id="outputPanelJavaScript" autoUpdate="true">
+                                            <script type="text/javascript" language="javascript">
+                                                function testRemainningTime(){
+                                                    if(${examCaseMB.remainingTime}&lt;=0){
+                                                        alert('交卷时间已到，点[确定]后试卷将自动提交！');
+                                                        jQuery("#myForm\\:subcase").trigger("click");
+                                                    }
+                                                }                                              
+                                            </script>
+                                        </p:outputPanel>
+                    -->
+                </div>
+            </p:notificationBar>
+
+            
+
+            <div style="width:957px;margin: 0px auto;">
+                <div style="height: 38px;"/>
+
+                <p:panel id="mainPanel" style="width:957px;" styleClass="mainPanel">
+                    <p:separator/>
+                    <p:outputPanel autoUpdate="true">
+                        <p:dataTable   value="#{examCaseMB.examCase.choiceItems}" var="choice" rowIndexVar="row" rendered="#{fn:length(examCaseMB.examCase.choiceItems)!=0}">
+                            <p:column style="text-align:left;">
+                                <f:facet name="header">
+                                    <h:outputText value="※ 单选题（从下列各题的备选答案中选出一个正确答案。答案选错或未选者，该题不得分。每小题#{examCaseMB.examCase.examination.choiceScore}分，共#{examCaseMB.examCase.examination.choiceTotal}题。）"/>
+                                </f:facet>
+                                <a id="archor-#{choice.id}" href="#"></a>
+                                <h:outputText value="#{row+1}、#{choice.question.name}" style="#{choice.marked?'color:red;':''}" styleClass="choiceTitle" escape="false"/>
+
+                                <p:commandLink action="#{wrongQuestionList.selectChoice(choice.question.id)}" rendered="#{examCaseMB.examCase.examination.ifShowAnswer}" update=":myForm:displayChoice" oncomplete="PF('choiceDialog').show()" style="margin-left:50px;"  styleClass="explain" value="试题解析"/>
+
+                                <h:selectBooleanCheckbox value="#{choice.marked}" style="margin-left:50px;">
+                                    <p:ajax process="@form"/>
+                                </h:selectBooleanCheckbox>
+                                <h:outputText value="标记" styleClass="explain"/>
+                                <br/>
+                                <div style="margin-left: 30px;">
+                                    <h:selectOneRadio  value="#{choice.userAnswer}" layout="pageDirection" class="threadColumn cell0 choiceTitle"> 
+                                        <f:selectItems value="#{choice.question.choices}" var="ch"
+                                                       itemLabel="#{ch.labelRendered}.&nbsp;#{ch.name}" itemValue="#{ch.label}" />
+                                    </h:selectOneRadio> 
+                                </div>
+                            </p:column>
+                        </p:dataTable>
+                    </p:outputPanel>
+
+                    <p:outputPanel autoUpdate="true">
+                        <p:dataTable   value="#{examCaseMB.examCase.multiChoiceItems}" var="choice" rowIndexVar="row" rendered="#{fn:length(examCaseMB.examCase.multiChoiceItems)!=0}">
+                            <p:column style="text-align:left;">
+                                <f:facet name="header">
+                                    <h:outputText value="※ 多选题（从下列各题的备选答案中选出正确答案。答案选错或未选者，该题不得分。每小题#{examCaseMB.examCase.examination.multiChoiceScore}分，共#{examCaseMB.examCase.examination.multiChoiceTotal}题。）"/>
+                                </f:facet>
+                                <a id="archor-#{choice.id}" href="#"></a>
+                                <h:outputText value="#{row+1}、#{choice.question.name}" style="#{choice.marked?'color:red;':''}" styleClass="choiceTitle" escape="false"/>
+
+                                <p:commandLink action="#{wrongQuestionList.selectMultiChoice(choice.question.id)}" rendered="#{examCaseMB.examCase.examination.ifShowAnswer}" update=":myForm:displayMultiChoice" oncomplete="PF('multiChoiceDialog').show()" style="margin-left:50px;"  styleClass="explain" value="试题解析"/>
+
+                                <h:selectBooleanCheckbox value="#{choice.marked}" style="margin-left:50px;">
+                                    <p:ajax process="@form"/>
+                                </h:selectBooleanCheckbox>
+                                <h:outputText value="标记"  styleClass="explain"/>
+                                <br/>
+                                <div style="margin-left: 30px;">
+                                    <ui:repeat value="#{choice.question.choices}" var="ch">
+                                        <h:selectBooleanCheckbox value="#{ch.selected}">
+                                        </h:selectBooleanCheckbox>
+                                        <h:outputText value="#{ch.labelRendered}.&nbsp;#{ch.name}" styleClass="choiceTitle"/>
+                                        <br/>
+                                    </ui:repeat>
+                                </div>
+                            </p:column>
+                        </p:dataTable>
+                    </p:outputPanel>
+
+                    <p:outputPanel autoUpdate="true">
+                        <p:dataTable   value="#{examCaseMB.examCase.fillItems}" var="fill"  rowIndexVar="row" rendered="#{fn:length(examCaseMB.examCase.fillItems)!=0}">
+                            <p:column style="text-align:left;">
+                                <f:facet name="header">
+                                    <h:outputText value="※ 填空题（每小题#{examCaseMB.examCase.examination.fillScore}分，共#{examCaseMB.examCase.examination.fillTotal}题。）"/>
+                                </f:facet>
+                                <a id="archor-#{fill.id}" href="#"></a>
+                                <h:outputText value="#{row+1}、" style="#{fill.marked?'color:red;':''}" styleClass="choiceTitle"/>
+                                <ui:repeat value="#{fill.blocks}" var="b">
+                                    <h:outputText value="#{b.preStr}" style="#{fill.marked?'color:red;':''}" escape="false" styleClass="choiceTitle"/>
+                                    <h:inputText value="#{b.userAnswer}" styleClass="fillBlank"/>
+                                </ui:repeat>
+                                <h:outputText value="#{fill.lastStr}" style="#{fill.marked?'color:red;':''}" escape="false" styleClass="choiceTitle"/> 
+
+                                <p:commandLink action="#{wrongQuestionList.selectFill(fill.question.id)}" rendered="#{examCaseMB.examCase.examination.ifShowAnswer}" update=":myForm:displayFill" oncomplete="PF('fillDialog').show()" style="margin-left:50px;"  styleClass="explain" value="试题解析"/>
+
+                                <h:selectBooleanCheckbox value="#{fill.marked}" style="margin-left:50px;">
+                                    <p:ajax process="@form"/>
+                                </h:selectBooleanCheckbox>
+                                <h:outputText value="标记"  styleClass="explain"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:outputPanel>
+                    <p:outputPanel autoUpdate="true">
+                        <p:dataTable  value="#{examCaseMB.examCase.judgeItems}" var="judge" rowIndexVar="row"  rendered="#{fn:length(examCaseMB.examCase.judgeItems)!=0}">
+                            <p:column style="text-align:left;">
+                                <f:facet name="header" >
+                                    <h:outputText value="※ 判断题（每小题#{examCaseMB.examCase.examination.judgeScore}分，共#{examCaseMB.examCase.examination.judgeTotal}题。）"/>
+                                </f:facet>
+                                <a id="archor-#{judge.id}" href="#"></a>
+                                <h:outputText value="#{row+1}、#{judge.question.name}" style="#{judge.marked?'color:red;':''}" escape="false" styleClass="choiceTitle"/>
+                                <h:panelGroup>
+                                    <p:commandLink action="#{wrongQuestionList.selectJudge(judge.question.id)}" rendered="#{examCaseMB.examCase.examination.ifShowAnswer}" update=":myForm:displayJudge" oncomplete="PF('judgeDialog').show()" style="margin-left:50px;"  styleClass="explain" value="试题解析"/>
+                                    <h:selectBooleanCheckbox value="#{judge.marked}" style="margin-left:50px;">
+                                        <p:ajax process="@form"/>
+                                    </h:selectBooleanCheckbox>
+                                    <h:outputText value="标记"  styleClass="explain"/>
+                                </h:panelGroup>
+                                <br/>
+                                <h:selectOneRadio value="#{judge.userAnswer}" style="display:inline;" styleClass="threadColumn choiceTitle">
+                                    <f:selectItem itemLabel="正确" itemValue="true"/>
+                                    <f:selectItem itemLabel="错误" itemValue="false"/>
+                                    <f:selectItem itemLabel="未填写" itemValue="null"/>
+                                </h:selectOneRadio>
+
+                                <!--
+                                <p:selectOneButton value="#{judge.userAnswer}" style="display:inline;margin-left:30px;">  
+                                    <f:selectItem itemLabel="正确" itemValue="true" />  
+                                    <f:selectItem itemLabel="错误" itemValue="false" />  
+                                </p:selectOneButton>
+                                -->
+                            </p:column>
+                        </p:dataTable>
+                    </p:outputPanel>
+                    <p:outputPanel autoUpdate="true">
+                        <p:dataTable  value="#{examCaseMB.examCase.essayItems}" var="essay" rowIndexVar="row"  rendered="#{fn:length(examCaseMB.examCase.essayItems)!=0}">
+                            <p:column style="text-align:left;">
+                                <f:facet name="header" >
+                                    <h:outputText value="※ 问答题（每小题#{examCaseMB.examCase.examination.essayScore}分，共#{examCaseMB.examCase.examination.essayTotal}题。）"/>
+                                </f:facet>
+                                <a id="archor-#{essay.id}" href="#"></a>
+                                <h:outputText value="#{row+1}、#{essay.question.name}" style="#{essay.marked?'color:red;':''}" styleClass="choiceTitle" escape="false"/>
+                                <h:panelGroup>
+                                    <p:commandLink action="#{wrongQuestionList.selectEssay(essay.question.id)}" rendered="#{examCaseMB.examCase.examination.ifShowAnswer}" update=":myForm:displayEssay" oncomplete="PF('essayDialog').show()" style="margin-left:50px;"  styleClass="explain" value="试题解析"/>
+                                    <h:selectBooleanCheckbox value="#{essay.marked}" style="margin-left:50px;">
+                                        <p:ajax process="@form"/>
+                                    </h:selectBooleanCheckbox>
+                                    <h:outputText value="标记"  styleClass="explain"/>
+                                </h:panelGroup><br/>
+                                <h:inputTextarea value="#{essay.userAnswer}" style="width:800px;height:150px;margin-left: 10px;"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:outputPanel>
+
+                    <p:outputPanel autoUpdate="true">
+                        <script type="text/javascript" language="javascript">
+                                    function aabbccStart(id) {
+                                        $("#" + id).html("正在上传中...，请稍侯");
+                                    }
+                                    function aabbccEnd(id) {
+                                        $("#" + id).html("");
+                                    }
+                                </script>
+                        <p:dataTable  value="#{examCaseMB.examCase.fileItems}" var="file" rowIndexVar="row"  rendered="#{fn:length(examCaseMB.examCase.fileItems)!=0}">
+                            <p:column style="text-align:left;">
+                                <f:facet name="header" >
+                                    <h:outputText value="※ 文件题（每小题#{examCaseMB.examCase.examination.fileScore}分，共#{examCaseMB.examCase.examination.fileTotal}题。）"/>
+                                </f:facet>
+                                <a id="archor-#{file.id}" href="#"></a>
+                                <h:outputText value="#{row+1}、#{file.question.name}" style="#{file.marked?'color:red!important;':''}" styleClass="choiceTitle" escape="false"/>
+                                <h:panelGroup>
+                                    <p:commandLink action="#{wrongQuestionList.selectFile(file.question.id)}" rendered="#{examCaseMB.examCase.examination.ifShowAnswer}" update=":myForm:displayFile" oncomplete="PF('fileDialog').show()" style="margin-left:50px;"  styleClass="explain" value="试题解析"/>
+                                    <h:selectBooleanCheckbox value="#{file.marked}" style="margin-left:50px;">
+                                        <p:ajax process="@form"/>
+                                    </h:selectBooleanCheckbox>
+                                    <h:outputText value="标记"  styleClass="explain"/>
+                                </h:panelGroup>
+                                <p:separator/>
+                                <p:dialog modal="true" widgetVar="statusDialog" header="请稍侯" showHeader="false"  width="250"
+                                          draggable="false" closable="false" resizable="false">  
+                                    <h:graphicImage value="/resources/images/ajaxloadingbar.gif"/>  
+                                </p:dialog>
+                                
+                                <h:panelGrid columns="1" style="margin-left:55px;" columnClasses="w20,w70" border="0" styleClass="threadColumn" cellpadding="0" cellspacing="0">
+                                    <h:panelGroup>
+                                        <h:outputText value="附件：" styleClass="choiceTitle"/>
+                                        <h:outputLink  target="_blank"  value="#{facesContext.externalContext.requestContextPath}/DownloadFileQuestionAttach?id=#{file.id}&amp;uid=#{clientSession.usr.id}&amp;eid=#{examCaseMB.examCase.examination.id}"  rendered="#{file.attached}">
+                                            <h:outputText value="点击下载"/>
+                                        </h:outputLink>
+                                        <h:outputText value="无" rendered="#{!file.attached}"/>
+                                        <h:outputText value="（上传成功）"  rendered="#{file.attached}" style="color:red;"/>
+                                    </h:panelGroup>
+                                    <h:panelGrid columns="2" columnClasses="w20,w50">
+                                        <p:fileUpload onstart="statusDialog.show();" process="@form" oncomplete="statusDialog.hide();"  fileUploadListener="#{examCaseMB.up_action}" style="width:500px;height:40px;margin-bottom: 2px;"  invalidFileMessage="格式只能为rar或zip"  uploadLabel="上传" auto="true" label="选择文件"  allowTypes="/(\.|\/)(rar|zip)$/" >
+                                        </p:fileUpload>
+                                        <h:outputText value="仅.ZIP和.RAR文件有效"/>
+                                        <!--
+                                        <span id="span#{file.id}"></span>
+                                        -->
+                                    </h:panelGrid>
+                                </h:panelGrid>
+                                <p:separator/>
+                                <h:panelGrid style="margin-left:10px;" styleClass="threadColumn" columns="2">
+                                    <h:outputText value="备注："/>
+                                    <h:inputTextarea value="#{file.userAnswer}" style="width:755px;height:80px;margin-left: 0px;" />
+                                </h:panelGrid>
+
+                            </p:column>
+                        </p:dataTable>
+                    </p:outputPanel>
+
+                    <p:outputPanel autoUpdate="true">
+                        <p:dataTable  value="#{examCaseMB.examCase.caseItems}" var="case1" rowIndexVar="row"  rendered="#{fn:length(examCaseMB.examCase.caseItems)!=0}">
+                            <p:column style="text-align:left;">
+                                <f:facet name="header" >
+                                    <h:outputText value="※ 综合题"/>
+                                </f:facet>
+                                <p:panel>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{row+1}、#{case1.question.name}" style="" styleClass="choiceTitle" escape="false"/>
+                                    </f:facet>
+                                    <h:outputText value="#{case1.question.content}" styleClass="choiceTitle" escape="false" style="padding:5px 10px 5px 10px;"/>
+                                    <p:dataTable   value="#{case1.choiceItems}" var="choice" rowIndexVar="row" rendered="#{fn:length(case1.choiceItems)!=0}">
+                                        <p:column style="text-align:left;">
+                                            <f:facet name="header">
+                                                <h:outputText value="※ 单项选择，每小题#{case1.question.choiceScore}分。）"/>
+                                            </f:facet>
+                                            <a id="archor-#{choice.id}" href="#"></a>
+                                            <h:outputText value="（#{row+1}）#{choice.question.name}" style="#{choice.marked?'color:red;':''}" styleClass="choiceTitle" escape="false"/>
+
+                                            <p:commandLink action="#{wrongQuestionList.selectChoice(choice.question.id)}" rendered="#{examCaseMB.examCase.examination.ifShowAnswer}" update=":myForm:displayChoice" oncomplete="PF('choiceDialog').show()" style="margin-left:50px;"  styleClass="explain" value="试题解析"/>
+
+                                            <h:selectBooleanCheckbox value="#{choice.marked}" style="margin-left:50px;">
+                                                <p:ajax process="@form"/>
+                                            </h:selectBooleanCheckbox>
+                                            <h:outputText value="标记"  styleClass="explain"/>
+                                            <br/>
+                                            <div style="margin-left: 30px;">
+                                                <h:selectOneRadio  value="#{choice.userAnswer}" layout="pageDirection" class="threadColumn cell0 choiceTitle"> 
+                                                    <f:selectItems value="#{choice.question.choices}" var="ch"
+                                                                   itemLabel="#{ch.labelRendered}.&nbsp;#{ch.name}" itemValue="#{ch.label}" />
+                                                </h:selectOneRadio> 
+                                            </div>
+                                        </p:column>
+                                    </p:dataTable>
+                                    <p:dataTable  value="#{case1.essayItems}" var="essay" rowIndexVar="row"  rendered="#{fn:length(case1.essayItems)!=0}">
+                                        <p:column style="text-align:left;">
+                                            <f:facet name="header" >
+                                                <h:outputText value="※ 问答题，每小题#{case1.question.essayScore}分。）"/>
+                                            </f:facet>
+                                            <a id="archor-#{essay.id}" href="#"></a>
+                                            <h:outputText value="（#{row+1}）#{essay.question.name}" style="#{essay.marked?'color:red;':''}" styleClass="choiceTitle" escape="false"/>
+                                            <h:panelGroup>
+                                                <p:commandLink action="#{wrongQuestionList.selectEssay(essay.question.id)}" rendered="#{examCaseMB.examCase.examination.ifShowAnswer}" update=":myForm:displayEssay" oncomplete="PF('essayDialog').show()" style="margin-left:50px;"  styleClass="explain" value="试题解析"/>
+
+                                                <h:selectBooleanCheckbox value="#{essay.marked}" style="margin-left:50px;">
+                                                    <p:ajax process="@form"/>
+                                                </h:selectBooleanCheckbox>
+                                                <h:outputText value="标记"  styleClass="explain"/>
+                                            </h:panelGroup><br/>
+                                            <h:inputTextarea value="#{essay.userAnswer}" style="width:800px;height:150px;margin-left: 10px;"/>
+                                        </p:column>
+                                    </p:dataTable>
+                                </p:panel>
+                            </p:column>
+                        </p:dataTable>
+                    </p:outputPanel>
+
+                    <p:separator/>
+                    <p:commandButton id="presubcase" widgetVar="presubcase11" onclick="presubcase11.disable();" value="提交试卷" disabled="#{examCaseMB.examCase.user==null}" action="#{examCaseMB.checkNull()}" styleClass=""  oncomplete="checkCase()" onerror="testPreRetry()" update="checkCase"></p:commandButton>
+
+                    <p:outputPanel id="checkCase" autoUpdate="true">
+                        <script>
+                                    function checkCase() {
+                                        presubcase11.enable();
+                                        b1 = false;
+                                        str = '#{examCaseMB.errStr}';
+                                        //alert(str);
+                                        if (str !== '') {
+                                            bl = confirm("试卷还有题目未完成，确认要提交吗？\n点击【取消】定位到未做题目");
+                                        } else {
+                                            jQuery("#myForm\\:subcase").trigger("click");
+                                            clearInterval(timer);
+                                            return;
+                                        }
+
+                                        if (bl) {
+                                            jQuery("#myForm\\:subcase").trigger("click");
+                                            clearInterval(timer);
+                                        } else {
+                                            cid = '#{examCaseMB.redirectId}';
+                                            cidd = '#archor-' + cid;
+                                            reply(cidd);
+                                        }
+                                    }
+                        </script>
+                    </p:outputPanel>
+
+                    <div style="display:none;">
+                        <p:commandButton id="subcase" widgetVar="subcase11" onclick="subcase11.disable();" value="提交试卷" disabled="#{examCaseMB.examCase.user==null}" action="#{examCaseMB.submitExamCase}" styleClass=""  onsuccess="closeWindow()" onerror="testRetry()"></p:commandButton>
+
+                    </div>
+                </p:panel>
+
+                <ui:include src="Footer1.xhtml"/>
+            </div>
+            <ui:include src="/AjaxStatus2.xhtml"/>
+        </h:form>
+
+    </h:body>
+</html>
+

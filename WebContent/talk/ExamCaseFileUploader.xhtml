@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      >
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <body>
+        <ui:composition>
+            <p:dialog id="examFileUploader" width="500" widgetVar="examFileUploader"  modal="true" 
+                      style="text-align:left;position: absolute;">
+                <f:facet name="header">
+                    <h:panelGroup>
+                        <h:outputText value="文件题上传"></h:outputText>
+                    </h:panelGroup>
+                </f:facet>
+                <h:panelGrid columns="2">
+                    <h:outputText value="文件名称："></h:outputText>
+                    <p:outputPanel autoUpdate="true">
+                        <h:outputText id="ffName" value="#{examCaseFileUploader.fileName}"></h:outputText>
+                    </p:outputPanel>
+                </h:panelGrid>
+                <p:separator style="margin-top:0px;margin-bottom:2px" />
+                <p:fileUpload fileUploadListener="#{examCaseFileUploader.up_action}"  id="upl1" mode="advanced" auto="true" widgetVar="upl1"  allowTypes="/(\.|\/)(rar|zip)$/"
+                              cancelLabel="取消" uploadLabel="上传" label="选择文件" sizeLimit="209715200" invalidSizeMessage="文件最大限制200M" update="upl1"/>
+                <h:outputText value="注意：仅.zip和.rar格式是被支持的！"></h:outputText>
+                <p:separator/>
+                <p:button id="fClink1" onclick="finishUpload();
+                        return null;"  value="完成"
+                          style="margin-top:6px">
+                </p:button>
+            </p:dialog>
+            <p:outputPanel autoUpdate="true">
+                <script type="text/javascript" language="javascript">
+                    //<![CDATA[
+                    function finishUpload() {
+                        var str1 = '<a target=\"_blank\" href=\"#{facesContext.externalContext.requestContextPath}/DownloadFileQuestionAttach?id=#{examCaseFileUploader.fileId}\&amp;uid=#{clientSession.usr.id}\&amp;eid=#{examCaseFileUploader.examId}\">#{examCaseFileUploader.fileId}</a>';
+                        var str2 = "<span style=\"color:red;\">（上传完成）</span>";
+                        PF('examFileUploader').hide();
+                        if ('#{examCaseFileUploader.fileName}' != '') {
+                            jQuery('#fwrapper-#{examCaseFileUploader.fileId}').html(str1 + str2);
+                            testFileDial('#{examCaseFileUploader.fileId}');
+                        }
+                        //$("#" + id).html("正在上传中...，请稍侯");
+                    }
+                    //]]>
+                </script>
+            </p:outputPanel>
+
+        </ui:composition>
+    </body>
+</html>
+

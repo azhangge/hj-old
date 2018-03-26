@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core"  lang="en">
+    <h:head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </h:head>
+    <f:view>
+        <body>
+            <ui:composition template="/talk/UserCenterGeneral.xhtml">
+                <ui:define name="ucontent">
+                    <ui:include src="NewFilePanel.xhtml"></ui:include>
+                    <ui:include src="NewFolderPanel.xhtml"></ui:include>
+                    <ui:include src="ChangeFileDir.xhtml"></ui:include>
+                    <ui:include src="ShareToPersPanel.xhtml"></ui:include>
+                    <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/checkbox.js"></script>
+
+                    <div >
+                        <h:panelGrid columns="2" style="width:100%">
+                            <h:outputText value="－个人文件－" styleClass="headLine"></h:outputText>
+                            <h:panelGrid columns="3" style="border:0px solid red;display:inline;margin-left:20px;">
+                                <h:outputText value="容量："
+                                              styleClass="headLine"></h:outputText>
+                                <p:progressBar  value="#{ClientSession.usr.realLength/ClientSession.usr.totalLength*100}"  style="width:130px;"/> 
+                                <h:panelGroup>
+                                    <h:outputText value="#{ClientSession.usr.realLength}" styleClass="headLine">
+                                        <f:convertNumber maxFractionDigits="1" minFractionDigits="0" groupingUsed="false"/>
+                                    </h:outputText>
+                                    <h:outputText value="MB/#{ClientSession.usr.totalLength}MB"
+                                                  styleClass="headLine"></h:outputText>
+                                </h:panelGroup></h:panelGrid>
+                        </h:panelGrid>
+
+                        <p:panel style="height: 25px" styleClass="ui-datatable-header mainTable">
+                            <h:panelGroup>
+                                路径：
+                                <c:forEach items="${listClientFilebyUsr.familyTree}" var="path"
+                                           begin="0" step="1">
+                                    <a href="ListClientFilebyUsr.jspx?fid=${path.id}">${path.fileName}</a>>>
+                                </c:forEach>
+                            </h:panelGroup>
+                        </p:panel>
+                        <div style="border-top:0px;" >
+
+                            <p:commandButton id="link" value="新建文件夹"  action="#{newFolder.newAdd}" update=":fm:ffName" oncomplete="newFolder.show();">
+                                <f:param name="scope" value="pers" ></f:param>
+                            </p:commandButton>
+
+                            <p:commandButton id="flink" value="上传文件" action="#{newFile.newAdd}"  update="fName" disabled="#{ClientSession.usr.realLength&gt;ClientSession.usr.totalLength}" oncomplete="newFile.show();">
+                                <f:param name="action" value="new"></f:param>
+                                <f:param name="scope" value="pers" ></f:param>
+                            </p:commandButton>
+                            <p:commandButton id="batChangeDir" value="移动"
+                                             action="#{listClientFilebyUsr.batChangeDir}" update="dc" oncomplete="changeFileDir.show();">
+                            </p:commandButton>
+
+                            <p:commandButton id="batDel" value="删除"
+                                             action="#{listClientFilebyUsr.batDel}" update="dc"
+                                             onclick="if (!confirm('确认要删除选中的文件及目录（包括所有子目录及文件）吗？')) return false">
+                            </p:commandButton>
+
+                        </div>
+                        <p:panel style="height: 30px" styleClass="ui-datatable-header mainTable"
+                                 rendered="#{listClientFilebyUsr.fatherID!='0'}">
+
+                            <h:outputLink
+                                value="ListClientFilebyUsr.jspx?fid=#{listClientFilebyUsr.grapaID}"
+                                rendered="#{listClientFilebyUsr.fatherID!='0'}" style="display:inline-block;">
+                                <h:panelGroup>
+                                    <h:graphicImage value="/resources/images/up.gif" style="border:0px;vertical-align: middle;"/>
+                                    <h:outputText value="返回上级" style=""></h:outputText>
+                                </h:panelGroup>
+                            </h:outputLink>
+                        </p:panel>
+                        <p:dataTable id="dc" value="#{listClientFilebyUsr.pro2s}" paginator="true" paginatorPosition="bottom"  styleClass="mainTable"
+                                     var="pro" rows="8" style="text-align:center;" emptyMessage="无记录">
+                            <p:column style="width:30px;">
+                                <f:facet name="header">
+                                    <h:outputText value="选择"></h:outputText>
+                                </f:facet>
+                                <h:selectBooleanCheckbox value="#{pro.selected}"
+                                                         id="test#{pro.id}">
+                                    <p:ajax event="change"></p:ajax>
+                                </h:selectBooleanCheckbox>
+                            </p:column>
+
+
+                            <p:column sortBy="#{pro.pinyin}" style="text-align:left;width:300px;">
+                                <f:facet name="header">
+                                    <h:outputText value="文件名称"></h:outputText>
+                                </f:facet>
+                                <h:graphicImage rendered="#{pro.ifFolder}"
+                                                value="/resources/images/folder.gif" style="vertical-align: middle;"></h:graphicImage>
+                                <h:graphicImage rendered="#{!pro.ifFolder}"
+                                                value="/resources/images/file.gif" style="vertical-align: middle;"></h:graphicImage>
+                                <h:outputLink value="ListClientFilebyUsr.jspx?fid=#{pro.id}"  title="#{pro.fileName}"
+                                              rendered="#{pro.ifFolder}">
+                                    <h:outputText value="#{fn:length(pro.fileName)>20?fn:substring(pro.fileName,0,20):pro.fileName}"></h:outputText>
+                                </h:outputLink>
+                                <h:outputLink title="#{pro.fileName}"
+                                              value="#{facesContext.externalContext.requestContextPath}/servlet/DownloadFile?id=#{pro.id}&amp;uid=#{ClientSession.usr.id}"
+                                              rendered="#{!pro.ifFolder}">
+                                    <h:outputText value="#{fn:length(pro.fileName)>20?(fn:substring(pro.fileName,0,20)):pro.fileName}#{pro.fileExt}"></h:outputText>
+                                </h:outputLink>
+                                <h:outputText value="(#{pro.sonNum})" rendered="#{pro.ifFolder}"></h:outputText>
+                            </p:column>
+                            <p:column sortBy="#{pro.secretGrade}"  style="width:55px;">
+                                <f:facet name="header">
+                                    <h:outputText value="文件密级"></h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{pro.secretGrade}"></h:outputText>
+                            </p:column>
+                            <p:column sortBy="#{pro.realLength}" style="width:50px;">
+                                <f:facet name="header">
+                                    <h:outputText value="大小"></h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{pro.fileSize}"></h:outputText>
+                            </p:column>
+                            <p:column sortBy="#{pro.scope}" style="width:30px;">
+                                <f:facet name="header">
+                                    <h:outputText value="范围"></h:outputText>
+                                </f:facet>
+                                <h:outputText value="${pro.scope=='pers'?'个人':'部门'}"></h:outputText>
+                            </p:column>
+                            <p:column sortBy="#{pro.uploadTime}" style="width:80px;text-align:center;">
+                                <f:facet name="header">
+                                    <h:outputText value="上传时间"></h:outputText>
+                                </f:facet>
+
+                                <h:outputText value="#{pro.uploadTime}">
+                                    <f:convertDateTime timeZone="GMT+8"
+                                                       pattern="yyyy-MM-dd HH:mm:ss" />
+                                </h:outputText>
+
+                            </p:column>
+                            <p:column style="width:75px;text-align: center;">
+                                <f:facet name="header">
+                                    <h:outputText value="修改"></h:outputText>
+                                </f:facet>
+
+                                <p:commandButton value="传阅" action="#{newFolder.alter}" update=":fm:ffName"
+                                                 rendered="#{pro.ifFolder}" oncomplete="newFolder.show();">
+                                    <f:param name="id" value="#{pro.id}"></f:param>
+                                    <f:param name="scope" value="#{pro.scope}" ></f:param>
+                                </p:commandButton>
+                                <p:commandButton value="传阅" action="#{newFile.alter}" oncomplete="newFile.show();" update=":fm:fName"
+                                                 rendered="#{(!pro.ifFolder)and((pro.lock.lockType==null)||(pro.lock.lockType==''))}">
+                                    <f:param name="id" value="#{pro.id}"></f:param>
+                                    <f:param name="scope" value="#{pro.scope}" ></f:param>
+                                </p:commandButton>
+
+                            </p:column>
+                        </p:dataTable>
+                        <p:separator/>
+
+                    </div>
+                </ui:define>
+            </ui:composition>
+        </body>
+    </f:view>
+</html>

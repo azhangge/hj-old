@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<manual>
+  <id>100531059662610</id>
+  <title>第三方平台连接</title>
+  <content>&lt;p&gt; 本系统为单点登录等潜在功能提供了集成接口。集成内容如下：其它系统中的用户或管理员可以一键（点击链接）跳过验证环节直接登录本系统，接口SERVLET调用地址如下：&lt;/p&gt; &lt;p&gt; 1、前台登录接口：&lt;/p&gt; &lt;p&gt; /RereClientConnector&lt;/p&gt; &lt;p&gt; 接收的参数如下：&lt;/p&gt; &lt;p&gt; username：第三方平台传入的用户名&lt;/p&gt; &lt;p&gt; email：第三方平台传入的email&lt;/p&gt; &lt;p&gt; name：第三方平台传入的姓名&lt;/p&gt; &lt;p&gt; group：第三方平台传入的用户组（班级/部门）&lt;/p&gt; &lt;p&gt; 若本系统名称为exam2，典型的调用场景如下：&lt;/p&gt; &lt;p&gt; /exam2/RereClientConnector?username=test&amp;amp;email=test@163.com&amp;amp;name=uu&amp;amp;group=111&lt;/p&gt; &lt;p&gt; 系统调用后，若本系统中无此用户，则添加，若有此用户，则修改。&lt;/p&gt; &lt;p&gt; 注意：若参数中有中文，请编码。&lt;/p&gt; &lt;p&gt; 2、后台登录接口：&lt;/p&gt; &lt;p&gt; /RereAdminConnector&lt;/p&gt; &lt;p&gt; 接收的参数如下：&lt;/p&gt; &lt;p&gt; username：第三方平台传入的用户名&lt;/p&gt; &lt;p&gt; password：第三方平台传入的email&lt;/p&gt; &lt;p&gt; 若本系统名称为exam2，典型的调用场景如下：&lt;/p&gt; &lt;p&gt; /exam2/RereAdminConnector?username=test&amp;amp;password=123456&lt;/p&gt; &lt;p&gt; 与前台登录接口不同的是，后台登录接口会验证此用户名和密码，即只有在本系统中存在的管理员才可在验证用户名密码后一键登录。&lt;/p&gt; &lt;p&gt; 使用以上两个接口功能时必须事先在后台管理中开放第三方平台集成功能。&lt;/p&gt;</content>
+  <gen_time>2014-02-10 15:19:44</gen_time>
+  <ord>16</ord>
+</manual>

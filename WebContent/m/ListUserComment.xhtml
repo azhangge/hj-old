@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions" lang="en">
+	
+	<head>
+		<title>My Facelets Page</title>
+		<meta http-equiv="keywords" content="enter,your,keywords,here" />
+		<meta http-equiv="description"
+			content="A short description of this page." />
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	</head>
+	
+	<body>
+		<ui:composition template="BackGeneral.xhtml">
+			<ui:define name="content">
+				<h:form>
+					<ui:include src="/AjaxStatus2.xhtml" />
+					<div style="text-align: left; margin: 10px 0px 0px 0px; width: 98%;">
+						<div>
+							<h:outputText id="outputText1" styleClass="tit" value="-评论列表-" />
+						</div>
+						<p:separator />
+						<div>
+						<p:dataTable paginator="true" paginatorPosition="bottom"
+							value="#{listUserComment.userComments}" var="us" id="dataTable1"
+							emptyMessage="#{lang['exam.empty_result']}" styleClass="list"
+							rowIndexVar="row" style="width:100%" liveResize="true" resizableColumns="true">
+							<p:column id="num" style="width:40px;text-align: center;">
+								<h:outputText style="height: 5%" value="#{row+1}" />
+								<f:facet name="header">
+									<h:outputText id="outputTextnum" value="序号" />
+								</f:facet>
+							</p:column>
+							
+							<p:column filterBy="#{us.course.name}" filterMatchMode="contains"
+							style="width:270px;" filterStyle="width:90%" sortBy="#{us.course.name}">
+								<h:outputText
+									value="#{us.course.name}"
+									escape="true" />
+								<f:facet name="header">
+									<h:outputText value="课程名称" />
+								</f:facet>
+							</p:column>
+							
+							<p:column filterBy="#{us.comment}" filterMatchMode="contains"
+							style="width:270px;" filterStyle="width:90%" sortBy="#{us.comment}"  resizable="true" >
+								<h:outputText
+									value="#{us.comment}"
+									escape="true" />
+								<f:facet name="header">
+									<h:outputText value="评论内容" />
+								</f:facet>
+							</p:column>
+							
+							<p:column filterBy="#{us.star}" filterMatchMode="contains" sortBy="#{us.star}" resizable="true" >
+								<h:outputText value="#{us.star}" />
+								<f:facet name="header">
+									<h:outputText value="星级" />
+								</f:facet>
+							</p:column>
+							
+							<p:column filterBy="#{us.user.username}" filterMatchMode="contains"
+							style="width:50px;" filterStyle="width:90%" sortBy="#{us.user.username}">
+								<h:outputText
+									value="#{us.user.username}"
+									escape="true" />
+								<f:facet name="header">
+									<h:outputText value="用户" />
+								</f:facet>
+							</p:column>
+							
+							
+							<p:column style="text-align: center;width: 40px;">
+								<p:commandLink action="#{listUserComment.deleteUserComment(us.id)}"
+									update="@form"
+									onclick="if (!confirm('确认要删除此评论吗？'))
+                                                return false">
+									<h:outputText value="删除" />
+								</p:commandLink>
+								<f:facet name="header">
+									<h:outputText value="删除" />
+								</f:facet>
+							</p:column>
+						</p:dataTable>
+						<p:separator />
+					</div>
+					</div>
+				</h:form>
+			</ui:define>
+		</ui:composition>
+	</body>
+</html>

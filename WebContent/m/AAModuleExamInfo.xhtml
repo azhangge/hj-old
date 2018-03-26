@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"  lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+
+
+                <h:form id="myForm">
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <h:outputScript name="chinese_locale.js" library="js"/>
+                    <div>
+                        <h:outputText  styleClass="tit"
+                                       value="－章节练习设置－" />
+                        <p:separator/>
+                        <h:panelGrid columns="2" cellpadding="0" >
+                            
+                            <h:outputText value="练习页解析：" />
+                            <h:panelGroup>
+                                <h:selectBooleanCheckbox value="#{aAModuleExamInfo.info.ifShowAnswer}"/>
+                                <h:outputText value="（在章节练习界面显示试题解析按钮，点击后显示试题答案及解析）。" />
+                            </h:panelGroup>
+                           
+
+                            <h:outputText value="试题顺序随机：" />
+                            <h:panelGroup>
+                                <h:selectBooleanCheckbox value="#{aAModuleExamInfo.info.ifRandom}"/>
+                                <h:outputText value="（练习界面中的试题随机排序）。" />
+                            </h:panelGroup>
+                            <h:outputText value="单选选项随机：" />
+                            <h:panelGroup>
+                                <h:selectBooleanCheckbox value="#{aAModuleExamInfo.info.choiceRandom}"/>
+                                <h:outputText value="（随机选项不允许选项间有顺序关系，如类似这样的选项：D. A+B+C ）。" />
+                            </h:panelGroup>
+
+                            <h:outputText value="多选选项随机：" />
+                            <h:panelGroup>
+                                <h:selectBooleanCheckbox value="#{aAModuleExamInfo.info.multiChoiceRandom}"/>
+                                <h:outputText value="（随机选项不允许选项间有顺序关系，如类似这样的选项：D. A+B+C ）。" />
+                            </h:panelGroup>
+                            
+                            <h:outputText value="单选题分值：" />
+                            <p:spinner value="#{aAModuleExamInfo.info.choiceScore}"  min="0" size="5" stepFactor="0.5"/>
+                            <h:outputText value="多选题分值：" />
+                            <p:spinner value="#{aAModuleExamInfo.info.multiChoiceScore}"  min="0" size="5" stepFactor="0.5"/>
+                            <h:outputText value="填空题分值：" />
+                            <p:spinner value="#{aAModuleExamInfo.info.fillScore}"  min="0" size="5" stepFactor="0.5"/>
+                            <h:outputText value="判断题分值：" />
+                            <p:spinner value="#{aAModuleExamInfo.info.judgeScore}"  min="0" size="5" stepFactor="0.5"/>
+                            <h:outputText value="问答题分值：" />
+                            <p:spinner value="#{aAModuleExamInfo.info.essayScore}" min="0" size="5" stepFactor="0.5"/>
+                            <h:outputText value="文件题分值：" />
+                            <p:spinner value="#{aAModuleExamInfo.info.fileScore}" min="0" size="5" stepFactor="0.5"/>
+                            
+                            <h:outputText value="消耗积分：" />
+                            <h:inputText value="#{aAModuleExamInfo.info.scorePaid}" style="width:60px;">
+                            </h:inputText>
+                            <h:outputText value="满分积分：" />
+                            <h:inputText value="#{aAModuleExamInfo.info.bbsScore}" style="width:60px;">
+                            </h:inputText>
+                        </h:panelGrid>
+                        <p:outputPanel autoUpdate="true">
+                            <p:growl/>
+                        </p:outputPanel>
+                        
+                        <p:separator/>
+                        <p:commandButton  action="#{aAModuleExamInfo.apply}" value="提交"  styleClass="commonSubmit" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'examination')}"/>
+
+                    </div></h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

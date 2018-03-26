@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form>
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <div style="text-align: left; margin: 10px 0px 0px 0px; width: 98%;">
+                        <div>
+                            <h:outputText id="outputText1" styleClass="tit"
+                                          value="-抽题记录-" />
+                        </div>
+                        <p:separator/>
+                        <div>
+                            <p:commandButton value="全部删除" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'examination')}" action="#{listExamCaseLog.deleteAll()}" update="@form"  onclick="if (!confirm('确认要删除所有的条目吗？'))
+                                        return false"/>
+                        </div>
+
+                        <p:separator/>
+                        <div>
+                            <div class="introduction">
+                                <h:outputText value="*前台用户只要打开考试界面，不管是否提交或保存，就会产生一条抽题记录。删除抽题记录可以取消“抽卷间隔”的锁定功能。" />
+                            </div>
+                            <p:dataTable paginator="true" paginatorPosition="bottom" value="#{listExamCaseLog.logs}" var="us" id="dataTable1" emptyMessage="#{lang['exam.empty_result']}"
+                                         styleClass="list" rowIndexVar="row" style="width:100%" rows="20">
+
+                                <p:column style="text-align: center;width:30px;">
+                                    <h:outputText value="#{row+1}">
+                                    </h:outputText>
+                                    <f:facet name="header">
+                                        <h:outputText value="序号" />
+                                    </f:facet>
+                                </p:column>
+
+                                <p:column filterBy="#{us.examination.name}">
+                                    <h:outputText value="#{us.examination.name}" />
+                                    <f:facet name="header">
+                                        <h:outputText value="考试名称" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column sortBy="#{us.examination.ifDirect}" style="text-align: center;width:80px;">
+                                    <h:outputText value="#{us.examination.ifDirect?'智能阅卷':'手动阅卷'}" />
+                                    <f:facet name="header">
+                                        <h:outputText value="阅卷类型" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column filterBy="#{us.user.name}" style="text-align: center;width:150px;">
+                                    <h:outputText value="#{us.user.name}（#{us.user.username}）" />
+                                    <f:facet name="header">
+                                        <h:outputText value="抽题用户" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column sortBy="#{us.genTime}" style="text-align: center;width:130px;">
+                                    <h:outputText value="#{us.genTime}">
+                                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"
+                                                           timeZone="GMT+8" />
+                                    </h:outputText>
+                                    <f:facet name="header">
+                                        <h:outputText value="抽题时间" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="text-align: center;width:60px;">
+                                    <h:outputText value="#{us.platform=='phone'?'手机':'电脑'}">
+                                    </h:outputText>
+                                    <f:facet name="header">
+                                        <h:outputText value="客户环境" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="text-align: center;width:120px;">
+                                    <p:commandLink value="#{us.ip}" title="#{us.ipAddr}" />
+                                    <f:facet name="header">
+                                        <h:outputText value="IP地址" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column style="text-align: center;width:60px;">
+                                    <p:commandLink disabled="#{!fn:contains(adminSessionBean.admin.authstr,'examination')}" action="#{listExamCaseLog.delete(us.id)}" update="@form" onclick="if (!confirm('确认要删除此抽题记录吗？'))
+                                                return false">                                       
+                                        <h:outputText value="删除" />
+                                    </p:commandLink>
+                                    <f:facet name="header">
+                                        <h:outputText value="删除" />
+                                    </f:facet>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:f="http://java.sun.com/jsf/core" lang="en">
+<head>
+<title>My Facelets Page</title>
+<meta http-equiv="keywords" content="enter,your,keywords,here" />
+<meta http-equiv="description"
+	content="A short description of this page." />
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+<!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+</head>
+<body>
+	<ui:composition template="BackGeneral.xhtml">
+		<ui:define name="content">
+			<h:form id="myForm">
+				<div style="text-align: left; margin: 10px 0px 0px 0px; width: 98%;">
+					<div>
+						<h:panelGrid columns="2" style="width:100%">
+							<h:outputText styleClass="tit" value="－错题检测信息－" />
+						</h:panelGrid>
+					</div>
+					<p:separator></p:separator>
+					<div class="introduction">
+						本功能用于检测题库具有物理性错误的试题，存在此类错误将可能导致生成试卷或阅卷时系统发生严重错误。目前可检测的类型包括：
+						1、单选类试题中无答案或无选项的试题； 2、多选类试题中无答案或无选项的试题；</div>
+					<script type="text/javascript">
+						function checkAll(whichTable) {
+							var idds = '#myForm\\:' + whichTable
+									+ '\\:checkAll';
+							var vv = $(idds).is(':checked');
+							//alert(vv);
+							$('input[type="checkbox"]').each(
+									function(index, element) {
+										try {
+											var idd = $(element).attr('id');
+											//alert(idd);
+											if (idd.indexOf(whichTable) >= 0) {
+												$(element).prop('checked', vv);
+												//alert(idd);
+											}
+										} catch (e) {
+										}
+									});
+						}
+					</script>
+					<p:separator></p:separator>
+					<div>
+						<p:commandButton value="删除单选试题"
+							action="#{listWrongQuestion.deleteBulkChoice()}"
+							update="dataTable1" />
+						<p:dataTable id="dataTable1" paginator="true"
+							paginatorPosition="bottom" rowIndexVar="row" emptyMessage="暂无数据"
+							styleClass="list" style="width:100%" rows="20"
+							value="#{listWrongQuestion.choices}" var="choice" liveResize="true" resizableColumns="true">
+							<p:column id="num" style="width:40px;text-align: center;" resizable="true">
+								<h:outputText style="height: 5%" value="#{row+1}" />
+								<f:facet name="header">
+									<h:outputText id="outputTextnum" value="序号" />
+								</f:facet>
+							</p:column>
+							<f:facet name="header">
+								<h:outputText value="单选题错误信息" />
+							</f:facet>
+							<p:column style="width:40px;text-align: center;" resizable="true">
+								<h:selectBooleanCheckbox value="#{choice.selected}" id="checkMe" />
+								<f:facet name="header">
+									<h:outputText value="选择" />
+									<br />
+									<h:selectBooleanCheckbox id="checkAll"
+										onclick="checkAll('dataTable1');">
+									</h:selectBooleanCheckbox>
+								</f:facet>
+							</p:column>
+							<p:column filterBy="#{choice.cleanName}"
+								filterMatchMode="contains" sortBy="#{choice.cleanName}" resizable="true">
+								<h:outputLink value="AAChoiceQuestion.jspx?id=#{choice.id}"
+									target="_blank">
+									<h:outputText style="" value="#{choice.cleanName}" />
+								</h:outputLink>
+								<f:facet name="header">
+									<h:outputText value="试题内容" />
+								</f:facet>
+							</p:column>
+
+							<p:column style="width:120px;text-align: center;"
+								filterBy="#{choice.module.name}" filterMatchMode="contains"
+								sortBy="#{choice.module.name}" resizable="true">
+								<h:outputLink
+									value="ListAllQuestion.jspx?module_id=#{choice.module.id}"
+									target="_blank">
+									<h:outputText style="" value="#{choice.module.name}" />
+								</h:outputLink>
+								<f:facet name="header">
+									<h:outputText value="试题模块" />
+								</f:facet>
+							</p:column>
+
+							<p:column style="width:110px;text-align: center;"
+								sortBy="#{choice.genTime}" resizable="true">
+								<h:outputText style="" value="#{choice.genTime}">
+									<f:convertDateTime pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" />
+								</h:outputText>
+								<f:facet name="header">
+									<h:outputText value="录入时间" />
+								</f:facet>
+							</p:column>
+
+							<p:column style="width:180px;text-align: center;"
+								filterBy="#{choice.wrongStr}" filterMatchMode="contains"
+								sortBy="#{choice.wrongStr}" resizable="true">
+								<h:outputText style="" value="#{choice.wrongStr}" />
+								<f:facet name="header">
+									<h:outputText value="错误原因" />
+								</f:facet>
+							</p:column>
+
+						</p:dataTable>
+						<p:separator></p:separator>
+					</div>
+
+					<div>
+						<p:commandButton value="删除多选试题"
+							action="#{listWrongQuestion.deleteBulkMultiChoice()}"
+							update="dataTable2" />
+						<p:dataTable id="dataTable2" paginator="true"
+							paginatorPosition="bottom" rowIndexVar="row" emptyMessage="暂无数据"
+							styleClass="list" style="width:100%" rows="20"
+							value="#{listWrongQuestion.mchoices}" var="mchoice" liveResize="true" resizableColumns="true">
+							<p:column id="num" style="width:40px;text-align: center;" resizable="true">
+								<h:outputText style="height: 5%" value="#{row+1}" />
+								<f:facet name="header">
+									<h:outputText id="outputTextnum" value="序号" />
+								</f:facet>
+							</p:column>
+							<f:facet name="header">
+								<h:outputText value="多选题错误信息" />
+							</f:facet>
+							<p:column style="width:40px;text-align: center;" resizable="true">
+								<h:selectBooleanCheckbox value="#{mchoice.selected}"
+									id="checkMe2" />
+								<f:facet name="header">
+									<h:outputText value="选择" />
+									<br />
+									<h:selectBooleanCheckbox id="checkAll2"
+										onclick="checkAll('dataTable2');">
+									</h:selectBooleanCheckbox>
+								</f:facet>
+							</p:column>
+							<p:column filterBy="#{mchoice.cleanName}"
+								filterMatchMode="contains" sortBy="#{mchoice.cleanName}" resizable="true">
+								<h:outputLink
+									value="AAMultiChoiceQuestion.jspx?id=#{mchoice.id}"
+									target="_blank">
+									<h:outputText style="" value="#{mchoice.cleanName}" />
+								</h:outputLink>
+								<f:facet name="header">
+									<h:outputText value="试题内容" />
+								</f:facet>
+							</p:column>
+
+							<p:column style="width:120px;text-align: center;"
+								filterBy="#{mchoice.module.name}" filterMatchMode="contains"
+								sortBy="#{mchoice.module.name}" resizable="true">
+								<h:outputLink
+									value="ListAllQuestion.jspx?active_id=1&amp;module_id=#{mchoice.module.id}"
+									target="_blank">
+									<h:outputText style="" value="#{mchoice.module.name}" />
+								</h:outputLink>
+								<f:facet name="header">
+									<h:outputText value="试题模块" />
+								</f:facet>
+							</p:column>
+
+							<p:column style="width:110px;text-align: center;"
+								sortBy="#{mchoice.genTime}" resizable="true">
+								<h:outputText style="" value="#{mchoice.genTime}">
+									<f:convertDateTime pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" />
+								</h:outputText>
+								<f:facet name="header">
+									<h:outputText value="录入时间" />
+								</f:facet>
+							</p:column>
+
+							<p:column style="width:180px;text-align: center;"
+								filterBy="#{mchoice.wrongStr}" filterMatchMode="contains"
+								sortBy="#{mchoice.wrongStr}" resizable="true">
+								<h:outputText style="" value="#{mchoice.wrongStr}" />
+								<f:facet name="header">
+									<h:outputText value="错误原因" />
+								</f:facet>
+							</p:column>
+
+						</p:dataTable>
+						<p:separator></p:separator>
+					</div>
+
+
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

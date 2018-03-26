@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"  lang="en">
+    <h:head>
+        <title>找回密码</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <link rel="stylesheet" type="text/css" href="${facesContext.externalContext.requestContextPath}/resources/stylesheet.css"/>
+    </h:head>
+    <h:body style="text-align: center">
+        <ui:composition template="General3.xhtml">
+            <ui:define name="title">找回密码 </ui:define>
+            <ui:define name="content">
+                <style type="text/css">
+                    .inputText {
+                        width: 180px;
+                    }
+
+                    .text {
+                        font-family: 宋体;
+                        font-size: 9pt;
+                    }
+
+                    .c1 {
+                        text-align: right;
+                    }
+
+                    .c2 {
+                        text-align: left;
+                    }
+                </style>
+                <div style="" class="borderx">
+                    <!--页面顶端导航-->
+                    <h:panelGrid columns="5">
+                        <h:outputLink value="ZoneList.jspx" styleClass="topNav1">
+                            <h:outputText value="讨论" />
+                        </h:outputLink>
+                        <h:outputText value=">>" />
+                        <h:outputText value="找回密码" styleClass="mark"/>
+                    </h:panelGrid>
+                    <p:separator/>
+                    <p:panel
+                        style="margin:auto;width:500px;text-align:left;margin-top:30px;margin-bottom: 30px;">
+
+                        <h:outputText value="找回密码" styleClass="headLine"></h:outputText>
+                        <p:separator></p:separator>
+                        <h:panelGrid columns="4" style="margin-top: 10px">
+
+                            <h:outputText value="注册电子邮箱：" styleClass="text"></h:outputText>
+                            <h:inputText value="#{getPWD.email}" style="border: solid 1px;"></h:inputText>
+
+                            <p:commandButton widgetVar="getButton" action="#{getPWD.check}" value="一击找回" id="ta" onclick="getButton.disable();" oncomplete="getButton.enable();">
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <p:messages />
+                    </p:panel>
+                    <p:growl autoUpdate="true"/>
+                </div></ui:define></ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:poue="http://primefaces.org/ui/extensions" lang="en">
+    <h:head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </h:head>
+    <h:body>
+        <!--
+        <div id='editableDiv' style="height:500px;" contenteditable='true'>Paste</div>
+        -->
+        <script type="text/javascript">
+            //<![CDATA[
+            document.getElementById('editableDiv').addEventListener('paste', getImages);
+            function onLoadCallback(editor1, e) {
+                //getImages(e);
+            }
+            function getImages(event)
+            {
+                //console.log("start to access images.");
+                var items = event.clipboardData.items;
+                for (var i = 0; i < items.length; i++)
+                {
+                    alert(items[i]);
+                    if (items[i].type.indexOf("image") != -1)
+                    {
+                        var image = getImage(items[i]);
+                        if (image) //paste the image
+                        {
+                            alert(image.src);
+                        }
+                    }
+                }
+            }
+            function getImage(item)
+            {
+                console.log("start to access image.");
+                if (item.type.indexOf("image") !== -1)
+                {
+                    var blob = item.getAsFile();
+                    var URLObj = window.URL || window.webkitURL;
+                    var source = URLObj.createObjectURL(blob);
+                    var image = new Image();
+                    image.src = source;
+                    image.onload = function (ev)
+                    {
+                        var reader = new FileReader();
+                        reader.onload = function (event)
+                        {
+                            if (image.src != event.target.result)
+                            {
+                                image.src = event.target.result;
+                            }
+                        };
+                        reader.readAsDataURL(blob);
+                    };
+                    return image;
+                }
+                return null;
+            }
+            //]]>
+        </script>
+
+        <h:form id="myForm">
+            <h:panelGroup>
+                <poue:ckEditor id="editor1" widgetVar="editor1"  customConfig="#{facesContext.externalContext.requestContextPath}/resources/js/ckeditor_config1.js"  width="98%" height="150">
+                    <poue:javascript  event="change" execute="onLoadCallback('editor1',this)" />
+
+                </poue:ckEditor>
+            </h:panelGroup>
+        </h:form>
+    </h:body>
+</html>

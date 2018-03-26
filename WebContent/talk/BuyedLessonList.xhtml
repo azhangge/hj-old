@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="UserCenterGeneral.xhtml">
+            <ui:define name="ucontent">
+                <h:panelGrid columns="1">
+                    <h:outputText value="－我的学习资料－" styleClass="mark"></h:outputText>
+                </h:panelGrid>
+                <p:tabView>
+                    <p:tab title="我的学习资料">
+                    <style>
+                    	.ui-datatable tbody td {
+						    border-color: inherit;
+						    background-color: #fff;
+						}
+                    </style>
+                        <p:dataTable id="dc" value="#{buyedLessonList.lessonTrades}" paginator="true" paginatorPosition="bottom"
+                                     var="trade" rowIndexVar="r" rows="10" style="width:100%" emptyMessage="无数据">
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="学习资料名称"></h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{trade.lesson.name}"></h:outputText>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="课程"></h:outputText>
+                                </f:facet>
+                                <h:outputLink value="LessonList.jspx?tid=#{trade.lesson.lessonType.id}" target="_blank">
+                                    <h:outputText value="#{trade.lesson.lessonType.name}"></h:outputText>
+                                </h:outputLink>
+                                
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="选课时间"></h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{trade.genTime}" styleClass="tip">
+                                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                       timeZone="GMT+8" />
+                                </h:outputText>
+                                
+                            </p:column>
+                            <p:column style="text-align: center;">
+                                <f:facet name="header">
+                                    <h:outputText value="进度"></h:outputText>
+                                </f:facet>
+                                
+                            <h:outputText value="#{applicationBean.wrapperTimeLen(trade.timeFinished)}" styleClass="tip"/>
+                                <h:outputText value="/"  styleClass="tip"/>
+                                <h:outputText value="#{trade.lesson.timeLen}"   styleClass="tip">
+                                    <f:convertNumber maxFractionDigits="0"/>
+                                </h:outputText>
+                                <h:outputText value="分"  styleClass="tip"/>
+                            </p:column>
+                            <p:column style="text-align: center;">
+                                <f:facet name="header">
+                                    <h:outputText value="状态"></h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{trade.finished?'完成':'未完成'}" style="color:#{trade.finished?'green':'orange'};" styleClass="tip"></h:outputText>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="操作"></h:outputText>
+                                </f:facet>
+                                <h:outputLink value="LessonDetail2.jspx?id=#{trade.lesson.id}">
+                                    <h:outputText value="学习"></h:outputText>
+                                </h:outputLink>
+                                <br/>
+                                <h:outputLink rendered="#{trade.lesson.moduleExam2!=null}"  value="ExamCaseModule2.jspx?type=1&amp;exam_id=#{trade.lesson.moduleExam2.id}#{trade.lesson.moduleExam2.module.examCase==null?'':'&amp;case_id='}#{trade.lesson.moduleExam2.module.examCase==null?'':trade.lesson.moduleExam2.module.examCase.id}">
+                                    <h:outputText value="随堂练习"></h:outputText>
+                                </h:outputLink>
+                                <h:outputText value="&lt;br/&gt;" escape="false" rendered="#{trade.lesson.moduleExam2!=null and trade.lesson.allowUserDel}"/>
+                                <p:commandLink value="删除" action="#{buyedLessonList.deleteTrade(trade.id)}" update="dc"  rendered="#{trade.lesson.allowUserDel}" onclick="if (!confirm('确认要删除本条目吗？')) return false"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:tab>
+
+                </p:tabView>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

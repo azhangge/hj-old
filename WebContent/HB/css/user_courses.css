@@ -1,0 +1,57 @@
+div.user_courses ul.nav {
+	width: auto;
+	float: none;
+	position: relative;
+}
+
+div.user_courses div.course_center {
+	line-height: 39px;
+	height: 39px;
+	font-size: 18px;
+	color: red;
+	margin-left: 20px;
+	margin-right: 20px;
+}
+
+div.user_courses {
+	width: 900px;
+}
+
+div.user_courses div.ui-grid-row div.course {
+	margin: 16px auto;
+	float: none;
+	width: 225px;
+}
+
+div.user_courses div.ui-datagrid-column {
+	height: 200px;
+	position: relative;
+}
+
+div.user_courses div.operate {
+	position: absolute;
+	top: 20px;
+	right: 50px;
+}
+
+div.user_courses button.operate_button {
+	float: right;
+	height: 39px;
+	line-height: 39px;
+	position: absolute;
+	top: -39px;
+	right: 0;
+}
+
+div.user_courses button.operate_button2 {
+	float: right;
+	height: 39px;
+	line-height: 39px;
+	position: absolute;
+	top: -39px;
+	right: 90px;
+}
+
+div.tab-pane {
+	position: relative;
+}

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"  lang="en">
+    <h:head>
+        <title>试卷提交成功！</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" type="text/css"
+              href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs.css" />
+        <link rel="stylesheet" type="text/css"
+              href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs_a.css" />
+        <link rel="stylesheet" type="text/css"
+              href="#{facesContext.externalContext.requestContextPath}/resources/external.css" />
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </h:head>
+    <h:body>
+        <h:form>
+
+            <p:dialog id="score11" widgetVar="score11" width="350"  modal="true" header="试卷提交成功" closable="false" resizable="false">
+                <p:outputPanel autoUpdate="true" style="display:none;">
+                    <br/>
+                    <p:dataGrid value="#{examCaseResult.examCase.vparts}" var="part1" columns="2" styleClass="threadColumn2"  emptyMessage="">
+                        <h:outputText value="#{part1.name} 得分： #{part1.realScore}"/>
+                    </p:dataGrid>
+                    <br/>
+                    <h:outputLabel value="总分：" />
+                    <h:outputText value="#{examCaseResult.examCase.score}" style="color:red;font-weight: bold;font-size: 30px;">
+                        <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}" minFractionDigits="1"/>
+                    </h:outputText>
+
+                </p:outputPanel>
+                <p:separator/>
+                <p:commandButton type="button" widgetVar="loginButton" value="关闭窗口"  onclick="finishExam();"></p:commandButton>
+                <p:button href="ExamCaseReportGeneral.jspx?case_id=#{examCaseResult.examCase.id}" value="查看详情" style="display:none;"/>
+
+            </p:dialog>
+
+
+            <script type="text/javascript" language="javascript">
+//<![CDATA[
+                jQuery().ready(function () {
+                    if (#{applicationBean.systemConfig.asyncSubmit}) {
+                        alert('试卷已经提交至交卷队列，请稍后到【成绩中心】查看！');
+                        closeWindow2();
+                    } else {
+                        if (#{!examCaseResult.examCase.examination.ifDirect}) {
+                            alert('试卷已成功提交，请到【成绩中心】查看！');
+                            closeWindow2();
+                        } else {
+                            PF('score11').show();
+                            //closeWindow2();
+                        }
+                    }
+                });
+                function finishExam() {
+                    PF('score11').hide();
+                    closeWindow2();
+                }
+
+                function   closeWindow2() {
+                    window.open('', '_parent', '');
+                    window.close();
+                }
+//]]>
+            </script>
+
+        </h:form>
+    </h:body>
+</html>

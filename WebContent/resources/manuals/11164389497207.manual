@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<manual>
+  <id>11164389497207</id>
+  <title>何时刷新试卷池？</title>
+  <content>本系统内置了试卷池，即：&lt;span style="color:#000080;"&gt;&lt;strong&gt;考试实例缓存&lt;/strong&gt;&lt;/span&gt;。试卷池会提前加载一定数量的考试实例在缓存中，当前台考生抽卷时，系统能够迅速从缓存中获取实例而不是重新生成，此种方法能够大幅加快考试时的试卷生成速度，提高前台用户体验。&lt;br /&gt; &lt;br /&gt; 预加载的试卷池会带来一些问题：若已经设置好了考试，系统会自动预加载考试实例，但此时再次修改试题、试卷、考试，就会使预加载的考试实例缓存变成&amp;ldquo;脏&amp;rdquo;数据，因此必须更新缓存。当考试数目较多或者试卷池配置的数值较大时，&lt;span style="color:#000080;"&gt;全部更新缓存是一项高耗资源操作，因此每个次修改自动更新并不科学。&lt;/span&gt;&lt;br /&gt; &lt;br /&gt; 本系统在&amp;ldquo;&lt;span style="color:#000080;"&gt;&lt;strong&gt;考试管理&lt;/strong&gt;&lt;/span&gt; - &lt;span style="color:#000080;"&gt;&lt;strong&gt;考试设置&lt;/strong&gt;&lt;/span&gt;&amp;rdquo;界面专用设置了&amp;ldquo;&lt;span style="color:#000080;"&gt;&lt;strong&gt;手动更新试卷池&lt;/strong&gt;&lt;/span&gt;&amp;rdquo;功能，在以下情形需要手动更新试卷池（注意更新时可以在所有修改完成后统一操作，无需每次小修改都操作）： &lt;ul&gt; &lt;li&gt;&lt;span style="color:#FF0000;"&gt;修改了试题；&lt;/span&gt;&lt;/li&gt; &lt;li&gt;&lt;span style="color:#FF0000;"&gt;修改了试题模块；&lt;/span&gt;&lt;/li&gt; &lt;li&gt;&lt;span style="color:#FF0000;"&gt;删除了试卷；&lt;/span&gt;&lt;/li&gt; &lt;/ul&gt; &lt;br /&gt; 以下修改情形系统会自动更新试卷池，无需人工操作： &lt;ul&gt; &lt;li&gt;&lt;span style="color:#FF0000;"&gt;修改了试卷；&lt;/span&gt;&lt;/li&gt; &lt;li&gt;&lt;span style="color:#FF0000;"&gt;添加、删除、修改了考试。&lt;/span&gt;&lt;/li&gt; &lt;/ul&gt;</content>
+  <gen_time>2015-05-18 19:45:00</gen_time>
+  <ord>17</ord>
+</manual>

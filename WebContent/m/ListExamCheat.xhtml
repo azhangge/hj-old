@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <h:head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </h:head>
+    <h:body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form>
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <div style="text-align: left; margin: 0px 0px 0px 0px; width: 98%;">
+                        <div>
+                            <h:outputText id="outputText1" styleClass="tit" value="－作弊记录－" />
+                        </div>
+                        <p:separator/>
+                        <div>
+                            <p:commandButton   value="全部清空" action="#{listExamCheat.delAll}" update="@form"  disabled="#{!fn:contains(adminSessionBean.admin.authstr,'examination')}" onclick="if (!confirm('确认要全部清空作弊吗？这将造成管理困难！'))
+                                        return false"/>
+                            <p:commandButton   value="批量删除" action="#{listExamCheat.batchDel}" update="@form"  disabled="#{!fn:contains(adminSessionBean.admin.authstr,'examination')}" onclick="if (!confirm('确认要删除所选的条目吗？'))
+                                        return false"/>
+                        </div>
+                        <p:separator/>
+                        <div>
+                            <p:dataTable paginator="true" id="dataTable1" styleClass="list" rows="14" style="width:100%" emptyMessage="无记录" paginatorPosition="bottom"
+                                         value="#{listExamCheat.examCheatList}" var="Case" rowIndexVar="row">
+                                <p:column style="width:40px;text-align: center;">
+                                    <h:selectBooleanCheckbox value="#{Case.selected}">
+                                        <f:ajax/>
+                                    </h:selectBooleanCheckbox>
+                                    <f:facet name="header">
+                                        <h:outputText  value="选择" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column sortBy="#{Case.user.name}" filterBy="#{Case.user.name}" filterMatchMode="contains">
+                                    <h:outputText style="height: 5%" value="#{Case.user.name}" />
+                                    <f:facet name="header">
+                                        <h:outputText value="用户" />
+                                    </f:facet>
+                                </p:column>
+                                <p:column sortBy="#{Case.exam.name}" filterBy="#{Case.exam.name}" filterMatchMode="contains">
+                                    <h:outputText style="height: 5%" value="#{Case.exam.name}" />
+                                    <f:facet name="header">
+                                        <h:outputText  value="考试" />
+                                    </f:facet>
+                                </p:column>
+                                
+                                <p:column>
+                                    <h:outputLink value="#" title="#{Case.ipAddr}">
+                                        <h:outputText style="height: 5%" value="#{Case.ip}" />
+                                    </h:outputLink>
+                                    <f:facet name="header">
+                                        <h:outputText  value="IP地址" />
+                                    </f:facet>
+
+                                </p:column>
+
+                                <p:column style="width:110px;text-align: center;">
+                                    <h:outputText style="height: 5%" value="#{Case.genTime}">
+                                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8" />
+                                    </h:outputText>
+                                    <f:facet name="header">
+                                        <h:outputText id="outputText5" value="时间" />
+                                    </f:facet>
+                                </p:column>
+
+                                <p:column style="width:40px;text-align: center;">
+                                    <p:commandLink actionListener="#{listExamCheat.deleteExamCheat(Case.id)}" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'examination')}" styleClass="common" onclick="if (!confirm('确认要删除本条作弊记录吗？'))
+                                        return false"
+                                                   value="删除" update="@form">
+                                    </p:commandLink>
+                                    <f:facet name="header">
+                                        <h:outputText id="outputText10888" style="height: 5%"
+                                                      value="删除" />
+                                    </f:facet>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      >
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition>
+            <h:form id="topx">
+                <div style="border-bottom: 2px solid #ccc;">
+                    <p:panel style="width:100%;height:80px;text-align: left;border: 0px solid red;">
+                        <span style="margin-left:30px;" class="backTitle">
+                            <i class="fa fa-pencil fa-spin"></i>
+                            <h:outputText id="backTitle" value="#{applicationBean.info.siteBackName}" />
+                        </span>
+
+                        <div>
+                            <div style="float:left;width:800px;margin-left:30px;" class="tipx">
+                                <h:outputText value="欢迎 " styleClass="info"/>
+                                <h:outputText value="#{adminSessionBean.admin.nickname} 的访问！"/>
+                                <h:outputText value="您上次登录的时间是：" styleClass="info"/>
+                                <h:outputText value="#{adminSessionBean.ltime}" styleClass="info">
+                                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" />
+                                </h:outputText>
+                            </div>
+                            <div style="margin-top: -50px;float:right;margin-right: 30px;text-align: center;">
+                                <p:panelGrid id="xx22" columns="4" style="text-align: center;" styleClass="threadColumn">
+                                    <h:outputLink  value="#{facesContext.externalContext.requestContextPath}/m/Welcome.jspx" styleClass="spanButton1">
+                                        <span style="">
+                                            <i class="fa fa-home" style=""></i>
+                                            <h:outputText value="管理首页"></h:outputText>
+                                        </span>
+                                    </h:outputLink>
+                                    <h:outputLink target="_blank"   styleClass="spanButton1"  value="#{facesContext.externalContext.requestContextPath}/">
+                                        <span style="">
+                                            <i class="fa fa-globe" style=""></i>
+                                            <h:outputText value="访问前台"></h:outputText>
+                                        </span>
+                                    </h:outputLink>
+                                    <!-- <h:outputLink    styleClass="spanButton1" value="#{facesContext.externalContext.requestContextPath}/m/ListManual.jspx">
+                                        <span style="">
+                                            <i class="fa fa-question-circle" style=""></i>
+                                            <h:outputText value="系统帮助"></h:outputText>
+                                        </span>
+                                    </h:outputLink> -->
+                                    <p:commandLink action="#{adminSessionBean.exitSys()}"  styleClass="spanButton1" >
+                                        <span style="">
+                                            <i class="fa fa-sign-out" style=""></i>
+                                            <h:outputText value="退出系统"></h:outputText>
+                                        </span>
+                                    </p:commandLink>
+                                </p:panelGrid>
+                            </div>
+                            <div style="clear:both"/>
+                        </div>
+                        <div style="clear:both"/>
+                    </p:panel>
+                </div>
+            </h:form>
+        </ui:composition>
+    </h:body>
+</html>
+

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<manual>
+  <id>204543505461399</id>
+  <title>为什么找不到试题录入入口？</title>
+  <content>七种试题严格按照试题模块和题型进行录入。设置好试题模块后，试题模块结构应该显示在&amp;ldquo;试题管理&amp;rdquo;菜单中。若未显示，则有如下可能：试题模块未设置；试题模块虽然已经设置，但未到当前管理员分配该试题模块的管理权限。</content>
+  <gen_time>2014-10-30 23:01:51</gen_time>
+  <ord>9</ord>
+</manual>

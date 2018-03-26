@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <title>#{lessonDetail2.lesson.name}</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description" content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    </h:head>
+    <h:body>
+    	<ui:composition template="../HJ/HJGeneral.xhtml">
+    		<ui:define name="title">
+				<h:outputText value="课程学习 - 文档资料查看" />
+			</ui:define>
+    		<ui:define name="content">
+		        <link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs.css" />
+        		<link rel="stylesheet" type="text/css" href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs_a.css" />
+        		<link type="text/css" rel="stylesheet" href="../HJ/css/navigation.css" />
+		       	<style >
+		       		a.list_name:hover{
+        				color: #666666!important;
+        			}
+        			a.list_name:hover div{
+        				background-color:#fbfbfb!important;
+        			}
+        			a.img_container_a:hover .img_container{
+        				border: 2px solid #3596e6!important;
+        			}
+		        </style>
+		        <script type="text/javascript">
+					$(document).ready(function(){
+						$('#lessonList').scrollTop(10);//控制滚动条下移10px
+						if( $('#lessonList').scrollTop()>0 ){  
+							$(".list_name_div").attr("style","width:230px;height:34px;background-color:#ffffff;padding-top:5px;max-width:210px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;");
+					    }else{  
+					    	$(".list_name_div").attr("style","width:230px;height:34px;background-color:#ffffff;padding-top:5px;max-width:230px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;");
+					    }  
+					    $('#lessonList').scrollTop(0);//滚动条返回顶部  
+					});
+				</script>
+    	   
+            <p:outputPanel rendered="#{lessonDetail2.lesson.timingType=='page'}">
+                <p:poll autoStart="true" interval="30" oncomplete="reportTime2(30)"/>
+                <script type="text/javascript">
+                    var tt =#{lessonDetail2.lessonLog.timeFinished};
+                    debugger;
+                    function reportTime2(step) {
+                        if (typeof (tt) != "undefined") {
+                            tt = tt + step;
+                            var url = "#{facesContext.externalContext.requestContextPath}/servlet/LessonLogNotifier?lid=#{lessonDetail2.lesson.id}&amp;action=time&amp;len=" + tt;                            
+                            jQuery.get(url);
+                            var minutes = Math.floor(tt / 60);
+                            var seconds = Math.floor(tt % 60);
+                            var msg = minutes + " 分 " + seconds + " 秒";
+                            jQuery('#finishedTime').html(msg);
+                        }
+                    }
+                </script>
+            </p:outputPanel>
+            
+			<div class="navigation yahei bold">
+				<div class="navigation_div">
+					<a href="#{facesContext.externalContext.requestContextPath}/" class="navigation_link">首页</a>
+				</div>
+				<div class="navigation_separate">/</div>
+				<div class="navigation_div">
+					<a href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{lessonDetail2.lesson.lessonType.id}" class="navigation_link">课程</a>
+				</div>
+				<div class="navigation_separate">/</div>
+				<div class="navigation_div">#{lessonDetail2.lesson.name}</div>
+			</div>
+
+            <div id="main_cont" style="width:1200px;margin:0 auto;height:970px;background-color: #f3f3f3;">
+            	<div id="main_cont_body" style="width:1200px;height:580px;margin-bottom:35px;">
+	                <div id="learnContent" style="text-align: center;float: left;overflow: hidden;border:0px solid #ccc;width:950px;height:580px;margin-right:10px;margin-left:5px;">
+						<iframe id="doc_html" src="#{applicationBean.htmlVirtualUrl}#{lessonDetail2.htmlUrl}" style="margin:0px;padding:0px;width:100%;height:100%;"></iframe>
+	                </div>
+	                
+	                <!-- 学习资料内容区域 -->
+	               <div id="lessonContent" style="border:0px solid #ccc;width:230px;float:left;height:580px;">
+                   	<h:outputText style="display:none;">#{playerList}</h:outputText>
+	                   	<div id="lessonList" style="border:1px solid #fff;height:580px;background-color:#FFFFFF;">
+             				<div id="list_header" style="width:230px;height:34px;font-family:微软雅黑;font-size:12px;color:#4bb9f3;padding:5px 0px 0px 20px;border-bottom:2px solid #e1e1e1;" >
+             					章节目录
+             				</div>
+             				<div style="border-bottom:2px solid #3596e6;width:49px;margin:-2px 0px 0px 20px;"></div>
+             				<div id="list_main" style="width:210px;height:480px;">
+		                   		<c:forEach items="#{playerList.lessons}" var="zone" varStatus="status">
+		                   			<c:choose>
+	                    				<c:when test="#{lessonDetail2.lesson.id eq zone.id}">
+	                    					<c:choose>
+			                    				<c:when test="#{zone.playType eq 'none'}">
+			                    					<a class="list_name" href="LessonDetail3.jspx?id=#{zone.id}" style="font-family:微软雅黑;font-size:12px!important;color:#4bb9f3;text-decoration:none;" title="#{status.index+1}、#{zone.name}">
+			                   							<div class="list_name_div">
+					                        				&nbsp;&nbsp;#{status.index+1}、#{zone.name}
+					                        			</div>
+					                        		</a>
+					                        	</c:when>
+					                        	<c:otherwise>
+					                        		<a class="list_name" href="LessonDetail2.jspx?id=#{zone.id}" style="font-family:微软雅黑;font-size:12px!important;color:#4bb9f3;text-decoration:none;" title="#{status.index+1}、#{zone.name}">
+			                   							<div class="list_name_div">
+					                        				&nbsp;&nbsp;#{status.index+1}、#{zone.name}
+					                        			</div>
+					                        		</a>
+					                        	</c:otherwise>
+			                        		</c:choose>
+	                    				</c:when>
+	                    				<c:otherwise>
+	                    					<c:choose>
+	                    						<c:when test="#{zone.playType eq 'none'}">
+		                    						<a class="list_name" href="LessonDetail3.jspx?id=#{zone.id}" style="font-family:微软雅黑;font-size:12px!important;color:#999999;text-decoration:none;" title="#{status.index+1}、#{zone.name}">
+		                   								<div class="list_name_div">
+				                        					&nbsp;&nbsp;#{status.index+1}、#{zone.name}
+				                        				</div>
+				                        			</a>
+	                    						</c:when>
+	                    						<c:otherwise>
+	                    							<a class="list_name" href="LessonDetail2.jspx?id=#{zone.id}" style="font-family:微软雅黑;font-size:12px!important;color:#999999;text-decoration:none;" title="#{status.index+1}、#{zone.name}">
+		                   								<div class="list_name_div">
+				                        					&nbsp;&nbsp;#{status.index+1}、#{zone.name}
+				                        				</div>
+				                        			</a>
+	                    						</c:otherwise>
+	                    					</c:choose>
+	                    					
+	                    				</c:otherwise>
+		                   			</c:choose>
+		                   		</c:forEach>
+	                   		</div>
+	                   	</div>
+	               	</div>
+	             </div>
+                
+                	                <div id="foot" style="width:1180px;height:340px;padding:0px 10px 0px 10px;">
+	                	<div id="foot_header" style="width:1180px;height:45px;padding:0px 0px 0px 0px;background:#fafafa;border:1px solid white;">
+	                		<div id="foot_header_button" style="background:url(../image/rounded_rectangle3.png) no-repeat 0px 0px;width:120px;height:40px;margin:3px 0px 3px 25px;">
+	                			<span style="width:100px;font-weight:bold;font-size:22px!important;color:#FEFFFE;display:block;margin-left:auto;margin-right:auto;padding-top:6px;">
+	                				课程推荐
+	                			</span>
+	                		</div>
+	                	</div>
+	                	<div id="foot_main" style="width:1180px;height:285px;background-color:#FFFFFF;">
+	                		<c:forEach items="#{lessonDetail2.courses}" var="course" size="#{lessonDetail2.courses.size()>4?4:lessonDetail2.courses.size()}">
+	                			<a class="img_container_a" href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{course.id}" target="_blank"  style="font-size:14px!important;">
+		                			<div class="img_container" style="width:259px;height:250px;border:2px solid #ECECEC;float:left;margin-left:29px;margin-top:17px;background-color:#FFFFFF">
+										<img src="../#{fn:replace(course.picture,'showimage','showabstractimage')}"  class="course-img" width="255px" height="165px"/> 
+										<div id="name_container" style="margin-top:6px;margin-left:25px;">
+					                        	#{course.name}
+					               		 </div>
+					                     <div id="num_container" style="float:left">
+				                        	<img src="../images/keshi.png" style="float:left;margin-left:24px;margin-bottom:15px;margin-top:12px;"/>
+				                        	<span style="display:block;float:left;margin-left:12px;margin-bottom:15px;margin-top:14px;">
+				                        		<h:outputText value="#{course.totalClassNum}">
+													<f:converter converterId="decimalConvert"></f:converter >
+												</h:outputText>
+				                        	</span>
+				                        </div>
+				                        <div id="count_container" style="float:right">
+				                        	<img src="../images/seecount.png" style="margin-right:12px;margin-bottom:15px;margin-top:12px;"/>
+				                        	<span style="display:block;float:right;margin-right:24px;margin-bottom:15px;margin-top:14px;">#{course.userNum}</span>
+				                        </div>
+		                			</div>
+								</a>
+							</c:forEach>
+	                	</div>
+	                </div>
+            </div>
+                
+            <p:notificationBar position="bottom" autoDisplay="true" effect="slide" style="height: 35px;padding: 0px 0px 0px 0px;line-height: 35px;">
+                <div>
+                    <h:panelGrid columns="5" style="width:100%;text-align: center;" columnClasses="w10,w10,w10">
+                        <h:panelGroup>
+                            <span class="tipStyle1">当前已经记录学习时间：</span>
+                            <span id="finishedTime" class="tipStyle2">
+                                <h:outputText value="#{applicationBean.wrapperTimeLen(lessonDetail2.lessonLog.timeFinished)}" styleClass="tipStyle"/>
+                            </span>
+                            <span class="tip">（每30秒自动记录一次）</span>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <span class="tipStyle1">最少学习时间：</span>
+                            <span id="finishedStatus" class="tipStyle2">#{lessonDetail2.lessonLog.lesson.leastTime}分钟</span>
+                        </h:panelGroup>
+                    </h:panelGrid>
+                </div>
+            </p:notificationBar>
+        	</ui:define>
+        </ui:composition>
+    </h:body>
+</html>

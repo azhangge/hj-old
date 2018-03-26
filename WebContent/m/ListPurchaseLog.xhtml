@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+                <h:form id="myForm">
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <div style="text-align: left; margin: 10px 0px 0px 0px; width: 98%;">
+                        <div>
+                            <h:outputText id="outputText1" styleClass="tit" value="-销售情况统计-" />
+                        </div>
+                        <p:separator/>
+                        <br/>
+					<p:chart type="pie" model="#{listPurchaseLog.pieModel1}"
+						style="width:600px;height:300px" />
+					<p:chart type="pie" model="#{listPurchaseLog.pieModel2}"
+						style="width:600px;height:300px" />
+                        <br/>
+                        
+
+							<h:panelGrid columns="5" cellpadding="5">
+						        <h:outputText value="开始时间：" />
+						        <p:calendar value="#{listPurchaseLog.startTime}" navigator="true" pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" locale="zh_CN"/>
+						        <h:outputText value="截止时间：" />
+						        <p:calendar value="#{listPurchaseLog.endTime}" navigator="true" pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" locale="zh_CN"/>
+						        <p:commandButton value="查询" update="myForm" icon="ui-icon-check" action="#{listPurchaseLog.init}"/>
+						    </h:panelGrid>
+						
+						<!--<h3>PDF</h3>
+ 						<p:media value="/resources/course/folder/http-api.pdf" 
+						height="300px" width="100%" player="pdf"/> -->
+						
+                        <div>
+						<p:dataTable paginator="true" paginatorPosition="bottom"
+							value="#{listPurchaseLog.logs}" var="us" id="dataTable1"
+							emptyMessage="#{lang['exam.empty_result']}" styleClass="list"
+							rowIndexVar="row" style="width:100%" rows="15">
+							<p:column id="num" style="width:40px;text-align: center;">
+								<h:outputText style="height: 5%" value="#{row+1}" />
+								<f:facet name="header">
+									<h:outputText id="outputTextnum" value="序号" />
+								</f:facet>
+							</p:column>
+							<p:column filterBy="#{us.courseName}" filterStyle="width:380px;"  filterMatchMode="contains" sortBy="#{us.courseName}">
+                                    <h:outputText value="#{us.courseName}" />
+                                    <f:facet name="header">
+                                        <h:outputText value="课程名称" />
+                                    </f:facet>
+                                </p:column>
+							<p:column filterBy="#{us.num}" filterStyle="width:80px;"  sortBy="#{us.num}"
+								style="text-align:center;width:100px;">
+                                    <h:outputText value="#{us.num}" />
+                                    <f:facet name="header">
+                                        <h:outputText value="数量" />
+                                    </f:facet>
+                                </p:column>
+							<p:column filterBy="#{us.money}" filterStyle="width:80px;"  filterMatchMode="contains" sortBy="#{us.money}"
+								style="text-align:center;width:100px;">
+                                    <h:outputText value="#{us.money}" />
+                                    <f:facet name="header">
+                                        <h:outputText value="积分" />
+                                    </f:facet>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

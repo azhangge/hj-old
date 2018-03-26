@@ -1,0 +1,192 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core"  lang="en">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition>
+            <script type="text/javascript" language="javascript">
+                //<![CDATA[
+
+                function copyUrl(txt) {
+                    txt = unescape(txt);
+                    if (window.clipboardData) {
+                        window.clipboardData.clearData();
+                        window.clipboardData.setData("Text", txt);
+                    } else if (navigator.userAgent.indexOf("Opera") != -1) {
+                        window.location = txt;
+                    } else if (window.netscape) {
+                        try {
+                            netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
+                        } catch (e) {
+                            alert("您的浏览器拒绝访问剪切板，请直接打开链接地址复制或点右键复制链接地址，或手动添加以下地址：" + txt + "\n复制失败！");
+                        }
+                        var clip = Components.classes['@mozilla.org/widget/clipboard;1'].createInstance(Components.interfaces.nsIClipboard);
+                        if (!clip)
+                            return;
+                        var trans = Components.classes['@mozilla.org/widget/transferable;1'].createInstance(Components.interfaces.nsITransferable);
+                        if (!trans)
+                            return;
+                        trans.addDataFlavor('text/unicode');
+                        var str = new Object();
+                        var len = new Object();
+                        var str = Components.classes["@mozilla.org/supports-string;1"].createInstance(Components.interfaces.nsISupportsString);
+                        var copytext = txt;
+                        str.data = copytext;
+                        trans.setTransferData("text/unicode", str, copytext.length * 2);
+                        var clipid = Components.interfaces.nsIClipboard;
+                        if (!clip)
+                            return false;
+                        clip.setData(trans, null, clipid.kGlobalClipboard);
+                        //alert("复制成功！");
+                    } else {
+                        alert("您的浏览器拒绝访问剪切板，请直接打开链接地址复制或点右键复制链接地址，或手动添加以下地址：" + txt + "\n复制失败！");
+                        return;
+                    }
+                    alert("链接为：" + txt + "\n复制成功！");
+                }
+
+                function gotoVideo(name) {
+                    var url1 = '#{facesContext.externalContext.requestContextPath}/vp/RerePlayer.swf?xml=player.jsp?fid=' + name;
+                    var url = unescape(url1);
+                    //alert(url);
+                    window.open(url, '_blank');
+                }
+
+
+                //]]>
+            </script>
+            <style>
+                .col1{
+                    width:50%;
+                    text-align:left!important;
+
+                }
+                .col2{
+                    width:10%;
+                }
+                .col3{
+                    width:20%;
+                }
+                .col4{
+                    width:10%;
+                }
+
+
+            </style>
+
+            <div style=" margin: 0 auto;overflow: hidden;">
+                <p:panel id="abcd">
+                    <h:panelGrid
+                        style="background-color: #eaf0f8;width: 98%;">
+                        <p:outputPanel autoUpdate="true">
+                            <h:panelGroup>
+                                路径：
+                                <c:forEach items="${clientListFile.familyTree}" var="path"
+                                           begin="0" step="1">
+                                    <p:commandLink value="#{path.fileName}" action="#{clientListFile.reBuild}" update=":myForm:ddc" styleClass="common">
+                                        <f:param name="fid" value="#{path.id}"/>
+                                    </p:commandLink>>>
+                                </c:forEach>
+                            </h:panelGroup>
+                        </p:outputPanel>
+                    </h:panelGrid>
+                    <p:outputPanel autoUpdate="true">
+                        <h:panelGrid
+                            style="background-color: #eaf0f8;width: 98%;border-top: 1px solid #cccccc;height:30px"
+                            rendered="#{clientListFile.fatherID!='0'}">
+                            <h:panelGroup>
+                                <p:commandLink value="↖返回上级目录" action="#{clientListFile.reBuild}" update=":myForm:ddc"  styleClass="common">
+                                    <f:param name="fid" value="#{clientListFile.grapaID}"/>
+                                </p:commandLink>
+
+
+                            </h:panelGroup>
+                        </h:panelGrid>
+                    </p:outputPanel>
+                    <p:dataTable id="ddc" value="#{clientListFile.pro2s}" paginator="true" paginatorPosition="bottom" rowKey="#{pro.id}"
+                                 var="pro" rows="9" style="text-align:left;border:0px solid black;background-color: gray;width:98%;">
+
+                        <p:column style="text-align:left">
+                            <f:facet name="header">
+                                <h:outputText value="文件名称"></h:outputText>
+                            </f:facet>
+                            <h:graphicImage rendered="#{pro.ifFolder}"
+                                            value="/resources/images/folder.jpg"></h:graphicImage>
+                            <h:graphicImage rendered="#{!pro.ifFolder}"
+                                            value="/resources/images/file.jpg"></h:graphicImage>
+
+                            <p:commandLink  value="#{fn:length(pro.fileName)>20?fn:substring(pro.fileName,0,20):pro.fileName}" action="#{clientListFile.reBuild}" rendered="#{pro.ifFolder}" update=":myForm:abcd"  styleClass="common">
+                                <f:param name="fid" value="#{pro.id}"/>
+                            </p:commandLink>
+                            <h:outputLink title="点击直接下载文件" target="_blank" styleClass="common"
+                                          value="../servlet/DownloadFile?id=#{pro.id}"
+                                          rendered="#{(!pro.ifFolder)&amp;&amp;(!(((pro.fileExt=='.jpg'||pro.fileExt=='.gif')||(pro.fileExt=='.png'||(pro.fileExt=='.flv')||(pro.fileExt=='.mp3')))||(pro.fileExt=='.mp4')))}">
+                                <h:outputText value="#{fn:length(pro.fileName)>20?(fn:substring(pro.fileName,0,20)):pro.fileName}#{pro.fileExt}"></h:outputText>
+                            </h:outputLink>
+                            <h:outputLink title="点击播放视频" target="_blank" styleClass="common"
+                                          value="#{facesContext.externalContext.requestContextPath}/vp/RerePlayer.swf?xml=x.rplayer?fid=#{pro.id}"
+                                          rendered="#{(!pro.ifFolder)&amp;&amp;(pro.fileExt=='.flv'||pro.fileExt=='.mp4')}">
+                                <h:outputText value="#{fn:length(pro.fileName)>20?(fn:substring(pro.fileName,0,20)):pro.fileName}#{pro.fileExt}"></h:outputText>
+                            </h:outputLink>
+                            <h:outputLink title="点击播放MP3" target="_blank" styleClass="common"
+                                          value="#{facesContext.externalContext.requestContextPath}/dewplayer/dewplayer-vol.swf?mp3=../#{applicationBean.relativePath}#{pro.id}.mp3&amp;autostart=0"
+                                          rendered="#{(!pro.ifFolder)&amp;&amp;(pro.fileExt=='.mp3')}">
+                                <h:outputText value="#{fn:length(pro.fileName)>20?(fn:substring(pro.fileName,0,20)):pro.fileName}#{pro.fileExt}"></h:outputText>
+                            </h:outputLink>
+                            <h:outputLink title="点击查看图片" target="_blank" styleClass="common"
+                                          value="#{facesContext.externalContext.requestContextPath}/servlet/ShowImage?id=#{pro.id}"
+                                          rendered="#{(!pro.ifFolder)&amp;&amp;((pro.fileExt=='.jpg'||pro.fileExt=='.gif')||pro.fileExt=='.png')}">
+                                <h:outputText value="#{fn:length(pro.fileName)>20?(fn:substring(pro.fileName,0,20)):pro.fileName}#{pro.fileExt}"></h:outputText>
+                            </h:outputLink>
+
+
+
+                            <h:outputText value="(#{pro.sonNum})" rendered="#{pro.ifFolder}"></h:outputText>
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="大小"></h:outputText>
+                            </f:facet>
+                            <h:outputText value="#{pro.fileSize}"></h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="上传时间"></h:outputText>
+                            </f:facet>
+                            <h:outputText value="#{pro.uploadTime}">
+                                <f:convertDateTime timeZone="GMT+8"
+                                                   pattern="yyyy-MM-dd HH:mm" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="复制链接"></h:outputText>
+                            </f:facet>
+                            <p:commandLink id="copy1" value="复制图片地址" styleClass="common"  rendered="#{((pro.fileExt=='.jpg'||pro.fileExt=='.gif')||pro.fileExt=='.png')and !pro.ifFolder}" onclick="copyUrl('servlet/ShowAbstractImage?id=#{pro.id}');
+                                    return false;"/>
+
+                            <p:commandLink id="copy2"  value="复制视频播放地址" styleClass="common"  rendered="#{pro.fileExt=='.flv'||pro.fileExt=='.mp4'}" onclick="copyUrl('http://#{facesContext.externalContext.requestServerName}:#{facesContext.externalContext.requestServerPort}#{facesContext.externalContext.requestContextPath}/vp/RerePlayer.swf?xml=x.rplayer?fid=#{pro.id}');
+                                    return false;"/>
+                            <p:commandLink id="copy3"  value="复制MP3播放地址" styleClass="common"  rendered="#{pro.fileExt=='.mp3'}" onclick="copyUrl('http://#{facesContext.externalContext.requestServerName}:#{facesContext.externalContext.requestServerPort}#{facesContext.externalContext.requestContextPath}/dewplayer/dewplayer-vol.swf?mp3=../#{applicationBean.relativePath}#{pro.id}.mp3&amp;autostart=0');
+                                    return false;"/>
+
+                            <p:commandLink id="copy4"  value="复制下载地址" styleClass="common"  rendered="#{(!((pro.fileExt=='.jpg'||pro.fileExt=='.gif')||(pro.fileExt=='.png'||(pro.fileExt=='.flv')||(pro.fileExt=='.mp4')||(pro.fileExt=='.mp3')))) and ! pro.ifFolder}" onclick="copyUrl('#{facesContext.externalContext.requestServerName}:#{facesContext.externalContext.requestServerPort}#{facesContext.externalContext.requestContextPath}/servlet/DownloadFile?id=#{pro.id}');
+                                    return false;"/>
+
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+            </div>
+        </ui:composition>
+    </h:body>
+</html>
+

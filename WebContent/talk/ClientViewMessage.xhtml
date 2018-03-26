@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core" 
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:p="http://primefaces.org/ui" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body> 
+        <ui:composition template="UserCenterGeneral.xhtml">
+            <ui:define name="ucontent">
+                <div>
+                    <h:panelGrid columns="2" style="width:100%">
+                        <h:outputText id="outputText1" styleClass="mark" value="－查看消息－" />
+                    </h:panelGrid>
+                </div>
+                <p:separator></p:separator>
+                <h:panelGrid columns="2" cellpadding="5" styleClass="generalInfo">
+                    <h:outputText value="发件人："></h:outputText>
+                    <h:outputText value="#{clientViewMessage.mm.sender.username}"></h:outputText>
+                    <h:outputText value="标题："></h:outputText>
+                    <h:outputText value="#{clientViewMessage.mm.title}"
+                                  style="width:500px">
+                    </h:outputText>
+                    <h:outputText value="内容："></h:outputText>
+                    <h:outputText value="#{clientViewMessage.mm.content}"
+                                  escape="false" style="width:400px;height:50px" />
+                </h:panelGrid>
+                <p:separator style="margin:5px 0px 10px 0px"></p:separator>
+                <h:panelGrid columns="2" styleClass="generalInfo">
+                    <h:outputText value="回复："></h:outputText>
+                    <pe:ckEditor value="#{clientViewMessage.mn.content}"  width="600" height="200"  customConfig="#{facesContext.externalContext.requestContextPath}/resources/js/ckeditor_config1.js"/>
+                    <!--
+                    <p:editor height="350" width="600"
+                              value="#{clientViewMessage.mn.content}"></p:editor>
+                    -->
+                </h:panelGrid>
+                <p:separator></p:separator>
+                <h:panelGrid columns="2">
+                    <p:commandButton value="发送" action="#{clientViewMessage.send}"></p:commandButton>
+                    <p:commandButton value="返回" action="ClientListMsg?faces-redirect=true"></p:commandButton>
+                </h:panelGrid>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

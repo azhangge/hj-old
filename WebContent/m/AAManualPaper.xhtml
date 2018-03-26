@@ -1,0 +1,686 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui"  lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+
+
+                <h:form id="myForm">
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <div>
+                        <h:outputText  styleClass="tit"
+                                       value="－#{aAManualPaper.flag?'修改人工试卷':'添加人工试卷'}－" />
+                        <p:separator/>
+                        <h:panelGrid columns="2"  cellpadding="0" >
+                            <h:outputText value="试卷名称：" />
+                            <h:inputText value="#{aAManualPaper.paper.name}" style="width:600px;" />
+
+                        </h:panelGrid>
+                        <p:separator/>
+                        <p:outputPanel autoUpdate="true">
+                            <p:panel header="试卷篮试题（试卷篮试题选择请到试题管理模块）">
+                                <p:tabView id="views22">
+                                    <p:tab title="单选题" id="view221">
+                                        <div><p:commandButton value="删除" action="#{basketSession.batchDeleteQuestion('choice')}" update=":myForm:main_panel" onclick="if (!confirm('确认要删除所选的条目吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="清空"  action="#{basketSession.clearQuestion('choice')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要清空所有题目吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="移动到试卷"  action="#{aAManualPaper.batchMoveQuestion('choice')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要移动所选题目吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="复制到试卷"  action="#{aAManualPaper.batchCopyQuestion('choice')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要复制所选题目吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="移动全部"  action="#{aAManualPaper.moveAllQuestion('choice')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要移动全部题目到试卷吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="复制全部"  action="#{aAManualPaper.copyAllQuestion('choice')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要复制全部题目到试卷吗？'))
+                                                    return false"/>
+                                        </div>
+                                        <p:separator/>
+                                        <div>
+                                            <p:dataTable paginator="true" paginatorPosition="bottom" value="#{basketSession.basket.choices}" var="us" id="dataTable1" liveResize="true" emptyMessage="#{lang['exam.empty_result']}"
+                                                         styleClass="list" rowIndexVar="row" style="width:630px;" rows="30">
+                                                <p:column>
+                                                    <h:selectBooleanCheckbox value="#{us.selected}"/>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="选择" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column  style="width:370px!important;word-wrap:break-word!important;word-break:break-all!important;">
+                                                    <h:outputText  value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}" escape="false"/>
+
+                                                    <f:facet name="header">
+                                                        <h:outputText value="题目名称" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column>
+                                                    <h:outputText value="#{us.answer}" />
+                                                    <f:facet name="header">
+                                                        <h:outputText value="答案" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column>
+                                                    <h:outputText value="#{us.genTime}">
+                                                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                                           timeZone="GMT+8" />
+                                                    </h:outputText>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="添加时间" />
+                                                    </f:facet>
+                                                </p:column>
+                                            </p:dataTable>
+                                            <h:outputText value="共有#{basketSession.basket.choices.size()}条数据！" />
+                                        </div>
+                                    </p:tab>
+                                    <p:tab title="多选题">
+                                        <div> <p:commandButton value="删除" action="#{basketSession.batchDeleteQuestion('mchoice')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要删除所选的条目吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="清空" action="#{basketSession.clearQuestion('mchoice')}"  update=":myForm:main_panel" onclick="if (!confirm('确认要清空所有题目吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="移动到试卷"  action="#{aAManualPaper.batchMoveQuestion('mchoice')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要移动所选题目吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="复制到试卷"  action="#{aAManualPaper.batchCopyQuestion('mchoice')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要复制所选题目吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="移动全部"  action="#{aAManualPaper.moveAllQuestion('mchoice')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要移动全部题目到试卷吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="复制全部"  action="#{aAManualPaper.copyAllQuestion('mchoice')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要复制全部题目到试卷吗？'))
+                                                    return false"/>
+                                        </div>
+                                        <p:separator/>
+                                        <div>
+                                            <p:dataTable paginator="true" paginatorPosition="bottom" value="#{basketSession.basket.multiChoices}" var="us" id="dataTable4" emptyMessage="#{lang['exam.empty_result']}"
+                                                         styleClass="list" rowIndexVar="row" style="width:100%" rows="30">
+                                                <p:column>
+                                                    <h:selectBooleanCheckbox value="#{us.selected}"/>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="选择" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column  style="width:370px;">
+                                                    <h:outputText value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}" escape="false"/>
+
+                                                    <f:facet name="header">
+                                                        <h:outputText value="题目名称" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column>
+                                                    <h:outputText value="#{us.answer}" />
+                                                    <f:facet name="header">
+                                                        <h:outputText value="答案" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column sortBy="#{us.genTime}">
+                                                    <h:outputText value="#{us.genTime}">
+                                                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                                           timeZone="GMT+8" />
+                                                    </h:outputText>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="添加时间" />
+                                                    </f:facet>
+                                                </p:column>
+                                            </p:dataTable>
+                                            <h:outputText value="共有#{basketSession.basket.multiChoices.size()}条数据！" />
+                                        </div>
+                                    </p:tab>
+                                    <p:tab title="填空题">
+                                        <div><p:commandButton value="删除" action="#{basketSession.batchDeleteQuestion('fill')}"  update=":myForm:main_panel" onclick="if (!confirm('确认要删除所选的条目吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="清空" action="#{basketSession.clearQuestion('fill')}"  update=":myForm:main_panel" onclick="if (!confirm('确认要清空所有题目吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="移动到试卷"  action="#{aAManualPaper.batchMoveQuestion('fill')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要移动所选题目吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="复制到试卷"  action="#{aAManualPaper.batchCopyQuestion('fill')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要复制所选题目吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="移动全部"  action="#{aAManualPaper.moveAllQuestion('fill')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要移动全部题目到试卷吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="复制全部"  action="#{aAManualPaper.copyAllQuestion('fill')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要复制全部题目到试卷吗？'))
+                                                    return false"/>
+                                        </div>
+                                        <p:separator/>
+                                        <div>
+                                            <p:dataTable paginator="true" paginatorPosition="bottom" value="#{basketSession.basket.fills}" var="us" id="dataTable2" emptyMessage="#{lang['exam.empty_result']}"
+                                                         styleClass="list" rowIndexVar="row" style="width:100%" rows="30">
+                                                <p:column>
+                                                    <h:selectBooleanCheckbox value="#{us.selected}"/>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="选择" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column  style="width:430px;">
+                                                    <h:outputText  value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}" escape="false"/>
+
+                                                    <f:facet name="header">
+                                                        <h:outputText value="题目名称" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column sortBy="#{us.genTime}">
+                                                    <h:outputText value="#{us.genTime}">
+                                                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                                           timeZone="GMT+8" />
+                                                    </h:outputText>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="添加时间" />
+                                                    </f:facet>
+                                                </p:column>
+                                            </p:dataTable>
+                                            <h:outputText value="共有#{basketSession.basket.fills.size()}条数据！" />
+                                        </div>
+                                    </p:tab>
+
+                                    <p:tab title="判断题">
+                                        <div><p:commandButton value="删除" action="#{basketSession.batchDeleteQuestion('judge')}"  update=":myForm:main_panel" onclick="if (!confirm('确认要删除所选的条目吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="清空" action="#{basketSession.clearQuestion('judge')}"  update=":myForm:main_panel" onclick="if (!confirm('确认要清空所有题目吗？'))
+                                                    return false"/>
+
+                                            <p:commandButton value="移动到试卷"  action="#{aAManualPaper.batchMoveQuestion('judge')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要移动所选题目吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="复制到试卷"  action="#{aAManualPaper.batchCopyQuestion('judge')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要复制所选题目吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="移动全部"  action="#{aAManualPaper.moveAllQuestion('judge')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要移动全部题目到试卷吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="复制全部"  action="#{aAManualPaper.copyAllQuestion('judge')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要复制全部题目到试卷吗？'))
+                                                    return false"/>
+                                        </div>
+                                        <p:separator/>
+                                        <div>
+                                            <p:dataTable paginator="true" paginatorPosition="bottom" value="#{basketSession.basket.judges}" var="us" id="dataTable3" emptyMessage="#{lang['exam.empty_result']}"
+                                                         styleClass="list" rowIndexVar="row" style="width:100%" rows="30">
+                                                <p:column>
+                                                    <h:selectBooleanCheckbox value="#{us.selected}"/>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="选择" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column   style="width:370px;">
+                                                    <h:outputText value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}" escape="false"/>
+
+                                                    <f:facet name="header">
+                                                        <h:outputText value="题目内容" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column>
+                                                    <h:outputText value="#{us.answer}" />
+                                                    <f:facet name="header">
+                                                        <h:outputText value="答案" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column sortBy="#{us.genTime}">
+                                                    <h:outputText value="#{us.genTime}">
+                                                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                                           timeZone="GMT+8" />
+                                                    </h:outputText>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="添加时间" />
+                                                    </f:facet>
+                                                </p:column>
+                                            </p:dataTable>
+                                            <h:outputText value="共有#{basketSession.basket.judges.size()}条数据！" />
+                                        </div>
+                                    </p:tab>
+
+                                    <p:tab title="问答题">
+                                        <div><p:commandButton value="删除" action="#{basketSession.batchDeleteQuestion('essay')}"  update=":myForm:main_panel" onclick="if (!confirm('确认要删除所选的条目吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="清空" action="#{basketSession.clearQuestion('essay')}"  update=":myForm:main_panel" onclick="if (!confirm('确认要清空所有题目吗？'))
+                                                    return false"/>
+
+                                            <p:commandButton value="移动到试卷"  action="#{aAManualPaper.batchMoveQuestion('essay')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要移动所选题目吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="复制到试卷"  action="#{aAManualPaper.batchCopyQuestion('essay')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要复制所选题目吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="移动全部"  action="#{aAManualPaper.moveAllQuestion('essay')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要移动全部题目到试卷吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="复制全部"  action="#{aAManualPaper.copyAllQuestion('essay')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要复制全部题目到试卷吗？'))
+                                                    return false"/>
+                                        </div>
+                                        <p:separator/>
+                                        <div>
+                                            <p:dataTable paginator="true" paginatorPosition="bottom" value="#{basketSession.basket.essaies}" var="us" id="dataTable5" emptyMessage="#{lang['exam.empty_result']}"
+                                                         styleClass="list" rowIndexVar="row" style="width:100%" rows="30">
+                                                <p:column>
+                                                    <h:selectBooleanCheckbox value="#{us.selected}"/>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="选择" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column  style="width:370px;">
+                                                    <h:outputText  value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}" escape="false"/>
+
+                                                    <f:facet name="header">
+                                                        <h:outputText value="题目内容" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column sortBy="#{us.genTime}">
+                                                    <h:outputText value="#{us.genTime}">
+                                                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                                           timeZone="GMT+8" />
+                                                    </h:outputText>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="添加时间" />
+                                                    </f:facet>
+                                                </p:column>
+                                            </p:dataTable>
+                                            <h:outputText value="共有#{basketSession.basket.essaies.size()}条数据！" />
+                                        </div>
+                                    </p:tab>
+
+                                    <p:tab title="文件题">
+                                        <div> <p:commandButton value="删除" action="#{basketSession.batchDeleteQuestion('file')}"  update=":myForm:main_panel" onclick="if (!confirm('确认要删除所选的条目吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="清空" action="#{basketSession.clearQuestion('file')}"  update=":myForm:main_panel" onclick="if (!confirm('确认要清空所有题目吗？'))
+                                                    return false"/>
+
+                                            <p:commandButton value="移动到试卷"  action="#{aAManualPaper.batchMoveQuestion('file')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要移动所选题目吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="复制到试卷"  action="#{aAManualPaper.batchCopyQuestion('file')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要复制所选题目吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="移动全部"  action="#{aAManualPaper.moveAllQuestion('file')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要移动全部题目到试卷吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="复制全部"  action="#{aAManualPaper.copyAllQuestion('file')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要复制全部题目到试卷吗？'))
+                                                    return false"/>
+                                        </div>
+                                        <p:separator/>
+                                        <div>
+                                            <p:dataTable paginator="true" paginatorPosition="bottom" value="#{basketSession.basket.files}" var="us" id="dataTable6" emptyMessage="#{lang['exam.empty_result']}"
+                                                         styleClass="list" rowIndexVar="row" style="width:100%" rows="30">
+                                                <p:column>
+                                                    <h:selectBooleanCheckbox value="#{us.selected}"/>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="选择" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column  style="width:370px;">
+                                                    <h:outputText value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}" escape="false"/>
+
+                                                    <f:facet name="header">
+                                                        <h:outputText value="题目内容" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column sortBy="#{us.genTime}">
+                                                    <h:outputText value="#{us.genTime}">
+                                                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                                           timeZone="GMT+8" />
+                                                    </h:outputText>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="添加时间" />
+                                                    </f:facet>
+                                                </p:column>
+                                            </p:dataTable>
+                                            <h:outputText value="共有#{basketSession.basket.files.size()}条数据！" />
+                                        </div>
+                                    </p:tab>
+
+
+                                    <p:tab title="综合题" rendered="#{copyrightController.sysType!='1'}">
+                                        <div>
+                                            <p:commandButton value="删除" action="#{basketSession.batchDeleteQuestion('case')}"  update=":myForm:main_panel" onclick="if (!confirm('确认要删除所选的条目吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="清空" action="#{basketSession.clearQuestion('case')}"  update=":myForm:main_panel" onclick="if (!confirm('确认要清空所有题目吗？'))
+                                                    return false"/>
+
+                                            <p:commandButton value="移动到试卷"  action="#{aAManualPaper.batchMoveQuestion('case')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要移动所选题目吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="复制到试卷"  action="#{aAManualPaper.batchCopyQuestion('case')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要复制所选题目吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="移动全部"  action="#{aAManualPaper.moveAllQuestion('case')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要移动全部题目到试卷吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="复制全部"  action="#{aAManualPaper.copyAllQuestion('case')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要复制全部题目到试卷吗？'))
+                                                    return false"/>
+                                        </div>
+                                        <p:separator/>
+                                        <div>
+                                            <p:dataTable paginator="true" paginatorPosition="bottom" value="#{basketSession.basket.cases}" var="us" id="dataTable7" emptyMessage="#{lang['exam.empty_result']}"
+                                                         styleClass="list" rowIndexVar="row" style="width:100%" rows="30">
+                                                <p:column>
+                                                    <h:selectBooleanCheckbox value="#{us.selected}"/>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="选择" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column  sortBy="#{us.nickName}" >
+                                                    <h:outputText id="caseTitle2"  value="#{fn:substring(us.nickName,0,25)}#{fn:length(us.nickName)>25?'...':''}" escape="false"/>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="题目别名" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column  style="">
+                                                    <h:outputText value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}" escape="false"/>
+
+                                                    <f:facet name="header">
+                                                        <h:outputText value="题目说明" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column sortBy="#{us.genTime}">
+                                                    <h:outputText value="#{us.genTime}">
+                                                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                                           timeZone="GMT+8" />
+                                                    </h:outputText>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="添加时间" />
+                                                    </f:facet>
+                                                </p:column>
+                                            </p:dataTable>
+                                            <h:outputText value="共有#{basketSession.basket.cases.size()}条数据！" />
+                                        </div>
+                                    </p:tab>
+                                </p:tabView>
+                            </p:panel>
+                            <p:separator/>
+
+                            <p:separator/>
+                            <p:panel id="main_panel" header="人工试卷试题">
+                                <p:tabView id="views23">
+                                    <p:tab title="单选题">
+                                        <div><p:commandButton value="删除" action="#{aAManualPaper.batchDeleteQuestion('choice')}" update=":myForm:main_panel" onclick="if (!confirm('确认要删除所选的条目吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="清空"  action="#{aAManualPaper.clearQuestion('choice')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要清空所有题目吗？'))
+                                                    return false"/>
+                                        </div>
+                                        <p:separator/>
+                                        <div>
+                                            <p:dataTable paginator="true" paginatorPosition="bottom" value="#{aAManualPaper.choices}" var="us" id="dataTable1" liveResize="true" emptyMessage="#{lang['exam.empty_result']}"
+                                                         styleClass="list" rowIndexVar="row" style="width:630px;" rows="30">
+                                                <p:column>
+                                                    <h:selectBooleanCheckbox value="#{us.selected}"/>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="选择" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column  style="width:370px!important;word-wrap:break-word!important;word-break:break-all!important;">
+                                                    <h:outputText  value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}" escape="false"/>
+
+                                                    <f:facet name="header">
+                                                        <h:outputText value="题目名称" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column>
+                                                    <h:outputText value="#{us.answer}" />
+                                                    <f:facet name="header">
+                                                        <h:outputText value="答案" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column>
+                                                    <h:outputText value="#{us.genTime}">
+                                                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                                           timeZone="GMT+8" />
+                                                    </h:outputText>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="添加时间" />
+                                                    </f:facet>
+                                                </p:column>
+                                            </p:dataTable>
+                                            <h:outputText value="共有#{aAManualPaper.choices.size()}条数据！" />
+                                        </div>
+                                    </p:tab>
+                                    <p:tab title="多选题">
+                                        <div> <p:commandButton value="删除" action="#{aAManualPaper.batchDeleteQuestion('mchoice')}"  update=":myForm:main_panel"  onclick="if (!confirm('确认要删除所选的条目吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="清空" action="#{aAManualPaper.clearQuestion('mchoice')}"  update=":myForm:main_panel" onclick="if (!confirm('确认要清空所有题目吗？'))
+                                                    return false"/>
+                                        </div>
+                                        <p:separator/>
+                                        <div>
+                                            <p:dataTable paginator="true" paginatorPosition="bottom" value="#{aAManualPaper.multiChoices}" var="us" id="dataTable4" emptyMessage="#{lang['exam.empty_result']}"
+                                                         styleClass="list" rowIndexVar="row" style="width:100%" rows="30">
+                                                <p:column>
+                                                    <h:selectBooleanCheckbox value="#{us.selected}"/>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="选择" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column  style="width:370px;">
+                                                    <h:outputText value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}" escape="false"/>
+
+                                                    <f:facet name="header">
+                                                        <h:outputText value="题目名称" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column>
+                                                    <h:outputText value="#{us.answer}" />
+                                                    <f:facet name="header">
+                                                        <h:outputText value="答案" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column sortBy="#{us.genTime}">
+                                                    <h:outputText value="#{us.genTime}">
+                                                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                                           timeZone="GMT+8" />
+                                                    </h:outputText>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="添加时间" />
+                                                    </f:facet>
+                                                </p:column>
+                                            </p:dataTable>
+                                            <h:outputText value="共有#{aAManualPaper.multiChoices.size()}条数据！" />
+                                        </div>
+                                    </p:tab>
+                                    <p:tab title="填空题">
+                                        <div><p:commandButton value="删除" action="#{aAManualPaper.batchDeleteQuestion('fill')}"  update=":myForm:main_panel" onclick="if (!confirm('确认要删除所选的条目吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="清空" action="#{aAManualPaper.clearQuestion('fill')}"  update=":myForm:main_panel" onclick="if (!confirm('确认要清空所有题目吗？'))
+                                                    return false"/>
+                                        </div>
+                                        <p:separator/>
+                                        <div>
+                                            <p:dataTable paginator="true" paginatorPosition="bottom" value="#{aAManualPaper.fills}" var="us" id="dataTable2" emptyMessage="#{lang['exam.empty_result']}"
+                                                         styleClass="list" rowIndexVar="row" style="width:100%" rows="30">
+                                                <p:column>
+                                                    <h:selectBooleanCheckbox value="#{us.selected}"/>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="选择" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column  style="width:430px;">
+                                                    <h:outputText  value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}" escape="false"/>
+
+                                                    <f:facet name="header">
+                                                        <h:outputText value="题目名称" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column sortBy="#{us.genTime}">
+                                                    <h:outputText value="#{us.genTime}">
+                                                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                                           timeZone="GMT+8" />
+                                                    </h:outputText>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="添加时间" />
+                                                    </f:facet>
+                                                </p:column>
+                                            </p:dataTable>
+                                            <h:outputText value="共有#{aAManualPaper.fills.size()}条数据！" />
+                                        </div>
+                                    </p:tab>
+
+                                    <p:tab title="判断题">
+                                        <div><p:commandButton value="删除" action="#{aAManualPaper.batchDeleteQuestion('judge')}"  update=":myForm:main_panel" onclick="if (!confirm('确认要删除所选的条目吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="清空" action="#{aAManualPaper.clearQuestion('judge')}"  update=":myForm:main_panel" onclick="if (!confirm('确认要清空所有题目吗？'))
+                                                    return false"/>
+                                        </div>
+                                        <p:separator/>
+                                        <div>
+                                            <p:dataTable paginator="true" paginatorPosition="bottom" value="#{aAManualPaper.judges}" var="us" id="dataTable3" emptyMessage="#{lang['exam.empty_result']}"
+                                                         styleClass="list" rowIndexVar="row" style="width:100%" rows="30">
+                                                <p:column>
+                                                    <h:selectBooleanCheckbox value="#{us.selected}"/>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="选择" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column   style="width:370px;">
+                                                    <h:outputText value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}" escape="false"/>
+
+                                                    <f:facet name="header">
+                                                        <h:outputText value="题目内容" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column>
+                                                    <h:outputText value="#{us.answer}" />
+                                                    <f:facet name="header">
+                                                        <h:outputText value="答案" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column sortBy="#{us.genTime}">
+                                                    <h:outputText value="#{us.genTime}">
+                                                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                                           timeZone="GMT+8" />
+                                                    </h:outputText>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="添加时间" />
+                                                    </f:facet>
+                                                </p:column>
+                                            </p:dataTable>
+                                            <h:outputText value="共有#{aAManualPaper.judges.size()}条数据！" />
+                                        </div>
+                                    </p:tab>
+
+                                    <p:tab title="问答题">
+                                        <div><p:commandButton value="删除" action="#{aAManualPaper.batchDeleteQuestion('essay')}"  update=":myForm:main_panel" onclick="if (!confirm('确认要删除所选的条目吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="清空" action="#{aAManualPaper.clearQuestion('essay')}"  update=":myForm:main_panel" onclick="if (!confirm('确认要清空所有题目吗？'))
+                                                    return false"/>
+                                        </div>
+                                        <p:separator/>
+                                        <div>
+                                            <p:dataTable paginator="true" paginatorPosition="bottom" value="#{aAManualPaper.essaies}" var="us" id="dataTable5" emptyMessage="#{lang['exam.empty_result']}"
+                                                         styleClass="list" rowIndexVar="row" style="width:100%" rows="30">
+                                                <p:column>
+                                                    <h:selectBooleanCheckbox value="#{us.selected}"/>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="选择" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column  style="width:370px;">
+                                                    <h:outputText  value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}" escape="false"/>
+
+                                                    <f:facet name="header">
+                                                        <h:outputText value="题目内容" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column sortBy="#{us.genTime}">
+                                                    <h:outputText value="#{us.genTime}">
+                                                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                                           timeZone="GMT+8" />
+                                                    </h:outputText>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="添加时间" />
+                                                    </f:facet>
+                                                </p:column>
+                                            </p:dataTable>
+                                            <h:outputText value="共有#{aAManualPaper.essaies.size()}条数据！" />
+                                        </div>
+                                    </p:tab>
+
+                                    <p:tab title="文件题">
+                                        <div> <p:commandButton value="删除" action="#{aAManualPaper.batchDeleteQuestion('file')}"  update=":myForm:main_panel" onclick="if (!confirm('确认要删除所选的条目吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="清空" action="#{aAManualPaper.clearQuestion('file')}"  update=":myForm:main_panel" onclick="if (!confirm('确认要清空所有题目吗？'))
+                                                    return false"/>
+                                        </div>
+                                        <p:separator/>
+                                        <div>
+                                            <p:dataTable paginator="true" paginatorPosition="bottom" value="#{aAManualPaper.files}" var="us" id="dataTable6" emptyMessage="#{lang['exam.empty_result']}"
+                                                         styleClass="list" rowIndexVar="row" style="width:100%" rows="30">
+                                                <p:column>
+                                                    <h:selectBooleanCheckbox value="#{us.selected}"/>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="选择" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column  style="width:370px;">
+                                                    <h:outputText value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}" escape="false"/>
+
+                                                    <f:facet name="header">
+                                                        <h:outputText value="题目内容" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column sortBy="#{us.genTime}">
+                                                    <h:outputText value="#{us.genTime}">
+                                                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                                           timeZone="GMT+8" />
+                                                    </h:outputText>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="添加时间" />
+                                                    </f:facet>
+                                                </p:column>
+                                            </p:dataTable>
+                                            <h:outputText value="共有#{aAManualPaper.files.size()}条数据！" />
+                                        </div>
+                                    </p:tab>
+
+
+                                    <p:tab title="综合题" rendered="#{copyrightController.sysType!='1'}">
+                                        <div>
+                                            <p:commandButton value="删除" action="#{aAManualPaper.batchDeleteQuestion('case')}"  update=":myForm:main_panel" onclick="if (!confirm('确认要删除所选的条目吗？'))
+                                                    return false"/>
+                                            <p:commandButton value="清空" action="#{aAManualPaper.clearQuestion('case')}"  update=":myForm:main_panel" onclick="if (!confirm('确认要清空所有题目吗？'))
+                                                    return false"/>
+                                        </div>
+                                        <p:separator/>
+                                        <div>
+                                            <p:dataTable paginator="true" paginatorPosition="bottom" value="#{aAManualPaper.cases}" var="us" id="dataTable7" emptyMessage="#{lang['exam.empty_result']}"
+                                                         styleClass="list" rowIndexVar="row" style="width:100%" rows="30">
+                                                <p:column>
+                                                    <h:selectBooleanCheckbox value="#{us.selected}"/>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="选择" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column  sortBy="#{us.nickName}" >
+                                                    <h:outputText id="caseTitle2"  value="#{fn:substring(us.nickName,0,25)}#{fn:length(us.nickName)>25?'...':''}" escape="false"/>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="题目别名" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column  style="">
+                                                    <h:outputText value="#{fn:substring(us.cleanName,0,25)}#{fn:length(us.cleanName)>25?'...':''}" escape="false"/>
+
+                                                    <f:facet name="header">
+                                                        <h:outputText value="题目说明" />
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:column sortBy="#{us.genTime}">
+                                                    <h:outputText value="#{us.genTime}">
+                                                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm"
+                                                                           timeZone="GMT+8" />
+                                                    </h:outputText>
+                                                    <f:facet name="header">
+                                                        <h:outputText value="添加时间" />
+                                                    </f:facet>
+                                                </p:column>
+                                            </p:dataTable>
+                                            <h:outputText value="共有#{aAManualPaper.cases.size()}条数据！" />
+                                        </div>
+                                    </p:tab>
+
+                                </p:tabView>
+
+                            </p:panel>
+
+                        </p:outputPanel>
+
+
+                        <p:growl/>
+                        <p:separator/>
+                        <p:commandButton ajax="false" action="#{aAManualPaper.done}" value="提交"  styleClass="commonSubmit" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'examination')}"/>
+
+                    </div></h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

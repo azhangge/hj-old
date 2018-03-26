@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="General3.xhtml">
+            <ui:define name="title">
+                <h:outputText value="#{examScoreReport.examCase.examination.name}-合格证-#{examScoreReport.examCase.user.name}" />
+            </ui:define>
+            <ui:define name="content">
+                <h:panelGrid columns="3">
+                    <h:outputLink styleClass="topNav1"
+                                  value="ExamCaseReportList.jspx">
+                        <h:outputText value="成绩查询" />
+                    </h:outputLink>
+                    <h:outputText value=">>" />
+                    <h:outputText value="合格证"  styleClass="mark"/>
+                </h:panelGrid>
+                <p:separator/>
+                <p:commandButton value="打印合格证" type="button">  
+                    <p:printer target="scoreReport" />  
+                </p:commandButton>  
+                <p:separator/>
+                <div style="border:1px dashed black;">
+                    <p:panel id="scoreReport" style="padding: 20px 20px 20px 20px;border:0px solid black;text-align: center;height:600px;">
+
+
+
+                        <style>
+                            #scoreContainer{
+                                width:800px;
+                                margin: 0px auto;
+                                border:1px solid white;
+                                position:relative;
+                            }
+                            #scoreTitle{
+                                font-weight: bolder;
+                                font-family: 微软雅黑;
+                                font-size: 32px;
+                                top:120px;
+                                text-align: center;
+                                z-index: 5;
+                                position:absolute;
+                                width:700px;
+                                padding: 0px 50px 0px 50px;
+                            }
+                            #scoreContent{
+                                text-indent:2em;
+                                font-weight: bolder;
+                                margin: 0px auto;
+                                border:0px solid red;
+                                font-family: 宋体;
+                                font-size: 22px;
+                                line-height:36px;
+                                top:220px;
+                                text-align:left;
+                                position:absolute;
+                                z-index: 5;
+                                width:820px;
+                                padding: 0px 50px 0px 50px;
+                            }
+
+                            #scoreFooter{
+                                font-weight: bold;
+                                font-family: 宋体;
+                                font-size: 22px;
+                                top:400px;
+                                height:100px;
+                                padding-right:90px;
+                                text-align: right;
+                                position:absolute;
+                                z-index: 5;
+                                width:700px;
+                                padding: 0px 50px 0px 50px;
+                            }
+
+                        </style>
+
+                        <div id="scoreContainer">
+                            <div style="top:0px;left:0px;position:absolute;z-index: 1;">
+                                <h:graphicImage value="/resources/images/qualified.jpg"/>
+                            </div>
+                            <div id="scoreTitle">
+                                <h:outputText value="#{applicationBean.info.siteName}合格证"/>
+                            </div>
+                            <div id="scoreContent">
+                                今有考生<span style="text-decoration: underline;">&nbsp;&nbsp;#{examScoreReport.examCase.user.name}&nbsp;&nbsp;</span>身份证号<span style="width:200px;text-decoration: underline;">&nbsp;&nbsp;#{examScoreReport.examCase.user.pid}&nbsp;&nbsp;</span>按规定参加了《#{examScoreReport.examCase.examination.name}》考试，成绩合格，特发此证！
+                            </div>
+                            <div id="scoreFooter">
+                                <h:outputText value="#{examScoreReport.examCase.genTime}">
+                                    <f:convertDateTime pattern="yyyy年MM月dd日" timeZone="GMT+8"/>
+                                </h:outputText>
+                            </div>
+                        </div>
+
+
+                    </p:panel>
+                </div>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui" lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+
+                <h:outputScript name="chinese_locale.js" library="js"/>
+                <h:form id="myForm">
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <div>
+                        <h:outputText  styleClass="tit"
+                                       value="－阅卷－" />
+                        <p:separator/>
+                        <h:panelGrid columns="3" style="width:90%;">
+                            <h:panelGroup>
+                                <h:outputText value="考试名称："/>
+                                <h:outputText value="#{examCaseReport.examCase.examination.name}"/>
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <h:outputText value="考生姓名："/>
+                                <h:outputText value="#{examCaseReport.examCase.user.name}（#{examCaseReport.examCase.user.username}）"/>
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <h:outputText value="考试时长："/>
+                                <h:outputText value="#{examCaseReport.examCase.examination.timeLen}分钟"/>
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <h:outputText value="开考时间："/>
+                                <h:outputText value="#{examCaseReport.examCase.genTime}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8"/>
+                                </h:outputText>
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <h:outputText value="交卷时间："/>
+                                <h:outputText value="#{examCaseReport.examCase.submitTime}">
+                                    <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8"/>
+                                </h:outputText>
+                            </h:panelGroup>
+
+                            <h:panelGroup>
+                                <h:outputText value="考试成绩："/>
+                                <h:outputText value="#{examCaseReport.examCase.score}" style="color:red;font-weight: bold;">
+                                    <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}"/>
+                                </h:outputText>/<h:outputText value="#{examCaseReport.examCase.totalFullScore}" style="color:green;font-weight: bold;">
+                                    <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}"/>
+                                </h:outputText>
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <h:outputText value="考场："/>
+                                <h:outputText value="#{examCaseReport.examCase.room.name}"/>
+                            </h:panelGroup>
+                            <h:panelGroup>
+                                <h:outputText value="IP地址："/>
+                                <p:commandLink value="#{examCaseReport.examCase.ip}" title="#{examCaseReport.examCase.ipAddr}" />
+                            </h:panelGroup>
+
+                        </h:panelGrid>
+                        <p:separator rendered="#{fn:length(examCaseReport.examCase.choiceItems)!=0}"/>
+                        <p:panel collapsed="true" toggleable="true" rendered="#{fn:length(examCaseReport.examCase.choiceItems)!=0}">
+                            <f:facet name="header">
+                                <h:outputText value="※单选题（共#{fn:length(examCaseReport.examCase.choiceItems)}题，每题#{examCaseReport.examCase.examination.randomPaper.choiceScore}分，总得分：#{examCaseReport.examCase.choiceScore}）" styleClass="questionHead" rendered="#{fn:length(examCaseReport.examCase.choiceItems)!=0}"/>
+                            </f:facet>
+                            <ui:repeat value="#{examCaseReport.examCase.choiceItems}" var="choice" varStatus="row">
+                                <h:outputText value="#{row.index+1}、#{choice.question.name}" escape="false"/>&nbsp;&nbsp;
+                                <br/>
+                                <h:outputText value="正确答案：#{choice.rightAnswer}，" styleClass="answer"/>&nbsp;
+                                <h:outputText value="考生填写：#{choice.userAnswer}" styleClass="answer"/>&nbsp;&nbsp;
+                                <h:outputText value="#{choice.ifRight?'√':'×'}" style="color:#{choice.ifRight?'green':'red'};font-weight:bolder;font-size:25px;font-family:宋体;"/>
+                                <br/>
+                                <div style="margin-left: 30px;">
+                                    <ui:repeat value="#{choice.question.choices}" var="ch">
+                                        <h:outputText value="#{ch.label}.&nbsp;#{ch.name}"/>
+                                        <br/>
+                                    </ui:repeat>
+                                </div>
+                            </ui:repeat>
+                        </p:panel>
+                        <p:separator rendered="#{fn:length(examCaseReport.examCase.multiChoiceItems)!=0}"/>
+                        <p:panel collapsed="true" toggleable="true" rendered="#{fn:length(examCaseReport.examCase.multiChoiceItems)!=0}">
+                            <f:facet name="header">
+                                <h:outputText value="※多选题（共#{fn:length(examCaseReport.examCase.multiChoiceItems)}题，每题#{examCaseReport.examCase.examination.randomPaper.multiChoiceScore}分，总得分：#{examCaseReport.examCase.multiChoiceScore}）" styleClass="questionHead" rendered="#{fn:length(examCaseReport.examCase.multiChoiceItems)!=0}"/>
+                            </f:facet>
+                            <ui:repeat value="#{examCaseReport.examCase.multiChoiceItems}" var="choice" varStatus="row">
+                                <h:outputText value="#{row.index+1}、#{choice.question.name}" escape="false"/>&nbsp;&nbsp;
+                                <br/>
+                                <h:outputText value="正确答案：#{choice.rightAnswer}，" styleClass="answer"/>&nbsp;
+                                <h:outputText value="考生填写：#{choice.userAnswer}" styleClass="answer"/>&nbsp;&nbsp;
+                                <h:outputText value="#{choice.ifRight?'√':'×'}" style="color:#{choice.ifRight?'green':'red'};font-weight:bolder;font-size:25px;font-family:宋体;"/>
+                                <br/>
+                                <div style="margin-left: 30px;">
+                                    <ui:repeat value="#{choice.question.choices}" var="ch">
+                                        <h:outputText value="#{ch.label}.&nbsp;#{ch.name}"/>
+                                        <br/>
+                                    </ui:repeat>
+                                </div>
+                            </ui:repeat>
+                        </p:panel>
+                        <p:separator rendered="#{fn:length(examCaseReport.examCase.fillItems)!=0}"/>
+                        <p:dataTable  value="#{examCaseReport.examCase.fillItems}" var="fill" rowIndexVar="row" rendered="#{fn:length(examCaseReport.examCase.fillItems)!=0}">
+                            <p:column style="text-align:left;">
+                                <f:facet name="header">
+                                    <h:outputText value="※填空题（共#{fn:length(examCaseReport.examCase.fillItems)}题，每题#{examCaseReport.examCase.examination.randomPaper.fillScore}分，参考得分：#{examCaseReport.examCase.fillScore}）" styleClass="questionHead"/><br/>
+                                </f:facet>
+                                <h:outputText value="#{row+1}、"/>
+                                <ui:repeat value="#{fill.blocks}" var="b">
+                                    <h:outputText value="#{b.preStr}" escape="false"/>
+                                    <h:outputText value="________"/>
+                                </ui:repeat>
+                                <h:outputText value="#{fill.lastStr}" escape="false"/><br/> 
+                                <h:outputText value="正确答案：" styleClass="answer"/>
+                                <h:outputText value="#{fill.rightAnswerStr}" style="color:green;font-weight: bold;"/>&nbsp;
+                                <h:outputText value="考生填写：" styleClass="answer"/>
+                                <h:outputText value="#{fill.userAnswerStr}" style="color:green;font-weight: bold;"/>&nbsp;
+                                <h:outputText value="正确数：" styleClass="answer"/>
+                                <h:inputText value="#{fill.rightNum}" style="width:80px;"/>
+                                <br/>
+                            </p:column>
+                        </p:dataTable>
+                        <p:separator rendered="#{fn:length(examCaseReport.examCase.judgeItems)!=0}"/>
+                        <p:panel collapsed="true" toggleable="true" rendered="#{fn:length(examCaseReport.examCase.judgeItems)!=0}">
+                            <f:facet name="header">
+                                <h:outputText value="※判断题（共#{fn:length(examCaseReport.examCase.judgeItems)}题，每题#{examCaseReport.examCase.examination.randomPaper.judgeScore}分，总得分：#{examCaseReport.examCase.judgeScore}）" styleClass="questionHead" rendered="#{fn:length(examCaseReport.examCase.judgeItems)!=0}"/>
+                            </f:facet>
+                            <ui:repeat value="#{examCaseReport.examCase.judgeItems}" var="judge" varStatus="row">
+                                <h:outputText value="#{row.index+1}、#{judge.question.name}"/><br/>
+                                <h:outputText value="正确答案：" styleClass="answer"/>
+                                <h:outputText value="#{judge.rightAnswer=='true'?'正确':'错误'}，"  style="color:green;font-weight: bold;"/>
+                                &nbsp;
+                                <h:outputText value="考生填写：" styleClass="answer"/>
+                                <h:outputText value="正确" rendered="#{judge.userAnswer=='true'}"  style="color:green;font-weight: bold;"/>
+                                <h:outputText value="错误" rendered="#{judge.userAnswer=='false'}"  style="color:green;font-weight: bold;"/>
+                                <h:outputText value="未填写" rendered="#{judge.userAnswer=='null'}" style="color:green;font-weight: bold;"/>
+                                &nbsp;&nbsp;
+                                <h:outputText value="#{judge.ifRight?'√':'×'}" style="color:#{judge.ifRight?'green':'red'};font-weight:bolder;font-size:25px;font-family:宋体;"/>
+                                <br/>
+                            </ui:repeat>
+                        </p:panel>
+                        <p:separator rendered="#{fn:length(examCaseReport.examCase.essayItems)!=0}"/>
+
+                        <p:dataTable  value="#{examCaseReport.examCase.essayItems}" var="essay" rowIndexVar="row"  rendered="#{fn:length(examCaseReport.examCase.essayItems)!=0}">
+                            <p:column style="text-align:left;">
+                                <f:facet name="header" >
+                                    <h:outputText value="※问答题（共#{fn:length(examCaseReport.examCase.essayItems)}题，每题#{examCaseReport.examCase.examination.randomPaper.essayScore}分，参考得分：#{examCaseReport.examCase.essayScore}）"/>
+                                </f:facet>
+                                <h:outputText value="#{row+1}、#{essay.question.name}" styleClass="choiceTitle" escape="false"/><br/>
+                                <h:panelGrid columns="2" styleClass="threadColumn" cellpadding="0" cellspacing="0" columnClasses="w12,w80">
+                                    <h:outputText value="正确答案：" styleClass="answer" escape="false"/>
+                                    <h:outputText value="#{essay.question.answer}"  style="color:green;font-weight: bold;" escape="false"/>
+                                    <h:outputText value="考生填写：" styleClass="answer" escape="false"/>
+                                    <h:outputText value="#{essay.userAnswer}"  style="color:green;font-weight: bold;" escape="false"/>
+                                    <h:outputText value="正确率：" styleClass="answer"  />
+                                    <h:panelGroup>
+                                        <p:spinner value="#{essay.rightRatio}" stepFactor="0.1" max="1" min="0" >
+                                            <p:ajax event="change" process="@this" update="@this"/>
+                                        </p:spinner>
+                                    </h:panelGroup>
+                                </h:panelGrid>
+                            </p:column>
+                        </p:dataTable>
+
+                        <p:separator rendered="#{fn:length(examCaseReport.examCase.fileItems)!=0}"/>
+
+                        <p:dataTable  value="#{examCaseReport.examCase.fileItems}" var="file" rowIndexVar="row"  rendered="#{fn:length(examCaseReport.examCase.fileItems)!=0}">
+                            <p:column style="text-align:left;">
+                                <f:facet name="header" >
+                                    <h:outputText value="※文件题，共#{fn:length(examCaseReport.examCase.fileItems)}题，每题#{examCaseReport.examCase.examination.randomPaper.fileScore}分，参考得分："/>
+                                    <h:outputText value="#{examCaseReport.examCase.fileScore}">
+                                        <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}"/>
+                                    </h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{row+1}、#{file.question.name}" styleClass="choiceTitle" escape="false"/>
+                                <h:panelGrid columns="2" styleClass="threadColumn" cellpadding="0" cellspacing="0"  columnClasses="w12,w80">
+                                    <h:outputText value="操作步骤：" styleClass="answer" escape="false"/>
+                                    <h:outputText value="#{file.rightAnswer}"  style="color:green;font-weight: bold;" escape="false"/>
+                                    <h:outputText value="考生操作步骤：" styleClass="answer" escape="false"/>
+                                    <h:outputText value="#{file.userAnswer}"  style="color:green;font-weight: bold;" escape="false"/>
+                                    <h:outputText value="附件：" styleClass="answer" />
+                                    <h:panelGroup>
+                                        <h:outputLink target="_blank"  value="#{facesContext.externalContext.requestContextPath}/DownloadFileQuestionAttach?id=#{file.id}&amp;uid=#{examCaseReport.examCase.user.id}&amp;eid=#{examCaseReport.examCase.examination.id}" rendered="#{file.attached}">
+                                            <h:outputText value="点击下载"/>
+                                        </h:outputLink>
+                                    </h:panelGroup>
+                                    <h:outputText value="正确率："  styleClass="answer"/>
+                                    <h:panelGroup>
+                                        <p:spinner value="#{file.rightRatio}" stepFactor="0.1" max="1" min="0">
+                                            <p:ajax event="change" process="@this" update="@this"/>
+                                        </p:spinner>
+                                    </h:panelGroup>
+                                    <h:outputText value="教师评语：" styleClass="answer"/>
+                                    <h:inputTextarea value="#{file.remark}"  style="width:500px;height:100px;"/>
+                                </h:panelGrid>
+                            </p:column>
+                        </p:dataTable>
+
+                        <p:separator rendered="#{fn:length(examCaseReport.examCase.caseItems)!=0}"/>
+
+                        <p:dataTable  value="#{examCaseReport.examCase.caseItems}" var="case1" rowIndexVar="row"  rendered="#{fn:length(examCaseReport.examCase.caseItems)!=0}">
+                            <p:column style="text-align:left;">
+                                <f:facet name="header">
+                                    <h:outputText value="※#{examCaseReport.examCase.examination.caseAlias}，得分："/>
+                                    <h:outputText value="#{examCaseReport.examCase.caseScore}">
+                                        <f:convertNumber maxFractionDigits="#{applicationBean.maxFraction}"/>
+                                    </h:outputText>
+                                </f:facet>
+                                <p:panel>
+                                    <f:facet name="header">
+                                        <h:outputText value="#{row+1}、#{case1.question.nickName}（#{case1.question.name}）" escape="false" style="" styleClass="choiceTitle"/>
+                                    </f:facet>
+
+                                    <h:outputText value="#{case1.question.content}" styleClass="choiceTitle" escape="false" style="padding:5px 10px 5px 10px;"/>
+                                    <p:separator/>
+                                    <h:outputText value="※单选题，共#{fn:length(case1.question.choices)}题，每题#{case1.question.choiceScore}分，总得分：#{case1.choiceScore}" styleClass="questionHead"/>
+                                    <p:separator/>
+                                    <h:outputText value="※多选题，共#{fn:length(case1.question.multiChoices)}题，每题#{case1.question.multiChoiceScore}分，总得分：#{case1.multiChoiceScore}" styleClass="questionHead"/>
+                                    <p:separator/>
+                                    <p:dataTable  value="#{case1.fillItems}" var="fill" rowIndexVar="row" rendered="#{fn:length(case1.fillItems)!=0}">
+                                        <p:column style="text-align:left;">
+                                            <f:facet name="header">
+                                                <h:outputText value="※填空题（共#{fn:length(case1.fillItems)}题，每题#{case1.question.fillScore}分，参考得分：#{case1.fillScore}）" styleClass="questionHead"/><br/>
+                                            </f:facet>
+                                            <h:outputText value="#{row+1}、"/>
+                                            <ui:repeat value="#{fill.blocks}" var="b">
+                                                <h:outputText value="#{b.preStr}" escape="false" />
+                                                <h:outputText value="________"/>
+                                            </ui:repeat>
+                                            <h:outputText value="#{fill.lastStr}" escape="false" /><br/> 
+                                            <h:outputText value="正确答案：" styleClass="answer"/>
+                                            <h:outputText value="#{fill.rightAnswerStr}" escape="false"  style="color:green;font-weight: bold;"/>&nbsp;
+                                            <h:outputText value="考生填写：" styleClass="answer"/>
+                                            <h:outputText value="#{fill.userAnswerStr}" style="color:green;font-weight: bold;"/>&nbsp;
+                                            <h:outputText value="正确数：" styleClass="answer"/>
+                                            <h:inputText value="#{fill.rightNum}" style="width:80px;"/>
+                                            <br/>
+                                        </p:column>
+                                    </p:dataTable>
+                                    <p:separator rendered="#{fn:length(case1.fillItems)!=0}"/>
+                                    <h:outputText value="※判断题，共#{fn:length(case1.question.judges)}题，每题#{case1.question.judgeScore}分，总得分：#{case1.judgeScore}" styleClass="questionHead"/>
+                                    <p:separator/>
+                                    <p:dataTable  value="#{case1.essayItems}" var="essay" rowIndexVar="row"  rendered="#{fn:length(case1.essayItems)!=0}">
+                                        <p:column style="text-align:left;">
+                                            <f:facet name="header" >
+                                                <h:outputText value="※问答题，共#{fn:length(case1.question.essaies)}题，每题#{case1.question.essayScore}分，总得分：#{case1.essayScore}"/>
+                                            </f:facet>
+                                            <h:outputText value="（#{row+1}）#{essay.question.name}" styleClass="choiceTitle" escape="false"/><br/>
+                                            <h:panelGrid columns="2" styleClass="threadColumn" cellpadding="0" cellspacing="0" columnClasses="w13,w80">
+                                                <h:outputText value="正确答案：" styleClass="answer" escape="false"/>
+                                                <h:outputText value="#{essay.question.answer}"  style="color:green;font-weight: bold;" escape="false"/>
+                                                <h:outputText value="考生填写：" styleClass="answer" escape="false"/>
+                                                <h:outputText value="#{essay.userAnswer}"  style="color:green;font-weight: bold;" escape="false"/>
+                                                <h:outputText value="正确率：" styleClass="answer"  />
+                                                <h:panelGroup>
+                                                    <p:spinner value="#{essay.rightRatio}" stepFactor="0.1" max="1" min="0" >
+                                                        <p:ajax event="change" process="@this" update="@this"/>
+                                                    </p:spinner>
+                                                </h:panelGroup>
+                                            </h:panelGrid>
+                                        </p:column>
+                                    </p:dataTable>
+                                </p:panel>
+                            </p:column>
+                        </p:dataTable>
+
+
+                        <p:separator/>
+                        是否发布成绩？<h:selectBooleanCheckbox value="#{examCaseReport.examCase.ifPub}"/><br/>
+                        用户所获积分？<h:inputText value="#{examCaseReport.examCase.newBbsScore}"/>
+                        <p:separator/>
+                        <p:commandButton ajax="false" value="提交" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'score')}" action="#{examCaseReport.submitReport}" styleClass="commonSubmit"></p:commandButton>
+                    </div></h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

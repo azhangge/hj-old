@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"  lang="en">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+    </head>
+    <body>
+        <ui:composition>
+        <link rel="stylesheet" type="text/css" href="/css/loginPopup.css"/>
+        <style>
+        	.ui-widget-header{
+        		background:none;
+        		background-color: #4BB9F3!important;
+        		font-family: 微软雅黑, sans-serif;
+				text-align: center;
+				font-size: 18px;
+                display: block;
+                padding-top: 12px;
+                padding-left: 12px;
+                color: #FFFFFF;
+                font-weight:normal;
+        	}
+        	span.ui-button-text.ui-c{
+        		color: #000000;
+        	}
+        	.generalInfo{
+        		font-size:14px!important;
+        		text-align:center;
+        	
+        	}
+        	a.operation:link {
+			    font-size: 14px!important;
+			    color: #0073ea;
+			    text-decoration: none;
+			}
+			a.operation:visited {
+			    font-size: 14px!important;
+			    text-decoration:none;
+			}
+			a.operation:hover {
+			    font-size: 14px!important;
+			    text-decoration: underline!important;
+			}
+			a.operation:active {
+			    font-size: 14px!important;
+			    text-decoration: none;
+			}
+        </style>
+            <p:dialog id="login1" widgetVar="login1" width="300" showEffect="drop" hideEffect="drop" resizable="false" style="z-index: 1000;">
+                <f:facet name="header">
+                    <h:outputText value="登录/Login" />
+                </f:facet>
+                <f:facet name="controls">
+                    <h:graphicImage value="/resources/images/close.png" style="cursor:pointer" onclick="login1.hide()" />
+                </f:facet>
+                <p:outputPanel autoUpdate="true">
+                    <script>          
+                        function testLogin() {
+                            //alert('ok');
+                            if (#{clientSession.ifLogin})
+                            {
+                                PF('login1').hide();
+
+                            }
+                            PF('loginButton').enable();
+
+                        }
+                    </script>
+                </p:outputPanel>
+                <h:panelGrid columns="1" style="width:98%;margin: 5px 0px 0px 0px;height:120px; background:#fff;" >
+                    <h:panelGroup style="display:none;">
+                        <h:outputText value="标识类型：" styleClass="myTip"/>
+                        <h:selectOneMenu value="#{bbsLogin.authStr}">
+  <!--                           <c:if test="#{applicationBean.systemConfig.openUrn}">
+                                <f:selectItem itemLabel="用户名" itemValue="urn"/>
+                            </c:if> -->
+                            <c:if test="#{applicationBean.systemConfig.openPhone}">
+                                <f:selectItem itemLabel="手机号" itemValue="phone"/>
+                            </c:if>
+<!--                             <c:if test="#{applicationBean.systemConfig.openPid}">
+                                <f:selectItem itemLabel="身份证号" itemValue="pid"/>
+                            </c:if>
+                            <c:if test="#{applicationBean.systemConfig.openCid}">
+                                <f:selectItem itemLabel="#{applicationBean.cidStr}" itemValue="cid" />
+                            </c:if> -->
+                        </h:selectOneMenu>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup>
+                    <!-- <h:outputText value="用户标识: " /> -->
+                    <img src="../images/iconOfUser.jpg" style="height: 40px;width: 40px;float: left;margin-left:23px;"></img>
+                    <p:inputText id="urn" onfocus="this.select()" style="width:180px;height:40px; margin:0px 0px 10px 0px;-webkit-box-shadow:inset 0 2px 2px #ffffff;box-shadow:inset 0 2px 2px #ffffff;" autocomplete="off" placeholder="手机号" value="#{bbsLogin.tempId}" >
+                    </p:inputText>
+                    <!-- <h:outputText value="密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码: " /> -->
+                    <img src="../images/iconOfPassword.jpg" style="height: 40px;width: 40px;float: left;margin:5px 0px 0px 23px;"></img>
+                    <!-- 
+                    <p:password id="pwd" onfocus="this.select()" style="width:180px;height:35px;margin-left:3px;margin-bottom:10px;-webkit-box-shadow:inset 0 2px 2px #ffffff;box-shadow:inset 0 2px 2px #ffffff;" autocomplete="off"  value="#{bbsLogin.pwd}">
+                    </p:password>
+                     -->
+                    <p:password id="pwd" onfocus="this.select()" style="width:180px;height:40px;margin:5px 0px 0px 0px;-webkit-box-shadow:inset 0 2px 2px #ffffff;box-shadow:inset 0 2px 2px #ffffff;" autocomplete="off;"  placeholder="密码" value="#{bbsLogin.pwd}">
+                    </p:password>
+                    
+                    
+                     <p:commandButton ajax="true" widgetVar="loginButton" value="登录" update=":myForm:mainPanel" onclick="PF('loginButton').disable();"
+                                         action="#{bbsLogin.checkUserWithoutRedirecting}" style="width:220px; height:40px;margin:20px 0px 0px 23px;"
+                                         oncomplete="javascript:testLogin();" process="@form"></p:commandButton>
+                    </h:panelGroup>
+                    
+                    <!--  
+                    <h:panelGrid columns="2" style="width:100%;" cellpadding="0" cellspacing="0">
+                        <p:commandButton ajax="true" widgetVar="loginButton" value="登录" update=":myForm:mainPanel" onclick="PF('loginButton').disable();"
+                                         action="#{bbsLogin.checkUserWithoutRedirecting}" style="width:80px; height:35px;"
+                                         oncomplete="javascript:testLogin();" process="@form"></p:commandButton>
+                        <h:panelGroup>
+                            <h:selectBooleanCheckbox value="#{bbsLogin.keepStatus}"/>
+                            <h:outputText value="七天内自动登录"/>
+                        </h:panelGroup>
+                    </h:panelGrid>
+                    -->
+                    <h:panelGroup>
+                            <h:selectBooleanCheckbox value="#{bbsLogin.keepStatus}" style="margin:10px 0px 5px 25px;padding:0px 0px 0px 0px;"/>
+                            <h:outputText value="七天内自动登录" style="margin:5px 0px 0px 0px; "/>
+                        </h:panelGroup>
+                    
+                </h:panelGrid>
+
+                <!-- <p:separator/> -->
+                <h:panelGrid columns="3" styleClass="generalInfo" style="width:100%;margin:0px 0px 0px 0px;">
+                    <h:panelGroup>
+                        <h:outputLabel value="还没有帐号？" rendered="#{!(applicationBean.systemConfig.systemClosed==0)}"/>&nbsp;&nbsp;
+                    	<h:outputLink value="#{facesContext.externalContext.requestContextPath}/talk/GetPWD.xhtml" styleClass="operation">
+                        	<h:outputText value="忘记密码"/>
+                    	</h:outputLink>
+                    	&nbsp;&nbsp;
+                    	<h:outputLink value="#{facesContext.externalContext.requestContextPath}/talk/Register3.xhtml" styleClass="operation" rendered="#{!(applicationBean.systemConfig.systemClosed==0)}">
+                        	<h:outputText value="立即注册"/>
+                    	</h:outputLink>
+                    </h:panelGroup>
+                </h:panelGrid>
+                <p:outputPanel autoUpdate="true">
+                    <h:messages style="font-size: 9pt;color: red;"></h:messages>
+                </p:outputPanel>
+            </p:dialog>
+        </ui:composition>
+    </body>
+</html>

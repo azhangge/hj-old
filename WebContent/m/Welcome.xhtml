@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:f="http://java.sun.com/jsf/core" lang="en"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>My Facelets Page</title>
+	<meta http-equiv="keywords" content="enter,your,keywords,here" />
+	<meta http-equiv="description"
+		content="A short description of this page." />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+	<!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+</h:head>
+<h:body>
+	<ui:composition template="BackGeneral.xhtml">
+		<ui:define name="content">
+			<h:form>
+				<ui:include src="/AjaxStatus2.xhtml" />
+				<div>
+					<div class="introduction">
+						<h:outputText
+							value="当前系统共有 #{welcome.userNum} 位注册用户，#{welcome.examNum} 个综合考试，#{welcome.caseNum} 个综合考试成绩信息。" />
+
+						<!-- <br/>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <ui:include src="/GeneralHelper.xhtml">
+                                <ui:param name="name" value="系统总体架构图"></ui:param>
+                                <ui:param name="id" value="203944271870031"></ui:param>
+                            </ui:include>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <ui:include src="/GeneralHelper.xhtml">
+                                <ui:param name="name" value="考试设置一般流程"></ui:param>
+                                <ui:param name="id" value="204092342303056"></ui:param>
+                            </ui:include> -->
+
+					</div>
+
+					<br />
+					<p:chart type="line" model="#{welcome.lineModel}"
+						style="height:400px;width:100%;" />
+					<br />
+					<p:dataTable paginator="true" paginatorPosition="bottom"
+						value="#{listExamination.exams}" var="us" emptyMessage="无数据"
+						styleClass="list" rowIndexVar="row" style="width:100%" rows="10">
+						<p:column id="num" style="width:40px;text-align: center;">
+							<h:outputText style="height: 5%" value="#{row+1}" />
+							<f:facet name="header">
+								<h:outputText id="outputTextnum" value="序号" />
+							</f:facet>
+						</p:column>
+
+						<p:column filterBy="#{us.name}" filterMatchMode="contains" sortBy="#{us.name}">
+							<h:outputText value="#{us.name}" />
+							<f:facet name="header">
+								<h:outputText value="考试名称" />
+							</f:facet>
+						</p:column>
+						<p:column style="width:80px;text-align: center;" filterBy="#{us.timeLen}" filterMatchMode="contains" sortBy="#{us.timeLen}">
+							<h:outputText value="#{us.timeLen}分钟" />
+							<f:facet name="header">
+								<h:outputText value="考试时长" />
+							</f:facet>
+						</p:column>
+						<p:column style="width:30px;text-align: center;"  sortBy="#{us.ifShow}">
+							<h:outputText value="#{us.ifShow?'是':'否'}" />
+							<f:facet name="header">
+								<h:outputText value="显示" />
+							</f:facet>
+						</p:column>
+						<p:column style="width:80px;"  sortBy="#{us.paperType}">
+							<h:outputText rendered="#{us.paperType=='random'}" value="简单随机" />
+							<h:outputText rendered="#{us.paperType=='random2'}" value="随机" />
+							<h:outputText rendered="#{us.paperType=='manual'}" value="人工" />
+							<f:facet name="header">
+								<h:outputText value="试卷类型" />
+							</f:facet>
+						</p:column>
+						<p:column  sortBy="#{us.paperType}">
+							<h:outputText rendered="#{us.paperType=='random'}"
+								value="#{us.randomPaper.name}" />
+							<h:outputText rendered="#{us.paperType=='random2'}"
+								value="#{us.random2Paper.name}" />
+							<h:outputText rendered="#{us.paperType=='manual'}"
+								value="#{us.manualPaper.name}" />
+							<f:facet name="header">
+								<h:outputText value="试卷" />
+							</f:facet>
+						</p:column>
+						<p:column style="width:50px;" sortBy="#{us.displayMode}">
+							<h:outputText rendered="#{us.displayMode=='single'}" value="单题" />
+							<h:outputText rendered="#{us.displayMode=='multiple'}" value="多题" />
+							<f:facet name="header">
+								<h:outputText value="模式" />
+							</f:facet>
+						</p:column>
+						<p:column style="width:30px;">
+							<h:outputText
+								value="#{us.ifDirect?lang['exam.intelligent']:lang['exam.artificial']}" />
+							<f:facet name="header">
+								<h:outputText value="#{lang['exam.score_type']}" />
+							</f:facet>
+						</p:column>
+						<p:column style="width:60px!important;text-align: center;" filterBy="#{us.examCaseNum}" filterMatchMode="contains" sortBy="#{us.examCaseNum}">
+							<f:facet name="header">
+								<h:outputText value="成绩数" escape="false" />
+							</f:facet>
+							<h:outputText value="#{us.examCaseNum}" styleClass="tip" />
+						</p:column>
+						<p:column style="width:60px!important;text-align: center;" filterBy="#{us.topExamCase.score}" filterMatchMode="contains" sortBy="#{us.topExamCase.score}">
+							<f:facet name="header">
+								<h:outputText value="最高分" escape="false" />
+							</f:facet>
+							<h:outputText value="#{us.topExamCase.score}" styleClass="tip">
+								<f:convertNumber maxFractionDigits="1" minFractionDigits="1" />
+							</h:outputText>
+						</p:column>
+
+						<p:column style="width:110px;text-align: center;"  sortBy="#{us.availableBegain}">
+							<h:outputText value="#{us.availableBegain}">
+								<f:convertDateTime pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" />
+							</h:outputText>
+							<f:facet name="header">
+								<h:outputText value="开放时间" />
+							</f:facet>
+						</p:column>
+						<p:column style="width:110px;text-align: center;"   sortBy="#{us.availableEnd}">
+							<h:outputText value="#{us.availableEnd}">
+								<f:convertDateTime pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" />
+							</h:outputText>
+							<f:facet name="header">
+								<h:outputText value="结束时间" />
+							</f:facet>
+						</p:column>
+					</p:dataTable>
+
+					<br />
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

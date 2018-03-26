@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <h:head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </h:head>
+    <h:body>
+        <ui:composition template="General3.xhtml">
+            <ui:define name="title">
+                <h:outputText value="错题中心" />
+            </ui:define>
+            <ui:define name="content">
+                <ui:include src="ViewKnowledgePopup.xhtml"/>
+                <p:panel id="topNav8" styleClass="frontColumn topNav8Wrapper">
+                    <h:outputLink value="#{facesContext.externalContext.requestContextPath}" styleClass="nav8">
+                        <h:outputText value="首页" />
+                    </h:outputLink>
+                    <h:outputText value="/" styleClass="navSeparator"/>
+                    <h:outputText value="知识点" styleClass="nav8"/>
+                    <h:outputText value="/" styleClass="navSeparator"/>
+                    <h:outputText value="我的难点" styleClass="nav8"/>
+                </p:panel>
+                <p:dataTable value="#{wrongKnowledgeList.knows}" var="question" rowIndexVar="row" styleClass="frontColumn" 
+                             style="width:100%;" rows="10" paginator="true" paginatorPosition="bottom" emptyMessage="暂无数据">
+                    <f:facet name="header">
+                        <h:outputText value="我的难点" />
+                    </f:facet>
+                    <p:column style="text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="序号" />
+                        </f:facet>
+                        <h:outputText value="#{row+1}"></h:outputText>
+                    </p:column>
+                    <p:column style="width:550px!important;text-align: left;">
+                        <f:facet name="header">
+                            <h:outputText value="知识点名称" />
+                        </f:facet>
+                        <h:outputText value="#{fn:substring(question.knowledge.title,0,50)}#{fn:length(question.knowledge.title)>50?'...':''}"></h:outputText>
+                    </p:column>
+                    <p:column style="width:80px!important;text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="出错次数" />
+                        </f:facet>
+                        <h:outputText value="#{question.wrongTimes}" style="color:red;" styleClass="tip"/><br/>
+                    </p:column>
+                    <p:column style="text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="查看内容" />
+                        </f:facet>
+                        <p:commandLink action="#{wrongKnowledgeList.selectKnowledge(question.knowledge.id)}"  update=":myForm:displayKnowledge" oncomplete="PF('knowledgeDialog').show()"  styleClass="news" value="查看内容">
+                        </p:commandLink>
+                    </p:column>
+                    <p:column style="text-align: center;">
+                        <f:facet name="header">
+                            <h:outputText value="删除" />
+                        </f:facet>
+                        <p:commandLink value="删除" action="#{wrongKnowledgeList.delKnowledge(question.id)}" update="@form"  onclick="if (!confirm('确认要删除此难点吗？'))
+                                                    return false" styleClass="news"/>
+                    </p:column>
+                </p:dataTable>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

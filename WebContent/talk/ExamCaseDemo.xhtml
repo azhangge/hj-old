@@ -1,0 +1,131 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:f="http://java.sun.com/jsf/core" lang="en">
+    <h:head>
+        <title>
+            <ui:insert name="title"></ui:insert>
+            #{examCaseMB.examCase.examination.name} - #{applicationBean.info.siteHeader}</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <link rel="stylesheet" type="text/css"
+              href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs.css" />
+        <link rel="stylesheet" type="text/css"
+              href="#{facesContext.externalContext.requestContextPath}/resources/rerebbs_a.css" />
+    </h:head>
+    <h:body style="padding:0;margin:0;">
+
+        <h:form id="myForm" style="padding: 0px 0px 0px 0px;margin: 0px 0px 0px 0px;">
+            <p:commandButton value="打印试题" type="button">  
+                    <p:printer target="exam_demo" />  
+                </p:commandButton>  
+            <p:panel id="exam_demo" style="width:957px;margin: 0px auto;">
+                
+                <div>
+                    <h:panelGrid columns="3" style="width:90%;" cellpadding="0" cellspacing="0">
+                        <h:panelGroup>
+                            <h:outputText value="考试名称："/>
+                            <h:outputText value="#{examCaseMB.examCase.examination.name}"/>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <h:outputText value="考试时长："/>
+                            <h:outputText value="#{examCaseMB.examCase.examination.timeLen}分钟"/>
+                        </h:panelGroup>
+                    </h:panelGrid>
+                </div>
+
+                <p:dataTable   value="#{examCaseMB.examCase.choiceItems}" var="choice" rowIndexVar="row" rendered="#{fn:length(examCaseMB.examCase.choiceItems)!=0}">
+                    <p:column style="text-align:left;">
+                        <f:facet name="header">
+                            <h:outputText value="※ 单选题（从下列各题的备选答案中选出一个正确答案。答案选错或未选者，该题不得分。每小题#{examCaseMB.examCase.examination.choiceScore}分，共#{examCaseMB.examCase.examination.choiceTotal}题。）"/>
+                        </f:facet>
+                        <h:outputText value="#{row+1}、#{choice.question.name}" style="#{choice.marked?'color:red;':''}" styleClass="choiceTitle" escape="false"/>
+
+                        <br/>
+                        <div style="margin-left: 30px;">
+                            <ui:repeat value="#{choice.question.choices}" var="ch">
+                                <h:outputText value="#{ch.labelRendered}.&nbsp;#{ch.name}" styleClass="choiceTitle"/>
+                                <br/>
+                            </ui:repeat>
+                        </div>
+                    </p:column>
+                </p:dataTable>
+
+                <p:dataTable   value="#{examCaseMB.examCase.multiChoiceItems}" var="choice" rowIndexVar="row" rendered="#{fn:length(examCaseMB.examCase.multiChoiceItems)!=0}">
+                    <p:column style="text-align:left;">
+                        <f:facet name="header">
+                            <h:outputText value="※ 多选题（从下列各题的备选答案中选出正确答案。答案选错或未选者，该题不得分。每小题#{examCaseMB.examCase.examination.multiChoiceScore}分，共#{examCaseMB.examCase.examination.multiChoiceTotal}题。）"/>
+                        </f:facet>
+                        <h:outputText value="#{row+1}、#{choice.question.name}" style="#{choice.marked?'color:red;':''}" styleClass="choiceTitle" escape="false"/>
+
+                        <br/>
+                        <div style="margin-left: 30px;">
+                            <ui:repeat value="#{choice.question.choices}" var="ch">
+                                <h:outputText value="#{ch.labelRendered}.&nbsp;#{ch.name}" styleClass="choiceTitle"/>
+                                <br/>
+                            </ui:repeat>
+                        </div>
+                    </p:column>
+                </p:dataTable>
+
+                <p:dataTable   value="#{examCaseMB.examCase.fillItems}" var="fill"  rowIndexVar="row" rendered="#{fn:length(examCaseMB.examCase.fillItems)!=0}">
+                    <p:column style="text-align:left;">
+                        <f:facet name="header">
+                            <h:outputText value="※ 填空题（每小题#{examCaseMB.examCase.examination.fillScore}分，共#{examCaseMB.examCase.examination.fillTotal}题。）"/>
+                        </f:facet>
+                        <h:outputText value="#{row+1}、" style="#{fill.marked?'color:red;':''}" styleClass="choiceTitle"/>
+                        <ui:repeat value="#{fill.blocks}" var="b">
+                            <h:outputText value="#{b.preStr}" style="#{fill.marked?'color:red;':''}" escape="false" styleClass="choiceTitle"/>
+
+                            <h:outputText value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" style="border-bottom: 1px solid black;" />
+                        </ui:repeat>
+                        <h:outputText value="#{fill.lastStr}" style="#{fill.marked?'color:red;':''}" escape="false" styleClass="choiceTitle"/> 
+
+                    </p:column>
+                </p:dataTable>
+
+                <p:dataTable  value="#{examCaseMB.examCase.judgeItems}" var="judge" rowIndexVar="row"  rendered="#{fn:length(examCaseMB.examCase.judgeItems)!=0}">
+                    <p:column style="text-align:left;">
+                        <f:facet name="header" >
+                            <h:outputText value="※ 判断题（每小题#{examCaseMB.examCase.examination.judgeScore}分，共#{examCaseMB.examCase.examination.judgeTotal}题。）"/>
+                        </f:facet>
+                        <h:outputText value="#{row+1}、#{judge.question.name}" style="#{judge.marked?'color:red;':''}" escape="false" styleClass="choiceTitle"/>
+
+
+                    </p:column>
+                </p:dataTable>
+
+                <p:dataTable  value="#{examCaseMB.examCase.essayItems}" var="essay" rowIndexVar="row"  rendered="#{fn:length(examCaseMB.examCase.essayItems)!=0}">
+                    <p:column style="text-align:left;">
+                        <f:facet name="header" >
+                            <h:outputText value="※ 问答题（每小题#{examCaseMB.examCase.examination.essayScore}分，共#{examCaseMB.examCase.examination.essayTotal}题。）"/>
+                        </f:facet>
+                        <h:outputText value="#{row+1}、#{essay.question.name}" style="#{essay.marked?'color:red;':''}" styleClass="choiceTitle" escape="false"/>
+                        <br/><br/><br/><br/><br/><br/><br/><br/>
+                    </p:column>
+                </p:dataTable>
+
+                <p:dataTable  value="#{examCaseMB.examCase.fileItems}" var="file" rowIndexVar="row"  rendered="#{fn:length(examCaseMB.examCase.fileItems)!=0}">
+                    <p:column style="text-align:left;">
+                        <f:facet name="header" >
+                            <h:outputText value="※ 文件题（每小题#{examCaseMB.examCase.examination.fileScore}分，共#{examCaseMB.examCase.examination.fileTotal}题。）"/>
+                        </f:facet>
+                        <h:outputText value="#{row+1}、#{file.question.name}" style="#{file.marked?'color:red!important;':''}" styleClass="choiceTitle" escape="false"/>
+                        <br/><br/><br/><br/><br/><br/><br/><br/>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+
+        </h:form>
+
+    </h:body>
+</html>
+

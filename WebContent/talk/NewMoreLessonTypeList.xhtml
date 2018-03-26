@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:f="http://java.sun.com/jsf/core" lang="en"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:head>
+	<title>My Facelets Page</title>
+	<meta http-equiv="keywords" content="enter,your,keywords,here" />
+	<meta http-equiv="description"
+		content="A short description of this page." />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+	<style>
+	.ui-column-customfilter{
+		display: inline;
+	}
+	</style>
+</h:head>
+<h:body>
+	<ui:composition template="../HJ/HJGeneral.xhtml">
+		<ui:define name="title">
+			<h:outputText value="最新课程列表 -华杰学习平台" />
+		</ui:define>
+		<ui:define name="content">
+		<link type="text/css" rel="stylesheet" href="../HJ/css/navigation.css" />
+			<script type="text/javascript" language="javascript">
+				function aabbcc(url) {
+					var scrWidth = screen.availWidth;
+					var scrHeight = screen.availHeight;
+					var self = window
+							.open(
+									url,
+									'',
+									"fullscreen=3,resizable=false,toolbar=no,menubar=no,scrollbars=yes,location=no,top=0,left=0,width="
+											+ scrWidth + ",height=" + scrHeight);
+					//self.resizeTo(scrWidth,scrHeight);
+					self.moveTo(0, 0);
+				}
+			/* 	$(function(){ 
+					alert($('#myForm\\:NewMoreTable').val());
+					alert($('.ui-column-customfilter').attr("style","display:inline"));
+				});  */
+				
+			</script>
+			<!-- <p:panel id="topNav8" styleClass="frontColumn topNav8Wrapper">
+				<h:outputLink value="#{facesContext.externalContext.requestContextPath}" styleClass="nav8">
+					<h:outputText value="首页" />
+				</h:outputLink>
+				<h:outputText value=">" styleClass="navSeparator" />
+				<h:outputText value="自助练习" styleClass="nav8" />
+                <h:outputLink value="#{facesContext.externalContext.requestContextPath}/talk/BuffetExamCaseReportList.jspx" styleClass="nav8" style="float:right;">
+                    <h:outputText value="练习成绩查询" />
+                </h:outputLink>
+			</p:panel> -->
+			<div class="navigation yahei bold" >
+				<div class="navigation_div">
+					<a href="#{facesContext.externalContext.requestContextPath}/" class="navigation_link">首页</a>
+				</div>
+				<div class="navigation_separate">/</div>
+				<div class="navigation_div">最新课程</div>
+			</div>
+			<div class="div-content">
+				<div class="div-panel">
+				<p:dataTable id='NewMoreTable'
+				    widgetVar='NewMoreTable'
+					value="#{jTindex.lessonTypes2}"
+					var="newLesson" style="width:100%" styleClass="frontColumn" rowIndexVar="row" emptyMessage="暂无最新课程" rows="20"
+					paginator="true" paginatorPosition="bottom">
+					<p:column id="num" style="width:50px;text-align: left;">
+						<h:outputText style="height: 5%" value="#{row+1}" />
+						<f:facet name="header">
+							<h:outputText id="outputTextnum" value="序号" />
+						</f:facet>
+					</p:column>
+					<p:column  sortBy="#{newLesson.name}" style="width:200px!important;text-align: left;"
+						filterBy="#{newLesson.name}" filterMatchMode="contains" filterStyle="width:40%;display:inline;margin-left:10px;">
+						<f:facet name="header">
+							<h:outputText value="课程名称" />
+						</f:facet>
+						<h:outputText value="#{newLesson.name}"></h:outputText>
+					</p:column>
+					<p:column  sortBy="#{newLesson.availableBegain}" style="width:200px!important;text-align: left;" 
+						filterBy="#{newLesson.availableBegain}" filterMatchMode="contains" filterStyle="width:30%;display:inline;margin-left:10px;">
+						
+						<f:facet name="header">
+							<h:outputText value="发布时间"/>
+						</f:facet>
+<!-- 
+						<f:facet name="filter">
+	           	            <p:selectOneMenu onchange="PF('NewMoreTable').filter()"  >
+	              	      		<f:selectItem itemLabel="请选择年份" itemValue="#{null}" noSelectionOption="true" />
+                 		  		 <f:selectItem itemLabel="2019" itemValue="#{2019}" />
+                 		  		 <f:selectItem itemLabel="2018" itemValue="#{2018}" />
+                 		  		 <f:selectItem itemLabel="2017" itemValue="#{2017}" />
+                 		  		 <f:selectItem itemLabel="2016" itemValue="#{2016}" />
+                 		  		 <f:selectItem itemLabel="2015" itemValue="#{2015}" />
+              				 </p:selectOneMenu>
+         			   </f:facet> -->
+
+						 <h:outputText value="#{newLesson.availableBegain}"  >
+											<f:convertDateTime pattern="yyyy/MM/dd HH:mm" />  
+								</h:outputText> 
+						<br />
+					</p:column>
+					<p:column style="text-align: center;width:100px;">
+						<f:facet name="header">
+							<h:outputText value="操作" />
+						</f:facet>
+						<p:button value="进入课程" href="#{facesContext.externalContext.requestContextPath}/talk/LessonList.jspx?tid=#{newLesson.id}" />
+					</p:column>
+				</p:dataTable>
+				</div>
+			</div>
+		</ui:define>
+	</ui:composition>
+</h:body>
+
+</html>

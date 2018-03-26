@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:poue="http://primefaces.org/ui/extensions"
+      xmlns:p="http://primefaces.org/ui">
+    <head>
+        <title>My Facelets Page</title>
+        <meta http-equiv="keywords" content="enter,your,keywords,here" />
+        <meta http-equiv="description"
+              content="A short description of this page." />
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+        <!--<link rel="stylesheet" type="text/css" href="styles.css">-->
+    </head>
+    <body>
+        <ui:composition template="BackGeneral.xhtml">
+            <ui:define name="content">
+
+
+                <h:form id="myForm">
+                    <script type="text/javascript" src="../resources/ckfinder/ckfinder.js"></script>
+                    <script type="text/javascript" language="javascript" src="#{facesContext.externalContext.requestContextPath}/rere_wimg_up/js/wordimage_uploader1.1.js"></script>
+
+                    <script type="text/javascript">
+                        //var editor1 = CKEDITOR.replace('myForm:editor1');
+                        function onLoadCallback(editor1) {
+                            var ed = PF(editor1).instance;
+                            CKFinder.setupCKEditor(ed, '../resources/ckfinder/');
+                        }
+                        
+                        function changeStatus(obj){
+                        	var type = obj.value;
+                        	var id = 'myForm:'+type;
+                        	var urlId = id+'Url';
+                        	var obj1 = document.getElementById('myForm:inner');
+                        	var obj2 = document.getElementById('myForm:innerUrl');
+                        	var obj3 = document.getElementById('myForm:outter');
+                        	var obj4 = document.getElementById('myForm:outterUrl');
+                        	if(type == 'inner'){
+                        		obj1.style.display='inline';
+                        		obj2.style.display='inline';
+                        		obj3.style.display='none';
+                        		obj4.style.display='none';
+                        	}else if(type == 'outter'){
+                        		obj1.style.display='none';
+                        		obj2.style.display='none';
+                        		obj3.style.display='inline';
+                        		obj4.style.display='inline';
+                        	}else{
+                        		obj1.style.display='none';
+                        		obj2.style.display='none';
+                        		obj3.style.display='none';
+                        		obj4.style.display='none';
+                        	}
+                        }
+
+                    </script>
+                    <h:outputScript target="body" rendered="#{applicationBean.systemConfig.autoUpload}">
+                        var sUrl = 'http://#{facesContext.externalContext.requestServerName}:#{facesContext.externalContext.requestServerPort}#{facesContext.externalContext.requestContextPath}/servlet/WordImageUploader';
+                        var appName = '#{facesContext.externalContext.requestContextPath}';
+                        var repStr1 = 'http://#{facesContext.externalContext.requestServerName}:#{facesContext.externalContext.requestServerPort}#{facesContext.externalContext.requestContextPath}';
+                        var repStr2 = '..';
+                        var uploader = new WordImageUploader(sUrl, appName,repStr1,repStr2);
+                    </h:outputScript>
+                    <ui:include src="/AjaxStatus2.xhtml"/>
+                    <h:outputScript name="chinese_locale.js" library="js"/>
+                    <div>
+                        <h:outputText  styleClass="tit"
+                                       value="－#{aALesson.flag?'修改资料':'添加资料'}－" />
+                        <p:separator/>
+                        <h:panelGrid columns="2" cellpadding="0"  columnClasses="thdL,thdR">
+                            <h:outputText value="资料名称：" />
+                            <h:panelGroup>
+	                            <p:inputText value="#{aALesson.exam.name}" style="width:600px;" required="true" label="资料名称" id="name" >
+		                            <p:ajax update="msgName" event="keyup" />
+		                            <f:validateLength maximum="100"></f:validateLength>
+	                            </p:inputText>
+	                            <p:message for="name" showSummary="请填写名称" id="msgName" display="default" style="float:right;"/>
+                            </h:panelGroup>
+                            <!-- <h:outputText value="教师：" />
+                            <p:inputText value="#{aALesson.exam.teacher}" style="width:80px;" /> -->
+                            <h:outputText value="课时数：" />
+                            <p:inputText value="#{aALesson.exam.classNum}" style="width:80px;" />
+                            <h:outputText value="次序：" />
+                            <p:inputText value="#{aALesson.exam.ord}" style="width:80px;" />
+                            
+                            <h:outputText value="所属课程：" />
+                            <h:panelGroup>
+                            <h:selectOneMenu value="#{aALesson.typeId}" action="" required="true" label="关联课程" id="name1">
+                                <f:selectItem itemLabel="-请选择所属课程-"/>
+                                <f:selectItems value="#{aALesson.types}" var="type1" itemLabel="#{type1.name}" itemValue="#{type1.id}"/>
+                                <p:ajax update="msgName2" event="keyup" />
+                            </h:selectOneMenu>
+                            <p:message for="name1" showSummary="所属课程" id="msgName2" display="default" style="float:right;"/>
+                            </h:panelGroup>
+                            
+                            <h:outputText value="所属章："  rendered="#{aALesson.exam.chapterType != 1}"/>                        
+                            <h:selectOneMenu value="#{aALesson.chapterId}" style="float:left;width:415px" rendered="#{aALesson.exam.chapterType != 1}">
+                                <f:selectItem itemValue="0" itemLabel="-请选择所属章-"/>
+                                <f:selectItems value="#{aALesson.chapters}" var="type2" itemLabel="#{type2.name}" itemValue="#{type2.id}"/>                               
+                            	<h:outputText value="（选择了章即为节，未选择则为章）"/>
+                            </h:selectOneMenu>
+                                                                                                          
+                            <h:outputText value="前台显示？" style="display:none"/>
+                            <h:panelGroup style="display:none">
+                                <h:selectBooleanCheckbox value="#{aALesson.exam.ifShow}"/>
+                                <h:outputText value="（已经过期的学习资料或还未开放的资料可以先设置好，但不在前台显示）。" />
+                            </h:panelGroup>
+                            <h:outputText value="删除记录？" style="display:none"/>
+                            <h:panelGroup style="display:none">
+                                <h:selectBooleanCheckbox id="allowUserDel" value="#{aALesson.exam.allowUserDel}"/>
+                                <h:outputLabel for="allowUserDel" value="（是否允许用户在前台将自己的学习记录删除（重要资料不推荐））。" />
+                            </h:panelGroup>
+                            <h:outputText value="消耗积分："  rendered="#{copyrightController.sysType!='1'}"/>
+                            <h:panelGroup rendered="#{copyrightController.sysType!='1'}">
+                                <p:spinner value="#{aALesson.exam.scorePaid}"  min="0" size="5"/>
+                                <h:outputText value="（用户学习此学习资料需要消耗的积分数）。" />
+                            </h:panelGroup>
+							<!-- 
+                            <h:outputText value="获得积分："  rendered="#{copyrightController.sysType!='1'}"/>
+                            <h:panelGroup rendered="#{copyrightController.sysType!='1'}">
+                                <p:spinner value="#{aALesson.exam.bbsScore}"  min="0" size="5"/>
+                                <h:outputText value="（学习完成后获得的积分数）。" />
+                            </h:panelGroup> -->
+
+
+                            <h:outputText value="开放时间：" />
+                            <p:calendar value="#{aALesson.exam.availableBegain}" navigator="true" pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" locale="zh_CN"/>
+                            <h:outputText value="结束时间：" />
+                            <p:calendar value="#{aALesson.exam.availableEnd}" navigator="true" pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" locale="zh_CN"/>
+                            
+                            <!-- <h:outputText value="开放#{applicationBean.departmentStr}：" />
+                            <p:treeTable id="dc" value="#{aALesson.root}" var="dic" style="width:600px;" emptyMessage="无部门！" >
+                                <p:column style="width:200px;">
+                                    <f:facet name="header">
+                                        <h:outputText value="部门名称"></h:outputText>
+                                    </f:facet>
+                                    <h:outputText value="#{dic.name}" ></h:outputText>
+                                </p:column>
+                                <p:column style="width:100px;">
+                                    <f:facet name="header">
+                                        <h:outputText value="选择"></h:outputText>
+                                    </f:facet>
+                                    <h:selectBooleanCheckbox value="#{dic.selected}">
+                                        <p:ajax process="@form" listener="#{aALesson.checkSons(dic.id,dic.selected)}" update="dc"/>
+                                    </h:selectBooleanCheckbox>
+                                </p:column>
+                            </p:treeTable> -->
+
+                            <h:outputText value="选择随堂练习挂载点：" />
+							
+                            <p:treeTable id="goodsTable" value="#{aALesson.root2}"  var="dic" style="width:600px;" scrollHeight="250"
+                            emptyMessage="无章节练习！" selectionMode="multiple" selection="#{aALesson.selectedNodes}" scrollable="true">
+                                <f:facet name="header">
+                               		 <h:outputText value="请使用Ctrl、Shift键完成知识点的多选"></h:outputText>
+                           		</f:facet>
+                                <p:column >
+                                    <f:facet name="header" >
+                                        <h:outputText value="题库名称" />
+                                    </f:facet>
+                                    <h:outputText value="#{dic.name}" ></h:outputText>
+                                </p:column>
+                                <p:column style="text-align: center;"> 
+                                    <f:facet name="header" >
+                                        <h:outputText value="试题数" />
+                                    </f:facet>
+                                    <h:outputText value="#{dic.exam.totalNum}题"  rendered="#{dic.exam.totalNum ne 0 and dic.sons.size()==0}"></h:outputText>
+                                </p:column>
+                                <!-- <p:column style="width:100px;">
+                                    <f:facet name="header">
+                                        <h:outputText value="选择"></h:outputText>
+                                    </f:facet>
+                                    <h:selectBooleanCheckbox value="#{dic.selected}"  rendered="#{dic.sons.size()==0}">
+                                    	勾选监听器，勾选父节点，子节点全部选中，然后刷新goodsTable 
+                                        <p:ajax process="@form" listener="#{aALesson.checkSons2(dic,dic.selected)}" update="goodsTable"/>
+                                    </h:selectBooleanCheckbox>
+                                </p:column> -->
+                            </p:treeTable>
+                            
+                            <!-- <h:outputText value="视频时长：" />
+                            <h:panelGroup>
+                                <p:inputText value="#{aALesson.exam.timeLen}" style="width:80px;" />
+                                <h:outputText value="分钟" />
+                            </h:panelGroup> -->
+
+                            <h:outputText value="最少学习时长：" />
+                            <!-- <h:panelGroup>
+                                <p:inputText value="#{aALesson.exam.leastTime}" style="width:80px;" />
+                                <h:outputText value="分钟（超过此时长即认为此门资料‘已完成’学习）" />
+                            </h:panelGroup> -->
+                            <h:panelGroup>
+                                <p:inputText value="#{aALesson.exam.leastTime}" style="width:80px;float: left;" id="leastTime" required="true" label="最少学习时长">
+                                	<f:validateLongRange minimum="1" />
+                                	<p:ajax update="ltMessage" event="keyup" />
+                                </p:inputText>
+                                <h:outputLabel value="分钟（超过此时长即认为此门资料‘已完成’学习）" style="float: left;margin-top: 4px;"/>
+                                <p:message display="default" for="leastTime" id="ltMessage" style="float: left;"></p:message>
+                            </h:panelGroup>
+
+                            <h:outputText value="计时方式：" />
+                            <h:selectOneMenu value="#{aALesson.exam.timingType}">
+                                <f:selectItem itemLabel="按页面打开时间" itemValue="page"/>
+                                <f:selectItem itemLabel="按视频播放时间（仅支持内置播放器）" itemValue="player"/>
+                            </h:selectOneMenu>
+                            
+                            <h:outputText value="播放方式：" />
+                            <h:selectOneMenu value="#{aALesson.exam.playType}" onchange="changeStatus(this);">
+                                <f:selectItem itemLabel="内置FLASH播放器（在下方填写 视频源URL(MP4、FLV)）" itemValue="inner"/>
+                                <f:selectItem itemLabel="连带整体播放器（在下方填写 FLASH播放URL）" itemValue="outter"/>
+                                <f:selectItem itemLabel="无视频" itemValue="none"/>
+                            </h:selectOneMenu>
+                            <h:outputText value="视频源URL：" id="inner"/>
+                            <h:panelGroup id="innerUrl">
+                                <p:inputText value="#{aALesson.exam.sourceUrl}" style="width:600px;"/><br/>
+                                <h:outputText value="精确填写视频源地址，PC使用内置FLASH播放器播放，支持MP4、FLV；手机使用HTML5技术播放，仅支持MP4。可以记录学习时间。" />
+                            </h:panelGroup>
+                            <h:outputText value="FLASH播放URL：" id="outter" style="display:none"/>
+                            <h:panelGroup id="outterUrl" style="display:none">
+                                <p:inputText value="#{aALesson.exam.videoUrl}"  style="width:600px;"/><br/>
+                                <h:outputText value="适用于整体引用外部FLASH播放器地址，如优酷（播放器为FLASH地址+参数，非HTML页面）。" />
+                            </h:panelGroup>
+                        </h:panelGrid>
+                        <p:growl/>
+                        <p:separator/>
+                        <p:commandButton ajax="false" action="#{aALesson.next}" value="下一步"  styleClass="commonSubmit" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'lesson')}"/>
+                        <!-- 
+	                        <p:commandButton ajax="false" action="#{aALesson.done}" value="保存"  styleClass="commonSubmit" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'lesson')}"/>
+							<p:commandButton ajax="false" action="#{aALesson.next2}" value="上传文件"  styleClass="commonSubmit" disabled="#{!fn:contains(adminSessionBean.admin.authstr,'lesson')}"/>
+                         -->
+                    
+                    </div></h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

@@ -1,0 +1,41 @@
+
+#
+
+#public
+
+
+welcome_you=Welcome
+system_homepage=Homepage
+login=Login
+register=Register
+exit=Exit
+question_search=Q-Search
+publication=Notice
+click_enter=Click
+
+#private
+
+score_lookup=Exam Results
+score_examination=Formal Exam
+score_competition=Competition
+score_buffet=Self Practice
+score_module_training=Chapter Training
+
+welcome=You are welcome！
+personal_center=Personal
+profile=My Profile
+my_lesson=My Lesson
+question_bookmark=Question Bookmark
+my_wrong_question=My Mistakes
+my_hard_point=Difficulties
+my_file=My Files
+message_box=Message Box
+
+cell_phone=Cellphone
+cell_phone_scan=Scan the 2-D Code！
+
+system_time='System Time'
+see_all_publication=View All Notices
+
+
+

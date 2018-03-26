@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:f="http://java.sun.com/jsf/core" lang="en">
+<h:head>
+	<title>Facelet Title</title>
+</h:head>
+<h:body>
+	<ui:composition template="BackGeneral.xhtml">
+		<ui:define name="content">
+			<h:form id="myForm">
+				<ui:include src="/AjaxStatus2.xhtml" />
+				<div style="text-align: left; margin: 10px 0px 0px 0px; width: 98%;">
+					<div>
+						<h:outputText id="outputText1" styleClass="tit" value="－学习计划管理－" />
+						<p:button href="/m/AAStudyPlan.jspx" value="添加新学习计划"
+							image="fa fa-fw fa-user"  />
+						<p:commandButton value="删除学习计划" process="@form" update="@form"
+							image="fa fa-fw fa-trash"
+							action="#{listStudyPlan.batDeleteUser()}"
+							onclick="if (!confirm('确定删除学习计划吗？'))
+                                        return false" />
+					</div>
+					<p:separator />
+					<script type="text/javascript">
+						$(function() {
+							$("#myForm\\:dc11\\:checkAll").click(
+									function() {
+										$('input:enabled[type="checkbox"]')
+												.prop("checked", this.checked);
+									});
+						});
+					</script>
+					<div>
+						<h:outputText style="color:green;" />
+						<p:dataTable id="dc11" paginator="true" paginatorPosition="bottom"
+							styleClass="list" stickyHeader="true" rows="10" rowIndexVar="row" lazy="true"
+							style="width:100%" emptyMessage="#{lang['exam.empty_result']}" editable="true" editMode="cell"
+							value="#{listStudyPlan.casusList}" var="Case" resizableColumns="true" liveResize="true">
+							<p:column id="num" style="width:40px;text-align: center;">
+								<h:outputText style="height: 5%" value="#{row+1}" />
+								<f:facet name="header">
+									<h:outputText id="outputTextnum" value="序号" />
+								</f:facet>
+							</p:column>
+							<p:column exportable="false"
+								style="width:30px;text-align: center;">
+								<h:selectBooleanCheckbox value="#{Case.selected}"  />
+								<f:facet name="header">
+									<h:outputText value="全选" />
+									<br />
+									<h:selectBooleanCheckbox id="checkAll">
+									</h:selectBooleanCheckbox>
+								</f:facet>
+							</p:column>
+							<p:column filterBy="#{Case.name}" filterStyle="width:80%;" sortBy="#{Case.name}" filterMatchMode="contains">
+								<h:outputLink
+									value="#{facesContext.externalContext.requestContextPath}/m/AAStudyPlan.jspx?id=#{Case.id}">
+									<h:outputText style="height: 5%" value="#{Case.name}" />
+								</h:outputLink>
+								<f:facet name="header">
+									<h:outputText value="学习计划名称" />
+								</f:facet>
+							</p:column>
+							<p:column filterBy="#{Case.courseStrCN}" filterStyle="width:80%;" filterMatchMode="contains">
+								<h:outputText style="height: 5%" value="#{Case.courseStrCN}" />
+								<f:facet name="header">
+									<h:outputText value="关联课程" />
+								</f:facet> 
+								<!-- <ui:repeat var="course" value="#{Case.courses}">
+									<h:outputText value="#{course.name}"></h:outputText>
+									<br/>
+								</ui:repeat> -->
+							</p:column>
+							<p:column filterBy="#{Case.examsStrCN}" filterStyle="width:80%;" filterMatchMode="contains">
+								<h:outputText style="height: 5%" value="#{Case.examsStrCN}" />
+								<f:facet name="header">
+									<h:outputText value="关联考试" />
+								</f:facet>
+							</p:column>
+							<p:column filterBy="#{Case.userStrCN}" filterStyle="width:80%;" sortBy="#{Case.userStrCN}" filterMatchMode="contains">
+								<h:outputText style="height: 5%" value="#{Case.userStrCN}" />
+								<f:facet name="header">
+									<h:outputText value="关联人员" />
+								</f:facet>
+							</p:column>
+							<p:column sortBy="#{Case.ord}" style="text-align: center;width: 40px;" resizable="true" >
+								<p:tooltip for="modelOutput" value="点击编辑" />
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText id="modelOutput" value="#{Case.ord}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText id="modelInput" value="#{Case.ord}"
+											style="width:30px;">
+											<p:ajax event="change" update="@none"
+												listener="#{listStudyPlan.editOrd(Case.id)}" />
+										</p:inputText>
+									</f:facet>
+								</p:cellEditor>
+								<f:facet name="header">
+									<h:outputText value="次序" />
+								</f:facet>
+							</p:column>
+							<p:column style="width:40px;text-align: center;">
+								<h:outputLink
+									value="#{facesContext.externalContext.requestContextPath}/m/AAStudyPlan.jspx?id=#{Case.id}">
+									<h:outputText style="height: 5%" value="修改" />
+								</h:outputLink>
+								<f:facet name="header">
+									<h:outputText value="修改" />
+								</f:facet>
+							</p:column>
+
+						</p:dataTable>
+						<p:panel>
+							<!-- <h:outputText
+								value="当前系统共有 #{listStudyPlan.casusList.size()} 个学习计划。"
+								styleClass="" /> -->
+						</p:panel>
+						<p:separator></p:separator>
+					</div>
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>
+

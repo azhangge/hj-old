@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions" lang="en">
+<head>
+<title>My Facelets Page</title>
+<meta http-equiv="keywords" content="enter,your,keywords,here" />
+<meta http-equiv="description"
+	content="A short description of this page." />
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+</head>
+<body>
+	<ui:composition template="BackGeneral.xhtml">
+		<ui:define name="content">
+			<h:form>
+				<ui:include src="/AjaxStatus2.xhtml" />
+				<div style="text-align: left; margin: 10px 0px 0px 0px; width: 98%;">
+					<div>
+						<h:outputText id="outputText1" styleClass="tit" value="-资料列表-" />
+						<p:button href="/m/AALesson.jspx" value="添加新资料"
+							disabled="#{!fn:contains(adminSessionBean.admin.authstr,'lesson') and !adminSessionBean.admin.grp=='company'}}" />
+					</div>
+					<p:separator />
+					<div>
+						<p:dataTable paginator="true" paginatorPosition="bottom"
+							value="#{listLesson.exams}" var="us" id="dataTable1"
+							emptyMessage="暂无数据" styleClass="list" rowIndexVar="row"
+							style="width:100%" rows="10" editable="true" editMode="cell">
+							<p:column id="num" style="width:40px;text-align: center;">
+								<h:outputText style="height: 5%" value="#{row+1}" />
+								<f:facet name="header">
+									<h:outputText id="outputTextnum" value="序号" />
+								</f:facet>
+							</p:column>
+							<p:column filterBy="#{us.name}" filterMatchMode="contains"
+							style="width:270px;" filterStyle="width:90%" sortBy="#{us.name}">
+								<h:outputText
+									value="#{fn:substring(us.name,0,20)}#{fn:length(us.name)>20?'..':''}"
+									escape="true" />
+								<f:facet name="header">
+									<h:outputText value="资料名称" />
+								</f:facet>
+							</p:column>
+							<p:column filterBy="#{us.lessonType.name}"
+								filterMatchMode="contains" sortBy="#{us.lessonType.name}"
+								filterStyle="width:90%;"
+								style="width:220px;"> 
+								<h:outputText value="#{us.lessonType.name}" />
+								<f:facet name="header">
+									<h:outputText value="课程" />
+								</f:facet>
+							</p:column>
+							<!-- <p:column style="text-align: center;width: 40px;" filterBy="#{us.timeLen}" filterMatchMode="contains" sortBy="#{us.timeLen}">
+								<h:outputText value="#{us.timeLen}" />
+								<f:facet name="header">
+									<h:outputText value="时长" />
+								</f:facet>
+							</p:column> -->
+							<!-- <p:column style="text-align: center;width: 40px;display:none" filterBy="#{us.version}" filterMatchMode="contains" sortBy="#{us.version}" >
+								<h:outputText value="#{us.version}" />
+								<f:facet name="header">
+									<h:outputText value="版本" />
+								</f:facet>
+							</p:column> -->
+							<p:column style="text-align: center;width: 40px;"   sortBy="#{us.classNum}">
+								<h:outputText value="#{us.classNum}" />
+								<f:facet name="header">
+									<h:outputText value="课时" />
+								</f:facet>
+							</p:column>
+							<p:column style="text-align: center;width: 40px;display:none;" sortBy="#{us.ifShow}">
+								<h:outputText
+									value="#{us.ifShow?lang['exam.yes']:lang['exam.no']}" />
+								<f:facet name="header">
+									<h:outputText value="#{lang['exam.show']}" />
+								</f:facet>
+							</p:column>
+							<p:column sortBy="#{us.ord}" 
+								style="text-align: center;width: 40px;">
+								<p:tooltip for="modelOutput" value="点击编辑" />
+								<p:cellEditor>
+									<f:facet name="output">
+										<h:outputText id="modelOutput" value="#{us.ord}" />
+									</f:facet>
+									<f:facet name="input">
+										<p:inputText id="modelInput" value="#{us.ord}"
+											style="width:30px;">
+											<p:ajax event="change" update="@none"
+												listener="#{listLesson.editOrd(us.id)}" />
+										</p:inputText>
+									</f:facet>
+								</p:cellEditor>
+								<f:facet name="header">
+									<h:outputText value="次序" />
+								</f:facet>
+							</p:column>
+							<p:column style="text-align: center;width: 100px;" sortBy="#{us.availableBegain}">
+								<h:outputText value="#{us.availableBegain}">
+									<f:convertDateTime pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" />
+								</h:outputText>
+								<f:facet name="header">
+									<h:outputText value="#{lang['exam.examination.begain']}" />
+								</f:facet>
+							</p:column>
+							<p:column style="text-align: center;width: 100px;"  sortBy="#{us.availableEnd}">
+								<h:outputText value="#{us.availableEnd}">
+									<f:convertDateTime pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" />
+								</h:outputText>
+								<f:facet name="header">
+									<h:outputText value="#{lang['exam.examination.end']}" />
+								</f:facet>
+							</p:column>
+							<p:column style="text-align: center;width: 110px;display:none;"
+								sortBy="#{us.genTime}">
+								<h:outputText value="#{us.genTime}">
+									<f:convertDateTime pattern="yyyy-MM-dd HH:mm" timeZone="GMT+8" />
+								</h:outputText>
+								<f:facet name="header">
+									<h:outputText value="#{lang['exam.examination.add']}" />
+								</f:facet>
+							</p:column>
+							<p:column style="text-align: center;width: 40px;">
+								<h:outputLink value="AALesson.jspx?id=#{us.id}">
+									<h:outputText value="#{lang['exam.alter']}" />
+								</h:outputLink>
+								<f:facet name="header">
+									<h:outputText value="#{lang['exam.alter']}" />
+								</f:facet>
+							</p:column>
+							<p:column style="text-align: center;width: 40px;">
+								<p:commandLink action="#{listLesson.delete(us.id)}"
+									update="@form"
+									onclick="if (!confirm('确认要删除此学习资料吗？'))
+                                                return false"
+									disabled="#{!fn:contains(adminSessionBean.admin.authstr,'lesson')}">
+									<h:outputText value="#{lang['exam.delete']}" />
+								</p:commandLink>
+								<f:facet name="header">
+									<h:outputText value="#{lang['exam.delete']}" />
+								</f:facet>
+							</p:column>
+						</p:dataTable>
+						<p:separator />
+						<h:outputText style="color:green;" value="注：此处仅列出了您有权限的课程下的学习资料。"></h:outputText>
+
+					</div>
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</body>
+</html>

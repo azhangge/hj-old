@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rereplayer>
+	<channel>
+		<item>
+			<source>700.flv</source>
+			<duration></duration>
+			<title>RerePlayer Test</title>
+		</item>
+	</channel>
+	<config>
+		<bufferTime>4</bufferTime>
+		<contralPanelAlpha>0.75</contralPanelAlpha>
+		<controlPanelBgColor>0x555555</controlPanelBgColor>
+		<controlPanelBtnColor>0xffffff</controlPanelBtnColor>
+		<contralPanelBtnGlowColor>0x555555</contralPanelBtnGlowColor>
+		<controlPanelMode>normal</controlPanelMode>
+		<defautVolume>0.7</defautVolume>
+		<isAutoPlay>true</isAutoPlay>
+		<isLoadBegin>false</isLoadBegin>
+		<isShowAbout>true</isShowAbout>
+		<scaleMode>showAll</scaleMode>
+		<isRepeat>false</isRepeat>
+	</config>
+</rereplayer>
