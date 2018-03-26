@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/mvc
+	http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+
+		<!-- 注解扫描包 -->
+	<context:component-scan base-package="com.ucenter" />	
+	
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">  
+	    <property name="messageConverters">  
+	        <list>  
+	            <ref bean="jsonHttpMessageConverter" />  
+	        </list>  
+	    </property>  
+	</bean>  
+  
+	<bean id="jsonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">  
+	    <property name="supportedMediaTypes">  
+	        <list>  
+	            <value>application/json;charset=UTF-8</value>  
+	        </list>  
+	    </property>  
+	</bean>  
+
+	<!--springMVC+thymeleaf的跳转页面配置-->
+    <bean id="templateResolver" class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+		<property name="templateMode" value="HTML5" />
+		<property name="cacheable" value="false" />
+		<property name="characterEncoding" value="UTF-8"/>
+    </bean>
+	
+	<bean id="templateEngine" class="org.thymeleaf.spring4.SpringTemplateEngine">
+          <property name="templateResolver" ref="templateResolver" />
+       </bean>
+
+	<bean class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
+         <property name="templateEngine" ref="templateEngine" />
+         <property name="characterEncoding" value="UTF-8"/>
+	</bean>
+
+		<!-- 开启注解 -->
+	<mvc:annotation-driven/>
+
+
+    <bean id="webServerEncoding" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="UTF-8" />
+    </bean>
+    
+    <bean id="pwd_encoder" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="des" />
+        <!--Valid value could be md5_32, md5_16, des, none.-->
+        <!--Note that the password could not be decoded once encoded by md5.-->
+    </bean>
+    
+    <bean id="page_after_login" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="/talk/Default?faces-redirect=true" />
+    </bean>
+    
+    <bean id="module2_logout_page" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="/talk/Default?faces-redirect=true" />
+    </bean>
+    
+    <bean id="mobile_module2_logout_page" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="/mobile/MobileExamModule2List?faces-redirect=true" />
+    </bean>
+    
+    <bean id="appEncoding" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="UTF-8" />
+    </bean>
+    <bean id="editorWidth" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="650" />
+    </bean>
+    
+    <bean id="editorHeight" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="450" />
+    </bean>
+    
+    <bean id="relativeDir" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="images/content/" />
+    </bean>
+    
+    <bean id="relativeWordImg" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="word_images/" />
+    </bean>
+    
+    <bean id="fillBegain" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="[" />
+    </bean>
+    
+    <bean id="fillEnd" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="]" />
+    </bean>
+    
+    <bean id="paper_pool_size" class="java.lang.Integer">
+        <constructor-arg type="int" value="3" />
+    </bean>
+    
+    <bean id="max_fraction" class="java.lang.Integer">
+        <constructor-arg type="int" value="2" />
+    </bean>
+    
+    <bean id="user_valid_year" class="java.lang.Long">
+        <constructor-arg type="long" value="5" />
+    </bean>
+    
+    <bean id="session_max_hours" class="java.lang.Float">
+        <constructor-arg type="float" value="1f" />
+    </bean>
+    
+    <bean id="department_str" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="部门" />
+    </bean>
+    
+    <bean id="cid_str" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="学号" />
+    </bean>
+    
+    <bean id="department_root_id" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="10000000000000000" />
+    </bean>
+    <bean id="exam_module_root_id" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="10000000000000000" />
+    </bean>
+    <bean id="goods_module_root_id" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="10000000000000000" />
+    </bean>
+    
+    <bean id="user_custom1" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="职称" />
+    </bean>
+    <bean id="user_custom2" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="从事专业时间（年）" />
+    </bean>
+    <bean id="user_custom3" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="评标业绩（项）" />
+    </bean>
+    <bean id="user_custom4" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="公路专家" />
+    </bean>
+    <bean id="user_custom5" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="水运专家" />
+    </bean>
+    
+    <!--是否使用第三方验证用户服务一-->
+    <bean id="usercheck_thirdParty" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="false" />
+    </bean>
+   <!--第三方验证用户服务的实现，包括LDAP与UCENTER，只能使用其一-->
+    <bean id="ThirdPartyUserService" class="com.hjedu.customer.service.impl.UCenterUserService">
+    </bean>
+    <!--
+    <bean id="ThirdPartyService" class="com.huajie.service.impl.ldap.LDAPUserService">
+        <property name="server" ref="ldapServer"></property>
+        <property name="port" ref="ldapPort"></property>
+    </bean>
+    -->
+    
+    <!--配置系统界面使用语言，常用值如zh_CN,en,auto等-->
+    <bean id="i18n_lang" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="zh_CN" />
+    </bean>
+    <!--自动情况下若推荐使用的语言包不存在，则使用此种语言-->
+    <bean id="last_lang" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="zh_CN" />
+    </bean>
+    <bean id="support_langs" class="java.util.ArrayList">  
+        <constructor-arg>  
+            <list>
+                <value>zh_CN</value>
+                <value>en</value>
+            </list>
+        </constructor-arg>  
+    </bean>
+    <bean id="lang_work_mode" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="dynamic" />
+    </bean>
+    
+    <bean id="max_cache_item_num" class="java.lang.Long">
+        <constructor-arg type="long" value="10000" />
+    </bean>
+</beans>

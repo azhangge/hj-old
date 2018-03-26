@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rereplayer>
+    <channel>
+        <item>
+            <source>${source}</source>
+            <duration>${duration}</duration>
+            <title>${title}</title>
+        </item>
+    </channel>
+    <config>
+        <bufferTime>2</bufferTime>
+        <contralPanelAlpha>0.75</contralPanelAlpha>
+        <controlPanelBgColor>0x555555</controlPanelBgColor>
+        <controlPanelBtnColor>0xffffff</controlPanelBtnColor>
+        <contralPanelBtnGlowColor>0x555555</contralPanelBtnGlowColor>
+        <controlPanelMode>float</controlPanelMode>
+        <defautVolume>1</defautVolume>
+        <isAutoPlay>true</isAutoPlay>
+        <isLoadBegin>true</isLoadBegin>
+        <isShowAbout>false</isShowAbout>
+        <scaleMode>showAll</scaleMode>
+        <isRepeat>false</isRepeat>
+    </config>
+</rereplayer>

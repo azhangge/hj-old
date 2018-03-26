@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util/spring-util-2.5.xsd"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+          http://www.springframework.org/schema/util/spring-util-2.5.xsd http://www.springframework.org/schema/util/spring-util-2.5.xsd/spring-spring-util-2.5.xsd-3.0.xsd
+">
+    <bean id="authorities" class="java.util.HashMap">  
+        <constructor-arg>  
+            <map>  
+                <entry key="module" value="模块管理"/>  
+                <entry key="export" value="导入导出"/>
+                <entry key="market" value="营销推广"/> 
+                <entry key="question" value="试题管理"/>  
+                <entry key="examination" value="考试监控"/>  
+                <entry key="score" value="阅卷改分"/> 
+                <entry key="analysis" value="成绩分析"/> 
+                <entry key="room" value="考场管理"/>
+                <entry key="lesson" value="课程管理"/>
+                <entry key="class" value="部门管理"/>  
+                <entry key="talk" value="论坛管理"/>  
+                <entry key="user" value="用户管理"/>  
+                <entry key="sys" value="系统设置"/>
+                <entry key="notice" value="信息管理"/> 
+                <entry key="safety" value="安全管理"/> 
+            </map>  
+        </constructor-arg>  
+    </bean>  
+    
+    
+    
+</beans>

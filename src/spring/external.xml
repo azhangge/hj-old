@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+">
+
+    
+    <!-- 调度中心接收考试系统发送的成绩地址 -->
+    <bean id="external_exam_stat_addr" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="127.0.0.1" />
+    </bean>
+    <bean id="external_exam_stat_port" class="java.lang.Integer" >
+        <constructor-arg type="int" value="8001" />
+    </bean>
+    <!-- 业务系统接收考试系统发送的成绩地址 -->
+    <bean id="external_exam_stat_addr2" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="192.168.1.1" />
+    </bean>
+    <bean id="external_exam_stat_port2" class="java.lang.Integer" >
+        <constructor-arg type="int" value="9000" />
+    </bean>
+    <!-- 调度中心接收考试系统核验IP的地址 -->
+    <bean id="external_exam_stat_addr3" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="127.0.0.1" />
+    </bean>
+    <bean id="external_exam_stat_port3" class="java.lang.Integer" >
+        <constructor-arg type="int" value="8002" />
+    </bean>
+    
+    <bean id="external_user_addr" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="http://192.168.1.235/xxxx-t_teller.txt"/>
+    </bean>
+</beans>

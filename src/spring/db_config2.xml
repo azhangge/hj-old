@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans  xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+        xmlns:tx="http://www.springframework.org/schema/tx"
+        xmlns:jee="http://www.springframework.org/schema/jee"
+        xsi:schemaLocation="  
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd  
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd  
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+       http://www.springframework.org/schema/jee
+		http://www.springframework.org/schema/jee/spring-jee-3.0.xsd">
+
+    <bean id="mysql_ds" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
+        <property name="driverClass" value="${mysql.jdbc.driverClassName}" />
+        <property name="jdbcUrl" value="${mysql.jdbc.url}" />
+        <property name="username" value="${mysql.jdbc.username}"/>
+        <property name="password" value="${mysql.jdbc.password}"/>
+        <!-- 连接池中未使用的链接最大存活时间，单位是分，默认值：60，如果要永远存活设置为0 --> 
+        <property name="idleMaxAgeInMinutes" value="60"/> 
+        <!-- 设置测试connection的间隔时间。这个参数默认为240，要取消设置为0，单位：分钟 --> 
+        <property name="idleConnectionTestPeriodInMinutes" value="60"/> 
+        <!-- 设置分区个数。这个参数默认为1，建议3-4（根据特定应用程序而定） --> 
+        <property name="partitionCount" value="4"/> 
+        <!-- 设置分区中的连接增长数量。这个参数默认为1 --> 
+        <property name="acquireIncrement" value="1"/> 
+        <!-- 设置每个分区含有连接最大个数。这个参数默认为2 --> 
+        <property name="maxConnectionsPerPartition" value="2"/> 
+        <!-- 设置每个分区含有连接最大小个数。这个参数默认为0 --> 
+        <property name="minConnectionsPerPartition" value="0"/> 
+        <!-- 设置statement缓存个数。这个参数默认为0 --> 
+        <property name="statementsCacheSize" value="5"/> 
+        <!-- 设置连接助手线程个数。这个参数默认为3 --> 
+        <property name="releaseHelperThreads" value="3"/>
+    </bean>
+    
+    <bean id="oracle_ds" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
+        <property name="driverClass" value="${oracle.jdbc.driverClassName}" />
+        <property name="jdbcUrl" value="${oracle.jdbc.url}" />
+        <property name="username" value="${oracle.jdbc.username}"/>
+        <property name="password" value="${oracle.jdbc.password}"/>
+        <!-- 连接池中未使用的链接最大存活时间，单位是分，默认值：60，如果要永远存活设置为0 --> 
+        <property name="idleMaxAgeInMinutes" value="60"/> 
+        <!-- 设置测试connection的间隔时间。这个参数默认为240，要取消设置为0，单位：分钟 --> 
+        <property name="idleConnectionTestPeriodInMinutes" value="60"/> 
+        <!-- 设置分区个数。这个参数默认为1，建议3-4（根据特定应用程序而定） --> 
+        <property name="partitionCount" value="4"/> 
+        <!-- 设置分区中的连接增长数量。这个参数默认为1 --> 
+        <property name="acquireIncrement" value="1"/> 
+        <!-- 设置每个分区含有连接最大个数。这个参数默认为2 --> 
+        <property name="maxConnectionsPerPartition" value="3"/> 
+        <!-- 设置每个分区含有连接最大小个数。这个参数默认为0 --> 
+        <property name="minConnectionsPerPartition" value="0"/>
+        <property name="connectionTimeoutInMs" value="60000"/> 
+        <!-- 设置statement缓存个数。这个参数默认为0 --> 
+        <property name="statementsCacheSize" value="500"/> 
+        <!-- 设置连接助手线程个数。这个参数默认为3 --> 
+        <property name="releaseHelperThreads" value="3"/>
+    </bean>
+    
+    <bean id="mssql_ds" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
+        <property name="driverClass" value="${mssql.jdbc.driverClassName}" />
+        <property name="jdbcUrl" value="${mssql.jdbc.url}" />
+        <property name="username" value="${mssql.jdbc.username}"/>
+        <property name="password" value="${mssql.jdbc.password}"/>
+        <!-- 连接池中未使用的链接最大存活时间，单位是分，默认值：60，如果要永远存活设置为0 --> 
+        <property name="idleMaxAgeInMinutes" value="60"/> 
+        <!-- 设置测试connection的间隔时间。这个参数默认为240，要取消设置为0，单位：分钟 --> 
+        <property name="idleConnectionTestPeriodInMinutes" value="60"/> 
+        <!-- 设置分区个数。这个参数默认为1，建议3-4（根据特定应用程序而定） --> 
+        <property name="partitionCount" value="2"/> 
+        <!-- 设置分区中的连接增长数量。这个参数默认为1 --> 
+        <property name="acquireIncrement" value="1"/> 
+        <!-- 设置每个分区含有连接最大个数。这个参数默认为2 --> 
+        <property name="maxConnectionsPerPartition" value="2"/> 
+        <!-- 设置每个分区含有连接最大小个数。这个参数默认为0 --> 
+        <property name="minConnectionsPerPartition" value="0"/> 
+        <!-- 设置statement缓存个数。这个参数默认为0 --> 
+        <property name="statementsCacheSize" value="5"/> 
+        <!-- 设置连接助手线程个数。这个参数默认为3 --> 
+        <property name="releaseHelperThreads" value="3"/>
+    </bean>
+    
+    <bean id="derby_ds" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
+        <property name="driverClass" value="${derby.jdbc.driverClassName}" />
+        <property name="jdbcUrl" value="${derby.jdbc.url}" />
+        <property name="username" value="${derby.jdbc.username}"/>
+        <property name="password" value="${derby.jdbc.password}"/>
+        <!-- 连接池中未使用的链接最大存活时间，单位是分，默认值：60，如果要永远存活设置为0 --> 
+        <property name="idleMaxAgeInMinutes" value="60"/> 
+        <!-- 设置测试connection的间隔时间。这个参数默认为240，要取消设置为0，单位：分钟 --> 
+        <property name="idleConnectionTestPeriodInMinutes" value="60"/> 
+        <!-- 设置分区个数。这个参数默认为1，建议3-4（根据特定应用程序而定） --> 
+        <property name="partitionCount" value="2"/> 
+        <!-- 设置分区中的连接增长数量。这个参数默认为1 --> 
+        <property name="acquireIncrement" value="1"/> 
+        <!-- 设置每个分区含有连接最大个数。这个参数默认为2 --> 
+        <property name="maxConnectionsPerPartition" value="2"/> 
+        <!-- 设置每个分区含有连接最大小个数。这个参数默认为0 --> 
+        <property name="minConnectionsPerPartition" value="0"/> 
+        <!-- 设置statement缓存个数。这个参数默认为0 --> 
+        <property name="statementsCacheSize" value="5"/> 
+        <!-- 设置连接助手线程个数。这个参数默认为3 --> 
+        <property name="releaseHelperThreads" value="3"/>
+    </bean>
+    
+    <bean id="h2_ds" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
+        <property name="driverClass" value="${h2.jdbc.driverClassName}" />
+        <property name="jdbcUrl" value="${h2.jdbc.url}" />
+        <property name="username" value="${h2.jdbc.username}"/>
+        <property name="password" value="${h2.jdbc.password}"/>
+        <!-- 连接池中未使用的链接最大存活时间，单位是分，默认值：60，如果要永远存活设置为0 --> 
+        <property name="idleMaxAgeInMinutes" value="60"/> 
+        <!-- 设置测试connection的间隔时间。这个参数默认为240，要取消设置为0，单位：分钟 --> 
+        <property name="idleConnectionTestPeriodInMinutes" value="60"/> 
+        <!-- 设置分区个数。这个参数默认为1，建议3-4（根据特定应用程序而定） --> 
+        <property name="partitionCount" value="2"/> 
+        <!-- 设置分区中的连接增长数量。这个参数默认为1 --> 
+        <property name="acquireIncrement" value="1"/> 
+        <!-- 设置每个分区含有连接最大个数。这个参数默认为2 --> 
+        <property name="maxConnectionsPerPartition" value="2"/> 
+        <!-- 设置每个分区含有连接最大小个数。这个参数默认为0 --> 
+        <property name="minConnectionsPerPartition" value="0"/> 
+        <!-- 设置statement缓存个数。这个参数默认为0 --> 
+        <property name="statementsCacheSize" value="5"/> 
+        <!-- 设置连接助手线程个数。这个参数默认为3 --> 
+        <property name="releaseHelperThreads" value="3"/>
+    </bean>
+    
+    <bean id="entityManagerFactory" 
+          class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"> 
+        <property name="dataSource" ref="${dataSource.name}" />
+        <property name="persistenceUnitName" value="examPU2" />
+        <property name="jpaVendorAdapter"> 
+            <bean class="org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter"> 
+            </bean> 
+        </property>
+        <!--
+        <property name="loadTimeWeaver">
+            <bean class="org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver"></bean> 
+        </property>
+        -->
+        <property name="jpaProperties">
+            <props>
+                <prop key="eclipselink.weaving">false</prop>
+                <prop key="eclipselink.logging.level">SEVERE</prop>
+                <!--
+                <prop key="eclipselink.cache.coordination.protocol">jms</prop>
+                <prop key="eclipselink.cache.coordination.jms.factory">java:comp/env/jms/ConnectionFactory</prop>
+                <prop key="eclipselink.cache.coordination.jms.topic">java:comp/env/jms/Topic</prop>
+                <prop key="eclipselink.cache.coordination.jms.host">${jms.brokerURL}</prop>
+                <prop key="eclipselink.cache.coordination.jndi.user">admin</prop>
+                <prop key="eclipselink.cache.coordination.jndi.password">admin</prop>
+                -->
+            </props>
+        </property>
+        
+    </bean> 
+    
+    <bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" /> 
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
+    <tx:annotation-driven transaction-manager="transactionManager" />
+    
+    <aop:config>
+        <!-- 第一个*号代表可以是任意返回类型,第二个*代表包下的所有类,第三个*代表类下的所有方法,之后的(..)个表任意的参数 -->
+        <aop:pointcut id="crudMethos2" expression="execution(* com.hjedu.*.dao.*.*(..))" />
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="crudMethos2" />
+    </aop:config>
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="publish*" propagation="REQUIRED" />
+            <tx:method name="add*" propagation="REQUIRED" />
+            <tx:method name="save*" propagation="REQUIRED" />
+            <tx:method name="update*" propagation="REQUIRED" />
+            <tx:method name="top*" propagation="REQUIRED" />
+            <tx:method name="unTop*" propagation="REQUIRED" />
+            <tx:method name="lock*" propagation="REQUIRED" />
+            <tx:method name="unlock*" propagation="REQUIRED" />
+            <tx:method name="delete*" propagation="REQUIRED" />
+            <tx:method name="enable*" propagation="REQUIRED" />
+            <tx:method name="disable*" propagation="REQUIRED" />
+            <tx:method name="activate*" propagation="REQUIRED" />
+            <tx:method name="*MarkDel*" propagation="REQUIRED" />
+            <tx:method name="del*" propagation="REQUIRED" />
+            <tx:method name="syn*" propagation="REQUIRED" />
+            <tx:method name="check*" propagation="REQUIRED" />
+            <tx:method name="uncheck*" propagation="REQUIRED" />
+            <tx:method name="*" read-only="true" />
+        </tx:attributes>
+    </tx:advice>
+</beans>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util/spring-util-2.5.xsd"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+          http://www.springframework.org/schema/util/spring-util-2.5.xsd http://www.springframework.org/schema/util/spring-util-2.5.xsd/spring-spring-util-2.5.xsd-3.0.xsd
+">
+    <bean id="themes" class="java.util.TreeMap">  
+        <constructor-arg>  
+            <map>
+                <entry key="欧米茄" value="omega"/>
+                <entry key="午夜余光" value="afterdark"/>  
+                <entry key="午后小憩" value="afternoon"/>  
+                <entry key="轻松时刻" value="afterwork"/> 
+                <entry key="贵族气息" value="aristo"/>   
+                <entry key="庄重雅黑" value="black-tie"/>  
+                <entry key="红色闪击" value="blitzer"/>
+                <entry key="蓝天白云" value="bluesky"/>  
+                <entry key="清淡素雅" value="bootstrap"/>  
+                <entry key="南欧素白" value="casablanca"/>  
+                <entry key="夜间兜风" value="cruze"/>  
+                <entry key="淡蓝色调" value="cupertino"/>  
+                <entry key="暗黑蜂巢" value="dark-hive"/>
+                <entry key="蓝纹亮黑" value="dot-luv"/>  
+                <entry key="我爱茄子" value="eggplant"/>    
+                <entry key="激情单车" value="excite-bike"/>  
+                <entry key="素雅蓝头" value="flick"/>  
+                <entry key="青色玻璃" value="glass-x"/>  
+                <entry key="家之温馨" value="home"/>  
+                <entry key="隐秘热情" value="hot-sneaks"/> 
+                <entry key="阿三降临" value="humanity"/> 
+                <entry key="青蛙王子" value="le-frog"/> 
+                <entry key="午夜惊魂" value="midnight"/> 
+                <entry key="薄荷巧克力" value="mint-choc"/> 
+                <entry key="天气阴沉" value="overcast"/> 
+                <entry key="满地胡椒粉" value="pepper-grinder"/> 
+                <entry key="青出于蓝" value="redmond"/>
+                <entry key="我是火箭" value="rocket"/> 
+                <entry key="银白蓝雅" value="sam"/> 
+                <entry key="平滑浅灰" value="smoothness"/>
+                <entry key="林荫大道" value="south-street"/> 
+                <entry key="蓝色亮丽" value="start"/>   
+                <entry key="阳光明媚" value="sunny"/> 
+                <entry key="星星的钱包" value="swanky-purse"/> 
+                <entry key="黑绿奇风" value="trontastic"/> 
+                <entry key="黑暗骑士" value="ui-darkness"/> 
+                <entry key="亮丽橙子" value="ui-lightness"/> 
+                <entry key="金属乐队" value="vader"/> 
+            </map>  
+        </constructor-arg>  
+    </bean>  
+    
+    <bean id="default_theme" class="java.lang.String">
+        <constructor-arg type="java.lang.String" value="rocket" />
+    </bean>
+    
+    
+</beans>
